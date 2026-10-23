@@ -54,6 +54,15 @@ def operation_record_identity(
     collapse only when their explicit receipt fields prove shared identity.
     """
 
+    if command == "sync" and "sync_operation" in args:
+        from memcommit.application.operations.mem_sync.external_change_checkpoint import (
+            validate_external_change_identity,
+        )
+
+        try:
+            return "sync:" + validate_external_change_identity(args)
+        except ValueError as error:
+            raise OperationRecordCorrelationError(str(error)) from error
     if command == "checkpoint":
         record = args.get("checkpoint_set")
         if isinstance(record, dict):
@@ -158,7 +167,7 @@ def operation_record_identity(
         if isinstance(record, dict):
             operation_uid = record.get("operation_uid")
             if (
-                record.get("version") == 1
+                record.get("version") == 2
                 and record.get("kind") == command.upper()
                 and isinstance(operation_uid, str)
                 and operation_uid

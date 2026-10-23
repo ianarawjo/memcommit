@@ -5,30 +5,34 @@ from __future__ import annotations
 import json
 import re
 import sys
-from collections.abc import Mapping
 from typing import Annotated, Any, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.application.capabilities.operand_resolution import (
     freeze_local_context_operand_candidates,
     resolve_existing_context_operand,
 )
-from memcommit.adapters.console.commands.revert.selection import review_context_checkpoints
+from memcommit.adapters.console.commands.revert.selection import (
+    review_context_checkpoints,
+)
 from memcommit.adapters.console.commands.revert.workbench import choose_revert_history
 from memcommit.adapters.console.commands.revert.review import (
     RevertSelectionReceipt,
     revert_exact_command_review,
 )
-from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
+from memcommit.adapters.console.terminal.components.history.presentation import (
+    checkpoint_picker_entries,
+)
 from memcommit.adapters.console.terminal.components.restoration_receipt import (
-    MemoryRefTargetKey,
-    memory_ref_target_key,
     render_checkpoint_unit_revert_receipt,
     render_revert_receipt,
 )
@@ -47,15 +51,19 @@ from memcommit.application.operations.revert.runtime import (
     execute_revert,
     resolve_revert_unit,
 )
-from memcommit.core.context import Memory
-from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError, build_history
-from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchError, search_history
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
+    HistoryError,
+    build_history,
+)
+from memcommit.application.capabilities.history.query.semantic_history_query import (
+    HistorySearchError,
+    search_history,
+)
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,
-    context_record_digest,
 )
 
 
@@ -177,7 +185,6 @@ def _validate_reviewed_frame(
     *,
     context_name: str,
     context_uid: str,
-    context_digest: str,
     history_digest: str,
     receipt: RevertSelectionReceipt,
 ) -> str:
@@ -189,7 +196,6 @@ def _validate_reviewed_frame(
     current = store.load_direct(context_name)
     if (
         current.uid != context_uid
-        or context_record_digest(current) != context_digest
         or checkpoint_history_digest(store.list_checkpoints(context_name))
         != history_digest
     ):
@@ -204,59 +210,6 @@ def _validate_reviewed_frame(
     if matching is None or matching.get("uid") != receipt.checkpoint_uid:
         raise ValueError("The selected checkpoint changed while selection was open.")
     return receipt.checkpoint_uid
-
-
-def _resolved_memory_ref_contents(
-    store: MemoryStore,
-    *snapshots: object,
-) -> dict[MemoryRefTargetKey, str | None]:
-    """Resolve only the direct Source Memories named by receipt relationships.
-
-    Revert checkpoints retain live Embed identity rather than Source bytes.
-    Resolve those exact targets after the mutation so the receipt matches the
-    list view without turning a failed optional display read into a failed
-    mutation receipt.
-    """
-
-    result: dict[MemoryRefTargetKey, str | None] = {}
-    for snapshot in snapshots:
-        if not isinstance(snapshot, Mapping):
-            continue
-        items = snapshot.get("memories")
-        if not isinstance(items, Mapping):
-            continue
-        for item in items.values():
-            if not isinstance(item, Mapping) or item.get("type") not in {
-                "memory_ref",
-                "memory_snapshot_ref",
-                "granted_memory_ref",
-            }:
-                continue
-            key = memory_ref_target_key(item)
-            if key is None or key in result:
-                continue
-            if item.get("type") == "memory_snapshot_ref":
-                content = item.get("content")
-                result[key] = content if isinstance(content, str) else None
-                continue
-            if item.get("type") == "granted_memory_ref":
-                # The raw checkpoint intentionally carries no Source bytes,
-                # and a local store lookup cannot authorize an external Grant.
-                result[key] = None
-                continue
-            target_name, target_context_uid, target_memory_uid = key
-            try:
-                source = store.load_direct(target_name)
-            except (FileNotFoundError, OSError, ValueError):
-                result[key] = None
-                continue
-            target = source.memories.get(target_memory_uid)
-            result[key] = (
-                target.content
-                if source.uid == target_context_uid and isinstance(target, Memory)
-                else None
-            )
-    return result
 
 
 def _apply_resolved_checkpoint_unit(
@@ -281,27 +234,13 @@ def _apply_resolved_checkpoint_unit(
             before_snapshot=restoration.recovery.snapshot,
             target=restoration.target,
             recovery=restoration.recovery,
-            resolved_memory_ref_contents=_resolved_memory_ref_contents(
-                store,
-                restoration.recovery.snapshot,
-                restoration.target.snapshot,
-            ),
         )
         return
     if not isinstance(restoration, RecursiveCheckpointRestoration):
         raise AssertionError("Revert returned an unsupported restoration result.")
     result = restoration.result
-    resolved_by_context = {
-        member.context_name: _resolved_memory_ref_contents(
-            store,
-            member.recovery.snapshot,
-            member.target.snapshot,
-        )
-        for member in result.members
-    }
     render_checkpoint_unit_revert_receipt(
         result,
-        resolved_memory_ref_contents=resolved_by_context,
     )
 
 
@@ -411,6 +350,7 @@ def cmd(
             )
             raise typer.Exit(1)
         if reviewed is None:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Revert cancelled.")
             return
         _apply_resolved_checkpoint_unit(
@@ -435,7 +375,6 @@ def cmd(
         raise typer.Exit(1)
 
     expected_context_uid = context.uid
-    expected_context_digest = context_record_digest(context)
     expected_history_digest = checkpoint_history_digest(entries)
 
     if selector is not None:
@@ -451,7 +390,6 @@ def cmd(
                     exact["uid"],
                     context_name=name,
                     expected_context_uid=expected_context_uid,
-                    expected_context_digest=expected_context_digest,
                     expected_history_digest=expected_history_digest,
                     expected_checkpoint=exact,
                 )
@@ -485,13 +423,13 @@ def cmd(
             )
         )
         if receipt is None:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Revert cancelled.")
             return
         uid = _validate_reviewed_frame(
             store,
             context_name=name,
             context_uid=expected_context_uid,
-            context_digest=expected_context_digest,
             history_digest=expected_history_digest,
             receipt=receipt,
         )
@@ -510,7 +448,6 @@ def cmd(
             uid,
             context_name=name,
             expected_context_uid=expected_context_uid,
-            expected_context_digest=expected_context_digest,
             expected_history_digest=expected_history_digest,
         )
     except (CheckpointCatalogError, RuntimeError, ValueError) as error:

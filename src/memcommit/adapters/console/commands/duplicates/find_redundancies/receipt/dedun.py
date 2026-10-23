@@ -30,7 +30,7 @@ def render_dedun_receipt(
         return
     report = analysis.contexts[0].report
     typer.secho(
-        f"Dedun '{context_label}': absorbed {len(receipt.absorbed_uids)} "
+        f"Dedup '{context_label}': absorbed {len(receipt.absorbed_uids)} "
         "redundant direct item(s); kept "
         f"{len(receipt.survivor_uids)} original UID(s).",
         fg=typer.colors.GREEN,
@@ -58,7 +58,7 @@ def _render_recursive_dedun_receipt(receipt: DedunScopeReceipt) -> None:
         return
     changed = tuple(frame for frame in receipt.contexts if frame.checkpoint_uid)
     typer.secho(
-        f"Dedun '{root}' recursively: absorbed "
+        f"Dedup '{root}' recursively: absorbed "
         f"{len(receipt.absorbed_uids)} redundant direct item(s) in "
         f"{len(changed)}/{len(receipt.contexts)} Context(s); kept "
         f"{len(receipt.survivor_uids)} original UID(s).",

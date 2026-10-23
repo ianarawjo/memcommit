@@ -12,6 +12,11 @@ from memcommit.operation_catalog.families import (
 from memcommit.operation_catalog.model import ExecutionKind, OperationDescriptor
 
 
+# Canonical identities remain available to the research evidence ledger.
+# Current Help and CLI expose only operations with an implementation.
+RETIRED_OPERATION_NAMES = frozenset({"embed", "reference", "share"})
+
+
 def _operation(
     name: str,
     summary: str,
@@ -55,11 +60,11 @@ _OPERATIONS = (
     ),
     _operation(
         "sync",
-        "Match owned Context documents to external files, once or automatically after commands.",
-        "Owned Context scope -> checked Export publication + Sync receipt",
+        "Discover and synchronize Profile project documents and owned Contexts.",
+        "Profile documents + retained agreement -> Context/file changes + Sync receipt",
         ExecutionKind.DETERMINISTIC,
-        "Writes document files and Sync records; --always toggles automatic synchronization",
-        "Current or explicit Context; -r includes descendants; -a/--all selects the current Profile",
+        "Manually accepts supported edits, additions, renames and deletions as checkpoints; honors .memignore",
+        "Omit the operand to discover the Profile; an explicit Context stays exact, with -r for descendants",
     ),
     _operation(
         "add",
@@ -112,8 +117,7 @@ _OPERATIONS = (
         ExecutionKind.DETERMINISTIC,
         "Adds recoverable history without changing content; direct by default, "
         "while --recursive appends one exception-atomic lexical-subtree set",
-        "One exact local Context or its frozen lexical descendants; embedded "
-        "and granted Contexts are not followed",
+        "One exact local Context or its frozen lexical descendants",
     ),
     _operation(
         "check-conformance",
@@ -122,7 +126,7 @@ _OPERATIONS = (
         "Rules or condition propositions + readable Context -> Conformance report",
         ExecutionKind.SEMANTIC,
         "Creates a conformance report without editing the selected data",
-        "Exact Rules and Target inputs, including readable References and Embeds",
+        "Exact Rules and Target inputs from local Memories",
         maturity="PARTIAL",
     ),
     _operation(
@@ -178,11 +182,11 @@ _OPERATIONS = (
     ),
     _operation(
         "delete",
-        "Select Contexts or direct items to delete, or name them by locator, name, or UID.",
-        "Context/direct-item targets -> independently removed in argv order",
+        "Delete current-Context Memories by UID, or explicitly delete the current Context with --context.",
+        "Current Memory UID prefixes or explicit current-Context deletion -> receipt",
         ExecutionKind.DETERMINISTIC,
         "Destructive change after confirmation",
-        "One or more exact Contexts or direct items",
+        "Current Context itself or its directly owned Memories",
     ),
     _operation(
         "diff",
@@ -221,11 +225,11 @@ _OPERATIONS = (
     ),
     _operation(
         "edit",
-        "Directly replace the content of one or more Memories selected by UID or prefix.",
+        "Replace current-Context Memory content using a UID or unique prefix.",
         "Memory or Memory batch -> replacement content",
         ExecutionKind.DETERMINISTIC,
         "Changes only the selected directly owned Memories",
-        "One or more direct Memories in one exact Context",
+        "One or more direct Memories in the current Context",
     ),
     _operation(
         "replace",
@@ -233,7 +237,7 @@ _OPERATIONS = (
         "Text pattern + replacement + local Context scope -> atomic replacement receipt",
         ExecutionKind.DETERMINISTIC,
         "Immediately changes matched local Memories in one Undo/Redo command unit",
-        "One or more local roots; lexical descendants and embedded owners are independent",
+        "One or more local roots and their lexical descendants",
     ),
     _operation(
         "embed",
@@ -253,23 +257,15 @@ _OPERATIONS = (
     ),
     _operation(
         "find",
-        "Find exact text or explicit regular-expression (regex) matches in readable Memories.",
-        "Text pattern + Context scope -> exact Memory spans",
-        ExecutionKind.DETERMINISTIC,
-        "Returns exact matching spans without editing the selected Contexts",
-        "One or more readable Context roots; descendants and embedded Contexts are optional",
-    ),
-    _operation(
-        "search",
-        "Semantically rank Memories relevant to a natural-language request across selected Contexts.",
-        "Context set + query -> ranked Memories",
-        ExecutionKind.SEMANTIC,
+        "Find relevant Memories semantically; --literal finds exact text or explicit regex matches without a semantic provider.",
+        "Context scope + query -> ranked Memories; --literal -> complete exact Memory spans",
+        ExecutionKind.MIXED,
         (
-            "Returns ranked results; optional reviewed Save As creates a "
+            "Returns ranked or complete exact results; optional reviewed Save As creates a "
             "new local Context"
         ),
         (
-            "One or more readable roots; lexical descendants and embedded "
+            "One or more local roots; lexical descendants "
             "Context reach are independently selectable"
         ),
     ),
@@ -284,30 +280,21 @@ _OPERATIONS = (
     ),
     _operation(
         "resolve",
-        "Find semantic conflicts, collect resolution decisions, and recheck the "
+        "Find current-Context conflicts, collect resolution decisions, and recheck the "
         "result for conflicts before applying it.",
         "Direct Context -> conflict check -> decisions and proposed changes -> conflict recheck -> Apply",
         ExecutionKind.SEMANTIC,
         "Decisions are process-local; an accepted UpdatePlan applies as one Resolve checkpoint",
-        "One complete bounded direct Context frame; explicit Memory UID prefixes limit actionable conflict members, not semantic reading or Update scope",
+        "The complete current Context; no Memory-level input filter or recursive target",
     ),
     _operation(
         "dedup",
-        "Remove same-role exact duplicates (dup) immediately, retaining the "
-        "first existing UID for each role-specific identity group.",
-        "Direct Context frames -> role-aware exact groups -> atomic removal",
-        ExecutionKind.DETERMINISTIC,
-        "Deletes later exact copies in one command unit; no provider or TUI",
-        "Exact root or local lexical subtree; Contexts and roles never merge and inbound references block Memory removal",
-    ),
-    _operation(
-        "dedun",
-        "Immediately resolve role-aware exact plus direct-Memory semantic "
-        "redundancies (dun), retaining the first existing UID in each group.",
-        "Direct Context items -> role-aware DUP + Memory semantic DUN groups -> atomic Apply -> receipt",
-        ExecutionKind.SEMANTIC,
-        "The invocation expresses Apply intent and publishes one atomic command unit",
-        "Exact root or local lexical subtree; Contexts never combine and inbound references block version 1 Apply",
+        "Remove exact plus semantic duplicates immediately; --literal removes "
+        "only same-role exact copies without semantic inference.",
+        "Direct Context frames -> exact plus semantic groups (exact only with --literal) -> atomic removal",
+        ExecutionKind.MIXED,
+        "Retains the first existing UID per group and publishes one atomic command unit; no TUI",
+        "Exact root or local lexical subtree; only directly owned Memories are deduplicated",
     ),
     _operation(
         "find-ambiguities",
@@ -403,9 +390,8 @@ _OPERATIONS = (
     _operation(
         "list",
         (
-            "List a Context's direct items—Memories, Memory references, query "
-            "views, and embedded Contexts—and its readable child Contexts. "
-            "Use -r to recursively include items from descendant and embedded "
+            "List a Context's Memories and its lexical child Contexts. "
+            "Use -r to recursively include Memories from descendant "
             "Contexts; ls is the compact alias."
         ),
         "Context -> direct-item and child-Context listing",
@@ -413,7 +399,7 @@ _OPERATIONS = (
         "Read-only",
         (
             "One exact Context; -r follows readable lexical descendants and "
-            "embedded Contexts"
+            "local Contexts"
         ),
     ),
     _operation(
@@ -460,7 +446,7 @@ _OPERATIONS = (
         "Profile registry <-> Profile administration",
         ExecutionKind.DETERMINISTIC,
         "May create, switch, import, rename, or permanently remove Profiles, rename "
-        "Study headings, or manage cross-Profile views through Grant subcommands",
+        "Study headings",
     ),
     _operation(
         "provider",
@@ -479,17 +465,11 @@ _OPERATIONS = (
     ),
     _operation(
         "query",
-        (
-            "Generate an LLM-based answer from readable Context knowledge or an "
-            "authorized concealed query-only view."
-        ),
+        ("Generate an LLM-based answer from local Context knowledge."),
         "Readable source + question -> answer with references",
         ExecutionKind.SEMANTIC,
         "Returns one process-local answer without retaining a transcript",
-        (
-            "Readable exact, descendant, or embedded Context scope; or one "
-            "QUERY-authorized query-only view"
-        ),
+        ("Local exact or lexical descendant Context scope"),
     ),
     _operation(
         "rationale",
@@ -561,8 +541,8 @@ _OPERATIONS = (
     _operation(
         "show",
         (
-            "Show a Memory, reference, embedded Context, or complete Context "
-            "contents. Use -r to include readable descendants and embedded "
+            "Show a Memory or complete Context contents. "
+            "Use -r to include local descendant "
             "Contexts as separate owner-preserving blocks."
         ),
         "Context scope or direct item -> rendered content",
@@ -570,7 +550,7 @@ _OPERATIONS = (
         "Returns retained lineage",
         (
             "One exact Context or direct item by default; -r follows readable "
-            "lexical descendants and embedded Contexts"
+            "lexical descendants"
         ),
     ),
     _operation(
@@ -584,7 +564,7 @@ _OPERATIONS = (
         "Read-only",
         (
             "Current Context by default; -r includes readable descendants and "
-            "embedded Contexts"
+            "local Contexts"
         ),
     ),
     _operation(
@@ -598,7 +578,7 @@ _OPERATIONS = (
         "Read-only",
         (
             "One readable Context; optionally includes readable lexical "
-            "descendants and embedded Contexts; ordinary Memories only"
+            "lexical descendants; Memories only"
         ),
     ),
     _operation(
@@ -648,11 +628,11 @@ _OPERATIONS = (
     ),
     _operation(
         "update",
-        "Apply one instruction or a stored Memory’s instruction to a Target Context.",
+        "Apply one literal instruction to the current Context; -r includes lexical descendants.",
         "Instruction -> Target changes -> Apply -> receipt",
         ExecutionKind.SEMANTIC,
         "Changes only the authorized Target",
-        "One instruction; direct Target contents",
+        "One literal instruction; current Context and optionally its lexical descendants",
     ),
 )
 

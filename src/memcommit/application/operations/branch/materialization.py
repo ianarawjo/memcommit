@@ -1,12 +1,13 @@
-"""Fresh Branch identities and internal pointer remapping for frozen Sources."""
+"""Fresh Context and Memory identities for frozen Branch Sources."""
 
 from __future__ import annotations
 
 import uuid
 from collections.abc import Mapping, Sequence
 
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 
 
 def _branch_memory_uid_map(
@@ -15,7 +16,7 @@ def _branch_memory_uid_map(
 ) -> dict[str, str]:
     """Freeze fresh occurrence identities for every current direct Memory."""
 
-    source_uids = {item.uid for item in ctx.iter_items() if isinstance(item, Memory)}
+    source_uids = {item.uid for item in ctx.iter_memories() if isinstance(item, Memory)}
     result = (
         {uid: str(uuid.uuid4()) for uid in source_uids}
         if supplied is None
@@ -37,11 +38,6 @@ def _branch_memory_uid_map(
     target_uids = tuple(result.values())
     if len(target_uids) != len(set(target_uids)):
         raise ValueError("Branch Memory identity map contains duplicate targets.")
-    direct_non_memory_uids = {
-        item.uid for item in ctx.iter_items() if not isinstance(item, Memory)
-    }
-    if set(target_uids) & direct_non_memory_uids:
-        raise ValueError("Branch Memory identity collides with a direct item.")
     return result
 
 
@@ -53,25 +49,16 @@ def _copy_context_for_branch(
 ) -> Context:
     new_ctx = Context(
         uid=str(uuid.uuid4()),
-        name=validate_portable_context_name(new_name),
-    )
-    from memcommit.application.capabilities.context_snapshot import (
-        ContextSnapshotRef,
+        name=validate_context_name(new_name),
     )
 
     uid_map = _branch_memory_uid_map(
         ctx,
         memory_uid_map,
     )
-    for info in ctx.iter_items():
+    for info in ctx.iter_memories():
         if isinstance(info, Memory):
             new_ctx.add(Memory(uid=uid_map[info.uid], content=info.content))
-        elif isinstance(info, (MemoryRef, QueryContextRef)):
-            new_ctx.add(info.copy())
-        elif isinstance(info, ContextSnapshotRef):
-            new_ctx.add(info.copy())
-        else:
-            new_ctx.add(info)
     return new_ctx
 
 
@@ -86,9 +73,7 @@ def branch(
 
     Direct Memory items are copied as independent objects with fresh occurrence
     UIDs. The durable Branch checkpoint, rather than a shared writable address,
-    records how those occurrences descend from the Source. Embedded Context
-    references are carried over as-is (live-reference semantics are preserved;
-    the sub-contexts themselves are not cloned).
+    records how those occurrences descend from the Source.
     """
 
     return _copy_context_for_branch(
@@ -109,9 +94,8 @@ def branch_subtree(
 
     Context and direct-Memory occurrence identities are regenerated because
     every branch is independently editable. The publishing checkpoint retains
-    their lineage explicitly. Persisted pointers whose targets are inside the
-    frozen subtree follow the new Context and Memory identities; outside
-    pointers retain the ordinary shallow Branch live-reference behavior.
+    their lineage explicitly. Each lexical Context remains an independent
+    owner of its copied Memories.
     """
     sources = tuple(contexts)
     if not sources:
@@ -136,7 +120,7 @@ def branch_subtree(
         source.name: new_root + source.name[len(source_root) :] for source in sources
     }
     for target_name in target_names.values():
-        validate_portable_context_name(target_name)
+        validate_context_name(target_name)
     if len(set(target_names.values())) != len(sources):
         raise ValueError("A subtree branch produced duplicate target names.")
 
@@ -154,16 +138,10 @@ def branch_subtree(
         )
         for source in sources
     }
-    from memcommit.application.capabilities.context_snapshot import (
-        ContextSnapshotRef,
-    )
 
-    # Populate every target Memory first so an internal live reference can
-    # bind to the independently owned target occurrence regardless of Context
-    # traversal order.
     for source in sources:
         target = targets[source.name]
-        for item in source.iter_items():
+        for item in source.iter_memories():
             if isinstance(item, Memory):
                 target.add(
                     Memory(
@@ -172,91 +150,4 @@ def branch_subtree(
                     )
                 )
 
-    for source in sources:
-        target = targets[source.name]
-        for item in source.iter_items():
-            if isinstance(item, Memory):
-                continue
-            elif isinstance(item, MemoryRef):
-                if item.is_snapshot:
-                    # A snapshot records the original Source identity. Branch
-                    # copies the retained evidence but must not retarget its
-                    # provenance to the new branch.
-                    target.add(item.copy())
-                    continue
-                internal_owner = source_by_name.get(item.target_context_name)
-                if internal_owner is None:
-                    target.add(item.copy())
-                    continue
-                if internal_owner.uid != item.target_context_uid:
-                    raise ValueError(
-                        "A subtree Branch found a stale internal Memory reference."
-                    )
-                internal_memory = internal_owner.memories.get(item.target_memory_uid)
-                if not isinstance(internal_memory, Memory):
-                    raise ValueError(
-                        "A subtree Branch found an unavailable internal Memory target."
-                    )
-                target_owner = targets[internal_owner.name]
-                target_memory_uid = uid_maps[internal_owner.uid][item.target_memory_uid]
-                target_memory = target_owner.memories.get(target_memory_uid)
-                if not isinstance(target_memory, Memory):
-                    raise ValueError(
-                        "A subtree Branch lost an internal Memory occurrence."
-                    )
-                target.add(
-                    MemoryRef(
-                        uid=item.uid,
-                        target_context_uid=target_owner.uid,
-                        target_context_name=target_owner.name,
-                        target_memory_uid=target_memory_uid,
-                        target=target_memory,
-                    )
-                )
-            elif isinstance(item, QueryContextRef):
-                target.add(item.copy())
-            elif isinstance(item, ContextSnapshotRef):
-                # A Context Reference is already an immutable value. Branch
-                # preserves its historical Source identity and scope.
-                target.add(item.copy())
-            else:
-                internal_context = source_by_name.get(item.name)
-                if internal_context is None:
-                    # Context serialization stores only uid/name. Use a fresh
-                    # stub so the branch cannot share a mutable object merely
-                    # because an external live reference was retained.
-                    target.add(Context(uid=item.uid, name=item.name))
-                    continue
-                if internal_context.uid != item.uid:
-                    raise ValueError(
-                        "A subtree Branch found a stale internal Context reference."
-                    )
-                target.add(targets[internal_context.name])
-        target.order = [
-            (
-                uid_maps[source.uid][item.uid]
-                if isinstance(item, Memory)
-                else (
-                    targets[item.name].uid
-                    if isinstance(item, Context) and item.name in targets
-                    else item.uid
-                )
-            )
-            for item in source.iter_items()
-        ]
-        ordinary_names = {
-            item.name for item in target.iter_items() if isinstance(item, Context)
-        }
-        query_names = {
-            item.name
-            for item in target.iter_items()
-            if isinstance(item, QueryContextRef)
-        }
-        collisions = ordinary_names & query_names
-        if collisions:
-            raise ValueError(
-                "A subtree Branch would give ordinary and query-only Context "
-                "pointers the same name: "
-                + ", ".join(repr(name) for name in sorted(collisions))
-            )
     return tuple(targets[source.name] for source in sources)

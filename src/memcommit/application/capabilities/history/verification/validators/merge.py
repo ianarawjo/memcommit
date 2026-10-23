@@ -287,7 +287,7 @@ def _common_merge_transition(entry):
         transition = _RecordedMergeTransition(
             checkpoint_uid=entry["uid"],
             timestamp=entry["timestamp"],
-            description=entry["description"],
+            description=entry.get("checkpoint_message") or "merge",
             operation_uid=operation_uid,
             source=MemoryHistoryCommandContext(
                 uid=source["context_uid"], name=source["context_name"]

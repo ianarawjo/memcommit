@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.table import (
     TuiTableRow,
     render_tui_table,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 
 from memcommit.adapters.console.commands.ground.shell.proposal import (
     GroundShellContextSuggestion,
@@ -347,7 +347,7 @@ def render_ground_location_pane(
 
     if ground_name is None:
         return "NOT SET · Enter/L to choose with the Context tree"
-    name = validate_portable_context_name(ground_name)
+    name = validate_context_name(ground_name)
     label = {
         "UNSET": "NOT SET",
         "SUGGESTED": "SUGGESTED · REVIEW REQUIRED",
@@ -371,7 +371,7 @@ def render_ground_workspace_pane(ground_name: str | None) -> str:
                 "No physical Context, manifest, or checkpoint exists.",
             )
         )
-    name = validate_portable_context_name(ground_name)
+    name = validate_context_name(ground_name)
     return "\n".join(
         (
             f"SAVE LOCATION · {safe_terminal_text(name)} · NOT CREATED",

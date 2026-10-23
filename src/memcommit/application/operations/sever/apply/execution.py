@@ -2,16 +2,9 @@
 
 from __future__ import annotations
 
+
 from dataclasses import dataclass
 
-from memcommit.application.context_access.access import (
-    revalidate_granted_context_binding,
-)
-from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.operations.profile.model import (
-    ProfileError,
-    authority_grant_snapshot_lock,
-)
 from memcommit.application.operations.sever.application import (
     SeverApplicationError,
 )
@@ -25,16 +18,12 @@ from memcommit.application.operations.sever.apply.self_save import (
     recover_self_save,
     rollback_self_save,
 )
-from memcommit.application.operations.sever.inputs import capture_sever_binding
 from memcommit.application.operations.sever.model import (
-    SeverContextBinding,
     SeverSession,
-)
-from memcommit.application.operations.update.model import (
-    GrantedUpdateTarget,
 )
 from memcommit.persistence.store import (
     MemoryStore,
+    ConcurrentContextUpdateError,
 )
 
 
@@ -51,10 +40,16 @@ class MemoryStoreSeverOutputPort:
             return recover_self_save(self.store, session)
         return recover_other_save(self.store, session)
 
-    def _materialize_frozen(self, session: SeverSession) -> SeverSession:
+    def _materialize_frozen(
+        self, session: SeverSession, *, context_catalog: tuple[str, ...]
+    ) -> SeverSession:
         if session.save_mode == "SELF_SAVE":
-            return materialize_self_save(self.store, session)
-        return materialize_other_save(self.store, session)
+            return materialize_self_save(
+                self.store, session, expected_context_catalog=context_catalog
+            )
+        return materialize_other_save(
+            self.store, session, expected_context_catalog=context_catalog
+        )
 
     def rollback_materialization(self, applied: SeverSession) -> None:
         if applied.state != "APPLIED" or applied.application is None:
@@ -67,58 +62,19 @@ class MemoryStoreSeverOutputPort:
             rollback_other_save(self.store, applied)
 
     def materialize(self, session: SeverSession) -> SeverSession:
-        granted_bindings = tuple(
-            (label, binding)
-            for label, binding in (
-                ("Source", session.source),
-                ("Criteria", session.criteria),
-            )
-            if binding.granted is not None
-        )
-        if not granted_bindings:
-            return self._materialize_frozen(session)
+        from memcommit.application.context_access.access import ContextAccess
+        from memcommit.application.operations.sever.inputs import capture_sever_binding
 
-        # Freeze the grant registry across both validation passes and output
-        # creation. The second pass makes the Result's commit point observe
-        # the exact authority content captured by the reviewed session.
-        with authority_grant_snapshot_lock() as registry:
-            for label, binding in granted_bindings:
-                self._revalidate_granted_binding(label, binding, registry)
-            applied = self._materialize_frozen(session)
-            try:
-                for label, binding in granted_bindings:
-                    self._revalidate_granted_binding(label, binding, registry)
-            except Exception:
-                self.rollback_materialization(applied)
-                raise
-            return applied
-
-    def _revalidate_granted_binding(
-        self,
-        label: str,
-        binding: SeverContextBinding,
-        registry: ProfileRegistry,
-    ) -> None:
-        if binding.granted is None:
-            raise SeverApplicationError(f"The Sever {label} is not a granted input.")
-        frozen = GrantedUpdateTarget.from_dict(binding.granted)
-        try:
-            access = revalidate_granted_context_binding(
-                frozen,
-                required_permission="READ",
-                registry=registry,
-                active_store=self.store,
-            )
+        # Capture membership before re-reading either input. Store publication
+        # checks this same catalog and every frozen content digest under locks.
+        context_catalog = tuple(self.store.list_context_names())
+        for binding in (session.source, session.criteria):
             current = capture_sever_binding(
-                access,
+                ContextAccess(self.store, binding.root_name, binding.root_name),
                 include_descendants=binding.include_descendants,
-                registry=registry,
             )
-        except (FileNotFoundError, ProfileError, ValueError) as error:
-            raise SeverApplicationError(
-                f"The granted Sever {label} is no longer authorized for Apply."
-            ) from error
-        if current != binding:
-            raise SeverApplicationError(
-                f"The granted Sever {label} changed after review. Re-run Sever."
-            )
+            if current != binding:
+                raise ConcurrentContextUpdateError(
+                    "Sever input changed before the result could be saved."
+                )
+        return self._materialize_frozen(session, context_catalog=context_catalog)

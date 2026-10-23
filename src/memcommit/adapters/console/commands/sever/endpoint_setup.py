@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-from typing import AbstractSet
 
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
@@ -209,7 +208,7 @@ def _validate_sever_draft(
     setup: SeverTuiSetup,
     draft: EndpointSetupDraft,
 ) -> str | None:
-    """Keep in-place authority policy outside shared mechanics."""
+    """Validate the local Source and Criteria before execution."""
 
     source = draft.value("SOURCE")
     criteria = draft.value("CRITERIA")
@@ -224,8 +223,6 @@ def choose_sever_setup(
     local_names: Sequence[str],
     *,
     current: str | None,
-    virtual_names: Sequence[str] = (),
-    selectable_virtual_names: AbstractSet[str] = frozenset(),
     annotations: Mapping[str, SourceDisplayValue] | None = None,
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     app_input: Input | None = None,
@@ -235,9 +232,8 @@ def choose_sever_setup(
     """Compatibility-shaped entry over the operation-owned role-pane setup."""
 
     local = tuple(local_names)
-    virtual = tuple(virtual_names)
-    names = (*local, *virtual)
-    selectable = frozenset(local) | frozenset(selectable_virtual_names)
+    names = local
+    selectable = frozenset(local)
     first = current if current in selectable else local[0] if local else ""
     second = next((name for name in names if name in selectable and name != first), "")
     setup = SeverTuiSetup(

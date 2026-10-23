@@ -16,7 +16,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Literal
 
-from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     QUALITY_RULESET_VERSIONS,
     AmbiguityFinding,
@@ -33,12 +32,13 @@ from memcommit.application.capabilities.reviewing.direct_item_duplicates import 
 from memcommit.application.operations.duplicates.find_duplicates.application import (
     ExactDuplicateReport,
 )
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store.context_memory.records import context_record_digest
 from memcommit.providers.types import ProviderIdentity
 
 # Audit records retain individual findings; whole-set Fit is a separate operation.
-QUALITY_AUDIT_SCHEMA_VERSION = 10
+QUALITY_AUDIT_SCHEMA_VERSION = 11
 QUALITY_AUDIT_KINDS = ("dup", "dun", "ambiguities", "conflicts")
 QUALITY_AUDIT_RULESETS = {
     "dup": "exact-direct-items-v1",
@@ -133,7 +133,7 @@ class QualityAuditMemory(Memory):
 
 @dataclass(frozen=True)
 class QualityAuditItem:
-    """One direct occurrence; pointers retain their role rather than becoming Memories."""
+    """One directly owned Memory occurrence in the Audit frame."""
 
     uid: str
     kind: str
@@ -141,24 +141,16 @@ class QualityAuditItem:
 
 
 def _copy_source_context(context: Context) -> Context:
-    """Detach direct evidence; resolved live pointers must not bring in content."""
+    """Copy the selected local Memory frame without retaining Store bindings."""
     copied = Context(uid=context.uid, name=context.name)
-    for item in context.iter_items():
+    for item in context.iter_memories():
         if isinstance(item, Memory):
             copied.add(Memory(item.uid, item.content))
-        elif isinstance(item, (MemoryRef, QueryContextRef, ContextSnapshotRef)):
-            copied.add(item.copy())
-        else:
-            pointer = Context(uid=item.uid, name=item.name)
-            pointer._granted_link = item._granted_link  # noqa: SLF001
-            copied.add(pointer)
     # An analysis snapshot is not a Store load or an optimistic-write handle.
-    copied._store_digest = None  # noqa: SLF001
-    copied.document = deepcopy(context.document)
-    copied.attached_files = deepcopy(context.attached_files)
-    for item in copied.iter_items():
-        if isinstance(item, MemoryRef) and not item.is_snapshot:
-            item.target = None
+    copied.corresponding_document_metadata = deepcopy(
+        context.corresponding_document_metadata
+    )
+    copied.asset_metadata = deepcopy(context.asset_metadata)
     return copied
 
 
@@ -175,17 +167,13 @@ class AuditTarget:
         context = self._context
         _canonical_uuid(context.uid, "Audit Context uid")
         _string(context.name, "Audit Context name", limit=500)
-        for uid, item in context.iter_entries():
-            _canonical_uuid(uid, "Audit item uid")
-            if uid != item.uid:
-                raise QualityAuditError(
-                    "Audit occurrence identity does not match its slot."
-                )
+        for item in context.iter_memories():
+            _canonical_uuid(item.uid, "Audit item uid")
             if isinstance(item, Memory):
                 _string(
                     item.content, "Audit Memory content", empty=True, limit=1_000_000
                 )
-            elif not isinstance(item, (MemoryRef, QueryContextRef, Context)):
+            else:
                 raise QualityAuditError("Invalid Audit direct-item type.")
         if (context.uid, context.name, context_record_digest(context)) != (
             self.context_uid,
@@ -206,29 +194,15 @@ class AuditTarget:
     def memories(self) -> tuple[QualityAuditMemory, ...]:
         return tuple(
             QualityAuditMemory(item.uid, item.content)
-            for item in self._context.iter_items()
+            for item in self._context.iter_memories()
             if isinstance(item, Memory)
         )
 
     @property
     def items(self) -> tuple[QualityAuditItem, ...]:
         result = []
-        for item in self._context.iter_items():
-            if isinstance(item, Memory):
-                kind, summary = "MEMORY", item.content
-            else:
-                if isinstance(item, MemoryRef):
-                    kind = "MEMORY_REFERENCE" if item.is_snapshot else "MEMORY_EMBED"
-                    name = item.target_context_name
-                elif isinstance(item, ContextSnapshotRef):
-                    kind, name = "CONTEXT_REFERENCE", item.name
-                elif isinstance(item, QueryContextRef):
-                    kind, name = "QUERY_CONTEXT_REFERENCE", item.name
-                else:
-                    kind, name = "CONTEXT_EMBED", item.name
-                summary = f"{kind} · {name}"
-                if isinstance(item, MemoryRef):
-                    summary += "#" + item.target_memory_uid[:8]
+        for item in self._context.iter_memories():
+            kind, summary = "MEMORY", item.content
             result.append(QualityAuditItem(item.uid, kind, summary))
         return tuple(result)
 
@@ -368,14 +342,7 @@ def _report_to_dict(
             }
             for item in report.findings
         ]
-        return {
-            "memory_count": report.memory_count,
-            "findings": findings,
-            "exact_item_groups": [
-                asdict(group) | {"absorbed_uids": list(group.absorbed_uids)}
-                for group in report.exact_item_groups
-            ],
-        }
+        return {"memory_count": report.memory_count, "findings": findings}
     if kind == "ambiguities" and isinstance(report, AmbiguityReport):
         findings = [
             {
@@ -431,10 +398,6 @@ def _bind_report(
                     "DUP report does not match the exact frozen Source."
                 )
             return report
-        if report.exact_item_groups != tuple(
-            group for group in groups if group.item_kind != "MEMORY"
-        ):
-            raise QualityAuditError("DUN exact items do not match the frozen Source.")
     memories = {memory.uid: memory for memory in source.memories}
 
     def memory(item):
@@ -465,7 +428,7 @@ def _bind_report(
                 not isinstance(finding, AmbiguityFinding)
                 or finding.interpretation not in {"SINGLE", "DOMINANT", "COMPETING"}
                 or finding.clarification not in {"NONE", "HELPFUL", "REQUIRED"}
-                or not isinstance(finding.ordinary_readings, tuple)
+                or (not isinstance(finding.ordinary_readings, tuple))
             ):
                 raise QualityAuditError("Invalid Ambiguity Audit finding.")
             for reading in finding.ordinary_readings:
@@ -497,8 +460,6 @@ def _report_from_dict(
         if kind == "dup"
         else {"memory_count", "findings"}
     )
-    if kind == "dun":
-        keys.add("exact_item_groups")
     if kind == "conflicts":
         keys.add("pair_count")
     data = _exact_dict(value, keys, f"{kind} Audit report")
@@ -592,9 +553,7 @@ def _report_from_dict(
                     )
                 )
     if kind == "dun":
-        return DuplicateReport(
-            data["memory_count"], tuple(findings), groups(data["exact_item_groups"])
-        )
+        return DuplicateReport(data["memory_count"], tuple(findings))
     if kind == "ambiguities":
         return AmbiguityReport(data["memory_count"], tuple(findings))
     return ConflictReport(data["memory_count"], data["pair_count"], tuple(findings))
@@ -734,11 +693,6 @@ class QualityAuditSession:
             len(check.report.groups)
             if isinstance(check.report, ExactDuplicateReport)
             else len(check.report.findings)
-            + (
-                len(check.report.exact_item_groups)
-                if isinstance(check.report, DuplicateReport)
-                else 0
-            )
             for check in self.checks
             if not (check.kind == "dup" and AuditCheckKind.DUN in self.requested_checks)
         )

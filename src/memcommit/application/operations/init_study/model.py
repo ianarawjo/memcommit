@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from memcommit.application.operations.profile.config import ProfileEntry
+from memcommit.models.profile import Profile
 
 if TYPE_CHECKING:
     from memcommit.application.operations.profile.model import StoreInspection
@@ -13,11 +13,9 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class StudyInitializationResult:
-    """One isolated participant/authority pair built from a Study scenario."""
+    """One isolated local Profile built from a Study scenario."""
 
-    profile: ProfileEntry
+    profile: Profile
     inspection: StoreInspection
-    authority_profile: ProfileEntry
-    authority_inspection: StoreInspection
     active_profile_name: str
     scenario_id: str = "legacy"

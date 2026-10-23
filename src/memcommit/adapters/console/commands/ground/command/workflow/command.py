@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import typer
 
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.application.operations.ground.contracts import (
     GroundError,
@@ -25,7 +26,7 @@ from memcommit.application.operations.ground.workspace_model import GroundWorksp
 from memcommit.application.operations.ground.workspace_runtime import (
     ground_workspace_exists,
 )
-from memcommit.persistence.store import MemoryStore, validate_context_name
+from memcommit.persistence.store import MemoryStore
 
 from . import create as create_workflow
 from . import edit as edit_workflow

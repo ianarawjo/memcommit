@@ -9,7 +9,8 @@ from memcommit.application.capabilities.semantic.prompt_policy import (
     SemanticPromptPolicy,
     resolve_semantic_prompt_policy,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.semantic.memory_scope import (
     MemoryScopeError,
     resolve_memory_scope,
@@ -41,10 +42,7 @@ def sentence_like_segment_count(content: str) -> int:
     for line in normalized.split("\n"):
         if not line.strip():
             continue
-        count += sum(
-            bool(segment.strip())
-            for segment in _SEGMENT_BOUNDARY.split(line)
-        )
+        count += sum(bool(segment.strip()) for segment in _SEGMENT_BOUNDARY.split(line))
     return count
 
 
@@ -52,8 +50,7 @@ def atomize_lint(content: str) -> tuple[str, ...]:
     """Return local review signals; lint never determines atomicity."""
     if (
         len(content) > ATOMIZE_SIZE_REVIEW_CHARS
-        or sentence_like_segment_count(content)
-        > ATOMIZE_SIZE_REVIEW_SEGMENTS
+        or sentence_like_segment_count(content) > ATOMIZE_SIZE_REVIEW_SEGMENTS
     ):
         return ("SIZE_REVIEW",)
     return ()
@@ -62,16 +59,12 @@ def atomize_lint(content: str) -> tuple[str, ...]:
 def collect_atomize_candidates(ctx: Context) -> list[AtomizeCandidate]:
     """Collect direct Memories in Context order without following references."""
     candidates: list[AtomizeCandidate] = []
-    for item in ctx.iter_items():
+    for item in ctx.iter_memories():
         if not isinstance(item, Memory):
             continue
         candidates.append(
             AtomizeCandidate(
                 candidate_id=f"m{len(candidates) + 1:06d}",
-                # The preview is direct-Memory-only.  A non-Memory pointer may
-                # be unresolved by load_direct() and restored by a mutating
-                # load, so binding to all-item slots would make an unchanged
-                # Memory appear stale merely because a pointer became visible.
                 position=len(candidates),
                 memory=item,
                 lint=atomize_lint(item.content),
@@ -122,11 +115,9 @@ def impact_atomize(
     else:
         requested = set(_memory_uids)
         all_candidates = collect_atomize_candidates(ctx)
-        if (
-            len(requested) != len(_memory_uids)
-            or requested
-            - {candidate.memory.uid for candidate in all_candidates}
-        ):
+        if len(requested) != len(_memory_uids) or requested - {
+            candidate.memory.uid for candidate in all_candidates
+        }:
             raise AtomizeImpactError(
                 "Atomize validation scope contains an unknown direct Memory."
             )

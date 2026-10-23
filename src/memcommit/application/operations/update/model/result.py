@@ -4,15 +4,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 @dataclass(frozen=True, slots=True)
-class AppliedOwner:
-    """One affected direct owner and its detached post-update record."""
+class UpdatedContext:
+    """One Context with applied changes and its detached post-update record."""
 
-    owner_context_uid: str
-    owner_context_name: str
+    context_uid: str
+    context_name: str
     post_image: Context
 
 
@@ -23,21 +23,23 @@ class UpdateResult:
     plan_uid: str
     target_uid: str
     target_name: str
-    affected_owners: tuple[AppliedOwner, ...]
+    updated_contexts: tuple[UpdatedContext, ...]
 
     @property
     def post_images(self) -> tuple[Context, ...]:
         """Return detached Context records in canonical save order."""
 
-        return tuple(owner.post_image for owner in self.affected_owners)
+        return tuple(
+            updated_context.post_image for updated_context in self.updated_contexts
+        )
 
     def post_image_for(self, context_uid: str) -> Context | None:
-        """Return one affected owner post-image without assuming root order."""
+        """Return one updated Context's post-image without assuming root order."""
 
-        for owner in self.affected_owners:
-            if owner.owner_context_uid == context_uid:
-                return owner.post_image
+        for updated_context in self.updated_contexts:
+            if updated_context.context_uid == context_uid:
+                return updated_context.post_image
         return None
 
 
-__all__ = ["AppliedOwner", "UpdateResult"]
+__all__ = ["UpdatedContext", "UpdateResult"]

@@ -1,9 +1,5 @@
-"""Project verified checkpoint frames into Context and Memory state history.
+"""Project retained checkpoint records into local Context and Memory evidence."""
 
-The store persists complete direct-Context snapshots.  This module turns those
-snapshots into a small public timeline for semantic history search without
-opening embedded Contexts, MemoryRef targets, or query-only sources.
-"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -11,12 +7,15 @@ import hashlib
 import json
 from typing import Any, Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.history.history_evidence_source import (
     HistoryEvidenceSource,
 )
 from memcommit.persistence.store import canonical_context_record
-from memcommit.application.capabilities.history.reconstruction.memory_state_delta import direct_memory_deltas
+from memcommit.application.capabilities.history.reconstruction.memory_state_delta import (
+    direct_memory_deltas,
+)
 
 
 HistoryTransitionKind = Literal["ADD", "EDIT", "REMOVE", "REORDER"]
@@ -167,14 +166,12 @@ def _entry_identity_digest(entry: dict[str, Any]) -> str:
     records are the same checkpoint even though only one retains the older
     nested log.
     """
-    args = entry.get("args")
+    args = entry.get("command_details")
     if isinstance(args, dict) and "log_snapshot" in args:
         entry = {
             **entry,
-            "args": {
-                key: value
-                for key, value in args.items()
-                if key != "log_snapshot"
+            "command_details": {
+                key: value for key, value in args.items() if key != "log_snapshot"
             },
         }
     return _json_digest(entry)
@@ -197,10 +194,8 @@ def flatten_checkpoint_entries(
             raise HistoryError("Checkpoint history is too large to inspect.")
         entry = _validate_entry(pending.pop())
         uid = entry["uid"]
-        args = entry.get("args")
-        log_snapshot = (
-            args.get("log_snapshot") if isinstance(args, dict) else None
-        )
+        args = entry.get("command_details")
+        log_snapshot = args.get("log_snapshot") if isinstance(args, dict) else None
         if log_snapshot is not None:
             if not isinstance(log_snapshot, list):
                 raise HistoryError(
@@ -263,10 +258,7 @@ def _versions_from_record(
             "Checkpoint contains an invalid direct Context state."
         ) from error
     versions: list[MemoryVersion] = []
-    # Context.from_dict receives no loaders here. It therefore preserves
-    # pointers but never opens a MemoryRef target, embedded Context, or
-    # query-only source. Only directly owned Memory content enters the index.
-    for item in direct.iter_items():
+    for item in direct.iter_memories():
         if not isinstance(item, Memory):
             continue
         versions.append(
@@ -275,9 +267,7 @@ def _versions_from_record(
                 context_name=context_name,
                 memory_uid=item.uid,
                 content=item.content,
-                content_digest=hashlib.sha256(
-                    item.content.encode("utf-8")
-                ).hexdigest(),
+                content_digest=hashlib.sha256(item.content.encode("utf-8")).hexdigest(),
             )
         )
     return tuple(versions)
@@ -363,19 +353,16 @@ def _memory_changes(
             MemoryTransition(
                 index=transition_offset + len(changes),
                 step_index=after.index,
-                context_uid=after.memories[0].context_uid if after.memories else (
-                    before.memories[0].context_uid if before.memories else ""
-                ),
-                context_name=after.memories[0].context_name if after.memories else (
-                    before.memories[0].context_name if before.memories else ""
-                ),
+                context_uid=after.memories[0].context_uid
+                if after.memories
+                else (before.memories[0].context_uid if before.memories else ""),
+                context_name=after.memories[0].context_name
+                if after.memories
+                else (before.memories[0].context_name if before.memories else ""),
                 checkpoint_uid=checkpoint_uid,
                 timestamp=timestamp,
                 command=command,
-                description=(
-                    description
-                    or _transition_description(kind, old, new)
-                ),
+                description=(description or _transition_description(kind, old, new)),
                 kind=kind,
                 memory_uid=delta.memory_uid,
                 before=old,
@@ -391,15 +378,24 @@ def _memory_changes(
     for rank, uid in enumerate(after_order):
         if old_rank[uid] == rank:
             continue
-        changes.append(MemoryTransition(
-            index=transition_offset + len(changes), step_index=after.index,
-            context_uid=after_by_uid[uid].context_uid,
-            context_name=after_by_uid[uid].context_name,
-            checkpoint_uid=checkpoint_uid, timestamp=timestamp, command=command,
-            description=description, kind="REORDER", memory_uid=uid,
-            before=before_by_uid[uid], after=after_by_uid[uid],
-            from_state_index=before.index, to_state_index=after.index,
-        ))
+        changes.append(
+            MemoryTransition(
+                index=transition_offset + len(changes),
+                step_index=after.index,
+                context_uid=after_by_uid[uid].context_uid,
+                context_name=after_by_uid[uid].context_name,
+                checkpoint_uid=checkpoint_uid,
+                timestamp=timestamp,
+                command=command,
+                description=description,
+                kind="REORDER",
+                memory_uid=uid,
+                before=before_by_uid[uid],
+                after=after_by_uid[uid],
+                from_state_index=before.index,
+                to_state_index=after.index,
+            )
+        )
     return changes
 
 
@@ -474,23 +470,31 @@ def reconstruct_checkpoint_timeline(
             if isinstance(command_value, str) and command_value
             else "checkpoint"
         )
-        description_value = entry.get("description") or entry.get("message")
-        description = (
-            description_value if isinstance(description_value, str) else ""
-        )
+        description_value = entry.get("checkpoint_message") or entry.get("command") or "checkpoint"
+        description = description_value if isinstance(description_value, str) else ""
         before_state = states[-1]
         preimage = entry.get("command_before")
         preimage_record = (
-            _normalized_record(preimage, context_uid=context_uid, context_name=context_name)
-            if isinstance(preimage, dict) else None
+            _normalized_record(
+                preimage, context_uid=context_uid, context_name=context_name
+            )
+            if isinstance(preimage, dict)
+            else None
         )
-        if preimage_record is not None and _json_digest(preimage_record) != before_state.record_digest:
+        if (
+            preimage_record is not None
+            and _json_digest(preimage_record) != before_state.record_digest
+        ):
             before_state = _state(
                 len(states),
                 preimage_record,
-                context_uid=context_uid, context_name=context_name,
-                checkpoint_uid=None, timestamp=entry["timestamp"],
-                command="preimage", description="Exact command input.", selectable=False,
+                context_uid=context_uid,
+                context_name=context_name,
+                checkpoint_uid=None,
+                timestamp=entry["timestamp"],
+                command="preimage",
+                description="Exact command input.",
+                selectable=False,
             )
             states.append(before_state)
         snapshot_state = _state(
@@ -505,14 +509,20 @@ def reconstruct_checkpoint_timeline(
             selectable=uid in physical_uids,
         )
         states.append(snapshot_state)
-        args = entry.get("args")
-        known_input = preimage_record is not None or bool(checkpoints) or command == "init"
+        args = entry.get("command_details")
+        known_input = (
+            preimage_record is not None or bool(checkpoints) or command == "init"
+        )
         if command != "revert" and known_input:
             transitions.extend(
                 _memory_changes(
-                    before_state, snapshot_state, checkpoint_uid=uid,
-                    timestamp=entry["timestamp"], command=command,
-                    description=description, transition_offset=len(transitions),
+                    before_state,
+                    snapshot_state,
+                    checkpoint_uid=uid,
+                    timestamp=entry["timestamp"],
+                    command=command,
+                    description=description,
+                    transition_offset=len(transitions),
                 )
             )
         checkpoints.append(
@@ -536,9 +546,7 @@ def reconstruct_checkpoint_timeline(
             recorded_restoration
             if isinstance(recorded_restoration, dict)
             else (
-                records_by_uid.get(target_uid)
-                if isinstance(target_uid, str)
-                else None
+                records_by_uid.get(target_uid) if isinstance(target_uid, str) else None
             )
         )
         if target_record is None:
@@ -582,8 +590,7 @@ def reconstruct_checkpoint_timeline(
             timestamp=None,
             command="current",
             description=(
-                "Current Context differs from the last observed "
-                "checkpoint state."
+                "Current Context differs from the last observed checkpoint state."
             ),
             selectable=False,
             current=True,
@@ -594,9 +601,7 @@ def reconstruct_checkpoint_timeline(
         # Mark the effective last occurrence as current without manufacturing
         # a duplicate state or changing its exact checkpoint selector.
         last = states[-1]
-        states[-1] = HistoryState(
-            **{**last.__dict__, "current": True}
-        )
+        states[-1] = HistoryState(**{**last.__dict__, "current": True})
 
     return HistoryTimeline(
         context_uid=context_uid,

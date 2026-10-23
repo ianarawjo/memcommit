@@ -2,20 +2,15 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.terminal.components.context_picker import choose_context, context_memory_rows
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
+from memcommit.adapters.console.terminal.components.context_picker import (
+    choose_context,
+    context_memory_rows,
+)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.context_access.access import (
-    GrantedReadStore,
-    resolve_context_access,
-)
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
-)
-from memcommit.application.context_access.granted_context_navigation import (
-    GrantedContextNavigation,
-    freeze_granted_context_navigation,
-    grant_navigation_annotation,
 )
 from memcommit.adapters.console.commands.switch.receipt import render_switch_context
 from memcommit.adapters.console.commands.switch.setup import (
@@ -23,53 +18,15 @@ from memcommit.adapters.console.commands.switch.setup import (
     run_switch_tui,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.source_projection.presentation import (
-    SourceDisplayValue,
-)
 from memcommit.application.operations.switch.application import (
     SwitchContextError,
     SwitchContextRequest,
     resolve_switch_context_name,
 )
-from memcommit.application.operations.switch.runtime import execute_switch_context, prepare_switch
-
-
-_GrantedPickerState = GrantedContextNavigation
-
-
-def _grant_annotation(
-    permissions: tuple[str, ...],
-) -> SourceDisplayValue:
-    """Render Grant authority through the application-wide source grammar."""
-
-    return grant_navigation_annotation(permissions)
-
-
-def _granted_picker_state(
-    store: MemoryStore | None = None,
-) -> _GrantedPickerState:
-    """Return granted rows, exact permission labels, and navigation rights."""
-
-    return freeze_granted_context_navigation(store)
-
-
-def _granted_picker_views(
-    store: MemoryStore | None = None,
-) -> tuple[tuple[str, ...], dict[str, SourceDisplayValue]]:
-    """Return granted rows and their permission labels."""
-
-    state = _granted_picker_state(store)
-    return state.names, state.annotations
-
-
-def _local_picker_annotations(
-    names: tuple[str, ...] | list[str],
-    store: MemoryStore | None = None,
-) -> dict[str, str]:
-    """Return no redundant annotation for locally owned history."""
-
-    del names, store
-    return {}
+from memcommit.application.operations.switch.runtime import (
+    execute_switch_context,
+    prepare_switch,
+)
 
 
 def cmd(
@@ -132,33 +89,14 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
+
             def load_picker_memories(context_name: str):
-                if context_name in snapshot.local_context_names:
-                    return context_memory_rows(store.load(context_name))
-                access = resolve_context_access(
-                    store,
-                    context_name,
-                    current_name=expected_current,
-                    required_permission="READ",
-                )
-                return context_memory_rows(
-                    GrantedReadStore(access).load(access.access_name)
-                )
+                return context_memory_rows(store.load(context_name))
+
             request = run_switch_tui(
                 SwitchTuiSetup(
                     expected_current=expected_current,
                     local_context_names=snapshot.local_context_names,
-                    virtual_context_names=snapshot.granted_navigation.names,
-                    selectable_virtual_names=(
-                        snapshot.granted_navigation.selectable_names
-                    ),
-                    local_annotations=_local_picker_annotations(
-                        snapshot.local_context_names,
-                        store,
-                    ),
-                    virtual_annotations=(
-                        snapshot.granted_navigation.annotations
-                    ),
                     memory_loader=load_picker_memories,
                 ),
                 # Preserve the established command-level injection seam while
@@ -173,6 +111,7 @@ def cmd(
             )
             raise typer.Exit(1)
         if request is None:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Switch cancelled.")
             return
     else:
@@ -181,13 +120,18 @@ def cmd(
                 store,
                 name,
                 current_name=expected_current,
-                required_permission="READ",
             )
             request = SwitchContextRequest(
                 selector=selected.name,
                 expected_current=expected_current,
             )
-        except (OSError, ProfileConfigError, ProfileError, RuntimeError, ValueError) as error:
+        except (
+            OSError,
+            ProfileConfigError,
+            ProfileError,
+            RuntimeError,
+            ValueError,
+        ) as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
 

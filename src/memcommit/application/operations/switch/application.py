@@ -46,13 +46,10 @@ class SwitchContextTarget:
     """Infrastructure-confirmed identity selected by one successful transition."""
 
     context_name: str
-    granted: bool
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name:
             raise SwitchContextError("Selected Context identity is invalid.")
-        if type(self.granted) is not bool:
-            raise SwitchContextError("Selected Context authority kind is invalid.")
 
 
 @dataclass(frozen=True)
@@ -62,7 +59,6 @@ class SwitchContextResult:
     previous_context_name: str | None
     context_name: str
     changed: bool
-    granted: bool
 
 
 class SwitchContextPort(Protocol):
@@ -128,7 +124,6 @@ def switch_context(
             previous_context_name=request.expected_current,
             context_name=target.context_name,
             changed=request.expected_current != target.context_name,
-            granted=target.granted,
         )
 
     context_name = resolve_switch_context_name(request)
@@ -155,5 +150,4 @@ def switch_context(
         previous_context_name=request.expected_current,
         context_name=context_name,
         changed=request.expected_current != context_name,
-        granted=target.granted,
     )

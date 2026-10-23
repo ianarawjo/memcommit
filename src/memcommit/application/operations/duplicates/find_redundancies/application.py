@@ -27,7 +27,6 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.persistence.store import MemoryStore
 
 
@@ -77,7 +76,6 @@ def prepare_find_redundancies(
     request: FindRedundanciesRequest,
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> QualityFindSourceFrame:
     """Resolve authority and freeze the exact independent Context frames."""
 
@@ -85,14 +83,11 @@ def prepare_find_redundancies(
         store,
         request.context_name,
         current_name=current_name,
-        required_permission="READ",
-        registry=registry,
     ).value
     return freeze_redundancy_scope(
         store,
         access,
         include_descendants=request.include_descendants,
-        registry=registry,
     )
 
 
@@ -115,7 +110,6 @@ def find_redundancies(
     provider_factory: Callable[[], FindingsProvider],
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> RedundancyScopeAnalysis:
     """Resolve authority, freeze Source, and execute Find Redundancies."""
 
@@ -123,7 +117,6 @@ def find_redundancies(
         store,
         request,
         current_name=current_name,
-        registry=registry,
     )
     return analyze_find_redundancies(source, provider_factory)
 

@@ -10,6 +10,7 @@ The persisted ``Comparison*`` vocabulary remains the wire-compatible schema.
 New operation code should use the ``MemoryRelation*`` aliases at the bottom of
 this module so ownership is not confused with the Compare command.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -19,7 +20,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Iterable, Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     MemoryRelationEvidenceError,
     MemoryRelationEvidenceSource,
@@ -52,7 +54,7 @@ MemoryRelationKind = Literal[
 ]
 MemoryRelationStatus = Literal["RESOLVED", "UNRESOLVED"]
 MemoryRelationIssuePriority = Literal["REQUIRED", "HELPFUL"]
-AnalysisRetention = Literal["GRANT_BOUND", "RETAINED"]
+AnalysisRetention = Literal["RETAINED"]
 
 _SIDES = {"REFERENCE", "COMPARED"}
 _RELATIONS = {
@@ -248,9 +250,10 @@ class MemoryRelationMemory:
             raise MemoryRelationError(
                 "Comparison Memory source identity does not match its evidence uid."
             )
-        if result.content_digest != hashlib.sha256(
-            result.content.encode("utf-8")
-        ).hexdigest():
+        if (
+            result.content_digest
+            != hashlib.sha256(result.content.encode("utf-8")).hexdigest()
+        ):
             raise MemoryRelationError(
                 "Comparison Memory content digest does not match."
             )
@@ -278,12 +281,12 @@ class MemoryRelationFrame:
         if not isinstance(context, Context):
             raise MemoryRelationError("Compare source must be a Context.")
         try:
-            context = project_memory_relation_context(context)
+            context = project_memory_relation_context((context,))
         except MemoryRelationEvidenceError as error:
             raise MemoryRelationError(str(error)) from error
         memories = tuple(
             MemoryRelationMemory.create(item, position)
-            for position, item in enumerate(context.iter_items())
+            for position, item in enumerate(context.iter_memories())
             if isinstance(item, Memory)
         )
         if not memories:
@@ -327,9 +330,7 @@ class MemoryRelationFrame:
             {
                 **complete.to_dict(),
                 "memories": [memory.to_dict() for memory in actionable],
-                "context_evidence": [
-                    memory.to_dict() for memory in scope.context_only
-                ],
+                "context_evidence": [memory.to_dict() for memory in scope.context_only],
                 # Evidence is empty when the Context has only one Memory, so
                 # selection identity must be stored independently. Otherwise
                 # a later Refresh could silently broaden an explicit focus
@@ -365,11 +366,7 @@ class MemoryRelationFrame:
                 memory.content,
                 memory.position,
                 memory.content_digest,
-                (
-                    memory.source.to_dict()
-                    if memory.source is not None
-                    else None
-                ),
+                (memory.source.to_dict() if memory.source is not None else None),
             )
 
         return (
@@ -452,12 +449,9 @@ class MemoryRelationFrame:
                 != list(range(len(memories)))
             )
         ):
-            raise MemoryRelationError(
-                "Invalid comparison frame Memory order."
-            )
+            raise MemoryRelationError("Invalid comparison frame Memory order.")
         if selected_memory_uid is not None and (
-            len(memories) != 1
-            or memories[0].uid != selected_memory_uid
+            len(memories) != 1 or memories[0].uid != selected_memory_uid
         ):
             raise MemoryRelationError(
                 "Selected comparison Memory does not match its frame."
@@ -582,9 +576,7 @@ class MemoryRelation:
             "comparison relation status",
         )
         expected_status = (
-            "UNRESOLVED"
-            if kind in {"CONFLICT", "UNCLEAR"}
-            else "RESOLVED"
+            "UNRESOLVED" if kind in {"CONFLICT", "UNCLEAR"} else "RESOLVED"
         )
         if status != expected_status:
             raise MemoryRelationError(
@@ -777,13 +769,8 @@ class MemoryRelationInput:
         reference_memory_selector: str | None = None,
         compared_memory_selector: str | None = None,
     ) -> "MemoryRelationInput":
-        if (
-            reference.uid == compared.uid
-            or reference.name == compared.name
-        ):
-            raise MemoryRelationError(
-                "Compare requires two distinct Contexts."
-            )
+        if reference.uid == compared.uid or reference.name == compared.name:
+            raise MemoryRelationError("Compare requires two distinct Contexts.")
         reference_frame, reference_evidence = MemoryRelationFrame.focused_from_context(
             reference,
             side="REFERENCE",
@@ -813,22 +800,19 @@ class MemoryRelationInput:
     def validate(self) -> None:
         _canonical_uuid(self.uid, "comparison uid")
         _timestamp(self.created_at, "comparison creation time")
-        if (
-            len(self.include_descendants) != 2
-            or any(type(value) is not bool for value in self.include_descendants)
+        if len(self.include_descendants) != 2 or any(
+            type(value) is not bool for value in self.include_descendants
         ):
             raise MemoryRelationError("Invalid comparison descendant scopes.")
         if (
             len(self.frames) != 2
-            or tuple(frame.side for frame in self.frames)
-            != ("REFERENCE", "COMPARED")
+            or tuple(frame.side for frame in self.frames) != ("REFERENCE", "COMPARED")
             or len({frame.uid for frame in self.frames}) != 2
             or len({frame.context_uid for frame in self.frames}) != 2
             or len({frame.context_name for frame in self.frames}) != 2
         ):
             raise MemoryRelationError(
-                "Compare requires ordered distinct REFERENCE and COMPARED "
-                "frames."
+                "Compare requires ordered distinct REFERENCE and COMPARED frames."
             )
         if (
             len(self.context_evidence) != 2
@@ -855,17 +839,16 @@ def memory_relation_analysis_matches_input(
 ) -> bool:
     """Return whether a saved result has the exact requested actionable scope."""
 
-    return (
-        analysis.include_descendants == comparison_input.include_descendants
-        and all(
-            saved.source_state() == requested.source_state()
-            for saved, requested in zip(
-                analysis.frames,
-                comparison_input.frames,
-                strict=True,
-            )
+    return analysis.include_descendants == comparison_input.include_descendants and all(
+        saved.source_state() == requested.source_state()
+        for saved, requested in zip(
+            analysis.frames,
+            comparison_input.frames,
+            strict=True,
         )
     )
+
+
 @dataclass(frozen=True)
 class MemoryRelationAnalysis:
     uid: str
@@ -921,9 +904,7 @@ class MemoryRelationAnalysis:
             "created_at": self.created_at,
             "frames": [frame.to_dict() for frame in self.frames],
             "overview": self.understanding.text,
-            "relations": [
-                relation.to_dict() for relation in self.relations
-            ],
+            "relations": [relation.to_dict() for relation in self.relations],
             "issues": [issue.to_dict() for issue in self.issues],
             "reports": self.reports.to_dict(),
             "include_descendants": list(self.include_descendants),
@@ -938,9 +919,7 @@ class MemoryRelationAnalysis:
             type(schema_version) is not int
             or schema_version != MEMORY_RELATION_SCHEMA_VERSION
         ):
-            raise MemoryRelationError(
-                "Unsupported comparison analysis schema version."
-            )
+            raise MemoryRelationError("Unsupported comparison analysis schema version.")
         keys = {
             "schema_version",
             "uid",
@@ -994,9 +973,7 @@ class MemoryRelationAnalysis:
                 text=_string(data["overview"], "comparison overview"),
                 source_uids=tuple(
                     dict.fromkeys(
-                        memory.uid
-                        for frame in frames
-                        for memory in frame.memories
+                        memory.uid for frame in frames for memory in frame.memories
                     )
                 ),
             ),
@@ -1042,8 +1019,7 @@ class MemoryRelationAnalysis:
             raise MemoryRelationError("Unsupported comparison analysis schema version.")
         if (
             not self.relations
-            or len({relation.uid for relation in self.relations})
-            != len(self.relations)
+            or len({relation.uid for relation in self.relations}) != len(self.relations)
             or len({issue.uid for issue in self.issues}) != len(self.issues)
         ):
             raise MemoryRelationError(
@@ -1059,9 +1035,7 @@ class MemoryRelationAnalysis:
         ):
             raise MemoryRelationError("Invalid comparison understanding summary.")
         if not isinstance(self.reports, MemoryRelationReports):
-            raise MemoryRelationError(
-                "Comparison analysis requires semantic reports."
-            )
+            raise MemoryRelationError("Comparison analysis requires semantic reports.")
 
         frame_by_uid = {frame.uid: frame for frame in self.frames}
         expected_members = {
@@ -1070,9 +1044,7 @@ class MemoryRelationAnalysis:
             for memory in frame.memories
         }
         observed_members: list[tuple[str, str]] = []
-        relation_by_uid = {
-            relation.uid: relation for relation in self.relations
-        }
+        relation_by_uid = {relation.uid: relation for relation in self.relations}
         for relation in self.relations:
             relation_sides: set[str] = set()
             for member in relation.members:
@@ -1081,12 +1053,9 @@ class MemoryRelationAnalysis:
                     memory.uid for memory in frame.memories
                 }:
                     raise MemoryRelationError(
-                        "Comparison relation references an unknown source "
-                        "Memory."
+                        "Comparison relation references an unknown source Memory."
                     )
-                observed_members.append(
-                    (member.frame_uid, member.memory_uid)
-                )
+                observed_members.append((member.frame_uid, member.memory_uid))
                 relation_sides.add(frame.side)
             if relation.kind == "DISTINCT":
                 if len(relation_sides) != 1:
@@ -1096,21 +1065,17 @@ class MemoryRelationAnalysis:
                     )
             elif relation_sides != {"REFERENCE", "COMPARED"}:
                 raise MemoryRelationError(
-                    "Cross-source comparison relation must contain both "
-                    "source sides."
+                    "Cross-source comparison relation must contain both source sides."
                 )
-        if (
-            set(observed_members) != expected_members
-            or len(observed_members) != len(expected_members)
+        if set(observed_members) != expected_members or len(observed_members) != len(
+            expected_members
         ):
             raise MemoryRelationError(
                 "Every source Memory must appear in exactly one primary "
                 "comparison relation."
             )
 
-        reference_uid, compared_uid = (
-            frame.uid for frame in self.frames
-        )
+        reference_uid, compared_uid = (frame.uid for frame in self.frames)
         # The ledger, rather than provider-authored counts or labels, is
         # authoritative for whether each compact report may exist.
         report_groups = {
@@ -1125,25 +1090,19 @@ class MemoryRelationAnalysis:
             "reference_only": any(
                 relation.kind == "DISTINCT"
                 and all(
-                    member.frame_uid == reference_uid
-                    for member in relation.members
+                    member.frame_uid == reference_uid for member in relation.members
                 )
                 for relation in self.relations
             ),
             "compared_only": any(
                 relation.kind == "DISTINCT"
-                and all(
-                    member.frame_uid == compared_uid
-                    for member in relation.members
-                )
+                and all(member.frame_uid == compared_uid for member in relation.members)
                 for relation in self.relations
             ),
         }
         for name, present in report_groups.items():
             report = getattr(self.reports, name)
-            if (present and not report.strip()) or (
-                not present and report != ""
-            ):
+            if (present and not report.strip()) or (not present and report != ""):
                 raise MemoryRelationError(
                     f"Comparison {name.replace('_', '-')} report does "
                     "not match its relation group."

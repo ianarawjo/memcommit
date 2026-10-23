@@ -14,7 +14,9 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.command_editor import (
     CommandReview,
@@ -40,7 +42,9 @@ from memcommit.adapters.console.terminal.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
     scroll_wrapped_page,
 )
-from memcommit.adapters.console.terminal.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.terminal.core.keybindings import (
+    bind_case_insensitive_key,
+)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -51,9 +55,16 @@ from memcommit.adapters.console.terminal.components.resolution.model import (
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
 )
-from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
-from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
-from memcommit.adapters.console.terminal.components.selection import choice_marker, choice_visual_state
+from memcommit.adapters.console.terminal.components.selection.model import (
+    SelectionOption,
+)
+from memcommit.adapters.console.terminal.components.selection.state import (
+    SingleSelectionState,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    choice_marker,
+    choice_visual_state,
+)
 
 
 T = TypeVar("T")
@@ -160,7 +171,7 @@ def run_inline_resolution_workbench(
                 if choice.selectable
             ),
             cursor_value=item.default_choice_uid or "",
-            selected_value=item.default_choice_uid,
+            selected_value=(item.default_choice_uid or ""),
             allow_empty=False,
         )
         for item in spec.items
@@ -342,7 +353,9 @@ def run_inline_resolution_workbench(
             )
         if review_mode["value"] is not None:
             apply_label = (
-                "reviewed plan" if current_review().replay_requires_input else "exact command"
+                "reviewed plan"
+                if current_review().replay_requires_input
+                else "exact command"
             )
             return (
                 f" Enter apply {apply_label} · Esc/Backspace return"

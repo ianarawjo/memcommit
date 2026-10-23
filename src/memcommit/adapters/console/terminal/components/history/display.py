@@ -36,7 +36,9 @@ def history_action_style(command: str) -> str:
     semantic palette.
     """
 
-    from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
+    from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+        semantic_action_style,
+    )
 
     return semantic_action_style(command, fallback="class:report-neutral").removeprefix(
         "class:"
@@ -145,7 +147,7 @@ def checkpoint_command_identity(checkpoint: Mapping[str, object]) -> str | None:
     uid = checkpoint.get("uid")
     if not isinstance(uid, str) or not uid:
         return None
-    args = _mapping(checkpoint.get("args"))
+    args = _mapping(checkpoint.get("command_details"))
     if command in {"undo", "redo"}:
         restore = _mapping(args.get("command_restore"))
         receipt_uid = restore.get("receipt_uid")
@@ -237,9 +239,7 @@ def _restore_badges_and_details(
         badges.append(
             HistoryDisplayBadge(f"RECEIPT {receipt_uid[:8]}", "history-receipt")
         )
-        details.append(
-            HistoryDisplayDetail("Receipt", receipt_uid, "history-receipt")
-        )
+        details.append(HistoryDisplayDetail("Receipt", receipt_uid, "history-receipt"))
     if isinstance(source_unit_uid, str) and source_unit_uid:
         source_short = source_unit_uid.split(":", 1)[-1][:8]
         source_label = (
@@ -292,16 +292,15 @@ def _summary(
         name = snapshot.get("name") or args.get("name") or "unknown"
         return f"baseline for CONTEXT {name} · not counted as a command"
     if command == "add":
-        content = _one_line(args.get("content"))
+        contents = args.get("contents")
+        if isinstance(contents, list) and len(contents) > 1:
+            return f"Memories +{len(contents)}"
+        content = _one_line(contents[0] if isinstance(contents, list) and contents else args.get("content"))
         if content:
             return f'created "{content}"'
     if command == "edit":
         return "content changed · Memory identity preserved"
     if command == "remove":
-        description = _one_line(checkpoint.get("description"))
-        marker = "]: "
-        if marker in description:
-            return "removed " + description.split(marker, 1)[1]
         return "removed one direct Memory"
     if command == "embed":
         child = args.get("child")
@@ -315,8 +314,8 @@ def _summary(
             effect = "restored" if command == "undo" else "reapplied"
             return f"{effect} mem {source}"
     return _one_line(
-        checkpoint.get("description") or checkpoint.get("message"),
-        fallback="(no description)",
+        checkpoint.get("checkpoint_message"),
+        fallback=command,
     )
 
 
@@ -353,7 +352,7 @@ def project_history_display_rows(
             if seen_key in seen:
                 continue
             seen.add(seen_key)
-        args = _mapping(checkpoint.get("args"))
+        args = _mapping(checkpoint.get("command_details"))
         badges: list[HistoryDisplayBadge] = [
             HistoryDisplayBadge(f"CHECKPOINT {checkpoint_uid[:8]}")
         ]
@@ -368,7 +367,7 @@ def project_history_display_rows(
                 ),
             ),
         ]
-        command_badge = _command_identity_badge(identity)
+        command_badge = _command_identity_badge((identity or ""))
         if command_badge is not None:
             badges.append(command_badge)
             details.append(
@@ -389,9 +388,7 @@ def project_history_display_rows(
             snapshot = _mapping(checkpoint.get("snapshot"))
             snapshot_uid = snapshot.get("uid")
             if isinstance(snapshot_uid, str) and snapshot_uid:
-                badges.append(
-                    HistoryDisplayBadge(f"CONTEXT {snapshot_uid[:8]}")
-                )
+                badges.append(HistoryDisplayBadge(f"CONTEXT {snapshot_uid[:8]}"))
                 details.append(HistoryDisplayDetail("Context", snapshot_uid))
         row = HistoryDisplayRow(
             command="created" if command == "init" else command,

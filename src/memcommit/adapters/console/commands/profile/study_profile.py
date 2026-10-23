@@ -38,7 +38,7 @@ def remove_study_cmd(
             "WARNING: This permanently deletes every Profile in Study '"
             + display_escape_text(name)
             + "', including every store, Memory, session, checkpoint, and "
-            "connected Grant. This cannot be undone or recovered by mem."
+            "registered Profile. This cannot be undone or recovered by mem."
         )
         if not typer.confirm("Continue?", default=False):
             typer.echo("Study removal cancelled.")

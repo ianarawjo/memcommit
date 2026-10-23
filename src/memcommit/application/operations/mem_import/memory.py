@@ -2,21 +2,25 @@
 
 from __future__ import annotations
 
+
+from memcommit.application.operations.profile.model._storage import (
+    locked_profile_registry,
+)
+
 import hashlib
 
 from memcommit.application.capabilities.operand_resolution import (
     resolve_existing_local_context_operand,
 )
 from memcommit.application.operations.profile.config import (
-    ProfileEntry,
     ProfileRegistry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model._storage import (
-    ProfileError,
-    authority_grant_snapshot_lock,
-)
-from memcommit.core.context import AutoCheckpoint, Context, Memory
+from memcommit.models.profile import Profile
+from memcommit.application.operations.profile.model._storage import ProfileError
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 from ._shared import (
@@ -32,7 +36,7 @@ def _direct_memory(context: Context, selector: str) -> Memory:
         raise ValueError("Memory selector must be non-empty.")
     matches = [
         item
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory) and item.uid.startswith(selector)
     ]
     if not matches:
@@ -52,7 +56,7 @@ def _memory_content_digest(memory: Memory) -> str:
 
 def _memory_import_plan(
     registry: ProfileRegistry,
-    source_profile_entry: ProfileEntry,
+    source_profile_entry: Profile,
     source_context: Context,
     source_memory: Memory,
     target: Context,
@@ -64,12 +68,10 @@ def _memory_import_plan(
         target_profile_uid=registry.active.uid,
         source_context=source_context.name,
         source_context_uid=source_context.uid,
-        source_context_digest=str(source_context._store_digest or ""),
         source_memory_uid=source_memory.uid,
         source_memory_content_sha256=_memory_content_digest(source_memory),
         target_context=target.name,
         target_context_uid=target.uid,
-        target_context_digest=str(target._store_digest or ""),
     )
 
 
@@ -104,7 +106,7 @@ def plan_memory_import(
         destination,
         target_context_locator,
     )
-    with authority_grant_snapshot_lock() as registry:
+    with locked_profile_registry() as registry:
         require_active_profile_snapshot(registry, destination)
         source = source_profile(registry, source_profile_name)
         require_cross_profile_source(registry, source)
@@ -162,7 +164,7 @@ def import_memory_from_profile(
         target_context_locator,
     )
 
-    with authority_grant_snapshot_lock() as registry:
+    with locked_profile_registry() as registry:
         require_active_profile_snapshot(registry, destination)
         source = source_profile(registry, source_profile_name)
         require_cross_profile_source(registry, source)
@@ -213,23 +215,17 @@ def import_memory_from_profile(
                 target.add(imported)
                 destination.save(
                     target,
-                    AutoCheckpoint(
+                    AutoCheckpointRequest(
                         command="import",
-                        args={
+                        command_details={
                             "resource_kind": "memory",
                             "source_profile_uid": source.uid,
                             "source_profile_name": source.name,
                             "source_context": source_context.name,
                             "source_context_uid": source_context.uid,
-                            "source_context_digest": source_context._store_digest,
                             "source_memory_uid": source_memory.uid,
                             "target_context": target.name,
                         },
-                        description=(
-                            f"Imported Memory [{source_memory.uid[:8]}] from "
-                            f"Profile '{source.name}' Context "
-                            f"'{source_context.name}'."
-                        ),
                     ),
                 )
 

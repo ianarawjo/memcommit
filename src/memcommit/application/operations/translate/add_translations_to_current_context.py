@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.core.context import AutoCheckpoint
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store import MemoryStore
 
 from .context_translation_result import ContextTranslationResult
@@ -26,16 +26,10 @@ def add_translations_to_current_context(
     result = apply_translation(source, plan)
     store.save(
         source,
-        AutoCheckpoint(
+        AutoCheckpointRequest(
             command="translate",
-            args=result.checkpoint_args(),
-            description=(
-                f"Added {len(result.translations)} "
-                + ("translation" if len(result.translations) == 1 else "translations")
-                + f" to {plan.target_language}"
-            ),
+            command_details=result.checkpoint_command_details(),
         ),
-        expected_context_digest=plan.context_digest,
     )
     return ContextTranslationResult(
         plan=plan,

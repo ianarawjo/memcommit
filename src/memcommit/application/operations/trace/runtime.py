@@ -8,9 +8,6 @@ from memcommit.application.context_access.access import (
     ContextAccess,
     resolve_context_access,
 )
-from memcommit.application.authorization.study_operation_policy import (
-    require_trace_access,
-)
 from memcommit.application.capabilities.memory_report_targeting import (
     ReadableMemoryTargetNotFoundError,
     ResolvedMemoryReportTarget,
@@ -22,16 +19,9 @@ from memcommit.application.capabilities.memory_report_targeting import (
 from memcommit.application.capabilities.history.query.context_history_slicing import (
     build_context_history_slice,
 )
-from memcommit.application.operations.trace.granted_view import (
-    GrantedMemoryTraceReport,
-    build_granted_memory_trace,
-)
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     collect_memory_history_candidates,
     reconstruct_memory_history,
-)
-from memcommit.application.operations.trace.reference_lineage import (
-    build_reference_trace,
 )
 from memcommit.application.operations.trace.application import (
     FrozenTraceSubject,
@@ -47,7 +37,7 @@ from memcommit.application.operations.trace.application import (
     list_trace_targets,
     run_trace,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore
 
 
@@ -62,12 +52,6 @@ class _OwnedMemoryBinding:
     store: MemoryStore
     context: Context
     target: ResolvedMemoryReportTarget
-
-
-@dataclass(frozen=True, slots=True)
-class _GrantedMemoryBinding:
-    access: ContextAccess
-    report: GrantedMemoryTraceReport
 
 
 class MemoryStoreTraceSource:
@@ -86,14 +70,6 @@ class MemoryStoreTraceSource:
             self._store,
             context_locator,
             current_name=current_context_name,
-            required_permission="READ",
-        )
-        # READ exposes current content. Retained owner checkpoints remain a
-        # separate authority boundary and must be checked before opening them.
-        require_trace_access(
-            access.access_name,
-            granted=access.is_granted,
-            store_root=self._store.store_dir,
         )
         return access, access.store.load_direct(access.context_name)
 
@@ -138,20 +114,6 @@ class MemoryStoreTraceSource:
             candidates=candidates,
         )
 
-    def _granted_subject(
-        self,
-        access: ContextAccess,
-        selector: str,
-    ) -> FrozenTraceSubject:
-        report = build_granted_memory_trace(access, selector)
-        return FrozenTraceSubject(
-            kind="GRANTED_MEMORY",
-            context_uid=report.context_uid,
-            context_name=report.context_name,
-            selected_uid=report.selected_uid,
-            token=_GrantedMemoryBinding(access=access, report=report),
-        )
-
     def _memory_subject(
         self,
         target: TraceMemoryTarget,
@@ -167,10 +129,7 @@ class MemoryStoreTraceSource:
                 self._store,
                 owner_locator,
                 current_name=current_context_name,
-                required_permission="READ",
             )
-            if access.is_granted:
-                return self._granted_subject(access, selector)
             resolved = resolve_local_memory_report_target(
                 self._store,
                 selector,
@@ -191,8 +150,6 @@ class MemoryStoreTraceSource:
             except ReadableMemoryTargetNotFoundError:
                 readable = None
             if readable is not None:
-                if readable.access.is_granted:
-                    return self._granted_subject(readable.access, readable.uid)
                 resolved = resolve_local_memory_report_target(
                     self._store,
                     readable.uid,
@@ -209,11 +166,7 @@ class MemoryStoreTraceSource:
 
         context = self._store.load_direct(resolved.context_name)
         return FrozenTraceSubject(
-            kind=(
-                "MEMORY_REFERENCE"
-                if resolved.kind == "MEMORY_REFERENCE"
-                else "MEMORY"
-            ),
+            kind=("MEMORY"),
             context_uid=context.uid,
             context_name=context.name,
             selected_uid=resolved.uid,
@@ -249,19 +202,11 @@ class MemoryStoreTraceSource:
         if isinstance(token, _OwnedContextBinding):
             return build_context_history_slice(token.store, token.context.name)
         if isinstance(token, _OwnedMemoryBinding):
-            if subject.kind == "MEMORY_REFERENCE":
-                return build_reference_trace(
-                    token.store,
-                    token.context,
-                    token.target.uid,
-                )
             return reconstruct_memory_history(
                 token.store,
                 token.context,
                 token.target.uid,
             )
-        if isinstance(token, _GrantedMemoryBinding):
-            return token.report
         raise TraceError("Frozen Trace subject has an invalid runtime binding.")
 
 

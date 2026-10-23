@@ -4,16 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
     try_resolve_context_access_or_local_memory,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.operand_resolution import (
     ContextOperandCandidate,
     ContextOperandResolutionError,
@@ -24,13 +21,11 @@ from memcommit.application.capabilities.local_target_lookup import (
 )
 from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
-    DirectMemoryTarget,
 )
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.persistence.store import MemoryStore
 
 
@@ -55,7 +50,6 @@ def _resolve_context_endpoint(
     operand: str | None,
     *,
     current_name: str | None,
-    registry: ProfileRegistry,
     role: str,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...],
 ) -> ContextAccess:
@@ -69,23 +63,25 @@ def _resolve_context_endpoint(
             store,
             requested,
             current_name=current_name,
-            required_permission="READ",
-            registry=registry,
             candidates=candidates,
         ).value
     except (FileNotFoundError, ContextOperandResolutionError) as error:
+        from memcommit.application.capabilities.context_locator import (
+            resolve_context_locator,
+        )
+
+        canonical = resolve_context_locator(requested, current=current_name)
+        resolved_detail = (
+            f" (resolved to {canonical!r})" if canonical != requested else ""
+        )
         raise CompareTargetingError(
-            f"{role} Context {requested!r} does not exist or is unavailable."
+            f"{role} Context {requested!r}{resolved_detail} does not exist."
         ) from error
 
 
-def _direct_context(access: ContextAccess, registry: ProfileRegistry):
+def _direct_context(access: ContextAccess):
     """Load only the authorized direct owner used by the shared UID grammar."""
 
-    if access.is_granted:
-        return GrantedReadStore(access, registry=registry).load_direct(
-            access.access_name
-        )
     return access.store.load_direct(access.context_name)
 
 
@@ -93,13 +89,12 @@ def _resolve_qualified_memory(
     access: ContextAccess,
     selector: str,
     *,
-    registry: ProfileRegistry,
     role: str,
 ) -> str:
-    context = _direct_context(access, registry)
+    context = _direct_context(access)
     matches = tuple(
         item
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory) and item.uid.startswith(selector)
     )
     if not matches:
@@ -122,15 +117,11 @@ def _resolve_auto_memory_endpoint(
     operand: str,
     *,
     current_name: str | None,
-    registry: ProfileRegistry,
     role: str,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...],
 ) -> tuple[ContextAccess, str]:
     locator = parse_direct_memory_locator(operand)
     if locator.context_locator is None:
-        # Bare selectors deliberately scan ordinary local direct owners only.
-        # Grant contents are not an enumerable namespace, and current Context
-        # must not silently win when branch copies retain the same Memory UID.
         try:
             target = resolve_local_direct_memory_locator(
                 store,
@@ -141,31 +132,27 @@ def _resolve_auto_memory_endpoint(
             if "was found in any local Context" not in str(error):
                 raise
             raise CompareTargetingError(
-                f"{error} Bare Memory operands do not enumerate Grants; use "
-                "CONTEXT:UID to name a readable public owner."
+                f"{error} Qualify the Memory with CONTEXT:UID to name its local owner."
             ) from error
         access = _resolve_context_endpoint(
             store,
-            target.context_name,
+            target[0].name,
             current_name=current_name,
-            registry=registry,
             role=role,
             candidates=candidates,
         )
-        return access, target.memory_uid
+        return access, target[1].uid
 
     access = _resolve_context_endpoint(
         store,
         locator.context_locator,
         current_name=current_name,
-        registry=registry,
         role=f"{role} Memory owner",
         candidates=candidates,
     )
     memory_uid = _resolve_qualified_memory(
         access,
         locator.memory_selector,
-        registry=registry,
         role=role,
     )
     return access, memory_uid
@@ -176,7 +163,6 @@ def _resolve_auto_typed_endpoint(
     operand: str,
     *,
     current_name: str | None,
-    registry: ProfileRegistry,
     role: str,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...],
 ) -> tuple[ContextAccess, str | None]:
@@ -188,7 +174,6 @@ def _resolve_auto_typed_endpoint(
             store,
             operand,
             current_name=current_name,
-            registry=registry,
             role=role,
             candidates=candidates,
         )
@@ -196,27 +181,24 @@ def _resolve_auto_typed_endpoint(
         store,
         operand,
         current_name=current_name,
-        registry=registry,
         candidates=candidates,
     )
     if isinstance(resolved, ResolvedExistingContextOperand):
         return resolved.value, None
-    if isinstance(resolved, DirectMemoryTarget):
+    if isinstance(resolved, tuple):
         access = _resolve_context_endpoint(
             store,
-            resolved.context_name,
+            resolved[0].name,
             current_name=current_name,
-            registry=registry,
             role=role,
             candidates=candidates,
         )
-        return access, resolved.memory_uid
+        return access, resolved[1].uid
     return (
         _resolve_context_endpoint(
             store,
             operand,
             current_name=current_name,
-            registry=registry,
             role=role,
             candidates=candidates,
         ),
@@ -236,14 +218,12 @@ def resolve_compare_cli_targets(
     reference_memory_selector: str | None,
     compared_memory_selector: str | None,
     current_name: str | None,
-    registry: ProfileRegistry,
 ) -> CompareCliTargets:
     """Freeze auto-typed operands into Compare's existing focused-frame inputs."""
 
     candidates = freeze_profile_context_access_candidates(
         store,
         current_name=current_name,
-        registry=registry,
     )
     reference_operand_is_memory = False
     compared_operand_is_memory = False
@@ -254,7 +234,6 @@ def resolve_compare_cli_targets(
             store,
             reference_operand,
             current_name=current_name,
-            registry=registry,
             role="Reference",
             candidates=candidates,
         )
@@ -264,7 +243,6 @@ def resolve_compare_cli_targets(
             store,
             reference_operand,
             current_name=current_name,
-            registry=registry,
             role="Reference",
             candidates=candidates,
         )
@@ -281,7 +259,6 @@ def resolve_compare_cli_targets(
             store,
             reference_operand,
             current_name=current_name,
-            registry=registry,
             role="Reference",
             candidates=candidates,
         )
@@ -292,7 +269,6 @@ def resolve_compare_cli_targets(
             store,
             compared_operand,
             current_name=current_name,
-            registry=registry,
             role="Compared",
             candidates=candidates,
         )
@@ -302,7 +278,6 @@ def resolve_compare_cli_targets(
             store,
             compared_operand,
             current_name=current_name,
-            registry=registry,
             role="Compared",
             candidates=candidates,
         )
@@ -318,7 +293,6 @@ def resolve_compare_cli_targets(
             store,
             compared_operand,
             current_name=current_name,
-            registry=registry,
             role="Compared",
             candidates=candidates,
         )

@@ -17,6 +17,7 @@ dependencies = [
   "PyYAML>=6,<7",
   "prompt-toolkit>=3.0.52,<4",
   "diff-match-patch==20241021",
+  "pathspec>=0.12,<2",
 ]
 
 [project.scripts]

@@ -5,7 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Iterable
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import (
     canonical_context_record,
     context_record_digest,
@@ -111,7 +112,7 @@ def _frame_from_context(ctx: Context) -> _Frame:
     record = ctx.to_dict()
     memories: dict[str, MemoryState] = {}
     order: list[str] = []
-    for item in ctx.iter_items():
+    for item in ctx.iter_memories():
         if not isinstance(item, Memory):
             continue
         memories[item.uid] = MemoryState(

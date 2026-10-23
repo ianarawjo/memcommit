@@ -7,10 +7,8 @@ from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.application.context_access.access import (
-    GrantedReadStore,
-    resolve_context_access,
-)
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
@@ -27,9 +25,6 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
-)
-from memcommit.application.context_access.granted_context_navigation import (
-    freeze_granted_context_navigation,
 )
 from memcommit.adapters.console.coordination.endpoint_operand import (
     choose_endpoint_operand,
@@ -120,13 +115,11 @@ def _start_analysis(
         store,
         source_name,
         current_name=current_name,
-        required_permission="READ",
     )
     criteria_access = resolve_context_access(
         store,
         criteria_name,
         current_name=current_name,
-        required_permission="READ",
     )
     # Freeze relative locators into canonical public names before confirmation.
     # The application repeats authority checks before cache lookup or provider
@@ -180,14 +173,12 @@ def _start(
             store,
             source_name,
             current_name=snapshot.current_name,
-            required_permission="READ",
             candidates=candidates,
         ).name,
         criteria_name=resolve_existing_context_access(
             store,
             criteria_name,
             current_name=snapshot.current_name,
-            required_permission="READ",
             candidates=candidates,
         ).name,
         output_name=output_name,
@@ -252,31 +243,13 @@ def render_sever(session: SeverSession) -> str:
                 f"     WHY · {safe_terminal_text(candidate.rationale)}",
             ]
         )
-    excluded_query_names = tuple(
-        dict.fromkeys(
-            (
-                *session.source.excluded_query_context_names,
-                *session.criteria.excluded_query_context_names,
-            )
-        )
-    )
-    if excluded_query_names:
-        lines.extend(
-            [
-                "",
-                "NOT INCLUDED · "
-                + ", ".join(safe_terminal_text(name) for name in excluded_query_names),
-                "These query-only Contexts do not grant readable Memory access.",
-            ]
-        )
+
     lines.extend(
         [
             "",
-            (
-                "Apply updates each selected Source Context at its existing location."
-                if self_save
-                else "Apply creates a separate Result Context."
-            ),
+            "Apply updates each selected Source Context at its existing location."
+            if self_save
+            else "Apply creates a separate Result Context.",
         ]
     )
     if session.state == "APPLIED":
@@ -357,26 +330,14 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
 
 def _interactive_setup(store: MemoryStore) -> tuple[str, str, bool, bool] | None:
     names = tuple(store.list_context_names())
-    granted = freeze_granted_context_navigation(store)
     current_name = store.current_context_name()
 
     def load_setup_memories(context_name: str):
-        if context_name in names:
-            return context_memory_rows(store.load(context_name))
-        access = resolve_context_access(
-            store,
-            context_name,
-            current_name=current_name,
-            required_permission="READ",
-        )
-        return context_memory_rows(GrantedReadStore(access).load(access.access_name))
+        return context_memory_rows(store.load_direct(context_name))
 
     receipt = choose_sever_setup(
         names,
         current=current_name,
-        virtual_names=granted.names,
-        selectable_virtual_names=granted.selectable_names,
-        annotations=granted.annotations,
         memory_loader=load_setup_memories,
     )
     if receipt is None:
@@ -445,7 +406,8 @@ def _run_preview(store: MemoryStore, session: SeverSession) -> SeverSession:
     def apply_preview():
         # The application snapshot token binds the displayed treatments to Apply.
         return execute_sever_session_apply(
-            SeverPersistedApplyRequest(snapshot=snapshot), store=store,
+            SeverPersistedApplyRequest(snapshot=snapshot),
+            store=store,
         ).snapshot.session
 
     return run_sever_preview(session, apply_preview=apply_preview) or session
@@ -679,6 +641,7 @@ def cmd(
                 session_store
             )
             if launcher_action == "CANCEL":
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Sever selection cancelled. No session was opened.")
                 return
             if launcher_action == "OPEN":
@@ -720,6 +683,7 @@ def cmd(
                     return
                 setup = _interactive_setup(store)
                 if setup is None:
+                    annotate_command_outcome("CANCELLED")
                     typer.echo("Sever setup cancelled. No session created.")
                     return
                 (
@@ -742,14 +706,12 @@ def cmd(
                 store,
                 source_name,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
                 candidates=context_candidates,
             ).name
             criteria_name = resolve_existing_context_access(
                 store,
                 criteria_name,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
                 candidates=context_candidates,
             ).name
             if source_descendants is None or criteria_descendants is None:
@@ -798,7 +760,9 @@ def cmd(
                 raise SeverCommandError(
                     "--choice must be recommended, as-written, forget, or custom."
                 )
-            if normalized == "custom" and (comment is None or not comment.strip()):
+            if normalized == "custom" and (
+                comment is None or not (comment or "").strip()
+            ):
                 raise SeverCommandError(
                     "--choice custom requires --comment with exact result content."
                 )

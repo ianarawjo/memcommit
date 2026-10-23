@@ -5,11 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Protocol, overload
 
-from memcommit.core.context_targeting.model import DirectMemoryLocator
-from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 
-
-class EditError(RuntimeError):
+class MemEditError(RuntimeError):
     """Raised when an exact Edit cannot be prepared or published."""
 
 
@@ -29,9 +26,6 @@ class EditBatchRequest:
     input_source: str | None = None
 
 
-EditTargetSelector = DirectMemoryLocator
-
-
 @dataclass(frozen=True)
 class EditMemoryChange:
     memory_uid: str
@@ -48,7 +42,6 @@ class FrozenEditPlan:
     request: EditRequest
     context_name: str
     context_uid: str
-    context_digest: str
     memory_uid: str
     original_content: str
     token: object = field(repr=False, compare=False)
@@ -59,7 +52,6 @@ class FrozenEditBatchPlan:
     request: EditBatchRequest
     context_name: str
     context_uid: str
-    context_digest: str
     edits: tuple[EditMemoryChange, ...]
     token: object = field(repr=False, compare=False)
 
@@ -110,41 +102,30 @@ def validate_edit_request(
     if request.context_locator is not None and (
         not isinstance(request.context_locator, str) or not request.context_locator
     ):
-        raise EditError("Edit Context locator must be nonempty text.")
+        raise MemEditError("Edit Context locator must be nonempty text.")
     if isinstance(request, EditBatchRequest):
         if not isinstance(request.edits, tuple) or not request.edits:
-            raise EditError("Edit batch requires at least one edit record.")
+            raise MemEditError("Edit batch requires at least one edit record.")
         if request.input_source is not None and (
             not isinstance(request.input_source, str) or not request.input_source
         ):
-            raise EditError("Edit input source must be nonempty text.")
+            raise MemEditError("Edit input source must be nonempty text.")
         entries = request.edits
     else:
         entries = ((request.memory_selector, request.content),)
     for entry in entries:
         if not isinstance(entry, tuple) or len(entry) != 2:
-            raise EditError(
+            raise MemEditError(
                 "Each edit requires a Memory selector and replacement content."
             )
         selector, content = entry
         if not isinstance(selector, str) or not selector:
-            raise EditError("Edit Memory selector must be nonempty text.")
+            raise MemEditError("Edit Memory selector must be nonempty text.")
+        if ":" in selector:
+            raise MemEditError("Edit accepts only a Memory UID in the current Context.")
         if not isinstance(content, str):
-            raise EditError("Edit replacement content must be text.")
+            raise MemEditError("Edit replacement content must be text.")
     return request
-
-
-def edit_target_selector(request: EditRequest) -> EditTargetSelector:
-    """Parse the shared ``CONTEXT:UID`` owner grammar for one Memory."""
-
-    validate_edit_request(request)
-    try:
-        return parse_direct_memory_locator(
-            request.memory_selector,
-            explicit_context=request.context_locator,
-        )
-    except ValueError as error:
-        raise EditError(str(error)) from error
 
 
 def planned_edits(
@@ -171,16 +152,15 @@ def _validate_plan(
     if not isinstance(plan, expected_type):
         raise TypeError("Edit port returned an invalid frozen plan.")
     if plan.request != request:
-        raise EditError("Frozen Edit plan no longer matches the request.")
+        raise MemEditError("Frozen Edit plan no longer matches the request.")
     if not all(
         isinstance(value, str) and value
         for value in (
             plan.context_name,
             plan.context_uid,
-            plan.context_digest,
         )
     ):
-        raise EditError("Edit plan has an incomplete binding.")
+        raise MemEditError("Edit plan has an incomplete binding.")
     edits = planned_edits(plan)
     contents = (
         tuple(content for _, content in request.edits)
@@ -200,7 +180,9 @@ def _validate_plan(
         or tuple(edit.content for edit in edits) != contents
         or len({edit.memory_uid for edit in edits}) != len(edits)
     ):
-        raise EditError("Edit plan does not cover each requested Memory exactly once.")
+        raise MemEditError(
+            "Edit plan does not cover each requested Memory exactly once."
+        )
 
 
 @overload
@@ -277,22 +259,20 @@ def run_edit(
         or (changed and not result.checkpoint_uid)
         or (not changed and result.checkpoint_uid is not None)
     ):
-        raise EditError("Edit receipt does not match the frozen plan.")
+        raise MemEditError("Edit receipt does not match the frozen plan.")
     return result
 
 
 __all__ = [
     "EditBatchRequest",
     "EditBatchResult",
-    "EditError",
+    "MemEditError",
     "EditMemoryChange",
     "EditPort",
     "EditRequest",
     "EditResult",
-    "EditTargetSelector",
     "FrozenEditBatchPlan",
     "FrozenEditPlan",
-    "edit_target_selector",
     "planned_edits",
     "prepare_edit",
     "run_edit",

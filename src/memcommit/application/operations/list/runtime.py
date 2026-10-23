@@ -18,7 +18,7 @@ from memcommit.application.operations.list.application import (
     ListSelection,
     run_list,
 )
-from memcommit.core.context import Context, MemoryRef
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore
 
 
@@ -34,15 +34,8 @@ def context_record_display_uids(context: Context) -> tuple[str, ...]:
             return
         visited.add(object_id)
         values.append(current.uid)
-        for item in current.iter_items():
-            if isinstance(item, Context):
-                # A live Context pointer is an empty shell, while a retained
-                # snapshot owns readable descendants without catalog records.
-                visit(item)
-            else:
-                values.append(item.uid)
-                if isinstance(item, MemoryRef):
-                    values.append(item.target_memory_uid)
+        for item in current.iter_memories():
+            values.append(item.uid)
 
     visit(context)
     return tuple(values)
@@ -51,7 +44,7 @@ def context_record_display_uids(context: Context) -> tuple[str, ...]:
 def readable_catalog_display_uids(
     catalog: ReadableContextCatalog,
 ) -> tuple[str, ...]:
-    """Freeze the readable UID namespace without opening QUERY-only routes."""
+    """Freeze local Context and Memory UIDs for collision-safe display."""
 
     values: list[str] = []
     for name in catalog.list_context_names():
@@ -68,7 +61,6 @@ def profile_readable_display_uids(
     catalog = freeze_profile_readable_context_catalog(
         active_store,
         selected_access,
-        include_query_routes=False,
     )
     return readable_catalog_display_uids(catalog)
 
@@ -84,30 +76,21 @@ class MemoryStoreListSource:
             self._store,
             request.context_locator,
             current_name=request.current_context_name,
-            required_permission="READ",
         ).value
         readable_uids = profile_readable_display_uids(self._store, access)
         catalog = freeze_readable_context_catalog(self._store, access)
         context_names = tuple(catalog.list_context_names())
         # Direct presentation must not open attached READ sources merely to
         # display authority metadata; recursive presentation deliberately may.
-        context = (
-            catalog.load(access.access_name)
-            if request.recursive
-            else catalog.load_without_attached_reads(access.access_name)
-        )
+        context = catalog.load_direct(access.access_name)
         return ListSelection(
             access=access,
             context=context,
             catalog=catalog,
             context_names=context_names,
             readable_uids=readable_uids,
-            sync_statuses=self.sync_statuses(),
         )
 
-    def sync_statuses(self):
-        from memcommit.application.operations.mem_sync.automatic.status import context_sync_statuses
-        return context_sync_statuses(self._store)
 
 
 def execute_list(store: MemoryStore, request: ListRequest) -> ListSelection:

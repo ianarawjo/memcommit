@@ -15,7 +15,7 @@ from memcommit.application.operations.atomize.records import (
     atomize_review_response_digest,
     project_atomize_review_findings,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 class AtomizeApplicationError(RuntimeError):

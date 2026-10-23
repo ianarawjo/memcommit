@@ -8,7 +8,10 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "sync": LocalizedOperationCopy('Өөрийн Context баримтыг гадаад файлтай нэг удаа эсвэл команд дууссаны дараа автоматаар синхрончилно.', 'Context нэртэй тохирох гадаад баримтын бүтцийг хадгалж, сонгосон хүрээний автомат Sync-ийг асаах эсвэл унтраах үед.'),
+    "sync": LocalizedOperationCopy(
+        "Profile төслийн баримтуудыг илрүүлж өөрийн Context-уудтай синхрончилно.",
+        ".memignore дүрмийг дагаж файл нэмэх, засах, нэр солих, устгах болон mem өөрчлөлтийг файлд тусгах үед.",
+    ),
     "export": LocalizedOperationCopy(
         "Context-ийн одоогийн агуулгыг баримт бичиг, Agent Skill эсвэл mem хэлбэрээр экспортлоно.",
         "Засварласан санах ойн баримт бичгийг mem-ээс гадуур ашиглах файл болгон гаргахад хэрэглэнэ.",
@@ -65,10 +68,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Шилжихгүйгээр локал Context болон унших боломжтой Profile хоорондын Context view-г үзнэ.",
         "Одоогийн Profile-д боломжтой бүх Context-г судлах үед.",
     ),
-    "dedup": _copy(
-        "Батлагдсан давхардлын бүлгүүдийг хянаж, бүлэг бүрээс нэг одоогийн Memory-г үлдээн Apply хийхэд бусдыг устгана.",
-        "Нэг яг одоогийн Memory болон түүний UID-г хадгалж, батлагдсан утгын давхардлыг арилгах үед.",
-    ),
     "delete": _copy(
         "Устгах Context эсвэл шууд зүйлийг сонгох, эсвэл locator, нэр, UID-аар заана.",
         "Хэрэггүй болсон тодорхой Context эсвэл зүйлийг арилгах үед.",
@@ -102,8 +101,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Дахин ашиглах тестийн өгөгдөл үүсгэж, давтагдах сценарийн дагуу operation-уудыг шалгах үед.",
     ),
     "find": _copy(
-        "Унших боломжтой Memory дотроос яг текст эсвэл тодорхой regular expression (regex) таарцыг олно.",
-        "Сонгосон Context хүрээн дотор яг үг, танигч эсвэл текстийн загвар олох үед.",
+        "Memory-г утгаар хайна; --literal нь semantic provider ашиглахгүйгээр яг текст эсвэл regex таарцыг олно.",
+        "Утга болон Context-оор холбоотой Memory, эсвэл --literal ашиглан яг үг, танигч, текстийн загвар олох үед.",
     ),
     "find-ambiguities": _copy(
         "Одоогийн эсвэл заасан Context доторх хоёрдмол утгатай шууд Memory-г мэдээлнэ; Context өөрчлөхгүй.",
@@ -150,7 +149,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Дахин давтагдах, тусгаарлагдсан хэрэглэгчийн судалгааны орчин бэлтгэх үед.",
     ),
     "list": _copy(
-        "Context-ийн шууд зүйлс—Memory, Memory reference, query view, embedded Context—болон унших боломжтой child Context-уудыг жагсаана. -r нь descendant болон embedded Context-ийн зүйлсийг рекурсээр оруулна; ls бол богино alias.",
+        "Context-ийн Memory болон тусад нь хадгалсан дэд Context-уудыг жагсаана. -r нь дэд Context-ийн Memory-г хамруулна; ls нь товч alias.",
         "Context-ийн бүтэц болон шууд агуулгыг шалгах үед.",
     ),
     "lock": _copy(
@@ -182,7 +181,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Script эсвэл terminal дотор идэвхтэй Context-г баталгаажуулах үед.",
     ),
     "query": _copy(
-        "Унших боломжтой Context мэдлэг эсвэл зөвшөөрөгдсөн далд query-only view-гээс LLM-д суурилсан хариулт үүсгэнэ.",
+        "Локал Context-ийн Memory-д тулгуурлан LLM хариулт үүсгэнэ.",
         "Таарсан Memory-н жагсаалтын оронд үндэслэлтэй байгалийн хэлний хариулт авах үед.",
     ),
     "rationale": _copy(
@@ -217,10 +216,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Хадгалсан semantic artifact-г нээж analysis, proposal эсвэл result төлөвийг шалган, дэмжвэл review response бүртгэнэ. Review нь Memory-г хэзээ ч Apply хийхгүй.",
         "Хадгалсан analysis, proposal эсвэл result төлөвийг дахин үзэх үед.",
     ),
-    "search": _copy(
-        "Сонгосон Context-үүдэд байгалийн хэлний хүсэлттэй холбоотой Memory-г утгаар эрэмбэлнэ.",
-        "Утга болон Context-оор холбоотой Memory, тэр дундаа илэрхий түлхүүр үг давхцаагүй агуулгыг олох үед.",
-    ),
     "sever": _copy(
         "Criteria Context-н дагуу Source Memory-г сонгох, хувиргах эсвэл хасах замаар Result үүсгэнэ.",
         "Тодорхой шалгуурын дагуу Source агуулгыг сонгох эсвэл хувиргах үед.",
@@ -230,7 +225,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Өөрийн Context-г зөвшөөрөгдсөн хүлээн авагчид хүргэх үед.",
     ),
     "show": _copy(
-        "Memory, reference, embedded Context эсвэл одоогийн/заасан Context-н шууд агуулгыг харуулна.",
+        "Нэг Memory эсвэл одоогийн болон заасан Context-ийн агуулгыг харуулна.",
         "Мэдэгдэж буй зүйл эсвэл Context-н бүрэн агуулгыг унших үед.",
     ),
     "status": _copy(
@@ -267,17 +262,12 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
     ),
 }
 
-# These names were split after the original semantic Dedup contract was
-# separated into exact Dedup and inclusive semantic Dedun operations.
+# Dedup exposes semantic cleanup by default and exact cleanup with --literal.
 TRANSLATIONS.update(
     {
-        "dedun": _copy(
-            "Exact DUP болон semantic DUN бүлгүүдийг шууд цэвэрлэж, холбогдсон бүлэг бүрийн эхний UID-г хадгална.",
-            "Exact DUP ба semantic DUN-г нэг checkpoint-д хамтад нь цэвэрлэх үед.",
-        ),
         "dedup": _copy(
-            "Байт бүрээрээ ижил direct Memory-нуудыг шууд устгаж, бүлэг бүрийн эхний одоо байгаа UID-г хадгална.",
-            "Semantic inference ашиглахгүйгээр яг ижил агуулгын хуулбарыг цэвэрлэх үед.",
+            "Яг ижил болон утгын давхардлыг шууд устгаж, бүлэг бүрийн эхний UID-г хадгална. --literal нь утгын дүгнэлтгүйгээр зөвхөн ижил үүрэгтэй яг ижил хуулбарыг устгана.",
+            "Яг ижил болон утгын давхардлыг хамтад нь, эсвэл --literal ашиглан зөвхөн яг ижил хуулбарыг цэвэрлэх үед.",
         ),
         "find-duplicates": _copy(
             "Байт бүрээрээ ижил direct Memory бүлгүүдийг Context-г өөрчлөхгүйгээр тайлагнана.",

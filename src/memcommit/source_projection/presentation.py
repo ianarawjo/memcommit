@@ -7,7 +7,6 @@ from enum import Enum
 from typing import TypeAlias
 
 from memcommit.source_projection.model import (
-    SourceAccess,
     SourceDisplayFacts,
     SourceForm,
     SourceReferenceRow,
@@ -19,9 +18,6 @@ from memcommit.source_projection.model import (
 class SourceTokenRole(str, Enum):
     """Presentation role used by terminal adapters without embedding colors."""
 
-    OWNERSHIP = "OWNERSHIP"
-    ACCESS = "ACCESS"
-    CAPABILITY = "CAPABILITY"
     REACH = "REACH"
     FORM = "FORM"
     STATE = "STATE"
@@ -52,40 +48,22 @@ SourceDisplayValue: TypeAlias = (
 )
 
 
-_ACCESS_LABELS = {
-    SourceAccess.READ_GRANT: "READ GRANT",
-    SourceAccess.QUERY_GRANT: "QUERY GRANT",
-}
 _REACH_LABELS = {
     SourceReach.DIRECT: "DIRECT",
     SourceReach.DESCENDANT: "DESCENDANT",
-    SourceReach.VIA_EMBED: "VIA EMBED",
 }
 _OBJECT_LABELS = {
     SourceForm.CONTEXT: "context",
-    SourceForm.CONTEXT_REFERENCE: "context reference",
     SourceForm.MEMORY: "memory",
-    SourceForm.MEMORY_EMBED: "embedded memory",
-    SourceForm.MEMORY_REFERENCE: "reference",
-    SourceForm.MEMORY_REF: "memory ref",
-    SourceForm.QUERY_VIEW: "query view",
 }
 _OBJECT_TITLE_LABELS = {
     SourceForm.CONTEXT: "Context",
-    SourceForm.CONTEXT_REFERENCE: "Context Reference",
     SourceForm.MEMORY: "Memory",
-    SourceForm.MEMORY_EMBED: "Embedded Memory",
-    SourceForm.MEMORY_REFERENCE: "Reference",
-    SourceForm.MEMORY_REF: "Memory ref",
-    SourceForm.QUERY_VIEW: "Query view",
 }
 _STATE_LABELS = {
     SourceState.READ_ONLY: "READ ONLY",
-    SourceState.OPAQUE: "OPAQUE",
     SourceState.UNAVAILABLE: "UNAVAILABLE",
-    SourceState.DANGLING: "DANGLING",
     SourceState.CYCLE: "CYCLE",
-    SourceState.NOT_INCLUDED: "NOT INCLUDED",
 }
 _STATE_ORDER = {state: index for index, state in enumerate(SourceState)}
 
@@ -125,28 +103,16 @@ def render_source_reference_row(
     owner = f"{row.uid[:uid_prefix_length]}, {row.context_name}"
     if row.alias is not None:
         owner += f", {row.alias}"
-    provenance = ""
-    if row.source_uid is not None:
-        provenance = (
-            f" → {row.source_uid[:uid_prefix_length]}, "
-            f"{row.source_context_name}"
-        )
     if layout is SourceReferenceLayout.IDENTITY_FIRST:
         location = row.context_name
         if row.alias is not None:
             location += f" {row.alias}"
         location_separator = " " if content[-1] in ".,;:!?" else ", "
-        source = ""
-        if row.source_uid is not None:
-            source = (
-                f" → [{row.source_uid[:uid_prefix_length]}]"
-                f" [{row.source_context_name}]"
-            )
         return (
             f"{row.number} [{row.uid[:uid_prefix_length]}] "
-            f"{content}{location_separator}[{location}]{source}"
+            f"{content}{location_separator}[{location}]"
         )
-    return f"[{row.number}] {content} — {owner}{provenance}"
+    return f"[{row.number}] {content} — {owner}"
 
 
 def source_display_tokens(
@@ -159,19 +125,6 @@ def source_display_tokens(
     """Render typed facts in canonical access/reach/form/state order."""
 
     tokens: list[SourceDisplayToken] = []
-    if facts.access is not SourceAccess.OWNED:
-        tokens.append(
-            SourceDisplayToken(_ACCESS_LABELS[facts.access], SourceTokenRole.ACCESS)
-        )
-    elif include_defaults:
-        tokens.append(SourceDisplayToken("OWNED", SourceTokenRole.ACCESS))
-    if include_permissions and facts.permissions:
-        tokens.append(
-            SourceDisplayToken(
-                "PERMISSIONS " + " + ".join(facts.permissions),
-                SourceTokenRole.ACCESS,
-            )
-        )
     if facts.reach is not SourceReach.DIRECT:
         tokens.append(
             SourceDisplayToken(
@@ -240,13 +193,6 @@ def source_relationship_label(
     form = value.form if isinstance(value, SourceDisplayFacts) else value
     if not isinstance(form, SourceForm):
         raise TypeError("Source relationship labels require a SourceForm value.")
-    if form in {SourceForm.MEMORY_EMBED, SourceForm.MEMORY_REF}:
-        return "embedded"
-    if form in {
-        SourceForm.CONTEXT_REFERENCE,
-        SourceForm.MEMORY_REFERENCE,
-    }:
-        return "reference"
     return source_object_label(form)
 
 

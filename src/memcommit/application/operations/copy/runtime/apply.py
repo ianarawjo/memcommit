@@ -6,6 +6,7 @@ from memcommit.application.capabilities.memory_transfer.checkpoint_metadata impo
     transfer_checkpoint_metadata,
 )
 from memcommit.application.capabilities.memory_transfer.context_bindings import (
+    StoreTransferToken,
     validate_context_bindings,
 )
 from memcommit.application.capabilities.memory_transfer.contracts import (
@@ -21,12 +22,9 @@ from memcommit.application.operations.copy.contracts import (
     CopyMemoriesResult,
     FrozenCopyMemoriesPlan,
 )
-from memcommit.application.operations.copy.runtime.granted_sources import (
-    CopyStoreToken,
-    locked_granted_sources,
-)
 from memcommit.application.operations.copy.runtime.prepare import copy_plan_digest
-from memcommit.core.context import AutoCheckpoint, Memory
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
@@ -38,9 +36,9 @@ def apply_copy(
 ) -> CopyMemoriesResult:
     if not isinstance(plan, FrozenCopyMemoriesPlan):
         raise TypeError("Copy requires its own frozen plan.")
-    if not isinstance(plan.token, CopyStoreToken):
+    if not isinstance(plan.token, StoreTransferToken):
         raise MemoryTransferError("Copy/Move plan belongs to a different runtime.")
-    bindings = plan.token.bindings
+    bindings = plan.token
     token = validate_context_bindings(
         bindings,
         owner=owner,
@@ -49,7 +47,6 @@ def apply_copy(
         memories=plan.memories,
         into_name=plan.into_name,
         into_uid=plan.into_uid,
-        into_digest=plan.into_digest,
     )
     frames = {frame.display_name: frame for frame in token.frames}
     into = frames[plan.into_name]
@@ -59,9 +56,6 @@ def apply_copy(
             position=plan.placement.position + offset,
         )
     affected = (into,)
-    description = (
-        f"Copied {len(plan.memories)} Memory/ies into '{plan.into_name}' with new UIDs."
-    )
     args = transfer_checkpoint_metadata(
         kind="COPY",
         operation_uid=token.operation_uid,
@@ -72,39 +66,30 @@ def apply_copy(
         into_uid=into.context.uid,
         placement=plan.placement,
         memories=plan.memories,
-        inbound_links=(),
         affected_contexts=tuple(
             (frame.context.name, frame.context.uid) for frame in affected
         ),
     )
     source_frames = unique_local_source_frames(plan.memories, frames)
     try:
-        with locked_granted_sources(
-            plan.memories,
-            frames,
-            authority_checks=plan.token.authority_checks,
-        ):
-            checkpoints = store.save_context_command_batch(
+        checkpoints = store.save_context_command_batch(
+            (
                 (
-                    (
-                        into.context,
-                        AutoCheckpoint(
-                            command="copy",
-                            args=args,
-                            description=description,
-                        ),
-                        into.expected_digest,
+                    into.context,
+                    AutoCheckpointRequest(
+                        command="copy",
+                        command_details=args,
                     ),
                 ),
-                source_bindings=tuple(
-                    (
-                        frame.context.name,
-                        frame.context.uid,
-                        frame.expected_digest,
-                    )
-                    for frame in source_frames
-                ),
-            )
+            ),
+            source_bindings=tuple(
+                (
+                    frame.context.name,
+                    frame.context.uid,
+                )
+                for frame in source_frames
+            ),
+        )
     except ConcurrentContextUpdateError as error:
         raise MemoryTransferStalePlanError(
             "Copy Source or Target changed before publication; nothing was copied."

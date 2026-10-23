@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 
 from memcommit.adapters.console.commands.ground.shell.proposal import (
     GroundShellProposal,
@@ -35,7 +35,7 @@ def prepare_ground_shell_start(
     """Reject contradictory entry states before prompt-toolkit is built."""
 
     fixed_ground_name = (
-        validate_portable_context_name(ground_name) if ground_name is not None else None
+        validate_context_name(ground_name) if ground_name is not None else None
     )
     if initial_proposal is not None and initial_request.strip():
         raise ValueError(

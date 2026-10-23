@@ -14,7 +14,6 @@ from memcommit.application.capabilities.memory_transfer.contracts import (
 from memcommit.application.capabilities.memory_transfer.locators import (
     placement_for_context,
     resolve_source_memories,
-    source_owner_locators,
     target_frame,
 )
 from memcommit.application.capabilities.memory_transfer.plan_digest import (
@@ -25,13 +24,6 @@ from memcommit.application.operations.copy.contracts import (
     CopyMemoriesRequest,
     FrozenCopyMemoriesPlan,
 )
-from memcommit.application.operations.copy.runtime.granted_sources import (
-    CopyStoreToken,
-    copy_authority_checks,
-    frozen_transfer_authority,
-    load_granted_source_frames,
-    unique_source_accesses,
-)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -41,19 +33,10 @@ def freeze_copy(
     store: MemoryStore,
     current_name: str | None,
     owner: object,
-    allow_granted_sources: bool,
 ) -> FrozenCopyMemoriesPlan:
     request = validate_copy_request(request)
     local_frames = capture_context_frames(store)
-    frames = load_granted_source_frames(
-        store,
-        local_frames,
-        owner_locators=source_owner_locators(
-            request.memory_locators, request.source_locator
-        ),
-        current_name=current_name,
-        allow_granted_sources=allow_granted_sources,
-    )
+    frames = local_frames
     into = target_frame(
         local_frames,
         request.into_locator,
@@ -79,17 +62,12 @@ def freeze_copy(
         FrozenTransferMemory(
             source_context_name=frame.display_name,
             source_context_uid=frame.context.uid,
-            source_context_digest=frame.expected_digest,
             source_memory_uid=memory.uid,
             content=memory.content,
             output_memory_uid=output_uid,
-            source_authority=frozen_transfer_authority(frame.access),
         )
         for (frame, memory), output_uid in zip(sources, output_uids, strict=True)
     )
-    frames_by_name = {frame.display_name: frame for frame in frames}
-    accesses = unique_source_accesses(memories, frames_by_name)
-    authority_checks = copy_authority_checks(accesses)
     placement = placement_for_context(
         into.context,
         before=request.before,
@@ -100,7 +78,6 @@ def freeze_copy(
         memories=memories,
         into_name=into.context.name,
         into_uid=into.context.uid,
-        into_digest=into.expected_digest,
         placement=placement,
         policy="NEW_UIDS",
     )
@@ -109,18 +86,14 @@ def freeze_copy(
         memories=memories,
         into_name=into.context.name,
         into_uid=into.context.uid,
-        into_digest=into.expected_digest,
         placement=placement,
         plan_digest=digest,
-        token=CopyStoreToken(
-            bindings=StoreTransferToken(
-                owner=owner,
-                operation_uid=str(uuid.uuid4()),
-                plan_digest=digest,
-                frames=frames,
-                context_catalog=tuple(frame.context.name for frame in local_frames),
-            ),
-            authority_checks=authority_checks,
+        token=StoreTransferToken(
+            owner=owner,
+            operation_uid=str(uuid.uuid4()),
+            plan_digest=digest,
+            frames=frames,
+            context_catalog=tuple(frame.context.name for frame in local_frames),
         ),
     )
 
@@ -131,7 +104,6 @@ def copy_plan_digest(plan: FrozenCopyMemoriesPlan) -> str:
         memories=plan.memories,
         into_name=plan.into_name,
         into_uid=plan.into_uid,
-        into_digest=plan.into_digest,
         placement=plan.placement,
         policy="NEW_UIDS",
     )

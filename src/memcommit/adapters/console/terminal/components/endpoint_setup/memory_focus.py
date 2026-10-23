@@ -25,7 +25,7 @@ from memcommit.adapters.console.terminal.components.selection import (
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     focused_control_style,
 )
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
 
 MemoryProjectionLoader = Callable[[str, str], Sequence[EndpointSetupMemory]]
@@ -262,7 +262,7 @@ class EndpointMemoryFocusController:
             memory_anchor=(context_name, cursor_index) if focused else None,
             selectable_memories=True,
             selected_memory=(
-                DirectMemoryTarget(context_name, self.selected_memory_uid)
+                (context_name, self.selected_memory_uid)
                 if self.selected_memory_uid is not None
                 else None
             ),

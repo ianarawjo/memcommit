@@ -1,10 +1,14 @@
 """Coordinate Profile, Context, and Memory write protection."""
 
 from __future__ import annotations
+
 from contextlib import contextmanager
 from functools import wraps
 from typing import Callable, Iterable, Iterator
-from memcommit.core.context import Context, Memory
+
+from memcommit.core.context_name_validation import validate_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store.infrastructure.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
@@ -14,11 +18,7 @@ from memcommit.persistence.store.infrastructure.write_protection import (
 
 
 from ..context_memory.models import ConcurrentContextUpdateError
-from ..context_memory.records import (
-    canonical_context_record,
-    context_record_digest,
-    validate_context_name,
-)
+from ..context_memory.records import canonical_context_record
 
 
 def _profile_write_guarded(method: Callable):
@@ -145,7 +145,6 @@ class _WriteProtectionStoreMixin:
         name: str,
         *,
         expected_context_uid: str,
-        expected_context_digest: str,
     ) -> Context:
         try:
             current = self.load_direct(name)
@@ -155,7 +154,6 @@ class _WriteProtectionStoreMixin:
             ) from error
         if (
             current.uid != expected_context_uid
-            or context_record_digest(current) != expected_context_digest
         ):
             raise ConcurrentContextUpdateError(
                 f"Context '{name}' changed before its lock state could be saved."
@@ -168,7 +166,6 @@ class _WriteProtectionStoreMixin:
         *,
         protected: bool,
         expected_context_uid: str,
-        expected_context_digest: str,
     ) -> bool:
         """Lock or unlock one exact existing Context identity."""
         validate_context_name(name)
@@ -176,7 +173,6 @@ class _WriteProtectionStoreMixin:
             current = self._revalidate_protection_target(
                 name,
                 expected_context_uid=expected_context_uid,
-                expected_context_digest=expected_context_digest,
             )
             before, after = self.write_protection_registry.update(
                 lambda state: state.with_context(
@@ -189,7 +185,7 @@ class _WriteProtectionStoreMixin:
     def set_context_namespace_write_protection(
         self,
         root_name: str,
-        expected_contexts: Iterable[tuple[str, str, str]],
+        expected_contexts: Iterable[tuple[str, str]],
         *,
         protected: bool,
     ) -> tuple[int, int]:
@@ -203,23 +199,22 @@ class _WriteProtectionStoreMixin:
         """
         validate_context_name(root_name)
         expected = tuple(sorted(expected_contexts))
-        if not expected or len({name for name, _, _ in expected}) != len(expected):
+        if not expected or len({name for name, _ in expected}) != len(expected):
             raise ValueError("Invalid recursive Context protection target set.")
         prefix = root_name + "/"
         if any(
-            name != root_name and not name.startswith(prefix) for name, _, _ in expected
+            name != root_name and not name.startswith(prefix) for name, _ in expected
         ):
             raise ValueError("Invalid recursive Context protection target set.")
 
         with self._context_graph_lock(exclusive=True):
-            with self._context_write_locks(name for name, _, _ in expected):
+            with self._context_write_locks(name for name, _ in expected):
                 graph = self.load_direct_context_graph_strict()
                 current = tuple(
                     sorted(
                         (
                             context.name,
                             context.uid,
-                            context_record_digest(context),
                         )
                         for context in graph
                         if context.name == root_name or context.name.startswith(prefix)
@@ -230,7 +225,7 @@ class _WriteProtectionStoreMixin:
                         f"Context namespace '{root_name}' changed before its "
                         "lock state could be saved."
                     )
-                context_uids = tuple(uid for _, uid, _ in current)
+                context_uids = tuple(uid for _, uid in current)
                 before, after = self.write_protection_registry.update(
                     lambda state: state.with_contexts(
                         context_uids,
@@ -262,7 +257,6 @@ class _WriteProtectionStoreMixin:
         *,
         protected: bool,
         expected_context_uid: str,
-        expected_context_digest: str,
     ) -> bool:
         """Lock or unlock one direct Memory occurrence in one exact Context."""
         validate_context_name(name)
@@ -270,7 +264,6 @@ class _WriteProtectionStoreMixin:
             current = self._revalidate_protection_target(
                 name,
                 expected_context_uid=expected_context_uid,
-                expected_context_digest=expected_context_digest,
             )
             item = current.memories.get(memory_uid)
             if not isinstance(item, Memory):

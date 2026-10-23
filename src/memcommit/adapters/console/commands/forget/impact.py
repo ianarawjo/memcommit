@@ -8,6 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.forget.setup import choose_forget_setup
 from memcommit.adapters.console.commands.forget.workbench.presentation import (
     forget_application_view,
@@ -25,7 +26,6 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.application.context_access.access import (
-    context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.application.operations.forget.application import (
@@ -53,10 +53,13 @@ def forget_impact_presentation(
 
     # The public Source remains the same identity shown by ordinary Forget;
     # this projection must not change its frozen authority or gain Apply.
-    review = replace(result.snapshot.review, context_name=result.snapshot.source.display_name)
+    review = replace(
+        result.snapshot.review, context_name=result.snapshot.source.display_name
+    )
     view = replace(
-        forget_application_view(review, source_granted=result.snapshot.source.granted),
-        capabilities=frozenset(), accept_enabled=False,
+        forget_application_view(review),
+        capabilities=frozenset(),
+        accept_enabled=False,
     )
     return ImpactSessionPresentation(
         view=view,
@@ -112,25 +115,20 @@ def forget_cmd(
                 store,
                 context_name,
                 current_name=snapshot.current_name,
-                required_permission="READ",
             )
             catalog = freeze_profile_readable_context_catalog(
                 store,
                 access,
-                include_query_routes=False,
             )
             names = tuple(catalog.list_context_names())
-            annotations = {
-                name: context_access_display_facts(catalog.access_for(name))
-                for name in names
-                if catalog.access_for(name).is_granted
-            }
+            annotations = {}
             receipt = choose_forget_setup(
                 names,
                 current=access.access_name,
                 annotations=annotations,
             )
             if receipt is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Forget Impact cancelled.")
                 return
             source_locator = receipt.context_name

@@ -1,17 +1,14 @@
 """Analyze one frozen Context and derive its issue directions."""
 
 from __future__ import annotations
-
 import hashlib
 import json
 from typing import TYPE_CHECKING, Protocol
-
 from memcommit.application.operations.audit.model import (
     AuditCheckKind,
     QualityAuditSession,
 )
 from memcommit.application.operations.audit.repository import AuditRecordRepository
-
 from .model import (
     AuditResolutionIssue,
     ResolveTarget,
@@ -26,16 +23,11 @@ from .analysis.select_issues_for_review import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.application.capabilities.context_memory_target import (
-        ContextMemoryOrigin,
-    )
     from .review_round.finalize_review_decisions import ResolveFinalizedInput
     from memcommit.application.operations.resolve.review_round.review_round_record import (
         ReviewRoundRecord,
     )
     from memcommit.application.operations.update.model import UpdatePlan
-
-# Entry points share this scope; Audit and explicit application callers stay selective.
 RESOLVE_CHECKS = frozenset({AuditCheckKind.CONFLICTS})
 
 
@@ -50,23 +42,10 @@ def run_resolve(
     expected_revision: str | None = None,
 ) -> ResolveAnalysis:
     """Acquire one exact Audit, then derive directions without applying them."""
-
     _require_source_precondition(frame)
     if expected_revision is not None and expected_revision != frame.revision:
         raise ResolveConflictError(
-            "The Resolve Context or requested capability frame changed before "
-            "its decisions could be finalized."
-        )
-    if frame.missing_authority or not frame.allowed_effects:
-        missing = frame.missing_authority or tuple(frame.denied_effects)
-        return ResolveAnalysis(
-            frame=frame,
-            status="NEEDS_AUTHORITY",
-            question=(
-                "Grant authority is missing: " + ", ".join(missing)
-                if missing
-                else "No requested Resolve mutation effect is authorized."
-            ),
+            "The Resolve Context or requested capability frame changed before its decisions could be finalized."
         )
     target = frame.source.context()
     audit = reuse_or_run_audit.audit_resolve_context(
@@ -94,7 +73,6 @@ def analyze_resolve_audit(
 ) -> ResolveAnalysis:
     """Derive decisions from an already acquired Audit; never apply them."""
 
-    # Deterministic item directions need no provider connection.
     class LazyDirectionProvider:
         def complete(self, *args, **kwargs):
             return direction_provider_factory().complete(*args, **kwargs)
@@ -116,11 +94,8 @@ def _require_source_precondition(frame: ResolveTarget) -> None:
         or frame.display_name != expected.display_name
         or _direct_memory_digest(frame) != expected.direct_memory_digest
     ):
-        # Finder reports are observations, not mutation authority. Re-freezing
-        # may therefore reauthorize, but it must never retarget stale evidence.
         raise ResolveConflictError(
-            "The quality finding source no longer matches the frozen Resolve "
-            "Context. Run the finder again before resolving it."
+            "The quality finding source no longer matches the frozen Resolve Context. Run the finder again before resolving it."
         )
 
 
@@ -129,11 +104,9 @@ def _direct_memory_digest(frame: ResolveTarget) -> str:
         {"uid": memory.uid, "content": memory.content}
         for memory in frame.source.memories
     ]
-    encoded = json.dumps(
-        payload,
-        ensure_ascii=False,
-        separators=(",", ":"),
-    ).encode("utf-8")
+    encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode(
+        "utf-8"
+    )
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -165,8 +138,6 @@ class ResolveApplyPort(Protocol):
         *,
         unresolved_issue_uids: tuple[str, ...] = (),
         finalized_inputs: tuple[ResolveFinalizedInput, ...] = (),
-        removed_item_uids: tuple[str, ...] = (),
-        memory_origins: tuple[ContextMemoryOrigin, ...] = (),
     ) -> ResolveReceipt:
         """Publish one Resolve-generated exact Update plan atomically."""
 

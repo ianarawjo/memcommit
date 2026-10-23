@@ -4,25 +4,18 @@ from __future__ import annotations
 
 import uuid
 
-from memcommit.application.authorization.context_operation import (
-    authorized_context_mutation,
-)
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    grant_checkpoint_args,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.core.context import AutoCheckpoint
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+
 from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.clear.application import ClearRequest, ClearResult
-from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore
 
 
 def _clear_recursive(
@@ -31,43 +24,24 @@ def _clear_recursive(
 ) -> ClearResult:
     """Clear one frozen local lexical subtree as one Undoable command unit."""
 
-    if access.is_granted:
-        raise ProfileError(
-            "Recursive clear cannot cross a granted Context boundary; "
-            "clear granted Contexts exactly."
-        )
-
-    readable = freeze_readable_context_catalog(
+    freeze_readable_context_catalog(
         active_store,
         access,
-        include_query_routes=False,
     )
-    granted_descendants = readable.granted_names_below(access.access_name)
-    if granted_descendants:
-        raise ProfileError(
-            "Recursive clear cannot cross granted Context boundaries: "
-            + ", ".join(repr(name) for name in granted_descendants)
-            + ". Clear those Contexts exactly."
-        )
 
     store = access.store
     catalog_names = tuple(store.list_context_names())
     context_names = expand_lexical_context_names(
-        ContextScope.create(
-            (access.context_name,),
-            include_descendants=True,
-        ),
-        catalog_names,
+        (access.context_name,), catalog_names, include_descendants=True
     )
     frames = tuple(
         (
             context,
-            context_record_digest(context),
             len(context.memories),
         )
         for context in (store.load_direct(name) for name in context_names)
     )
-    changed = tuple(frame for frame in frames if frame[2] > 0)
+    changed = tuple(frame for frame in frames if frame[1] > 0)
     if not changed:
         return ClearResult(
             context_name=access.access_name,
@@ -79,15 +53,10 @@ def _clear_recursive(
 
     operation_uid = str(uuid.uuid4())
     membership = [
-        {"uid": context.uid, "name": context.name}
-        for context, _digest, _count in changed
+        {"uid": context.uid, "name": context.name} for context, _count in changed
     ]
-    total_count = sum(count for _context, _digest, count in changed)
+    total_count = sum(count for _context, count in changed)
     changed_count = len(changed)
-    description = (
-        f"Cleared {total_count} item(s) from {changed_count} Context(s) "
-        f"under '{access.access_name}'"
-    )
     tree_receipt = {
         "version": 1,
         "operation_uid": operation_uid,
@@ -97,28 +66,26 @@ def _clear_recursive(
 
     entries = []
     unchanged_bindings = []
-    for context, digest, count in frames:
+    for context, count in frames:
         if count == 0:
-            # Empty members remain part of the frozen subtree so a concurrent
-            # add cannot escape merely because that member needs no checkpoint.
-            unchanged_bindings.append((context.name, context.uid, digest))
+            # Empty Contexts still belong to the selected subtree and need
+            # the same identity validation as its changed members.
+            unchanged_bindings.append((context.name, context.uid))
             continue
         context.clear()
         entries.append(
             (
                 context,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="clear",
-                    args={
+                    command_details={
                         "count": count,
                         "context": context.name,
                         "recursive": True,
                         "clear_tree": tree_receipt,
                         "command_contexts": membership,
                     },
-                    description=description,
                 ),
-                digest,
             )
         )
 
@@ -148,7 +115,6 @@ def execute_clear(
         active_store,
         request.context_locator,
         current_name=current_name,
-        required_permission="DELETE",
     ).value
     if request.recursive:
         return _clear_recursive(active_store, access)
@@ -166,24 +132,16 @@ def execute_clear(
         )
 
     context.clear()
-    with authorized_context_mutation(
-        access,
-        required_permissions=("DELETE",),
-    ):
-        store.save(
-            context,
-            AutoCheckpoint(
-                command="clear",
-                args={
-                    "count": count,
-                    "context": access.access_name,
-                    **grant_checkpoint_args(access),
-                },
-                description=(
-                    f"Cleared all {count} item(s) from '{access.access_name}'"
-                ),
-            ),
-        )
+    store.save(
+        context,
+        AutoCheckpointRequest(
+            command="clear",
+            command_details={
+                "count": count,
+                "context": access.access_name,
+            },
+        ),
+    )
     return ClearResult(
         context_name=access.access_name,
         recursive=False,

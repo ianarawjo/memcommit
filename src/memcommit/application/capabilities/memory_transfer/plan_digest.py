@@ -1,4 +1,4 @@
-"""Version-1 digest encoding for an operation's frozen transfer facts."""
+"""Digest encoding for an operation's frozen transfer facts."""
 
 from __future__ import annotations
 
@@ -17,19 +17,16 @@ def transfer_plan_digest(
     memories: tuple[FrozenTransferMemory, ...],
     into_name: str,
     into_uid: str,
-    into_digest: str,
     placement: MemoryTransferPlacement,
     policy: str,
-    inbound_links: tuple[dict[str, object], ...] = (),
 ) -> str:
     payload = {
-        "version": 1,
+        "version": 2,
         "kind": kind,
         "policy": policy,
         "into": {
             "name": into_name,
             "uid": into_uid,
-            "digest": into_digest,
         },
         "placement": {
             "position": placement.position,
@@ -40,21 +37,14 @@ def transfer_plan_digest(
             {
                 "source_context_name": item.source_context_name,
                 "source_context_uid": item.source_context_uid,
-                "source_context_digest": item.source_context_digest,
                 "source_memory_uid": item.source_memory_uid,
                 "content_sha256": hashlib.sha256(
                     item.content.encode("utf-8")
                 ).hexdigest(),
                 "output_memory_uid": item.output_memory_uid,
-                "source_authority": (
-                    item.source_authority.to_dict()
-                    if item.source_authority is not None
-                    else None
-                ),
             }
             for item in memories
         ],
-        "inbound_links": list(inbound_links),
     }
     encoded = json.dumps(
         payload,

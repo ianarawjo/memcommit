@@ -22,7 +22,6 @@ def render_study_init_receipt(result: StudyInitializationResult) -> None:
     )
     echo_text("Scenario: {name}", name=result.scenario_id)
     echo_text("Participant Profile: {name}", name=result.profile.name)
-    echo_text("Granted-memory Profile: {name}", name=result.authority_profile.name)
     echo_text(
         "Provider config: {version} · locked · sha256 {digest}",
         version=STUDY_PROVIDER_POLICY_VERSION,
@@ -34,15 +33,7 @@ def render_study_init_receipt(result: StudyInitializationResult) -> None:
         memories=result.inspection.ordinary_memory_count,
         current=result.inspection.current_context or "(none)",
     )
-    echo_text(
-        "Granted Contexts {contexts} · Granted Memories {memories}",
-        contexts=result.inspection.granted_context_count,
-        memories=result.inspection.granted_memory_count,
-    )
-    typer.echo(
-        "Task-owned and granted-memory data were copied into isolated run "
-        "Profiles and connected with real authority grants."
-    )
+    typer.echo("Task data was copied into one isolated local Profile.")
     typer.echo(
         "Operational history starts empty. "
         "Checkpoints, sessions, ad-hoc caches, locks, and run logs "

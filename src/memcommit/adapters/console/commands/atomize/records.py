@@ -15,7 +15,7 @@ from memcommit.application.operations.atomize.domain import (
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionPickerEntry,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.operations.atomize.runtime import (
     atomize_analysis_was_applied,
 )

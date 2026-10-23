@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from ..history_evidence_source import HistoryEvidenceSource
 from ..model.memory_event import MemoryHistoryRecord

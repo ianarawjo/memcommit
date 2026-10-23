@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.core.memory_translation import MemoryTranslationCatalog
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.translation_catalog import (
     load_translation_catalog,
     save_translation_catalog,
@@ -62,8 +62,5 @@ def save_curated_translation_catalog(
         store,
         catalog,
         expected_record_digest=seed.expected_record_digest,
-        expected_context_digest=(
-            context_record_digest(context) if seed.requires_save else None
-        ),
         required_source_digests=source_digests,
     )

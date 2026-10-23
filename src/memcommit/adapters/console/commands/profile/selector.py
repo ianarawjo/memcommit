@@ -63,10 +63,6 @@ def _pick_profile(
             memory_count=inspection.ordinary_memory_count,
             current_context=inspection.current_context,
             root_dir=str(profile_root_dir(profile)),
-            granted_context_count=inspection.granted_context_count,
-            granted_memory_count=inspection.granted_memory_count,
-            query_source_count=inspection.query_source_count,
-            query_source_names=inspection.query_source_names,
             uid=profile.uid,
             study_uid=(
                 memberships[profile.uid].uid if profile.uid in memberships else None
@@ -147,7 +143,6 @@ def _apply_profile_picker_action(
                 expected_generation=action.registry_generation,
                 root_dir=action.root_dir,
                 import_project_files=action.import_project_files,
-                automatic_sync=action.automatic_sync,
                 expected_import_digest=action.import_digest,
             )
         elif action.kind == "RENAME_PROFILE":

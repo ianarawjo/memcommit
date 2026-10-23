@@ -11,7 +11,8 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -532,36 +533,6 @@ def quality_find_report_view(
                     ),
                 )
             )
-        # Exact pointer groups keep their role and identity; they are not
-        # fabricated Memory claims and their live contents are never loaded.
-        for group in session.report.exact_item_groups:
-            members = (group.survivor_uid, *group.absorbed_uids)
-            owner = next(
-                ctx for ctx in current_contexts if group.survivor_uid in ctx.memories
-            )
-            ordinals = {uid: index for index, uid in enumerate(owner.ordered_uids(), 1)}
-            items.append(
-                QualityFindingReportItem(
-                    uid="exact-item:" + group.survivor_uid,
-                    category="duplicates",
-                    kind="DUP / " + group.item_kind,
-                    classification="EXACT",
-                    title=group.summary,
-                    reason_heading="WHY THESE ITEMS ARE EXACT DUPLICATES",
-                    reason="The direct occurrences have the same role and target identity.",
-                    sources=tuple(
-                        QualityFindingSource(
-                            label=group.item_kind,
-                            context_name=owner.name,
-                            memory_uid=uid,
-                            content=group.summary,
-                            ordinal=ordinals[uid],
-                            item_kind=group.item_kind,
-                        )
-                        for uid in members
-                    ),
-                )
-            )
         empty_message = "No redundancy evidence in this analysis."
 
     default_operation_label = (
@@ -742,7 +713,7 @@ def quality_find_resolution_view(
                 f"{len(session.source.contexts)} selected readable "
                 f"{'Context' if len(session.source.contexts) == 1 else 'Contexts'} "
                 f"as one analysis frame. {target_mode} · {reach}. "
-                "Embedded Context edges were not followed."
+                "Each Memory retains its local owner."
             ),
         ),
         ResolutionOverviewSection(

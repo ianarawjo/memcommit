@@ -16,11 +16,10 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
-from memcommit.core.context import Checkpoint
+from memcommit.models.checkpoint import Checkpoint
 from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,
-    context_record_digest,
 )
 
 
@@ -43,7 +42,6 @@ class ResolvedCheckpointMember:
     context_name: str
     checkpoint_uid: str
     checkpoint: dict[str, Any]
-    expected_context_digest: str
     expected_history_digest: str
 
 
@@ -86,7 +84,6 @@ class CheckpointUnitRevertResult:
 class _FrozenHistory:
     context_uid: str
     context_name: str
-    context_digest: str
     history_digest: str
     checkpoints: tuple[dict[str, Any], ...]
 
@@ -102,7 +99,7 @@ def _canonical_uuid(value: object, *, label: str) -> str:
 
 
 def _checkpoint_set(checkpoint: Mapping[str, object]) -> Mapping[str, object] | None:
-    args = checkpoint.get("args")
+    args = checkpoint.get("command_details")
     if not isinstance(args, Mapping):
         return None
     value = args.get("checkpoint_set")
@@ -112,7 +109,7 @@ def _checkpoint_set(checkpoint: Mapping[str, object]) -> Mapping[str, object] | 
 def _command_contexts(
     checkpoint: Mapping[str, object],
 ) -> tuple[tuple[str, str], ...]:
-    args = checkpoint.get("args")
+    args = checkpoint.get("command_details")
     raw = args.get("command_contexts") if isinstance(args, Mapping) else None
     if not isinstance(raw, list) or not raw:
         raise CheckpointCatalogError(
@@ -176,7 +173,6 @@ class CheckpointCatalog:
                 _FrozenHistory(
                     context_uid=context.uid,
                     context_name=context.name,
-                    context_digest=context_record_digest(context),
                     history_digest=checkpoint_history_digest(checkpoints),
                     checkpoints=tuple(copied),
                 )
@@ -304,7 +300,6 @@ class CheckpointCatalog:
             context_name=history.context_name,
             checkpoint_uid=checkpoint["uid"],
             checkpoint=copy.deepcopy(checkpoint),
-            expected_context_digest=history.context_digest,
             expected_history_digest=history.history_digest,
         )
 

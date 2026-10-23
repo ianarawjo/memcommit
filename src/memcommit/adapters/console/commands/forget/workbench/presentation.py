@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.forget.review import ForgetReview
-from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
+    EffectReportPresentation,
+)
 from memcommit.application.capabilities.resolution.workbench import (
-    ResolutionDetailBlock,
     ResolutionContextLocation,
+    ResolutionDetailBlock,
     ResolutionIssueEvidence,
     ResolutionIssuePresentation,
     ResolutionIssueSource,
@@ -17,10 +18,9 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
-from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
-    EffectReportPresentation,
-)
+from memcommit.application.operations.forget.review import ForgetReview
 
 
 def forget_effect_report(review: ForgetReview) -> EffectReportPresentation:
@@ -32,9 +32,11 @@ def forget_effect_report(review: ForgetReview) -> EffectReportPresentation:
         apply_label=f"Apply {count} {'change' if count == 1 else 'changes'} to {review.context_name}",
         unchanged_label="KEEP",
         unchanged_entry_uids=frozenset(
-            candidate.source.uid for candidate in review.candidates
+            candidate.source.uid
+            for candidate in review.candidates
             if candidate.selected_action()[0] == "KEEP"
         ),
+        inline_memory_diffs=True,
     )
 
 
@@ -54,7 +56,9 @@ def forget_memory_changes(review: ForgetReview) -> tuple[MemoryChange, ...]:
         changes.append(
             MemoryChange(
                 marker="−" if action == "DROP" else "=" if action == "KEEP" else "~",
-                treatment=action,
+                treatment={"TRANSFORM": "EDIT", "DROP": "REMOVE", "KEEP": "KEEP"}[
+                    action
+                ],
                 location=review.context_name,
                 memory_uid=source.uid,
                 before=source.content,
@@ -83,7 +87,9 @@ class ForgetResolutionWorkbenchAdapter:
             decision = candidate.decision
             source = candidate.source
             selected = selected_options[candidate.selection]
-            source_ref = ResultRef("context-memory", f"{review.context_name}:{source.uid}")
+            source_ref = ResultRef(
+                "context-memory", f"{review.context_name}:{source.uid}"
+            )
             judgment_ref = ResultRef("forget-decision", candidate.uid)
             outcome_ref = ResultRef("forget-result", candidate.uid)
             selected_action, selected_content = candidate.selected_action()
@@ -177,7 +183,11 @@ class ForgetResolutionWorkbenchAdapter:
             results.append(
                 ResolutionResult(
                     uid=candidate.uid,
-                    marker="−" if action == "DROP" else "=" if action == "KEEP" else "~",
+                    marker="−"
+                    if action == "DROP"
+                    else "="
+                    if action == "KEEP"
+                    else "~",
                     label=action,
                     text=(
                         "This Source Memory will be removed."
@@ -234,8 +244,6 @@ class ForgetResolutionWorkbenchAdapter:
 
 def forget_application_view(
     review: ForgetReview,
-    *,
-    source_granted: bool = False,
 ) -> ResolutionWorkbenchView:
     """Expose one exact batch for inspection and Apply, without revision choices."""
 
@@ -251,7 +259,9 @@ def forget_application_view(
         metrics=(),
         context_locations=(
             ResolutionContextLocation(
-                "SOURCE", review.context_name, state="GRANT" if source_granted else "",
+                "SOURCE",
+                review.context_name,
+                state=(""),
             ),
         ),
         overview=review.instruction,

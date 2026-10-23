@@ -9,13 +9,7 @@ from memcommit.source_projection.presentation import SourceDisplayValue
 
 @dataclass(frozen=True)
 class CopyAndMoveTuiSetup:
-    """Frozen role-specific Source and Target catalogs for one launch.
-
-    ``source_names`` may contain explicitly READ-granted public names for
-    Copy. ``local_source_names`` is the only catalog searched for an
-    unqualified Memory UID and is also the complete Move Source catalog. The
-    Target catalog stays independently owned and local for both operations.
-    """
+    """Frozen local Source and Target catalogs for one Memory transfer launch."""
 
     source_names: tuple[str, ...]
     local_source_names: tuple[str, ...]
@@ -48,13 +42,10 @@ class CopyAndMoveTuiSetup:
             self.current_context is not None
             and self.current_context not in self.into_names
         ):
-            raise ValueError(
-                "Copy/Move current Context is outside the local catalog."
-            )
+            raise ValueError("Copy/Move current Context is outside the local catalog.")
         annotation_names = tuple(name for name, _value in self.source_annotations)
-        if (
-            len(set(annotation_names)) != len(annotation_names)
-            or any(name not in source_set for name in annotation_names)
+        if len(set(annotation_names)) != len(annotation_names) or any(
+            name not in source_set for name in annotation_names
         ):
             raise ValueError(
                 "Copy/Move Source annotations must name distinct visible rows."

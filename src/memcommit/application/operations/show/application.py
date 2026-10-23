@@ -37,7 +37,6 @@ class ShowRequest:
     selector: str | None = None
     current_context_name: str | None = None
     include_descendants: bool = False
-    follow_embeds: bool = False
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -49,14 +48,9 @@ class ShowRequest:
                 raise ShowInputError(f"{label} must be nonblank text.")
         if type(self.include_descendants) is not bool:
             raise ShowInputError("Show descendant reach must be a boolean.")
-        if type(self.follow_embeds) is not bool:
-            raise ShowInputError("Show embed reach must be a boolean.")
-        if self.selector is not None and (
-            self.include_descendants or self.follow_embeds
-        ):
+        if self.selector is not None and self.include_descendants:
             raise ShowDirectItemScopeError(
-                "Recursive Show scope cannot be combined with a direct-item "
-                "selector."
+                "Recursive Show scope cannot be combined with a direct-item selector."
             )
 
 
@@ -69,44 +63,7 @@ class ShowMemory:
     source: SourceDisplayFacts
 
 
-@dataclass(frozen=True, slots=True)
-class ShowMemoryReference:
-    """One read-only Memory reference and an optional resolved content copy."""
-
-    uid: str
-    target_context_uid: str
-    target_context_name: str
-    target_memory_uid: str
-    content: str | None
-    source: SourceDisplayFacts
-
-    @property
-    def resolved(self) -> bool:
-        return self.content is not None
-
-
-@dataclass(frozen=True, slots=True)
-class ShowQueryView:
-    """Opaque query-only metadata; concealed source content is never present."""
-
-    uid: str
-    name: str
-    source: SourceDisplayFacts
-
-
-@dataclass(frozen=True, slots=True)
-class ShowEmbeddedContext:
-    """One direct embedded-Context row plus a port-private selection snapshot."""
-
-    uid: str
-    name: str
-    source: SourceDisplayFacts
-    context: ShowContextSnapshot | None
-
-
-ShowItem: TypeAlias = (
-    ShowMemory | ShowMemoryReference | ShowQueryView | ShowEmbeddedContext
-)
+ShowItem: TypeAlias = ShowMemory
 
 
 @dataclass(frozen=True, slots=True)
@@ -119,9 +76,7 @@ class ShowContextSnapshot:
     source: SourceDisplayFacts
 
 
-ShowValue: TypeAlias = (
-    ShowContextSnapshot | ShowMemory | ShowMemoryReference | ShowQueryView
-)
+ShowValue: TypeAlias = ShowContextSnapshot | ShowMemory
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,7 +88,6 @@ class ShowResult:
     selector: str | None
     value: ShowValue
     include_descendants: bool = False
-    follow_embeds: bool = False
     contexts: tuple[ShowContextSnapshot, ...] = ()
 
 
@@ -146,7 +100,6 @@ class ShowPort(Protocol):
         *,
         current_context_name: str | None,
         include_descendants: bool,
-        follow_embeds: bool,
     ) -> tuple[ShowContextSnapshot, ...]:
         """Return one ordered, authorized immutable Context scope."""
 
@@ -155,15 +108,7 @@ def _selected_value(
     context: ShowContextSnapshot,
     selector: str,
 ) -> ShowValue:
-    matches = tuple(
-        item
-        for item in context.items
-        if item.uid.startswith(selector)
-        or (
-            isinstance(item, (ShowEmbeddedContext, ShowQueryView))
-            and item.name == selector
-        )
-    )
+    matches = tuple(item for item in context.items if item.uid.startswith(selector))
     if not matches:
         raise ShowItemNotFoundError(
             f"No direct item matching '{selector}' in context '{context.name}'."
@@ -174,34 +119,7 @@ def _selected_value(
             + ", ".join(item.uid[:8] for item in matches)
         )
     selected = matches[0]
-    if isinstance(selected, ShowEmbeddedContext):
-        if selected.context is None:
-            raise ShowError("The selected embedded Context was not loaded.")
-        return _direct_snapshot(selected.context)
     return selected
-
-
-def _direct_snapshot(context: ShowContextSnapshot) -> ShowContextSnapshot:
-    """Remove loaded descendant bodies from one returned direct Context value."""
-
-    return ShowContextSnapshot(
-        uid=context.uid,
-        name=context.name,
-        items=tuple(
-            (
-                ShowEmbeddedContext(
-                    uid=item.uid,
-                    name=item.name,
-                    source=item.source,
-                    context=None,
-                )
-                if isinstance(item, ShowEmbeddedContext)
-                else item
-            )
-            for item in context.items
-        ),
-        source=context.source,
-    )
 
 
 def show(request: ShowRequest, *, port: ShowPort) -> ShowResult:
@@ -213,7 +131,6 @@ def show(request: ShowRequest, *, port: ShowPort) -> ShowResult:
         request.context_name,
         current_context_name=request.current_context_name,
         include_descendants=request.include_descendants,
-        follow_embeds=request.follow_embeds,
     )
     if (
         not isinstance(contexts, tuple)
@@ -221,7 +138,7 @@ def show(request: ShowRequest, *, port: ShowPort) -> ShowResult:
         or any(not isinstance(context, ShowContextSnapshot) for context in contexts)
     ):
         raise ShowError("Show storage returned an invalid Context scope.")
-    direct_contexts = tuple(_direct_snapshot(context) for context in contexts)
+    direct_contexts = contexts
     context = contexts[0]
     value: ShowValue = direct_contexts[0]
     if request.selector is not None:
@@ -232,23 +149,19 @@ def show(request: ShowRequest, *, port: ShowPort) -> ShowResult:
         selector=request.selector,
         value=value,
         include_descendants=request.include_descendants,
-        follow_embeds=request.follow_embeds,
         contexts=direct_contexts,
     )
 
 
 __all__ = [
     "ShowContextSnapshot",
-    "ShowEmbeddedContext",
     "ShowError",
     "ShowDirectItemScopeError",
     "ShowInputError",
     "ShowItemNotFoundError",
     "ShowItem",
     "ShowMemory",
-    "ShowMemoryReference",
     "ShowPort",
-    "ShowQueryView",
     "ShowRequest",
     "ShowResult",
     "ShowValue",

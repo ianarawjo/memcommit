@@ -13,70 +13,6 @@ from memcommit.persistence.store.infrastructure.atomic_io import (
 )
 
 
-def _decode_completed_receipt(data):
-    from memcommit.application.operations.update.model import UpdateReceipt
-
-    if not isinstance(data, dict) or "status" not in data:
-        return UpdateReceipt.from_dict(data)
-    # Retained historical receipts remain evidence. This decoder never opens
-    # a pending-work file and cannot restore the removed resume lifecycle.
-    version = data.get("schema_version")
-    if version not in {6, 7, 8, 9, 10} or data.get("status") not in {
-        "applied",
-        "undone",
-    }:
-        raise ValueError("Expected completed Update evidence.")
-    keys = {
-        "schema_version",
-        "uid",
-        "status",
-        "created_at",
-        "source",
-        "target",
-        "operations",
-        "application",
-    }
-    if version in {9, 10}:
-        keys.add("goal_focus")
-    if set(data) != keys:
-        raise ValueError("Invalid historical Update receipt.")
-    inputs = {"goal_focus": data.get("goal_focus"), "inline_source_content": None}
-    for role in ("source", "target"):
-        endpoint = data[role]
-        fields = {"uid", "name", "digest", "contexts", "access", "include_descendants"}
-        if version >= 7:
-            fields.add("memory_uid")
-        if role == "source" and version in {8, 10}:
-            fields.add("inline_memory")
-        if not isinstance(endpoint, dict) or set(endpoint) != fields:
-            raise ValueError("Invalid historical Update input.")
-        for field in ("uid", "name", "digest", "contexts", "include_descendants"):
-            inputs[f"{role}_{field}"] = endpoint[field]
-        inputs[f"{role}_memory_uid"] = endpoint.get("memory_uid")
-        inputs[f"granted_{role}"] = endpoint["access"]
-        if "inline_memory" in endpoint:
-            inline = endpoint["inline_memory"]
-            from memcommit.application.operations.update.model import (
-                inline_update_context,
-            )
-
-            if not isinstance(inline, dict) or set(inline) != {"uid", "content"}:
-                raise ValueError("Invalid historical inline Source.")
-            source = inline_update_context(inline["content"])
-            if inline["uid"] != next(iter(source.memories)):
-                raise ValueError("Invalid historical inline Memory identity.")
-            inputs["inline_source_content"] = inline["content"]
-    return UpdateReceipt.from_dict(
-        {
-            "schema_version": 1,
-            "uid": data["uid"],
-            "inputs": inputs,
-            "operations": data["operations"],
-            "application": data["application"],
-        }
-    )
-
-
 class UpdateReceiptRepository:
     def __init__(self, store):
         self.store = store
@@ -110,7 +46,9 @@ class UpdateReceiptRepository:
         if path.is_symlink() or self.directory.is_symlink():
             raise ValueError("Invalid Update receipt storage.")
         with path.open(encoding="utf-8") as stream:
-            receipt = _decode_completed_receipt(
+            from memcommit.application.operations.update.model import UpdateReceipt
+
+            receipt = UpdateReceipt.from_dict(
                 json.load(stream, object_pairs_hook=_reject_duplicate_json_keys)
             )
         if receipt.uid != operation_uid:

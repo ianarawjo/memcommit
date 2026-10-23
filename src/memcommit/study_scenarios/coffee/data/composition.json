@@ -1,17 +1,5 @@
 {
   "1": {
-    "grants": [
-      {
-        "key": "coffee-task-1-customer-perspectives",
-        "authority_context": "task-1/customer-perspectives",
-        "attachment_context": "task-1",
-        "public_name": "task-1/customer-perspectives",
-        "permissions": [
-          "READ"
-        ],
-        "recursive": true
-      }
-    ],
     "participant": [
       {
         "name": "practice",
@@ -111,18 +99,6 @@
     ]
   },
   "2": {
-    "grants": [
-      {
-        "key": "coffee-task-2-operational-perspectives",
-        "authority_context": "task-2/operational-perspectives",
-        "attachment_context": "task-2",
-        "public_name": "task-2/operational-perspectives",
-        "permissions": [
-          "READ"
-        ],
-        "recursive": true
-      }
-    ],
     "participant": [
       {
         "name": "task-2",
@@ -176,28 +152,6 @@
     ]
   },
   "3": {
-    "grants": [
-      {
-        "key": "coffee-task-3-friend-conditions",
-        "authority_context": "task-3/friend-cafe/conditions",
-        "attachment_context": "task-3",
-        "public_name": "task-3/friend-cafe/conditions",
-        "permissions": [
-          "READ"
-        ],
-        "recursive": false
-      },
-      {
-        "key": "coffee-task-3-friend-share-endpoint",
-        "authority_context": "task-3/friend-cafe",
-        "attachment_context": "task-3",
-        "public_name": "task-3/friend-cafe",
-        "permissions": [
-          "SHARE"
-        ],
-        "recursive": false
-      }
-    ],
     "participant": [
       {
         "name": "task-3",

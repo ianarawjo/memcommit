@@ -71,11 +71,6 @@ def _payload(
     memories = frame.source.memories
     alias_by_uid = {memory.uid: f"m{index}" for index, memory in enumerate(memories, 1)}
     actionable = set(frame.actionable_uids)
-    origins = (
-        {item.analysis_uid: item.context_name for item in frame.memory_target.origins}
-        if frame.memory_target
-        else {}
-    )
     return {
         "context": frame.display_name,
         "guidance": frame.request.guidance,
@@ -99,11 +94,6 @@ def _payload(
             {
                 "memory_id": alias_by_uid[memory.uid],
                 "content": memory.content,
-                **(
-                    {"owner_context": origins[memory.uid]}
-                    if memory.uid in origins
-                    else {}
-                ),
                 "actionable": memory.uid in actionable,
             }
             for memory in memories
@@ -149,7 +139,7 @@ def _preflight(
 ) -> tuple[tuple[AuditResolutionIssue, ...], dict[str, object], dict[str, object]]:
     if audit.source != frame.source:
         raise ResolveError("Resolve Audit does not match its frozen Context.")
-    known = {item.uid: item for item in collect_resolution_issues(frame, audit)}
+    known = {item.uid: item for item in collect_resolution_issues(audit)}
     if len({item.uid for item in all_items}) != len(all_items) or any(
         known.get(item.uid) != item for item in all_items
     ):

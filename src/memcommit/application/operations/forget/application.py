@@ -8,11 +8,22 @@ import hashlib
 import json
 from typing import Literal, Protocol
 
-from memcommit.core.context import Context, Memory
-from memcommit.application.operations.forget.provider import analyze_forget, revise_forget_analysis
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.application.operations.forget.provider import (
+    analyze_forget,
+    revise_forget_analysis,
+)
 from memcommit.application.operations.forget.review import ForgetReview, ForgetSelection
-from memcommit.application.capabilities.semantic.changes import EditChange, ProposedChange, RemoveChange
-from memcommit.application.capabilities.semantic.selective_curation import CurationAnalysis, CurationDecision
+from memcommit.application.capabilities.semantic.changes import (
+    EditChange,
+    ProposedChange,
+    RemoveChange,
+)
+from memcommit.application.capabilities.semantic.selective_curation import (
+    CurationAnalysis,
+    CurationDecision,
+)
 
 
 class ForgetApplicationError(RuntimeError):
@@ -28,8 +39,7 @@ class ForgetAnalysisRequest:
 
     def __post_init__(self) -> None:
         if self.source_locator is not None and (
-            not isinstance(self.source_locator, str)
-            or not self.source_locator.strip()
+            not isinstance(self.source_locator, str) or not self.source_locator.strip()
         ):
             raise ForgetApplicationError(
                 "Forget Source must be nonblank text when supplied."
@@ -44,7 +54,6 @@ class FrozenForgetSource:
 
     context: Context
     display_name: str
-    granted: bool
     _runtime_token: object = field(repr=False, compare=False)
 
     def __post_init__(self) -> None:
@@ -52,12 +61,10 @@ class FrozenForgetSource:
             raise ForgetApplicationError("Forget Source must be a Context.")
         if not isinstance(self.display_name, str) or not self.display_name.strip():
             raise ForgetApplicationError("Forget Source requires a display name.")
-        if not isinstance(self.granted, bool):
-            raise ForgetApplicationError("Forget granted state must be a boolean.")
 
     @property
     def memory_count(self) -> int:
-        return sum(isinstance(item, Memory) for item in self.context.iter_items())
+        return sum(isinstance(item, Memory) for item in self.context.iter_memories())
 
 
 @dataclass(frozen=True)
@@ -108,7 +115,6 @@ def _snapshot_payload(
             "name": source.display_name,
             "context_name": source.context.name,
             "context_uid": source.context.uid,
-            "granted": source.granted,
         },
         "review": {
             "uid": review.uid,
@@ -134,8 +140,7 @@ def _snapshot_payload(
             ],
         },
         "history": [
-            {"role": message.role, "content": message.content}
-            for message in history
+            {"role": message.role, "content": message.content} for message in history
         ],
     }
 
@@ -238,15 +243,10 @@ class ForgetApplyReceipt:
     edited_count: int
     checkpoint_uid: str | None
     undo_available: bool
-    granted: bool
 
     def __post_init__(self) -> None:
         if self.removed_count < 0 or self.edited_count < 0:
             raise ForgetApplicationError("Forget effect counts cannot be negative.")
-        if self.granted and self.undo_available:
-            raise ForgetApplicationError(
-                "Granted Forget receipts cannot advertise local Undo."
-            )
 
     @property
     def changed_count(self) -> int:
@@ -357,7 +357,7 @@ def prepare_forget_snapshot(
         by_uid[change.uid] = change
     decisions: list[CurationDecision] = []
     source_uids: set[str] = set()
-    for item in source.context.iter_items():
+    for item in source.context.iter_memories():
         if not isinstance(item, Memory):
             continue
         source_uids.add(item.uid)
@@ -477,7 +477,6 @@ def run_forget_apply(
             edited_count=0,
             checkpoint_uid=None,
             undo_available=False,
-            granted=snapshot.source.granted,
         )
         return ForgetApplyResult(snapshot=snapshot, receipt=receipt, applied=False)
 
@@ -490,9 +489,8 @@ def run_forget_apply(
         receipt.source_name != snapshot.source.display_name
         or receipt.source_context_uid != snapshot.source.context.uid
         or receipt.removed_count != removed
-        or receipt.edited_count != edited
-        or receipt.granted != snapshot.source.granted
-        or receipt.checkpoint_uid is None
+        or (receipt.edited_count != edited)
+        or (receipt.checkpoint_uid is None)
     ):
         raise ForgetApplicationError(
             "Forget Apply returned a receipt outside the reviewed Source and effects."

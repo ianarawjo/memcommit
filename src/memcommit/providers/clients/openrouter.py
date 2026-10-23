@@ -17,7 +17,6 @@ from memcommit.providers.clients.completion import (
     model_name,
     schema_instruction,
     usage_count,
-    build_query_prompt,
 )
 from memcommit.persistence.command_ledger.study_actions import (
     record_study_provider_turn,
@@ -63,8 +62,6 @@ class OpenRouterProvider:
         if not isinstance(api_key, str) or not api_key.strip():
             raise QueryProviderError("OPENROUTER_API_KEY is not set.")
         headers = {"Authorization": f"Bearer {api_key}"}
-        # Authenticate before any command is allowed to open query-only source
-        # material. This mirrors the existing Codex login preflight boundary.
         key_info = requester(
             OPENROUTER_BASE_URL + "/key",
             "GET",
@@ -165,11 +162,3 @@ class OpenRouterProvider:
             ),
         )
         return content.strip()
-
-    def query(self, source_name: str, source_content: str, question: str) -> str:
-        if not question.strip():
-            raise QueryProviderError("Question must be non-empty.")
-        return self.complete(
-            build_query_prompt(source_name, source_content, question),
-            operation="query",
-        )

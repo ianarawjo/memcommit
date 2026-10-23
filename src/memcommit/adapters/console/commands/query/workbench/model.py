@@ -6,23 +6,14 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
 
-from memcommit.application.operations.query.granted_application import (
-    GrantedQueryRequest,
-    GrantedQueryResponse,
-)
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
 
 
-QueryWorkbenchResponse: TypeAlias = OrdinaryQueryResponse | GrantedQueryResponse
-OrdinaryQueryRunner: TypeAlias = Callable[
-    [OrdinaryQueryRequest], OrdinaryQueryResponse
-]
-GrantedQueryRunner: TypeAlias = Callable[
-    [GrantedQueryRequest], GrantedQueryResponse
-]
+QueryWorkbenchResponse: TypeAlias = OrdinaryQueryResponse
+OrdinaryQueryRunner: TypeAlias = Callable[[OrdinaryQueryRequest], OrdinaryQueryResponse]
 
 
 @dataclass(frozen=True)

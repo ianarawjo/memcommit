@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 from memcommit.application.capabilities.resolution.workbench import ResolutionOption
 from memcommit.application.operations.audit.model import (
@@ -13,14 +13,8 @@ from memcommit.application.operations.audit.model import (
     AuditTarget,
 )
 
-if TYPE_CHECKING:
-    from memcommit.application.capabilities.context_memory_target import (
-        ContextMemoryTarget,
-    )
-    from memcommit.application.operations.update.model import GrantedUpdateTarget
 
-
-RESOLVE_CONTRACT_VERSION = "resolve-direct-items-audit-direction-update"
+RESOLVE_CONTRACT_VERSION = "resolve-context-audit-direction-update"
 ResolveEffectKind = Literal["CREATE", "UPDATE", "DELETE"]
 ResolveIssueKind = Literal[
     "REDUNDANCY",
@@ -29,7 +23,6 @@ ResolveIssueKind = Literal[
 ]
 ResolveStatus = Literal[
     "NO_ISSUES",
-    "NEEDS_AUTHORITY",
     "NEEDS_INPUT",
 ]
 
@@ -48,12 +41,7 @@ class ResolveConflictError(ResolveError):
 
 @dataclass(frozen=True)
 class ResolveSourcePrecondition:
-    """Finder-owned direct-Memory source that must still back Resolve.
-
-    The public display name is retained because a granted Context may have a
-    different authority-local name. Authority and effect permissions are not
-    carried across this boundary; the Resolve Store boundary freezes them again.
-    """
+    """Finder-owned direct Memory source whose identity and content must still back Resolve."""
 
     context_uid: str
     display_name: str
@@ -82,7 +70,7 @@ class ResolveSourcePrecondition:
 
 @dataclass(frozen=True)
 class ResolveRequest:
-    """One direct or recursive Memory Audit-resolution request.
+    """One whole-Context Audit-resolution request.
 
     UPDATE and information-preserving CREATE are ordinary Resolve effects.
     DELETE is an explicit expansion and additionally requires nonempty grounding
@@ -90,7 +78,6 @@ class ResolveRequest:
     """
 
     context_name: str | None = None
-    memory_selectors: tuple[str, ...] = ()
     # Resolve starts from information preservation: adding one grounded
     # interpretation or editing existing wording is ordinary, while DELETE
     # remains the exceptional effect that needs an explicit retirement basis.
@@ -98,26 +85,12 @@ class ResolveRequest:
     allow_delete: bool = False
     guidance: str = ""
     source_precondition: ResolveSourcePrecondition | None = None
-    recursive: bool = False
 
     def __post_init__(self) -> None:
-        if type(self.recursive) is not bool:
-            raise ResolveError("Resolve recursive scope must be boolean.")
         if self.context_name is not None and (
             not isinstance(self.context_name, str) or not self.context_name.strip()
         ):
             raise ResolveError("Resolve Context name must be nonblank when supplied.")
-        if not isinstance(self.memory_selectors, tuple) or any(
-            not isinstance(selector, str)
-            or not selector
-            or any(character in selector for character in "\r\n")
-            for selector in self.memory_selectors
-        ):
-            raise ResolveError(
-                "Resolve Memory selectors must be one-line uid prefixes."
-            )
-        if len(set(self.memory_selectors)) != len(self.memory_selectors):
-            raise ResolveError("Resolve Memory selectors must not repeat.")
         if not isinstance(self.allow_create, bool) or not isinstance(
             self.allow_delete, bool
         ):
@@ -153,16 +126,10 @@ class ResolveTarget:
 
     request: ResolveRequest
     display_name: str
-    # Audit owns the semantic snapshot. Recursive owner placement stays separate
-    # so a flat analysis result can be returned to real Contexts without moving it.
     source: AuditTarget
     revision: str
     actionable_uids: tuple[str, ...]
     allowed_effects: tuple[ResolveEffectKind, ...]
-    denied_effects: tuple[ResolveEffectKind, ...] = ()
-    missing_authority: tuple[str, ...] = ()
-    granted_binding: "GrantedUpdateTarget | None" = None
-    memory_target: ContextMemoryTarget | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, ResolveRequest):
@@ -179,22 +146,13 @@ class ResolveTarget:
         if (
             (not self.actionable_uids and item_uids)
             or len(set(self.actionable_uids)) != len(self.actionable_uids)
-            or not set(self.actionable_uids) <= item_uids
+            or set(self.actionable_uids) != item_uids
         ):
-            raise ResolveError("Resolve actionable Memory identities are invalid.")
-        requested = set(self.request.requested_effects)
-        if (
-            len(set(self.allowed_effects)) != len(self.allowed_effects)
-            or len(set(self.denied_effects)) != len(self.denied_effects)
-            or set(self.allowed_effects) | set(self.denied_effects) != requested
-            or set(self.allowed_effects) & set(self.denied_effects)
-        ):
-            raise ResolveError("Resolve effect capability projection is invalid.")
-        if any(
-            not isinstance(permission, str) or not permission
-            for permission in self.missing_authority
-        ):
-            raise ResolveError("Resolve missing authority values are invalid.")
+            raise ResolveError("Resolve must include every Memory in the Context.")
+        if len(set(self.allowed_effects)) != len(self.allowed_effects) or set(
+            self.allowed_effects
+        ) != set(self.request.requested_effects):
+            raise ResolveError("Resolve effects must match the explicit request.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -265,24 +223,8 @@ class ResolveIssue:
             or not self.item_uids
         ):
             raise ResolveError("Resolve Issue members are invalid.")
-        if self.item_kind not in {
-            "MEMORY",
-            "MEMORY_EMBED",
-            "CONTEXT_EMBED",
-            "MEMORY_REFERENCE",
-            "CONTEXT_REFERENCE",
-            "QUERY_CONTEXT_REFERENCE",
-            "MIXED",
-        }:
+        if self.item_kind not in {"MEMORY"}:
             raise ResolveError("Resolve Issue item kind is invalid.")
-        if self.item_kind != "MEMORY" and (
-            self.kind != "REDUNDANCY"
-            or self.classification != "EXACT"
-            or len(self.item_uids) < 2
-        ):
-            raise ResolveError(
-                "Structural Resolve items must be exact same-role duplicates."
-            )
         if not isinstance(self.choices, tuple) or any(
             not isinstance(choice, ResolutionOption) for choice in self.choices
         ):
@@ -327,7 +269,6 @@ class ResolveAnalysis:
             raise TypeError("Resolve analysis requires a frozen frame.")
         if self.status not in {
             "NO_ISSUES",
-            "NEEDS_AUTHORITY",
             "NEEDS_INPUT",
         }:
             raise ResolveError("Resolve analysis status is invalid.")
@@ -344,15 +285,10 @@ class ResolveAnalysis:
             raise ResolveError("Resolve review Issues name Memories outside the frame.")
         kinds = {item.uid: item.kind for item in self.frame.source.items}
         if any(
-            issue.item_kind != "MIXED"
-            and any(kinds[uid] != issue.item_kind for uid in issue.item_uids)
+            any(kinds[uid] != issue.item_kind for uid in issue.item_uids)
             for issue in self.issues
         ):
             raise ResolveError("Resolve Issue role does not match its Source items.")
-        if self.status == "NEEDS_AUTHORITY":
-            if self.audit is not None or self.issues:
-                raise ResolveError("Authority failure cannot publish Audit evidence.")
-            return
         if not isinstance(self.audit, QualityAuditSession):
             raise ResolveError("Resolve analysis requires one completed Audit.")
         if self.audit.source != self.frame.source:

@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.move.receipt import render_move_receipt
 from memcommit.adapters.console.commands.move.setup import choose_move_setup
 from memcommit.adapters.console.coordination.copy_and_move.arguments import (
@@ -90,37 +91,13 @@ def cmd(
             help="Insert the moved batch after this Target direct item",
         ),
     ] = None,
-    retarget_links: Annotated[
-        bool,
-        typer.Option(
-            "--retarget-links",
-            help=(
-                "Compatibility spelling for the default: atomically retarget "
-                "every local inbound live Memory Embed"
-            ),
-        ),
-    ] = False,
-    break_links: Annotated[
-        bool,
-        typer.Option(
-            "--break-links",
-            help="Explicitly leave inbound live Memory Embeds dangling",
-        ),
-    ] = False,
 ) -> None:
     """Move direct Memories while preserving their identities."""
 
     try:
-        if retarget_links and break_links:
-            raise MemoryTransferError(
-                "Pass only one of --retarget-links or --break-links."
-            )
         store = MemoryStore()
-        # Move recognizes Grants only so it can explain why an authority-owned
-        # public Source cannot enter this local ownership mutation.
         port = MemoryStoreMovePort.capture(
             store,
-            allow_granted_sources=True,
         )
         frozen_plan = None
         bare = not any(
@@ -132,8 +109,6 @@ def cmd(
                 to,
                 before,
                 after,
-                retarget_links,
-                break_links,
             )
         )
         if bare:
@@ -144,6 +119,7 @@ def cmd(
                 )
             frozen_plan = choose_move_setup(port)
             if frozen_plan is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Move cancelled — no Context was changed.")
                 return
             request = frozen_plan.request
@@ -157,7 +133,6 @@ def cmd(
                 into_locator=target_context_option(into, to),
                 before=before,
                 after=after,
-                link_policy="BREAK" if break_links else "RETARGET",
             )
         result = run_move(
             request,

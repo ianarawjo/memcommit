@@ -33,8 +33,8 @@ def _checkpoint_fields(entry: dict) -> tuple[str, str, str, str, dict[str, Any]]
     uid = entry["uid"]
     timestamp = entry["timestamp"]
     command = entry.get("command")
-    description = entry.get("description") or entry.get("message") or ""
-    args = entry.get("args")
+    description = entry.get("checkpoint_message") or entry.get("command") or "checkpoint"
+    args = entry.get("command_details")
     return (
         uid,
         timestamp,

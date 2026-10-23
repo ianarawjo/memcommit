@@ -39,11 +39,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     SurfaceActionResult,
     SurfaceMoveResult,
 )
-from memcommit.adapters.console.terminal.components.horizontal_choice import (
-    HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
-)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     focused_control_style,
 )
@@ -77,7 +72,6 @@ class CompactReadableScopeControl:
         current_name: str,
         initial_targets: Sequence[str],
         include_descendants: bool,
-        follow_embeds: bool,
         annotations: Mapping[str, SourceDisplayValue] | None = None,
         input_name: str = "compact-readable-scope-context",
         on_change: ScopeChanged = _noop,
@@ -124,13 +118,6 @@ class CompactReadableScopeControl:
         # Browse promises the complete frozen readable catalog. Start expanded
         # so opening it never hides an eligible child behind a second gesture.
         self.range.toggle_expand_all()
-        self.embed_choice = HorizontalChoiceState(
-            (
-                HorizontalChoiceOption(value="EXCLUDE", label="EXCLUDE"),
-                HorizontalChoiceOption(value="FOLLOW", label="FOLLOW"),
-            ),
-            selected_value="FOLLOW" if follow_embeds else "EXCLUDE",
-        )
 
         initial_direct = selected[-1]
         completer = WordCompleter(
@@ -163,11 +150,6 @@ class CompactReadableScopeControl:
         )
         self.range_control = FormattedTextControl(
             self._render_range,
-            focusable=True,
-            show_cursor=False,
-        )
-        self.embed_control = FormattedTextControl(
-            self._render_embeds,
             focusable=True,
             show_cursor=False,
         )
@@ -231,7 +213,6 @@ class CompactReadableScopeControl:
             [
                 context_row,
                 Window(self.range_control, height=Dimension.exact(1)),
-                Window(self.embed_control, height=Dimension.exact(1)),
                 tree_detail,
             ]
         )
@@ -257,10 +238,6 @@ class CompactReadableScopeControl:
     @property
     def effective_names(self) -> tuple[str, ...]:
         return self.range.effective_names
-
-    @property
-    def follow_embeds(self) -> bool:
-        return self.embed_choice.selected_value == "FOLLOW"
 
     @property
     def include_descendants(self) -> bool:
@@ -356,8 +333,7 @@ class CompactReadableScopeControl:
             if self.range.reach.include_descendants
             else "THIS CONTEXT ONLY"
         )
-        embeds = "FOLLOW EMBEDS" if self.follow_embeds else "EXCLUDE EMBEDS"
-        return f"{targets} · {reach} · {embeds}"
+        return f"{targets} · {reach}"
 
     def _render_state(self) -> StyleAndTextTuples:
         if self._direct_dirty:
@@ -391,13 +367,6 @@ class CompactReadableScopeControl:
             self.range.reach,
             title="RANGE",
             focused=get_app().layout.has_focus(self.range_control),
-        )
-
-    def _render_embeds(self) -> StyleAndTextTuples:
-        return render_horizontal_choice(
-            self.embed_choice,
-            title="EMBEDS",
-            focused=get_app().layout.has_focus(self.embed_control),
         )
 
     def _render_tree(self) -> StyleAndTextTuples:
@@ -484,22 +453,6 @@ class CompactReadableScopeControl:
         self._move_range(event, -1 if self.include_descendants else 1)
         return "HANDLED"
 
-    def _move_embeds(
-        self,
-        _event: KeyPressEvent,
-        delta: int,
-    ) -> SurfaceMoveResult:
-        if self._locked():
-            return "CONSUMED"
-        if not self.embed_choice.move(delta):
-            return "BOUNDARY"
-        self.on_change("EMBED SCOPE CHANGED · PRESS ENTER TO RUN")
-        return "MOVED"
-
-    def _toggle_embeds(self, event: KeyPressEvent) -> SurfaceActionResult:
-        self._move_embeds(event, -1 if self.follow_embeds else 1)
-        return "HANDLED"
-
     def normal_surfaces(self, *, uid_prefix: str = "scope") -> tuple[FocusSurface, ...]:
         return (
             FocusSurface(
@@ -519,12 +472,6 @@ class CompactReadableScopeControl:
                 self.range_control,
                 move_vertical=lambda _event, _delta: "BOUNDARY",
                 activate=self._toggle_range,
-            ),
-            FocusSurface(
-                f"{uid_prefix}:embeds",
-                self.embed_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=self._toggle_embeds,
             ),
         )
 
@@ -573,21 +520,6 @@ class CompactReadableScopeControl:
         @bindings.add(" ", filter=has_focus(self.range_control), eager=True)
         def _range_space(event: KeyPressEvent) -> None:
             self._toggle_range(event)
-            event.app.invalidate()
-
-        @bindings.add("left", filter=has_focus(self.embed_control), eager=True)
-        def _embeds_left(event: KeyPressEvent) -> None:
-            self._move_embeds(event, -1)
-            event.app.invalidate()
-
-        @bindings.add("right", filter=has_focus(self.embed_control), eager=True)
-        def _embeds_right(event: KeyPressEvent) -> None:
-            self._move_embeds(event, 1)
-            event.app.invalidate()
-
-        @bindings.add(" ", filter=has_focus(self.embed_control), eager=True)
-        def _embeds_space(event: KeyPressEvent) -> None:
-            self._toggle_embeds(event)
             event.app.invalidate()
 
 

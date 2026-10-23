@@ -1,1 +1,1 @@
-"""Search-owned terminal workbench; import each narrow owner directly."""
+"""Find-owned terminal workbench; import each narrow owner directly."""

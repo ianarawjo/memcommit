@@ -7,7 +7,7 @@ from dataclasses import field
 from typing import Protocol
 
 
-class AddError(RuntimeError):
+class MemAddError(RuntimeError):
     """Raised when one Add request cannot be completed atomically."""
 
 
@@ -67,18 +67,16 @@ class AddTargetPort(Protocol):
 def validate_add_request(request: AddRequest) -> AddRequest:
     """Validate the complete batch before any target or Store is opened."""
 
-    if not isinstance(request, AddRequest):
-        raise TypeError("Add requires an AddRequest.")
     if not request.contents:
-        raise AddError("Add requires at least one Memory.")
+        raise MemAddError("Add requires at least one Memory.")
     if any(not isinstance(content, str) for content in request.contents):
-        raise AddError("Every Add Memory must be text.")
+        raise MemAddError("Every Add Memory must be text.")
     if any(not content.strip() for content in request.contents):
-        raise AddError("Every Add Memory must contain nonblank text.")
+        raise MemAddError("Every Add Memory must contain nonblank text.")
     if request.context_locator is not None and (
         not isinstance(request.context_locator, str) or not request.context_locator
     ):
-        raise AddError("Add Context locator must be nonempty text.")
+        raise MemAddError("Add Context locator must be nonempty text.")
     return request
 
 
@@ -92,12 +90,12 @@ def prepare_add_target(
     if context_locator is not None and (
         not isinstance(context_locator, str) or not context_locator
     ):
-        raise AddError("Add Context locator must be nonempty text.")
+        raise MemAddError("Add Context locator must be nonempty text.")
     target = target_port.freeze(context_locator)
     if not isinstance(target, FrozenAddTarget):
         raise TypeError("Add target port returned an invalid frozen target.")
     if not target.context_name or not target.context_uid:
-        raise AddError("Add target binding is incomplete.")
+        raise MemAddError("Add target binding is incomplete.")
     return target
 
 
@@ -120,12 +118,12 @@ def run_add(
     if not isinstance(result, AddResult):
         raise TypeError("Add target returned an invalid result.")
     if result.count != len(validated.contents):
-        raise AddError("Add target returned an incomplete durable receipt.")
+        raise MemAddError("Add target returned an incomplete durable receipt.")
     if tuple(memory.content for memory in result.memories) != validated.contents:
-        raise AddError("Add target receipt does not match the requested Memories.")
+        raise MemAddError("Add target receipt does not match the requested Memories.")
     if (
         result.context_name != target.context_name
         or result.context_uid != target.context_uid
     ):
-        raise AddError("Add target receipt does not match the frozen target.")
+        raise MemAddError("Add target receipt does not match the frozen target.")
     return result

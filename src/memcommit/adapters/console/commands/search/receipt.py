@@ -1,11 +1,10 @@
-"""Static Search receipts: ranked results, references, and completed saves."""
+"""Static Find receipts: ranked results, references, and completed saves."""
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import TypeVar
-import shlex
 
 import typer
 
@@ -17,14 +16,11 @@ from memcommit.application.capabilities.retrieval_corpus.candidates import (
 from memcommit.application.capabilities.save_context_from_selection.application import (
     SaveContextFromSelectionResult,
 )
-from memcommit.core.context import Memory, MemoryRef, QueryContextRef
+from memcommit.models.memory import Memory
 from memcommit.source_projection.model import (
-    SourceDisplayFacts,
     SourceForm,
-    SourceState,
 )
 from memcommit.source_projection.presentation import (
-    source_annotation_text,
     source_object_label,
 )
 
@@ -84,7 +80,7 @@ def render_grouped_search_results(
     """Render one common primary/related header and Context-grouped result body."""
 
     if not rows:
-        return f"SEARCH RESULTS\n  {safe_terminal_text(empty_message)}"
+        return f"FIND RESULTS\n  {safe_terminal_text(empty_message)}"
     lines: list[str] = []
     if related_query:
         lines.extend(
@@ -99,7 +95,7 @@ def render_grouped_search_results(
             ]
         )
     else:
-        lines.append("SEARCH RESULTS")
+        lines.append("FIND RESULTS")
     for group_index, group in enumerate(group_search_result_rows(rows)):
         if group_index:
             lines.append("")
@@ -132,48 +128,6 @@ def _render_match(match: SearchMatch) -> None:
             f"[{item_label} {item.uid[:8]}]{relevance}",
             item.content,
         )
-    elif isinstance(item, MemoryRef):
-        facts = SourceDisplayFacts(
-            form=SourceForm.MEMORY_REF,
-            states=(
-                (SourceState.READ_ONLY,)
-                if item.target is not None
-                else (SourceState.DANGLING,)
-            ),
-        )
-        item_label = source_object_label(facts)
-        annotations = [
-            *(("RELATED",) if match.relevance == "related" else ()),
-            source_annotation_text(facts),
-        ]
-        annotation = " · ".join(value for value in annotations if value)
-        label = (
-            f"[{item_label} {item.uid[:8]}]"
-            + (f" · {annotation}" if annotation else "")
-            + " "
-            + f"-> {display_escape_text(item.target_context_name)}#"
-            f"{display_escape_text(item.target_memory_uid[:8])}"
-        )
-        if item.target is not None:
-            _render_labeled_content(label, item.target.content)
-        else:
-            typer.echo(label)
-    elif isinstance(item, QueryContextRef):
-        item_label = source_object_label(SourceForm.QUERY_VIEW)
-        relevance = " · RELATED" if match.relevance == "related" else ""
-        label = f"[{item_label} {item.uid[:8]}]{relevance}"
-        typer.echo(f"{label} {display_escape_text(item.name)}")
-        command = shlex.join(
-            [
-                "mem",
-                "query",
-                item.name,
-                "<question>",
-                "--context",
-                candidate.context_name,
-            ]
-        )
-        typer.echo(f"{' ' * (len(label) + 1)}Ask with: {display_escape_text(command)}")
     elif isinstance(item, RetrievalArtifact):
         label = (
             f"[related {item.artifact_kind} {item.uid[:8]}]"
@@ -238,7 +192,7 @@ def render_save_receipt(saved: SaveContextFromSelectionResult) -> None:
     """Report the existing save capability's committed result."""
 
     typer.secho(
-        f"Saved {len(saved.item_uids)} checked Search result(s) as "
+        f"Saved {len(saved.item_uids)} checked Find result(s) as "
         f"{saved.mode} in new Context "
         f"'{display_escape_text(saved.context_name)}' "
         f"[{saved.context_uid[:8]}]; sources unchanged.",

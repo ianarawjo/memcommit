@@ -15,7 +15,7 @@ from memcommit.application.operations.atomize.records import (
     AtomizeReviewRecord,
     atomize_review_issue_projection,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 AtomizeAnalysisOrigin = Literal["SAVED", "PROVIDER"]

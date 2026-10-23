@@ -5,17 +5,12 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.authorization.context_operation import (
-    authorized_context_mutation,
-)
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    grant_checkpoint_args,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.core.context import AutoCheckpoint, Context
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetAnalysisResult,
@@ -62,36 +57,6 @@ class _ForgetRuntimeToken:
     context: Context
 
 
-def _required_permissions(
-    changes: Sequence[ProposedChange],
-) -> tuple[str, ...]:
-    permissions = {
-        "DELETE" if isinstance(change, RemoveChange) else "EDIT"
-        for change in changes
-    }
-    return tuple(sorted(permissions))
-
-
-def _checkpoint_description(
-    instruction: str,
-    changes: Sequence[ProposedChange],
-) -> str:
-    removes = [change for change in changes if isinstance(change, RemoveChange)]
-    edits = [change for change in changes if isinstance(change, EditChange)]
-    parts: list[str] = []
-    if removes:
-        parts.append(
-            f'removed "{removes[0].content[:40]}"'
-            if len(removes) == 1
-            else f"removed {len(removes)}"
-        )
-    if edits:
-        parts.append(
-            f'edited "{edits[0].old_content[:40]}"'
-            if len(edits) == 1
-            else f"edited {len(edits)}"
-        )
-    return f'Forgot ({instruction[:40]}): {", ".join(parts)}'
 
 
 def _checkpoint_effects(
@@ -148,13 +113,11 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
             self.store,
             request.source_locator,
             current_name=self.current_name,
-            required_permission="READ",
         ).value
         context = access.store.load_direct(access.context_name)
         source = FrozenForgetSource(
             context=context,
             display_name=access.access_name,
-            granted=access.is_granted,
             _runtime_token=_ForgetRuntimeToken(access=access, context=context),
         )
         self._frozen_request = request
@@ -172,31 +135,24 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
             not isinstance(token, _ForgetRuntimeToken)
             or token.context is not source.context
             or token.context.uid != source.context.uid
-            or token.access.access_name != source.display_name
-            or token.access.is_granted != source.granted
+            or (token.access.access_name != source.display_name)
         ):
             raise ValueError("Forget Source does not belong to this runtime binding.")
         removed = sum(isinstance(change, RemoveChange) for change in changes)
         edited = sum(isinstance(change, EditChange) for change in changes)
         if removed + edited != len(changes) or not changes:
             raise ValueError("Forget Apply requires supported reviewed changes.")
-        with authorized_context_mutation(
-            token.access,
-            required_permissions=_required_permissions(changes),
-        ):
-            apply_changes(token.context, list(changes))
-            checkpoint = token.access.store.save(
-                token.context,
-                AutoCheckpoint(
-                    command="forget",
-                    args={
-                        "query": instruction,
-                        "effects": _checkpoint_effects(changes),
-                        **grant_checkpoint_args(token.access),
-                    },
-                    description=_checkpoint_description(instruction, changes),
-                ),
-            )
+        apply_changes(token.context, list(changes))
+        checkpoint = token.access.store.save(
+            token.context,
+            AutoCheckpointRequest(
+                command="forget",
+                command_details={
+                    "query": instruction,
+                    "effects": _checkpoint_effects(changes),
+                },
+            ),
+        )
         if checkpoint is None:
             raise RuntimeError("Forget Apply did not create its checkpoint.")
         return ForgetApplyReceipt(
@@ -205,8 +161,7 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
             removed_count=removed,
             edited_count=edited,
             checkpoint_uid=checkpoint.uid,
-            undo_available=not source.granted,
-            granted=source.granted,
+            undo_available=True,
         )
 
 

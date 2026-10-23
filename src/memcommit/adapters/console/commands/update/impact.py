@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+
 import sys
 
 import typer
 
-from memcommit.application.authorization import ContextPermission, check_context_permissions
 from memcommit.adapters.console.commands.impact.sessions import (
     update_impact_presentation,
 )
@@ -18,27 +18,21 @@ from memcommit.adapters.console.commands.update.impact_screen import (
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.context_access.access import (
-    GrantedReadStore,
-    freeze_granted_context_binding,
-    resolve_context_access,
-)
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import (
-    ProfileError,
-    authority_grant_snapshot_lock,
-)
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.adapters.console.commands.impact.update_endpoints import (
     resolve_update_endpoint_accesses,
 )
 from memcommit.application.operations.update.model import (
     UpdateError,
     plan_update,
-    required_update_context_uses,
     update_inputs_match,
     freeze_update_context_inputs,
 )
-from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import (
+    load_context_and_descendants,
+)
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.errors import QueryProviderError
@@ -95,52 +89,23 @@ def run_directional_update_impact(
         )
         source_access = endpoints.source.value
         target_access = endpoints.target.value
-        check_context_permissions(source_access, ContextPermission.READ)
-        target_authorization = check_context_permissions(
-            target_access,
-            ContextPermission.READ,
+        source_store = store
+        target_store = store
+        source_contexts = (
+            load_context_and_descendants(source_store, source_access.context_name)
+            if source_descendants
+            else (source_store.load(source_access.context_name),)
         )
-        source_store = (
-            GrantedReadStore(source_access) if source_access.is_granted else store
-        )
-        target_store = (
-            GrantedReadStore(target_access) if target_access.is_granted else store
-        )
-        source = load_context_scope(
-            source_store,
-            (
-                source_access.access_name
-                if source_access.is_granted
-                else source_access.context_name
-            ),
-            include_descendants=source_descendants,
-        )
-        target = load_context_scope(
-            target_store,
-            (
-                target_access.access_name
-                if target_access.is_granted
-                else target_access.context_name
-            ),
-            include_descendants=target_descendants,
-        )
-        granted_source = (
-            freeze_granted_context_binding(source_access)
-            if source_access.is_granted
-            else None
-        )
-        granted_target = (
-            freeze_granted_context_binding(target_access)
-            if target_access.is_granted
-            else None
+        target_contexts = (
+            load_context_and_descendants(target_store, target_access.context_name)
+            if target_descendants
+            else (target_store.load(target_access.context_name),)
         )
         inputs = freeze_update_context_inputs(
-            source,
-            target,
+            source_contexts,
+            target_contexts,
             source_include_descendants=source_descendants,
             target_include_descendants=target_descendants,
-            granted_source=granted_source,
-            granted_target=granted_target,
             source_memory_selector=source_memory,
             target_memory_selector=target_memory,
         )
@@ -151,103 +116,47 @@ def run_directional_update_impact(
         ) as progress:
             progress.update("planning memory changes", step=2)
             plan = plan_update(
-                source,
-                target,
-                # Keep connection lazy so Update's complete authority and
-                # semantic-disclosure preflight runs first. A nested live
-                # Grant must fail without contacting a provider at all.
+                source_contexts,
+                target_contexts,
                 connect_semantic_provider,
                 source_include_descendants=source_descendants,
                 target_include_descendants=target_descendants,
-                granted_source=granted_source,
-                granted_target=granted_target,
                 source_memory_selector=source_memory,
                 target_memory_selector=target_memory,
-                allowed_target_uses=target_authorization.allowed,
             )
-
-        check_context_permissions(
-            target_access,
-            required_update_context_uses(plan.operations),
-        )
 
         # Provider latency is not an authorization lease. Re-resolve both
         # endpoints and rebuild both projections before publishing the plan.
-        with authority_grant_snapshot_lock() as registry:
-            current_source_access = resolve_context_access(
-                store,
-                endpoints.source.name,
-                current_name=current_name,
-                required_permission="READ",
-                registry=registry,
+        current_source_access = resolve_context_access(
+            store,
+            endpoints.source.name,
+            current_name=current_name,
+        )
+        current_target_access = resolve_context_access(
+            store,
+            endpoints.target.name,
+            current_name=current_name,
+        )
+        current_source_store = store
+        current_target_store = store
+        current_source_contexts = (
+            load_context_and_descendants(
+                current_source_store, current_source_access.context_name
             )
-            current_target_access = resolve_context_access(
-                store,
-                endpoints.target.name,
-                current_name=current_name,
-                required_permission="READ",
-                registry=registry,
+            if source_descendants
+            else (current_source_store.load(current_source_access.context_name),)
+        )
+        current_target_contexts = (
+            load_context_and_descendants(
+                current_target_store, current_target_access.context_name
             )
-            check_context_permissions(current_source_access, ContextPermission.READ)
-            check_context_permissions(
-                current_target_access,
-                required_update_context_uses(plan.operations),
+            if target_descendants
+            else (current_target_store.load(current_target_access.context_name),)
+        )
+        if not update_inputs_match(inputs, current_source_contexts, current_target_contexts):
+            raise UpdateError(
+                "An update endpoint changed while planning; no preview was displayed."
             )
-            current_source_store = (
-                GrantedReadStore(
-                    current_source_access,
-                    registry=registry,
-                )
-                if current_source_access.is_granted
-                else store
-            )
-            current_target_store = (
-                GrantedReadStore(
-                    current_target_access,
-                    registry=registry,
-                )
-                if current_target_access.is_granted
-                else store
-            )
-            current_source = load_context_scope(
-                current_source_store,
-                (
-                    current_source_access.access_name
-                    if current_source_access.is_granted
-                    else current_source_access.context_name
-                ),
-                include_descendants=source_descendants,
-            )
-            current_target = load_context_scope(
-                current_target_store,
-                (
-                    current_target_access.access_name
-                    if current_target_access.is_granted
-                    else current_target_access.context_name
-                ),
-                include_descendants=target_descendants,
-            )
-            current_granted_source = (
-                freeze_granted_context_binding(current_source_access)
-                if current_source_access.is_granted
-                else None
-            )
-            current_granted_target = (
-                freeze_granted_context_binding(current_target_access)
-                if current_target_access.is_granted
-                else None
-            )
-            if not update_inputs_match(
-                inputs,
-                current_source,
-                current_target,
-                granted_source=current_granted_source,
-                granted_target=current_granted_target,
-            ):
-                raise UpdateError(
-                    "An update endpoint or grant changed while planning; "
-                    "no preview was displayed."
-                )
     except (
         OSError,
         ProfileConfigError,

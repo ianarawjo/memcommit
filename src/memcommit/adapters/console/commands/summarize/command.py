@@ -84,7 +84,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help=("Include readable lexical descendants and follow embedded Contexts"),
+            help=("Include local lexical descendants"),
         ),
     ] = False,
     copy_result: Annotated[
@@ -113,7 +113,6 @@ def cmd(
             SummarizeRequest(
                 context_locator=context_name,
                 include_descendants=traversal.include_descendants,
-                follow_embeds=traversal.follow_embeds,
             ),
             store=store,
             current_context_name=snapshot.current_name,

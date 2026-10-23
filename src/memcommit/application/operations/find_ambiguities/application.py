@@ -20,7 +20,6 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.persistence.store import MemoryStore
 
 
@@ -71,7 +70,6 @@ def prepare_find_ambiguities(
     request: FindAmbiguitiesRequest,
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> QualityFindSourceFrame:
     """Resolve authority and freeze the approved ambiguity Source."""
 
@@ -80,7 +78,6 @@ def prepare_find_ambiguities(
         request.context_name,
         current_name=current_name,
         all_readable=request.all_readable,
-        registry=registry,
     )
 
 
@@ -90,7 +87,6 @@ def find_ambiguities(
     provider_factory: Callable[[], FindingsProvider],
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> FindAmbiguitiesResult:
     """Resolve authority, freeze Source, and execute Find Ambiguities."""
 
@@ -98,7 +94,6 @@ def find_ambiguities(
         store,
         request,
         current_name=current_name,
-        registry=registry,
     )
     return analyze_find_ambiguities(source, provider_factory)
 

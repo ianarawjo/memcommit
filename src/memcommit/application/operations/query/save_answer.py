@@ -5,15 +5,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol, TypeAlias
 
-from memcommit.application.operations.query.granted_application import (
-    GrantedQueryResponse,
-)
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryResponse,
 )
 
 
-QueryAnswerResponse: TypeAlias = OrdinaryQueryResponse | GrantedQueryResponse
+QueryAnswerResponse: TypeAlias = OrdinaryQueryResponse
 
 
 class SaveQueryAnswerError(RuntimeError):
@@ -26,10 +23,8 @@ class SaveQueryAnswerRequest:
     destination_name: str
 
     def __post_init__(self) -> None:
-        if not isinstance(self.response, (OrdinaryQueryResponse, GrantedQueryResponse)):
-            raise SaveQueryAnswerError(
-                "Expected an OrdinaryQueryResponse or GrantedQueryResponse."
-            )
+        if not isinstance(self.response, OrdinaryQueryResponse):
+            raise SaveQueryAnswerError("Expected an OrdinaryQueryResponse.")
         if (
             not isinstance(self.destination_name, str)
             or not self.destination_name.strip()

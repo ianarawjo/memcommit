@@ -8,13 +8,9 @@ from .changes import (
     UpdateError,
     UpdateOperation,
     operation_digest,
-    required_grant_permissions,
-    required_update_context_uses,
-    update_operations_are_authorized,
 )
 from .inputs import (
     INLINE_UPDATE_CONTEXT_NAME,
-    GrantedUpdateTarget,
     SourceCandidate,
     TargetContextCandidate,
     TargetMemoryCandidate,
@@ -24,7 +20,6 @@ from .inputs import (
     update_inputs_match,
     inline_update_source,
     collect_update_inputs,
-    granted_target_digest,
     inline_update_context,
 )
 from .planning import (
@@ -43,7 +38,7 @@ from .receipt import (
     UpdateCheckpointReceipt,
 )
 from .plan import UpdatePlan
-from .result import AppliedOwner, UpdateResult
+from .result import UpdatedContext, UpdateResult
 
 
 __all__ = (
@@ -54,10 +49,9 @@ __all__ = (
     "UPDATE_RESPONSE_CHAR_LIMIT",
     "INLINE_UPDATE_CONTEXT_NAME",
     "AddOperation",
-    "AppliedOwner",
+    "UpdatedContext",
     "ContextFingerprint",
     "EditOperation",
-    "GrantedUpdateTarget",
     "RemoveOperation",
     "SourceCandidate",
     "SourceReference",
@@ -77,11 +71,9 @@ __all__ = (
     "UpdateProvider",
     "UpdateResult",
     "collect_update_inputs",
-    "granted_target_digest",
     "inline_update_context",
     "operation_digest",
     "plan_update",
-    "required_grant_permissions",
     "required_update_context_uses",
     "update_operations_are_authorized",
 )

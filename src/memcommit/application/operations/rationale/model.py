@@ -17,7 +17,7 @@ from memcommit.application.capabilities.history.verification import MemoryState
 from memcommit.application.capabilities.semantic_execution import (
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 RATIONALE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 

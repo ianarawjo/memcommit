@@ -109,7 +109,9 @@ class EndpointEditor:
             self.source_type = HorizontalChoiceState(
                 (
                     HorizontalChoiceOption(
-                        value="CONTEXT", label="CONTEXT", description="Use the selected Context frame."
+                        value="CONTEXT",
+                        label="CONTEXT",
+                        description="Use the selected Context frame.",
                     ),
                     HorizontalChoiceOption(
                         value="STORED_MEMORY",
@@ -423,13 +425,7 @@ class EndpointEditor:
         return self.input.text.strip() == self.required_memory_locator_text(memory_uid)
 
     def synchronize_required_memory_input(self) -> tuple[str, str | None]:
-        """Resolve an owner, owner-qualified UID, or UID under the shown owner.
-
-        The retained owner is explicit process-local state. A bare UID is
-        resolved only inside that owner; it never broadens into a scan of
-        granted or unrelated Contexts. The canonical field then makes the
-        coordinate visible as ``CONTEXT:FULL_UID``.
-        """
+        """Resolve a qualified Memory or a UID within the shown owner, then display its exact CONTEXT:FULL_UID coordinate."""
 
         role = self.role
         candidate = self.input.text.strip()

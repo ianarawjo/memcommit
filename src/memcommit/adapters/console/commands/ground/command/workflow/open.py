@@ -7,6 +7,7 @@ from typing import Literal
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.ground.workspace.catalog import (
     list_ground_workspace_catalog,
     list_ground_workspace_draft_catalog,
@@ -72,6 +73,7 @@ def _run_ground_session_picker(store: MemoryStore) -> None:
             location=session_picker_location(store),
         )
         if receipt is None:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Ground selection cancelled.")
             return
         if isinstance(receipt, SessionNewReceipt):

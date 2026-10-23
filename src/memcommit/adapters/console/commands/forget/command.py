@@ -5,9 +5,8 @@ import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.application.context_access.access import (
-    context_access_display_facts,
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
 )
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
@@ -15,12 +14,14 @@ from memcommit.application.context_access.operand_resolution import (
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.commands.forget.receipt import render_forget_change_lines
+from memcommit.adapters.console.commands.forget.receipt import (
+    render_forget_change_lines,
+)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplyRequest,
@@ -63,7 +64,6 @@ class _FrozenContextForgetSourcePort:
         self.source = FrozenForgetSource(
             context=context,
             display_name=context.name,
-            granted=False,
             _runtime_token=self,
         )
 
@@ -78,8 +78,6 @@ def _run_resolution_forget_snapshot(
     source_port: ForgetSourcePort,
     request: ForgetAnalysisRequest,
     provider_factory,
-    *,
-    mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | None:
     # Progress reports liveness around the whole-frame turn; it does not
     # partition the Source or criterion frame into independent provider calls.
@@ -97,7 +95,6 @@ def _run_resolution_forget_snapshot(
     )
     return run_forget_review_workbench(
         result.snapshot,
-        mutates_granted_authority=mutates_granted_authority,
     )
 
 
@@ -105,8 +102,6 @@ def _run_resolution_forget(
     source_port: MemoryStoreForgetSourcePort | Context,
     request: ForgetAnalysisRequest | str,
     provider_factory,
-    *,
-    mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | list[ProposedChange] | None:
     """Run the current typed controller or adapt the historical test signature."""
 
@@ -125,7 +120,6 @@ def _run_resolution_forget(
             port,
             typed_request,
             legacy_provider_factory,
-            mutates_granted_authority=mutates_granted_authority,
         )
         return None if snapshot is None else snapshot.review.changes()
     if not isinstance(request, ForgetAnalysisRequest):
@@ -134,7 +128,6 @@ def _run_resolution_forget(
         source_port,
         request,
         provider_factory,
-        mutates_granted_authority=mutates_granted_authority,
     )
 
 
@@ -142,15 +135,12 @@ def _run_interactive_forget_snapshot(
     source_port: ForgetSourcePort,
     request: ForgetAnalysisRequest,
     provider_factory,
-    *,
-    mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | list[ProposedChange] | None:
     if _interactive_terminal():
         return _run_resolution_forget(
             source_port,
             request,
             provider_factory,
-            mutates_granted_authority=mutates_granted_authority,
         )
     source = source_port.freeze(request)
     ctx = source.context
@@ -178,7 +168,6 @@ def _run_interactive_forget(
     request: ForgetAnalysisRequest | str,
     provider_factory,
     *,
-    mutates_granted_authority: bool = False,
     frozen_source: FrozenForgetSource | None = None,
 ) -> ForgetSessionSnapshot | list[ProposedChange] | None:
     """Preserve the historical command hook while entering typed use cases."""
@@ -191,8 +180,6 @@ def _run_interactive_forget(
         if frozen_source is not None:
             if frozen_source.context is not context:
                 raise ValueError("Forget analysis must keep its exact frozen Source.")
-            # Keep the public Grant name and binding through the historical
-            # Context-shaped hook; approval must name the authorized Source.
             port.source = frozen_source
         typed_request = ForgetAnalysisRequest(context.name, request)
         provider = provider_factory
@@ -204,7 +191,6 @@ def _run_interactive_forget(
             port,
             typed_request,
             legacy_provider_factory,
-            mutates_granted_authority=mutates_granted_authority,
         )
     if not isinstance(request, ForgetAnalysisRequest):
         raise TypeError("Forget execution requires a typed analysis request.")
@@ -212,7 +198,6 @@ def _run_interactive_forget(
         source_port,
         request,
         provider_factory,
-        mutates_granted_authority=mutates_granted_authority,
     )
 
 
@@ -255,19 +240,13 @@ def cmd(
                 active_store,
                 context_name,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             ).value
             catalog = freeze_profile_readable_context_catalog(
                 active_store,
                 access,
-                include_query_routes=False,
             )
             names = tuple(catalog.list_context_names())
-            annotations = {
-                name: context_access_display_facts(catalog.access_for(name))
-                for name in names
-                if catalog.access_for(name).is_granted
-            }
+            annotations = {}
             setup_receipt = choose_forget_setup(
                 names,
                 current=access.access_name,
@@ -277,9 +256,6 @@ def cmd(
                 annotate_command_outcome("CANCELLED")
                 typer.echo("Forget cancelled.")
                 return
-            # The receipt is already canonical in the frozen public catalog.
-            # The runtime revalidates its exact local/Grant binding before any
-            # provider construction instead of trusting selection visibility.
             source_locator = setup_receipt.context_name
             info = setup_receipt.instruction
         assert info is not None
@@ -309,7 +285,6 @@ def cmd(
             source.context,
             info,
             provider,
-            mutates_granted_authority=source.granted,
             frozen_source=source,
         )
     except (OSError, QueryProviderError, RuntimeError, ValueError) as e:
@@ -327,9 +302,7 @@ def cmd(
 
     try:
         reviewed_changes = (
-            reviewed
-            if isinstance(reviewed, list)
-            else reviewed.review.changes()
+            reviewed if isinstance(reviewed, list) else reviewed.review.changes()
         )
         snapshot = prepare_forget_snapshot(source, info, reviewed_changes)
         result = run_forget_apply(
@@ -357,8 +330,7 @@ def cmd(
         return
 
     typer.secho(
-        "FORGET APPLIED · SOURCE "
-        f"{safe_terminal_text(apply_receipt.source_name)}",
+        f"FORGET APPLIED · SOURCE {safe_terminal_text(apply_receipt.source_name)}",
         bold=True,
     )
     typer.echo(f"FORGET · {display_escape_text(info)}")
@@ -369,12 +341,10 @@ def cmd(
     if apply_receipt.checkpoint_uid is not None:
         typer.echo(f"RECEIPT · {apply_receipt.checkpoint_uid}")
         typer.echo(f"CHECKPOINT · {apply_receipt.checkpoint_uid}")
-        if not apply_receipt.granted:
-            typer.echo(
-                "REVIEW · mem review forget --receipt "
-                f"{apply_receipt.checkpoint_uid}"
-            )
+        typer.echo(
+            f"REVIEW · mem review forget --receipt {apply_receipt.checkpoint_uid}"
+        )
     if apply_receipt.undo_available:
         typer.echo("RECOVERY · mem undo")
     else:
-        typer.echo("RECOVERY · governed by the granted authority owner")
+        typer.echo("RECOVERY · no local Undo receipt was produced")

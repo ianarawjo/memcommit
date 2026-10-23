@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
@@ -146,6 +147,7 @@ def cmd(
             )
             raise typer.Exit(1)
         if not completed:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Find ambiguities cancelled.")
         return
     try:

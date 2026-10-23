@@ -40,14 +40,6 @@ def update_effect_view(
         overview_sections=(),
         report_items_summary=None,
         show_results=False,
-        context_locations=tuple(
-            replace(location, state="GRANT" if binding is not None else "")
-            for location, binding in zip(
-                view.context_locations,
-                (inputs.granted_source, inputs.granted_target),
-                strict=True,
-            )
-        ),
         capabilities=frozenset({"ACCEPT"}) if applying else frozenset(),
         accept_enabled=applying and not completed,
     )

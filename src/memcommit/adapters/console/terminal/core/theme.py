@@ -12,7 +12,6 @@ from enum import Enum
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
-    SourceReach,
 )
 
 
@@ -51,8 +50,6 @@ class SemanticColorRole(str, Enum):
     UNDO = "undo"
     REDO = "redo"
     HISTORY = "history"
-    GRANT = "grant"
-    NAVIGATION_GRANT = "navigation-grant"
     CAPABILITY = "capability"
     REFERENCE = "reference"
     PROFILE_CURRENT = "profile-current"
@@ -76,8 +73,6 @@ SEMANTIC_COLOR_HEX = {
     SemanticColorRole.UNDO: PEACH_HEX,
     SemanticColorRole.REDO: LAVENDER_HEX,
     SemanticColorRole.HISTORY: HISTORY_HEX,
-    SemanticColorRole.GRANT: REPORT_HEX,
-    SemanticColorRole.NAVIGATION_GRANT: GREEN_HEX,
     SemanticColorRole.CAPABILITY: TEAL_HEX,
     SemanticColorRole.REFERENCE: MAUVE_HEX,
     SemanticColorRole.PROFILE_CURRENT: GREEN_HEX,
@@ -186,24 +181,13 @@ def semantic_source_role(
     """Classify one typed Source relationship without parsing display text."""
 
     if isinstance(value, SourceDisplayFacts):
-        form = value.form
-        reach = value.reach
+        pass
     elif isinstance(value, SourceForm):
-        form = value
-        reach = SourceReach.DIRECT
+        pass
     else:
         raise TypeError(
             "Source semantic colors require SourceDisplayFacts or SourceForm."
         )
-    if form in {SourceForm.MEMORY_EMBED, SourceForm.MEMORY_REF}:
-        return SemanticColorRole.EMBED
-    if form in {
-        SourceForm.CONTEXT_REFERENCE,
-        SourceForm.MEMORY_REFERENCE,
-    }:
-        return SemanticColorRole.REFERENCE
-    if reach is SourceReach.VIA_EMBED:
-        return SemanticColorRole.EMBED
     return None
 
 

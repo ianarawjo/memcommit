@@ -4,7 +4,7 @@ from copy import deepcopy
 from dataclasses import asdict, dataclass, field
 
 from memcommit.application.capabilities.resolution.workbench import ResolutionOption
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .analysis.candidate import MergeCandidate, digest
 from .analysis.choices import (
@@ -14,7 +14,6 @@ from .analysis.choices import (
     MergeConflictIssue,
     MergeDecisionSet,
     finalize_merge_decisions,
-    merge_item_kind,
 )
 from .analysis.conflicts import MergeConflictReport, analyze_merge_conflicts
 
@@ -40,24 +39,19 @@ class LiteralMergeRound:
             raise ValueError("Merge round belongs to another candidate.")
         if self.report != analyze_merge_conflicts(self.candidate):
             raise ValueError("Merge findings differ from the frozen candidate.")
-        if tuple(issue.uid for issue in self.issues) != tuple(
-            finding.uid for finding in self.report.findings
+        if tuple((issue.uid for issue in self.issues)) != tuple(
+            (finding.uid for finding in self.report.findings)
         ):
             raise ValueError("Merge round does not cover its structural findings.")
         for issue, finding in zip(self.issues, self.report.findings, strict=True):
             members = (*finding.target_uids, finding.source_uid)
-            kinds = {
-                merge_item_kind(self.candidate.original_item(uid)) for uid in members
-            }
             if (
                 issue.kind != "MERGE_CONFLICT"
                 or issue.classification != finding.kind.value
                 or issue.item_uids != members
-                or issue.item_kind
-                != (next(iter(kinds)) if len(kinds) == 1 else "MIXED")
-                or issue.reason != finding.reason
-                or not issue.choices
-                or not {choice.uid for choice in issue.choices} <= EXACT_DECISIONS
+                or (issue.reason != finding.reason)
+                or (not issue.choices)
+                or (not {choice.uid for choice in issue.choices} <= EXACT_DECISIONS)
             ):
                 raise ValueError("Merge issue differs from its structural finding.")
         mappings = dict(self.input_result_uids)
@@ -83,7 +77,9 @@ class LiteralMergeRound:
         return ()
 
     def affected_uids(self, issue_uid):
-        return next(issue.item_uids for issue in self.issues if issue.uid == issue_uid)
+        return next(
+            (issue.item_uids for issue in self.issues if issue.uid == issue_uid)
+        )
 
     def to_dict(self):
         return dict(
@@ -123,24 +119,24 @@ class LiteralMergeRound:
             candidate,
             report,
             tuple(
-                MergeConflictIssue(
-                    **(
-                        item
+                (
+                    MergeConflictIssue(
+                        **item
                         | {
                             "item_uids": tuple(item["item_uids"]),
                             "choices": tuple(
-                                ResolutionOption(**c) for c in item["choices"]
+                                (ResolutionOption(**c) for c in item["choices"])
                             ),
                         }
                     )
+                    for item in value["issues"]
                 )
-                for item in value["issues"]
             ),
             MergeDecisionSet(
                 value["revision"],
-                tuple(MergeConflictDecision(**d) for d in value["decisions"]),
+                tuple((MergeConflictDecision(**d) for d in value["decisions"])),
             ),
             Context.from_dict(value["before"]),
             Context.from_dict(value["after"]),
-            tuple(tuple(pair) for pair in value["input_result_uids"]),
+            tuple((tuple(pair) for pair in value["input_result_uids"])),
         )

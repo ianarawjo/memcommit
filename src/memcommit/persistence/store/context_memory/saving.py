@@ -5,103 +5,88 @@ from __future__ import annotations
 import json
 from typing import Iterable, Optional
 
-from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
-from memcommit.core.context_targeting.naming import (
-    validate_portable_context_name,
-)
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
+from memcommit.core.context_name_validation import validate_context_name
 
 from ..infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
 from .models import ConcurrentContextUpdateError
-from .records import (
-    _validate_context_header,
-    context_record_digest,
-    validate_context_name,
-)
+from .records import _validate_context_header
 
 
 class _ContextSavingMixin:
     def save(
         self,
         ctx: Context,
-        auto_checkpoint: Optional[AutoCheckpoint] = None,
-        *,
-        expected_context_digest: str | None = None,
+        auto_checkpoint: Optional[AutoCheckpointRequest] = None,
     ) -> Checkpoint | None:
         """Persist one Context inside the global command-order boundary."""
         with self._command_write_lock():
             return self._save_command_locked(
                 ctx,
                 auto_checkpoint,
-                expected_context_digest=expected_context_digest,
             )
 
     def _save_command_locked(
         self,
         ctx: Context,
-        auto_checkpoint: Optional[AutoCheckpoint] = None,
-        *,
-        expected_context_digest: str | None = None,
+        auto_checkpoint: Optional[AutoCheckpointRequest] = None,
     ) -> Checkpoint | None:
-        """Persist a Context, optionally only if its disk record is unchanged."""
-        if expected_context_digest is None:
-            expected_context_digest = getattr(ctx, "_store_digest", None)
-        # A brand-new identity can add an inbound reference under a name that
-        # did not exist during rename's graph scan. Coordinate that creation
-        # with the graph lock; stale loaded writers already carry a digest and
-        # are rejected by ordinary per-Context CAS after a rename.
-        if expected_context_digest is None:
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_lock(ctx.name):
-                    checkpoint = self._save_locked(
-                        ctx,
-                        auto_checkpoint,
-                        expected_context_digest=expected_context_digest,
-                    )
-        else:
+        """Persist a Context and its optional checkpoint."""
+        # Coordinate new names with namespace changes; writing and checkpointing
+        # still share the same Context lock and exception rollback boundary.
+        with self._context_graph_lock(exclusive=False):
             with self._context_write_lock(ctx.name):
-                checkpoint = self._save_locked(
-                    ctx,
-                    auto_checkpoint,
-                    expected_context_digest=expected_context_digest,
-                )
-        ctx._store_digest = context_record_digest(ctx)
+                checkpoint = self._save_locked(ctx, auto_checkpoint)
         return checkpoint
 
     def save_context_command_batch(
         self,
-        entries: Iterable[tuple[Context, AutoCheckpoint, str]],
+        entries: Iterable[tuple[Context, AutoCheckpointRequest]],
         *,
-        source_bindings: Iterable[tuple[str, str, str]] = (),
+        source_bindings: Iterable[tuple[str, str]] = (),
         expected_context_catalog: Iterable[str] | None = None,
     ) -> tuple[Checkpoint, ...]:
         """Persist one existing multi-Context command with exception rollback.
 
-        Each entry carries its own already-reviewed Context digest.  The
-        complete name set remains locked from the first revalidation through
-        the final write, so application adapters can publish a command unit
-        without inventing a whole-graph digest.  This is exception-atomic;
-        like the other multi-Context prototype paths, a durable crash journal
-        is intentionally deferred.
+        Each entry carries a Context and its checkpoint request. The complete
+        identity set stays locked through the final write. Rollback protects
+        ordinary exceptions; a durable crash journal remains deferred.
         """
 
+        with self._command_write_lock():
+            return self._save_context_command_batch_command_locked(
+                entries,
+                source_bindings=source_bindings,
+                expected_context_catalog=expected_context_catalog,
+            )
+
+    def _save_context_command_batch_command_locked(
+        self,
+        entries: Iterable[tuple[Context, AutoCheckpointRequest]],
+        *,
+        source_bindings: Iterable[tuple[str, str]] = (),
+        expected_context_catalog: Iterable[str] | None = None,
+    ) -> tuple[Checkpoint, ...]:
+        """Reuse batch persistence when a coordinating operation owns the lock."""
         records = tuple(entries)
         if not records:
             raise ValueError("At least one Context command entry is required.")
         if any(
             not isinstance(context, Context)
-            or not isinstance(checkpoint, AutoCheckpoint)
-            or not isinstance(expected_digest, str)
-            for context, checkpoint, expected_digest in records
+            or not isinstance(checkpoint, AutoCheckpointRequest)
+            for context, checkpoint in records
         ):
             raise TypeError("Invalid Context command batch entry.")
-        names = tuple(context.name for context, _, _ in records)
+        names = tuple(context.name for context, _ in records)
         if len(names) != len(set(names)):
             raise ValueError("Context command batch contains duplicate names.")
         bindings = tuple(source_bindings)
-        source_names = tuple(name for name, _uid, _digest in bindings)
+        source_names = tuple(name for name, _uid in bindings)
         if len(source_names) != len(set(source_names)):
             raise ValueError("Context command batch repeats a source binding.")
         if any(
@@ -109,9 +94,7 @@ class _ContextSavingMixin:
             or not name
             or not isinstance(uid, str)
             or not uid
-            or not isinstance(digest, str)
-            or not digest
-            for name, uid, digest in bindings
+            for name, uid in bindings
         ):
             raise TypeError("Invalid Context command source binding.")
         for name in names:
@@ -129,112 +112,105 @@ class _ContextSavingMixin:
         ):
             raise ValueError("Expected Context command catalog is invalid.")
 
-        with self._command_write_lock():
-            # A complete-scope operation may bind catalog membership as well
-            # as Context bytes. Use the exclusive graph lock only for those
-            # callers; ordinary batches retain the narrower shared lock.
-            with self._context_graph_lock(exclusive=expected_catalog is not None):
-                if (
-                    expected_catalog is not None
-                    and tuple(self.list_context_names()) != expected_catalog
-                ):
-                    raise ConcurrentContextUpdateError(
-                        "The Context namespace changed after the command was reviewed."
+        # A complete-scope operation may bind catalog membership as well
+        # as Context bytes. Use the exclusive graph lock only for those
+        # callers; ordinary batches retain the narrower shared lock.
+        with self._context_graph_lock(exclusive=expected_catalog is not None):
+            if (
+                expected_catalog is not None
+                and tuple(self.list_context_names()) != expected_catalog
+            ):
+                raise ConcurrentContextUpdateError(
+                    "The Context namespace changed after the command was reviewed."
+                )
+            # Read-only members of a complete operation frame stay locked
+            # through the writes as well. Otherwise a plan claiming all
+            # matches could silently miss a newly changed sibling.
+            with self._context_write_locks((*names, *source_names)):
+                if bindings:
+                    self._assert_source_bindings_locked(
+                        bindings,
+                        result_label="Context command batch",
                     )
-                # Read-only members of a complete operation frame stay locked
-                # through the writes as well. Otherwise a plan claiming all
-                # matches could silently miss a newly changed sibling.
-                with self._context_write_locks((*names, *source_names)):
-                    if bindings:
-                        self._assert_source_bindings_locked(
-                            bindings,
-                            result_label="Context command batch",
-                        )
-                    original_records: dict[str, dict[str, object]] = {}
-                    for context, _, expected_digest in records:
-                        try:
-                            current = self.load_direct(context.name)
-                        except FileNotFoundError as error:
-                            raise ConcurrentContextUpdateError(
-                                f"Context '{context.name}' no longer exists."
-                            ) from error
-                        if (
-                            current.uid != context.uid
-                            or context_record_digest(current) != expected_digest
-                        ):
-                            raise ConcurrentContextUpdateError(
-                                f"Context '{context.name}' changed before the "
-                                "command could be saved."
-                            )
-                        # Validate the entire write set before the first
-                        # publication. Rollback still protects unexpected I/O
-                        # failures, while a locked later Context must fail the
-                        # complete command without a provisional earlier save.
-                        self._assert_context_record_change_allowed(
-                            current,
-                            context,
-                        )
-                        original_records[context.name] = current.to_dict()
-
-                    created: list[tuple[str, Checkpoint]] = []
-                    written: list[str] = []
+                original_records: dict[str, dict[str, object]] = {}
+                for context, _ in records:
                     try:
-                        for context, auto_checkpoint, expected_digest in records:
-                            checkpoint = self._save_locked(
-                                context,
-                                auto_checkpoint,
-                                expected_context_digest=expected_digest,
-                            )
-                            if checkpoint is None:
-                                raise RuntimeError(
-                                    "Context command batch created no checkpoint."
-                                )
-                            written.append(context.name)
-                            created.append((context.name, checkpoint))
-                    except Exception:
-                        rollback_error: Exception | None = None
-                        for name in written:
-                            try:
-                                _write_json_atomic(
-                                    self._context_file(name),
-                                    original_records[name],
-                                )
-                            except Exception as candidate:
-                                rollback_error = rollback_error or candidate
-                        for name, checkpoint in created:
-                            try:
-                                self._remove_checkpoint_uid_locked(
-                                    name,
-                                    checkpoint.uid,
-                                )
-                            except Exception as candidate:
-                                rollback_error = rollback_error or candidate
-                        if rollback_error is not None:
-                            raise RuntimeError(
-                                "Context command batch failed and could not be "
-                                "fully rolled back."
-                            ) from rollback_error
-                        raise
+                        current = self.load_direct(context.name)
+                    except FileNotFoundError as error:
+                        raise ConcurrentContextUpdateError(
+                            f"Context '{context.name}' no longer exists."
+                        ) from error
+                    if (
+                        current.uid != context.uid
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            f"Context '{context.name}' changed before the "
+                            "command could be saved."
+                        )
+                    # Validate the entire write set before the first
+                    # publication. Rollback still protects unexpected I/O
+                    # failures, while a locked later Context must fail the
+                    # complete command without a provisional earlier save.
+                    self._assert_context_record_change_allowed(
+                        current,
+                        context,
+                    )
+                    original_records[context.name] = current.to_dict()
 
-        for context, _, _ in records:
-            context._store_digest = context_record_digest(context)
+                created: list[tuple[str, Checkpoint]] = []
+                written: list[str] = []
+                try:
+                    for context, auto_checkpoint in records:
+                        checkpoint = self._save_locked(
+                            context,
+                            auto_checkpoint,
+                        )
+                        if checkpoint is None:
+                            raise RuntimeError(
+                                "Context command batch created no checkpoint."
+                            )
+                        written.append(context.name)
+                        created.append((context.name, checkpoint))
+                except Exception:
+                    rollback_error: Exception | None = None
+                    for name in written:
+                        try:
+                            _write_json_atomic(
+                                self._context_file(name),
+                                original_records[name],
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    for name, checkpoint in created:
+                        try:
+                            self._remove_checkpoint_uid_locked(
+                                name,
+                                checkpoint.uid,
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Context command batch failed and could not be "
+                            "fully rolled back."
+                        ) from rollback_error
+                    raise
+
         return tuple(checkpoint for _, checkpoint in created)
 
     def save_merge_target(
         self,
         ctx: Context,
-        auto_checkpoint: AutoCheckpoint,
+        auto_checkpoint: AutoCheckpointRequest,
         *,
-        expected_context_digest: str | None,
         require_new: bool = False,
-        source_bindings: Iterable[tuple[str, str, str]],
+        source_bindings: Iterable[tuple[str, str]],
     ) -> Checkpoint | None:
         """Save one Merge result as one globally ordered command."""
         with self._command_write_lock():
             return self._save_merge_target_command_locked(
                 ctx,
                 auto_checkpoint,
-                expected_context_digest=expected_context_digest,
                 require_new=require_new,
                 source_bindings=source_bindings,
             )
@@ -242,23 +218,14 @@ class _ContextSavingMixin:
     def _save_merge_target_command_locked(
         self,
         ctx: Context,
-        auto_checkpoint: AutoCheckpoint,
+        auto_checkpoint: AutoCheckpointRequest,
         *,
-        expected_context_digest: str | None,
         require_new: bool = False,
-        source_bindings: Iterable[tuple[str, str, str]],
+        source_bindings: Iterable[tuple[str, str]],
     ) -> Checkpoint | None:
-        """Save one Merge target while its exact source snapshots stay locked.
-
-        Ordinary Context CAS protects only the target. A Merge result also
-        depends on read-only source snapshots, so all participating Context
-        locks must remain held from the final source recheck through the
-        target checkpoint and write. In a Merge the BASELINE frame
-        is the target itself and is protected by target CAS rather than being
-        repeated in ``source_bindings``.
-        """
+        """Publish a Merge target while its Source identities stay locked."""
         bindings = tuple(source_bindings)
-        source_names = tuple(name for name, _, _ in bindings)
+        source_names = tuple(name for name, _ in bindings)
         if len(source_names) != len(set(source_names)) or ctx.name in source_names:
             raise ValueError("Invalid Merge source lock set.")
         with self._context_graph_lock(exclusive=require_new):
@@ -267,13 +234,13 @@ class _ContextSavingMixin:
                     bindings,
                     result_label="Merge target",
                 )
-                record = auto_checkpoint.args.get("merge", {})
+                record = auto_checkpoint.command_details.get("merge", {})
                 operation_uid = record.get("operation_uid")
                 if (
                     operation_uid
                     and self.context_exists(ctx.name)
                     and any(
-                        entry.get("args", {}).get("merge", {}).get("operation_uid")
+                        entry.get("command_details", {}).get("merge", {}).get("operation_uid")
                         == operation_uid
                         for entry in self.list_checkpoints(ctx.name)
                     )
@@ -284,29 +251,20 @@ class _ContextSavingMixin:
                 checkpoint = self._save_locked(
                     ctx,
                     auto_checkpoint,
-                    expected_context_digest=expected_context_digest,
                     require_new=require_new,
                 )
-        ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
     def save_context_with_sources(
         self,
         ctx: Context,
-        auto_checkpoint: AutoCheckpoint,
+        auto_checkpoint: AutoCheckpointRequest,
         *,
-        expected_context_digest: str,
-        source_bindings: Iterable[tuple[str, str, str]],
+        source_bindings: Iterable[tuple[str, str]],
     ) -> Checkpoint | None:
-        """Save a target only while every source receipt is still exact.
-
-        A target digest cannot detect a rename or replacement of a separate
-        source that supplied a persisted locator.  Keep every source and the
-        target locked from final validation through the target write so a
-        successful command cannot reintroduce stale source names.
-        """
+        """Save a target with its exact Source identities locked."""
         bindings = tuple(source_bindings)
-        source_names = tuple(name for name, _, _ in bindings)
+        source_names = tuple(name for name, _ in bindings)
         if not bindings or len(source_names) != len(set(source_names)):
             raise ValueError("Invalid Context source lock set.")
         with self._command_write_lock():
@@ -316,21 +274,19 @@ class _ContextSavingMixin:
                     checkpoint = self._save_locked(
                         ctx,
                         auto_checkpoint,
-                        expected_context_digest=expected_context_digest,
                     )
-        ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
     def _assert_source_bindings_locked(
         self,
-        bindings: Iterable[tuple[str, str, str]],
+        bindings: Iterable[tuple[str, str]],
         *,
         result_label: str = "result",
     ) -> None:
         """Validate exact source identities while their write locks are held."""
         if not result_label:
             raise ValueError("Context source result label cannot be empty.")
-        for name, expected_uid, expected_digest in bindings:
+        for name, expected_uid in bindings:
             try:
                 source = self.load_direct(name)
             except FileNotFoundError as error:
@@ -339,7 +295,6 @@ class _ContextSavingMixin:
                 ) from error
             if (
                 source.uid != expected_uid
-                or context_record_digest(source) != expected_digest
             ):
                 raise ConcurrentContextUpdateError(
                     f"The source Context changed before the {result_label} "
@@ -349,9 +304,8 @@ class _ContextSavingMixin:
     def _save_locked(
         self,
         ctx: Context,
-        auto_checkpoint: Optional[AutoCheckpoint],
+        auto_checkpoint: Optional[AutoCheckpointRequest],
         *,
-        expected_context_digest: str | None,
         require_new: bool = False,
     ) -> Checkpoint | None:
         """Save while holding this Context's cooperative process lock."""
@@ -363,11 +317,6 @@ class _ContextSavingMixin:
                 f"Refusing to write context '{ctx.name}' through a symbolic link."
             )
         context_preexisting = self.context_exists(ctx.name)
-        if not context_preexisting:
-            # Existing non-portable records remain writable until an explicit
-            # identity-preserving migration moves them. A newly published
-            # identity must never reintroduce shell-dependent spelling.
-            validate_portable_context_name(ctx.name)
         if require_new and context_preexisting:
             raise FileExistsError(f"Context '{ctx.name}' already exists.")
         current_record: dict[str, object] | None = None
@@ -381,21 +330,6 @@ class _ContextSavingMixin:
                 loaded_record,
                 ctx.name,
             )
-        if expected_context_digest is not None:
-            if len(expected_context_digest) != 64 or any(
-                character not in "0123456789abcdef"
-                for character in expected_context_digest
-            ):
-                raise ValueError("Expected Context digest is invalid.")
-            if not context_preexisting:
-                raise ConcurrentContextUpdateError(
-                    f"Context '{ctx.name}' no longer exists."
-                )
-            assert current_record is not None
-            if context_record_digest(current_record) != expected_context_digest:
-                raise ConcurrentContextUpdateError(
-                    f"Context '{ctx.name}' changed before it could be saved."
-                )
         if current_record is not None:
             self._assert_context_record_change_allowed(current_record, ctx)
         if not context_preexisting:
@@ -412,10 +346,8 @@ class _ContextSavingMixin:
                 # history race reviewed revert/undo selections.
                 created_checkpoint = self._checkpoint_locked(
                     ctx,
-                    message=auto_checkpoint.description,
                     command=auto_checkpoint.command,
-                    args=auto_checkpoint.args,
-                    description=auto_checkpoint.description,
+                    command_details=auto_checkpoint.command_details,
                     auto=True,
                     command_before=current_record,
                 )

@@ -101,8 +101,7 @@ def _makemore_lines(payload: dict[str, object]) -> list[str]:
                 boundary = rule.get("boundary_memory_uids")
                 if isinstance(boundary, list) and boundary:
                     lines.append(
-                        "   BOUNDARY · "
-                        + ", ".join(_line(uid) for uid in boundary)
+                        "   BOUNDARY · " + ", ".join(_line(uid) for uid in boundary)
                     )
     overview = payload.get("overview")
     if overview:
@@ -129,11 +128,9 @@ def _dedun_fragments(payload: dict[str, object]) -> tuple[ReviewTextFragment, ..
         fragments.extend(parts)
 
     components = payload.get("components")
-    exact_item_groups = payload.get("exact_item_groups")
     component_count = len(components) if isinstance(components, list) else 0
-    exact_count = len(exact_item_groups) if isinstance(exact_item_groups, list) else 0
-    if component_count or exact_count:
-        line(ReviewTextFragment(f"RESOLVED GROUPS · {component_count + exact_count}"))
+    if component_count:
+        line(ReviewTextFragment(f"RESOLVED GROUPS · {component_count}"))
     if isinstance(components, list):
         for index, component in enumerate(components, 1):
             if not isinstance(component, dict):
@@ -192,31 +189,6 @@ def _dedun_fragments(payload: dict[str, object]) -> tuple[ReviewTextFragment, ..
                                 f"{_line(item.get('reason', ''))}"
                             )
                         )
-    if isinstance(exact_item_groups, list):
-        for offset, group in enumerate(exact_item_groups, 1):
-            if not isinstance(group, dict):
-                continue
-            index = component_count + offset
-            survivor_uid = str(group.get("survivor_uid", ""))
-            summary = _line(group.get("summary", ""))
-            kind = _line(group.get("item_kind", ""))
-            line(
-                ReviewTextFragment(f"{index}. "),
-                ReviewTextFragment("SURVIVOR", SemanticColorRole.ADD, bold=True),
-                ReviewTextFragment(f" · [{_line(survivor_uid[:8])}] {kind} · {summary}"),
-            )
-            absorbed_uids = group.get("absorbed_uids")
-            if isinstance(absorbed_uids, list):
-                for uid in absorbed_uids:
-                    line(
-                        ReviewTextFragment("   "),
-                        ReviewTextFragment(
-                            "ABSORB", SemanticColorRole.REMOVE, bold=True
-                        ),
-                        ReviewTextFragment(
-                            f" · [{_line(str(uid)[:8])}] {kind} · {summary}"
-                        ),
-                    )
     return tuple(fragments)
 
 

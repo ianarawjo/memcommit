@@ -88,14 +88,12 @@ def resolve_update_endpoint_accesses(
         store,
         source_locator,
         current_name=current,
-        required_permission="READ",
         candidates=frozen,
     )
     target = resolve_existing_context_access(
         store,
         target_locator,
         current_name=current,
-        required_permission="READ",
         candidates=frozen,
     )
     # Names can expose the same durable Context through different authorized

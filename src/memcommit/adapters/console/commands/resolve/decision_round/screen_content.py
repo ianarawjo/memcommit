@@ -36,13 +36,6 @@ def _issue_memory_blocks(analysis: ResolveAnalysis, issue: ResolveIssue):
     for uid in issue.item_uids:
         location = analysis.frame.display_name
         memory_uid = uid
-        if analysis.frame.memory_target is not None:
-            origin = next(
-                item
-                for item in analysis.frame.memory_target.origins
-                if item.analysis_uid == uid
-            )
-            location, memory_uid = origin.context_name, origin.memory_uid
         blocks.append(
             ResolutionDetailBlock(
                 heading=f"[{location}:{memory_uid[:8]}]",
@@ -60,8 +53,7 @@ def build_decision_view(analysis: ResolveAnalysis) -> ResolutionWorkbenchView:
         artifact_uid=analysis.frame.source.context_uid,
         revision=analysis.frame.revision,
         title="Resolve Audit directions",
-        route=analysis.frame.display_name
-        + (" · RECURSIVE" if analysis.frame.memory_target else ""),
+        route=analysis.frame.display_name,
         status="NEEDS DECISIONS",
         metrics=(),
         overview="",

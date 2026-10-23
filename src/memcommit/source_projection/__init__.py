@@ -1,13 +1,11 @@
 """Shared semantic facts and display policy for readable source occurrences."""
 
 from memcommit.source_projection.model import (
-    SourceAccess,
     SourceDisplayFacts,
     SourceForm,
     SourceReferenceRow,
     SourceReach,
     SourceState,
-    context_access_facts,
 )
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
@@ -23,7 +21,6 @@ from memcommit.source_projection.presentation import (
 )
 
 __all__ = [
-    "SourceAccess",
     "SourceDisplayFacts",
     "SourceDisplayToken",
     "SourceForm",
@@ -32,7 +29,6 @@ __all__ = [
     "SourceReach",
     "SourceState",
     "SourceTokenRole",
-    "context_access_facts",
     "source_annotation_text",
     "source_annotation_tokens",
     "source_display_text",

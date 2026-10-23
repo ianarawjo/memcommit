@@ -15,13 +15,6 @@ from memcommit.application.capabilities.history.reconstruction.checkpoint_state_
     MemoryTransition,
     build_history,
 )
-from memcommit.application.capabilities.history.reconstruction.reference_occurrence_derivation import (
-    MemoryReferenceCandidate,
-    MemoryReferenceState,
-    MemoryReferenceHistoryEvent,
-    collect_reference_candidates,
-    reference_occurrence_events,
-)
 from memcommit.application.capabilities.history.model.topology import (
     HistoryEffect,
     HistoryGraph,
@@ -31,12 +24,14 @@ from memcommit.application.capabilities.history.model.topology import (
     HistoryRelation,
 )
 from memcommit.application.capabilities.history.model.memory_event import (
-    MemoryHistoryEvent, MemoryHistoryRelation, MemoryHistoryRecord,
+    MemoryHistoryEvent,
+    MemoryHistoryRelation,
+    MemoryHistoryRecord,
 )
 from memcommit.application.capabilities.history.reconstruction.memory_history_reconstruction import (
     derive_memory_history_events,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.history.history_evidence_source import (
     HistoryEvidenceSource,
 )
@@ -50,16 +45,6 @@ class HistoryGraphAssembly:
     timeline: HistoryTimeline
     memory_events: tuple[MemoryHistoryRecord, ...]
     memory_frames: tuple[_Frame, ...]
-    reference_evidence: tuple["HistoryReferenceEvidence", ...] = ()
-
-
-@dataclass(frozen=True, slots=True)
-class HistoryReferenceEvidence:
-    """Exact retained occurrence payload behind one Reference projection."""
-
-    candidate: MemoryReferenceCandidate
-    events: tuple[MemoryReferenceHistoryEvent, ...]
-    current: MemoryReferenceState | None
 
 
 @dataclass
@@ -96,7 +81,10 @@ class _Draft:
                 sequence=sequence,
             ),
         )
-        if checkpoint_uid is not None and checkpoint_uid not in operation.checkpoint_uids:
+        if (
+            checkpoint_uid is not None
+            and checkpoint_uid not in operation.checkpoint_uids
+        ):
             operation.checkpoint_uids.append(checkpoint_uid)
         if context_uid not in operation.context_uids:
             operation.context_uids.append(context_uid)
@@ -104,7 +92,9 @@ class _Draft:
     def add_occurrence(self, occurrence: HistoryOccurrence) -> None:
         existing = self.occurrences.get(occurrence.node_id)
         if existing is not None and existing != occurrence:
-            raise ValueError("One History occurrence identity has conflicting evidence.")
+            raise ValueError(
+                "One History occurrence identity has conflicting evidence."
+            )
         self.occurrences[occurrence.node_id] = occurrence
 
     def add_relation(self, relation: HistoryRelation) -> None:
@@ -202,7 +192,6 @@ def _register_step(
         timestamp=timestamp,
         command=command,
         description=description,
-
         sequence=sequence,
     )
     draft.steps[step.node_id] = step
@@ -319,7 +308,6 @@ def _add_context_effect(
         operation_node_id=step.operation_node_id,
         operation_step_id=step.node_id,
         kind=transition.kind,
-
         before_occurrence_ids=before_ids,
         after_occurrence_ids=after_ids,
     )
@@ -538,7 +526,6 @@ def _add_memory_effect(
             operation_node_id=step.operation_node_id,
             operation_step_id=step.node_id,
             kind=event.kind,
-
             before_occurrence_ids=tuple(before_ids),
             after_occurrence_ids=tuple(after_ids),
             payload_index=event_index,
@@ -574,21 +561,34 @@ def _add_memory_effect(
     # Source text or adding it to the owned Memory selector domain.
     for index, source in enumerate(event.sources):
         source_id = _memory_occurrence_id(
-            source.context_uid, f"event:{event_index}:source:{index}", source.memory_uid,
+            source.context_uid,
+            f"event:{event_index}:source:{index}",
+            source.memory_uid,
         )
-        draft.add_occurrence(HistoryOccurrence(
-            node_id=source_id, kind="MEMORY", context_uid=source.context_uid,
-            context_name=source.context_name, subject_uid=source.memory_uid,
-            state_anchor=f"event:{event_index}:source:{index}",
-            content_digest=source.content_digest, selectable=False,
-        ))
-        draft.add_relation(HistoryRelation(
-            relation_id=f"source-input:{effect_id}:{index}", kind="INPUT",
-            source_node_id=source_id, target_node_id=step.operation_node_id,
-            operation_node_id=step.operation_node_id, operation_step_id=step.node_id,
-            effect_id=effect_id if isinstance(event, MemoryHistoryEvent) else None,
-            payload_index=event_index,
-        ))
+        draft.add_occurrence(
+            HistoryOccurrence(
+                node_id=source_id,
+                kind="MEMORY",
+                context_uid=source.context_uid,
+                context_name=source.context_name,
+                subject_uid=source.memory_uid,
+                state_anchor=f"event:{event_index}:source:{index}",
+                content_digest=source.content_digest,
+                selectable=False,
+            )
+        )
+        draft.add_relation(
+            HistoryRelation(
+                relation_id=f"source-input:{effect_id}:{index}",
+                kind="INPUT",
+                source_node_id=source_id,
+                target_node_id=step.operation_node_id,
+                operation_node_id=step.operation_node_id,
+                operation_step_id=step.node_id,
+                effect_id=effect_id if isinstance(event, MemoryHistoryEvent) else None,
+                payload_index=event_index,
+            )
+        )
     for before_index, before_id in enumerate(before_ids):
         for after_index, after_id in enumerate(after_ids):
             before_uid = draft.occurrences[before_id].subject_uid
@@ -604,11 +604,16 @@ def _add_memory_effect(
                         target_node_id=after_id,
                         operation_node_id=step.operation_node_id,
                         operation_step_id=step.node_id,
-                        effect_id=effect_id if isinstance(event, MemoryHistoryEvent) else None,
+                        effect_id=effect_id
+                        if isinstance(event, MemoryHistoryEvent)
+                        else None,
                         payload_index=event_index,
                     )
                 )
-            if isinstance(event, MemoryHistoryRelation) and event.kind == "DERIVED_FROM":
+            if (
+                isinstance(event, MemoryHistoryRelation)
+                and event.kind == "DERIVED_FROM"
+            ):
                 draft.add_relation(
                     HistoryRelation(
                         relation_id=(
@@ -619,326 +624,12 @@ def _add_memory_effect(
                         target_node_id=after_id,
                         operation_node_id=step.operation_node_id,
                         operation_step_id=step.node_id,
-                        effect_id=effect_id if isinstance(event, MemoryHistoryEvent) else None,
+                        effect_id=effect_id
+                        if isinstance(event, MemoryHistoryEvent)
+                        else None,
                         payload_index=event_index,
                     )
                 )
-
-
-def _add_reference_occurrence(
-    draft: _Draft,
-    *,
-    state: MemoryReferenceState,
-    context_uid: str,
-    context_name: str,
-    state_anchor: str,
-) -> str:
-    occurrence_id = (
-        f"memory-reference-occurrence:{context_uid}:{state_anchor}:{state.uid}"
-    )
-    draft.add_occurrence(
-        HistoryOccurrence(
-            node_id=occurrence_id,
-            kind="MEMORY_REFERENCE",
-            context_uid=context_uid,
-            context_name=context_name,
-            subject_uid=state.uid,
-            state_anchor=state_anchor,
-            position=state.position,
-        )
-    )
-    target_id = (
-        f"memory-target-occurrence:{state.target_context_uid}:"
-        f"{state_anchor}:{state.uid}:{state.target_memory_uid}"
-    )
-    draft.add_occurrence(
-        HistoryOccurrence(
-            node_id=target_id,
-            kind="MEMORY",
-            context_uid=state.target_context_uid,
-            context_name=state.target_context_name,
-            subject_uid=state.target_memory_uid,
-            state_anchor=f"relationship-target:{state_anchor}:{state.uid}",
-            content=state.snapshot_content,
-            content_digest=state.snapshot_content_sha256,
-            selectable=False,
-        )
-    )
-    relation_kind = "REFERENCES" if state.mode == "SNAPSHOT" else "EMBEDS"
-    draft.add_relation(
-        HistoryRelation(
-            relation_id=f"{relation_kind.lower()}:{occurrence_id}:{target_id}",
-            kind=relation_kind,
-            source_node_id=occurrence_id,
-            target_node_id=target_id,
-        )
-    )
-    return occurrence_id
-
-
-def _add_reference_effect(
-    draft: _Draft,
-    *,
-    event: MemoryReferenceHistoryEvent,
-    payload_index: int,
-    step: HistoryStep,
-    context_uid: str,
-    context_name: str,
-) -> None:
-    effect_id = f"reference-effect:{context_uid}:{payload_index}"
-    before_ids = (
-        (
-            _add_reference_occurrence(
-                draft,
-                state=event.before,
-                context_uid=context_uid,
-                context_name=context_name,
-                state_anchor=f"reference-event:{payload_index}:before",
-            ),
-        )
-        if event.before is not None
-        else ()
-    )
-    after_ids = (
-        (
-            _add_reference_occurrence(
-                draft,
-                state=event.after,
-                context_uid=context_uid,
-                context_name=context_name,
-                state_anchor=f"reference-event:{payload_index}:after",
-            ),
-        )
-        if event.after is not None
-        else ()
-    )
-    effect = HistoryEffect(
-        effect_id=effect_id,
-        channel="REFERENCE",
-        operation_node_id=step.operation_node_id,
-        operation_step_id=step.node_id,
-        kind=("ADD" if event.before is None else "REMOVE" if event.after is None else "REORDER" if event.kind == "REORDERED" else "EDIT"),
-
-        before_occurrence_ids=before_ids,
-        after_occurrence_ids=after_ids,
-        payload_index=payload_index,
-    )
-    draft.effects.append(effect)
-    for index, occurrence_id in enumerate(before_ids):
-        draft.add_relation(
-            HistoryRelation(
-                relation_id=f"input:{effect_id}:{index}",
-                kind="INPUT",
-                source_node_id=occurrence_id,
-                target_node_id=step.operation_node_id,
-                operation_node_id=step.operation_node_id,
-                operation_step_id=step.node_id,
-                effect_id=effect_id,
-            )
-        )
-    for index, occurrence_id in enumerate(after_ids):
-        draft.add_relation(
-            HistoryRelation(
-                relation_id=f"output:{effect_id}:{index}",
-                kind="OUTPUT",
-                source_node_id=step.operation_node_id,
-                target_node_id=occurrence_id,
-                operation_node_id=step.operation_node_id,
-                operation_step_id=step.node_id,
-                effect_id=effect_id,
-            )
-        )
-    if before_ids and after_ids:
-        draft.add_relation(
-            HistoryRelation(
-                relation_id=f"continues:{effect_id}:0:0",
-                kind="CONTINUES_AS",
-                source_node_id=before_ids[0],
-                target_node_id=after_ids[0],
-                operation_node_id=step.operation_node_id,
-                operation_step_id=step.node_id,
-                effect_id=effect_id,
-            )
-        )
-
-
-def _ordered_item_uids(record: dict[str, object]) -> tuple[str, ...]:
-    serialized = record.get("memories")
-    if not isinstance(serialized, dict):
-        return ()
-    requested = record.get("order")
-    result: list[str] = []
-    seen: set[str] = set()
-    if isinstance(requested, list):
-        for uid in requested:
-            if isinstance(uid, str) and uid in serialized and uid not in seen:
-                result.append(uid)
-                seen.add(uid)
-    for uid in serialized:
-        if isinstance(uid, str) and uid not in seen:
-            result.append(uid)
-            seen.add(uid)
-    return tuple(result)
-
-
-def _relationship_target(
-    item: dict[str, object],
-) -> tuple[str, str, str, str] | None:
-    kind = item.get("type")
-    if kind in {"memory_ref", "granted_memory_ref", "memory_snapshot_ref"}:
-        target = item.get("target_context")
-        target_memory_uid = item.get("target_memory_uid")
-        if not isinstance(target, dict) or not isinstance(target_memory_uid, str):
-            return None
-        context_uid = target.get("uid")
-        context_name = target.get("name")
-        if not isinstance(context_uid, str) or not isinstance(context_name, str):
-            return None
-        relation_kind = "REFERENCES" if kind == "memory_snapshot_ref" else "EMBEDS"
-        return relation_kind, context_uid, context_name, target_memory_uid
-    return None
-
-
-def _context_relationship_target(
-    item: dict[str, object],
-) -> tuple[str, str, str] | None:
-    kind = item.get("type")
-    if kind in {"context_ref", "granted_context_ref"}:
-        uid = item.get("uid")
-        name = item.get("name")
-        if isinstance(uid, str) and isinstance(name, str):
-            return "EMBEDS", uid, name
-    if kind == "context_snapshot_ref":
-        target = item.get("target_context")
-        if isinstance(target, dict):
-            uid = target.get("uid")
-            name = target.get("name")
-            if isinstance(uid, str) and isinstance(name, str):
-                return "REFERENCES", uid, name
-    return None
-
-
-def _add_relationship_state(
-    draft: _Draft,
-    *,
-    record: dict[str, object],
-    owner_context_uid: str,
-    owner_context_name: str,
-    state_anchor: str,
-    operation_step: HistoryStep | None,
-) -> None:
-    serialized = record.get("memories")
-    if not isinstance(serialized, dict):
-        return
-    owner_id = _context_occurrence_id(owner_context_uid, state_anchor)
-    if owner_id not in draft.occurrences:
-        return
-    for position, item_uid in enumerate(_ordered_item_uids(record)):
-        item = serialized.get(item_uid)
-        if not isinstance(item, dict):
-            continue
-        memory_target = _relationship_target(item)
-        if memory_target is not None:
-            relation_kind, target_context_uid, target_context_name, target_uid = (
-                memory_target
-            )
-            relationship_id = (
-                f"memory-reference-occurrence:{owner_context_uid}:"
-                f"{state_anchor}:{item_uid}"
-            )
-            target_id = (
-                f"memory-target-occurrence:{target_context_uid}:"
-                f"{state_anchor}:{item_uid}:{target_uid}"
-            )
-            draft.add_occurrence(
-                HistoryOccurrence(
-                    node_id=relationship_id,
-                    kind="MEMORY_REFERENCE",
-                    context_uid=owner_context_uid,
-                    context_name=owner_context_name,
-                    subject_uid=item_uid,
-                    state_anchor=state_anchor,
-                    position=position,
-                )
-            )
-            draft.add_occurrence(
-                HistoryOccurrence(
-                    node_id=target_id,
-                    kind="MEMORY",
-                    context_uid=target_context_uid,
-                    context_name=target_context_name,
-                    subject_uid=target_uid,
-                    state_anchor=f"relationship-target:{state_anchor}:{item_uid}",
-                    selectable=False,
-                )
-            )
-            draft.add_relation(
-                HistoryRelation(
-                    relation_id=f"contains:{owner_id}:{relationship_id}",
-                    kind="CONTAINS",
-                    source_node_id=owner_id,
-                    target_node_id=relationship_id,
-                    operation_node_id=(
-                        operation_step.operation_node_id
-                        if operation_step is not None
-                        else None
-                    ),
-                    operation_step_id=(
-                        operation_step.node_id if operation_step is not None else None
-                    ),
-                )
-            )
-            draft.add_relation(
-                HistoryRelation(
-                    relation_id=f"{relation_kind.lower()}:{relationship_id}:{target_id}",
-                    kind=relation_kind,
-                    source_node_id=relationship_id,
-                    target_node_id=target_id,
-                    operation_node_id=(
-                        operation_step.operation_node_id
-                        if operation_step is not None
-                        else None
-                    ),
-                    operation_step_id=(
-                        operation_step.node_id if operation_step is not None else None
-                    ),
-                )
-            )
-            continue
-        context_target = _context_relationship_target(item)
-        if context_target is None:
-            continue
-        relation_kind, target_context_uid, target_context_name = context_target
-        target_id = (
-            f"context-target-occurrence:{target_context_uid}:"
-            f"{state_anchor}:{item_uid}"
-        )
-        draft.add_occurrence(
-            HistoryOccurrence(
-                node_id=target_id,
-                kind="CONTEXT",
-                context_uid=target_context_uid,
-                context_name=target_context_name,
-                subject_uid=target_context_uid,
-                state_anchor=f"relationship-target:{state_anchor}:{item_uid}",
-            )
-        )
-        draft.add_relation(
-            HistoryRelation(
-                relation_id=f"{relation_kind.lower()}:{owner_id}:{target_id}",
-                kind=relation_kind,
-                source_node_id=owner_id,
-                target_node_id=target_id,
-                operation_node_id=(
-                    operation_step.operation_node_id
-                    if operation_step is not None
-                    else None
-                ),
-                operation_step_id=(
-                    operation_step.node_id if operation_step is not None else None
-                ),
-            )
-        )
 
 
 def reconstruct_history_graph_from_evidence(
@@ -949,14 +640,12 @@ def reconstruct_history_graph_from_evidence(
     retained_entries: Iterable[dict[str, object]] = (),
     current_record: dict[str, object] | None = None,
     memory_warnings: Iterable[str] = (),
-    reference_evidence: Iterable[HistoryReferenceEvidence] = (),
 ) -> HistoryGraphAssembly:
     """Normalize already verified evidence without interpreting report prose."""
 
     events = tuple(memory_events)
     frames = tuple(memory_frames)
-    entries = tuple(retained_entries)
-    references = tuple(reference_evidence)
+    tuple(retained_entries)
     operation_uid_by_checkpoint = _operation_uids_by_checkpoint(events)
     draft = _Draft()
     _add_context_states(draft, timeline)
@@ -972,7 +661,6 @@ def reconstruct_history_graph_from_evidence(
             timestamp=checkpoint.timestamp,
             command=checkpoint.command,
             description=checkpoint.description,
-
             sequence=checkpoint_sequence,
             operation_uid=operation_uid_by_checkpoint.get(checkpoint.uid),
         )
@@ -993,7 +681,6 @@ def reconstruct_history_graph_from_evidence(
             timestamp=None,
             command=first.command,
             description=first.description,
-
             sequence=len(draft.steps),
             operation_uid=None,
         )
@@ -1003,11 +690,7 @@ def reconstruct_history_graph_from_evidence(
         step.node_id
         for checkpoint_uid, step in steps_by_checkpoint.items()
         if checkpoint_uid is not None
-    ) + (
-        (steps_by_checkpoint[None].node_id,)
-        if None in steps_by_checkpoint
-        else ()
-    )
+    ) + ((steps_by_checkpoint[None].node_id,) if None in steps_by_checkpoint else ())
 
     for transition in timeline.transitions:
         step = steps_by_checkpoint.get(transition.checkpoint_uid)
@@ -1020,7 +703,6 @@ def reconstruct_history_graph_from_evidence(
                 timestamp=transition.timestamp,
                 command=transition.command,
                 description=transition.description,
-
                 sequence=len(draft.steps),
                 operation_uid=(
                     operation_uid_by_checkpoint.get(transition.checkpoint_uid)
@@ -1052,7 +734,6 @@ def reconstruct_history_graph_from_evidence(
                 timestamp=event.timestamp,
                 command=event.command,
                 description=event.description,
-
                 sequence=len(draft.steps),
                 operation_uid=event_operation_uid,
             )
@@ -1075,77 +756,6 @@ def reconstruct_history_graph_from_evidence(
             frames=frames,
             fallback_uid=timeline.context_uid,
             fallback_name=timeline.context_name,
-        )
-
-    reference_payload_index = 0
-    for evidence in references:
-        for event in evidence.events:
-            # Pointer observations and live comparisons are not command effects.
-            if event.kind in {"EARLIEST_RETAINED", "HISTORY_GAP"}:
-                reference_payload_index += 1
-                continue
-            step = steps_by_checkpoint.get(event.checkpoint_uid)
-            if step is None:
-                step = _register_step(
-                    draft,
-                    context_uid=timeline.context_uid,
-                    context_name=timeline.context_name,
-                    checkpoint_uid=event.checkpoint_uid,
-                    timestamp=event.timestamp,
-                    command=event.command,
-                    description=event.description,
-
-                    sequence=len(draft.steps),
-                    operation_uid=None,
-                )
-                steps_by_checkpoint[event.checkpoint_uid] = step
-            _add_reference_effect(
-                draft,
-                event=event,
-                payload_index=reference_payload_index,
-                step=step,
-                context_uid=timeline.context_uid,
-                context_name=timeline.context_name,
-            )
-            reference_payload_index += 1
-
-    entries_by_uid = {
-        entry.get("uid"): entry
-        for entry in entries
-        if isinstance(entry.get("uid"), str)
-    }
-    for checkpoint in timeline.checkpoints:
-        entry = entries_by_uid.get(checkpoint.uid)
-        if entry is None:
-            continue
-        snapshot = entry.get("snapshot")
-        if not isinstance(snapshot, dict):
-            continue
-        state = timeline.state(checkpoint.state_index)
-        state_anchor = f"history-state:{state.index}:{state.record_digest}"
-        _add_relationship_state(
-            draft,
-            record=snapshot,
-            owner_context_uid=timeline.context_uid,
-            owner_context_name=timeline.context_name,
-            state_anchor=state_anchor,
-            operation_step=steps_by_checkpoint.get(checkpoint.uid),
-        )
-    if current_record is not None:
-        current_state = next(
-            (state for state in reversed(timeline.states) if state.current),
-            timeline.states[-1],
-        )
-        state_anchor = (
-            f"history-state:{current_state.index}:{current_state.record_digest}"
-        )
-        _add_relationship_state(
-            draft,
-            record=current_record,
-            owner_context_uid=timeline.context_uid,
-            owner_context_name=timeline.context_name,
-            state_anchor=state_anchor,
-            operation_step=steps_by_checkpoint.get(current_state.checkpoint_uid),
         )
 
     operations = tuple(
@@ -1183,16 +793,13 @@ def reconstruct_history_graph_from_evidence(
         relations=tuple(draft.relations.values()),
         context_warnings=timeline.warnings,
         memory_warnings=tuple(memory_warnings),
-        warnings=tuple(
-            dict.fromkeys((*timeline.warnings, *tuple(memory_warnings)))
-        ),
+        warnings=tuple(dict.fromkeys((*timeline.warnings, *tuple(memory_warnings)))),
     )
     return HistoryGraphAssembly(
         graph=lineage,
         timeline=timeline,
         memory_events=events,
         memory_frames=frames,
-        reference_evidence=references,
     )
 
 
@@ -1205,20 +812,6 @@ def reconstruct_history_graph(
     timeline = build_history(store, context.name)
     events, warnings, frames = derive_memory_history_events(store, context)
     entries = _checkpoint_entries(store, context.name)
-    references: list[HistoryReferenceEvidence] = []
-    for candidate in collect_reference_candidates(store, context):
-        reference_events, current = reference_occurrence_events(
-            store,
-            context,
-            candidate.state.uid,
-        )
-        references.append(
-            HistoryReferenceEvidence(
-                candidate=candidate,
-                events=reference_events,
-                current=current,
-            )
-        )
     return reconstruct_history_graph_from_evidence(
         timeline=timeline,
         memory_events=events,
@@ -1226,13 +819,11 @@ def reconstruct_history_graph(
         retained_entries=entries,
         current_record=context.to_dict(),
         memory_warnings=warnings,
-        reference_evidence=tuple(references),
     )
 
 
 __all__ = [
     "HistoryGraphAssembly",
-    "HistoryReferenceEvidence",
     "reconstruct_history_graph",
     "reconstruct_history_graph_from_evidence",
 ]

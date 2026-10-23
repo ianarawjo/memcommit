@@ -8,7 +8,10 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "sync": LocalizedOperationCopy('Synchroniser les documents des Contexts possédés avec les fichiers externes, une fois ou après chaque commande.', 'Maintenir un arbre de documents externes correspondant aux noms des Contexts et activer ou désactiver la synchronisation automatique.'),
+    "sync": LocalizedOperationCopy(
+        "Détecter et synchroniser les documents du projet du Profile et ses Contexts.",
+        "Appliquer .memignore, intégrer les ajouts, modifications, renommages et suppressions, et publier les changements de mem.",
+    ),
     "export": LocalizedOperationCopy(
         "Exporter le contenu actuel des Contexts en documents, en Agent Skill ou au format mem.",
         "Produire des fichiers utilisables hors de mem à partir des documents de mémoire modifiés.",
@@ -65,10 +68,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Parcourir les Contexts locaux et les vues de Context inter-Profile lisibles sans changer de Context.",
         "Explorer tous les Contexts actuellement accessibles au Profile.",
     ),
-    "dedup": _copy(
-        "Examiner les groupes de doublons confirmés, conserver une Memory existante dans chaque groupe et supprimer les autres lors de Apply.",
-        "Supprimer les doublons sémantiques confirmés tout en conservant une Memory existante exacte et son UID.",
-    ),
     "delete": _copy(
         "Sélectionner un Context ou un élément direct à supprimer, ou le désigner par locator, nom ou UID.",
         "Supprimer un Context ou un élément précis devenu inutile.",
@@ -102,8 +101,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Créer des données de test réutilisables et vérifier les opérations avec des scénarios reproductibles.",
     ),
     "find": _copy(
-        "Trouver dans les Memories lisibles un texte exact ou des correspondances d’expression régulière explicite (regex).",
-        "Localiser des mots, identifiants ou motifs textuels exacts dans une portée de Context sélectionnée.",
+        "Trouver des Memories par leur sens ; --literal trouve un texte exact ou une expression régulière sans modèle sémantique.",
+        "Trouver des Memories pertinentes par le sens et le contexte, ou des mots, identifiants et motifs exacts avec --literal.",
     ),
     "find-ambiguities": _copy(
         "Signaler les Memories directes ambiguës du Context courant ou indiqué, sans modifier le Context.",
@@ -150,7 +149,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Préparer un environnement d’étude utilisateur isolé et reproductible.",
     ),
     "list": _copy(
-        "Lister les éléments directs d’un Context—Memories, références, vues query et Contexts intégrés—ainsi que ses Contexts enfants lisibles ; -r inclut récursivement les descendants et éléments intégrés, et ls est l’alias court.",
+        "Lister les Memories d’un Context et ses Contexts descendants, enregistrés séparément. -r inclut les descendants ; ls est un alias court.",
         "Examiner la structure et le contenu direct d’un Context.",
     ),
     "lock": _copy(
@@ -182,7 +181,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Confirmer le Context actif dans un script ou un terminal.",
     ),
     "query": _copy(
-        "Produire une réponse basée sur un LLM à partir des connaissances de Context lisibles ou d’une vue query-only masquée et autorisée.",
+        "Produire une réponse basée sur un LLM à partir des Memories des Contexts locaux.",
         "Obtenir une réponse en langage naturel fondée sur les données plutôt qu’une liste de Memories correspondantes.",
     ),
     "rationale": _copy(
@@ -217,10 +216,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Ouvrir un artefact sémantique enregistré pour examiner son analyse, sa proposition ou son résultat et, si disponible, enregistrer des réponses ; Review n’applique jamais de Memories.",
         "Revenir sur une analyse, une proposition ou un résultat enregistré.",
     ),
-    "search": _copy(
-        "Classer sémantiquement les Memories pertinentes pour une demande en langage naturel dans les Contexts sélectionnés.",
-        "Trouver des Memories pertinentes par le sens et le contexte, y compris du contenu lié sans recouvrement évident de mots-clés.",
-    ),
     "sever": _copy(
         "Créer un Result en sélectionnant, transformant ou excluant des Source Memories selon un Criteria Context.",
         "Sélectionner ou transformer le contenu Source selon des critères définis.",
@@ -230,7 +225,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Transmettre un Context possédé à un destinataire autorisé.",
     ),
     "show": _copy(
-        "Afficher une Memory, une référence, un Context intégré ou le contenu direct du Context courant/indiqué.",
+        "Afficher une Memory ou le contenu du Context courant ou indiqué.",
         "Lire le contenu complet d’un élément ou Context connu.",
     ),
     "status": _copy(
@@ -267,17 +262,12 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
     ),
 }
 
-# These names were split after the original semantic Dedup contract was
-# separated into exact Dedup and inclusive semantic Dedun operations.
+# Dedup exposes semantic cleanup by default and exact cleanup with --literal.
 TRANSLATIONS.update(
     {
-        "dedun": _copy(
-            "Résoudre immédiatement les groupes DUN exacts et sémantiques, en conservant le premier UID existant de chaque groupe connecté.",
-            "Nettoyer ensemble les DUP exacts et les DUN sémantiques en un seul point de contrôle.",
-        ),
         "dedup": _copy(
-            "Supprimer immédiatement les Memories directes dont le contenu est identique octet pour octet, en conservant le premier UID existant de chaque groupe.",
-            "Éliminer des copies de contenu strictement identiques sans inférence sémantique.",
+            "Supprimer immédiatement les doublons exacts et sémantiques en conservant le premier UID existant de chaque groupe ; --literal supprime uniquement les copies exactes de même rôle sans inférence sémantique.",
+            "Nettoyer les doublons exacts et sémantiques, ou seulement les copies exactes avec --literal.",
         ),
         "find-duplicates": _copy(
             "Signaler les groupes de Memories directes dont le contenu est identique octet pour octet, sans modifier le Context.",

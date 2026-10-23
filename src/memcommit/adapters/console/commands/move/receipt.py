@@ -22,7 +22,7 @@ def render_move_receipt(result: MoveMemoriesResult) -> None:
     typer.echo(
         f"MOVED · {result.count} "
         f"{'Memory' if result.count == 1 else 'Memories'} → '{target}' · "
-        f"{result.link_policy} LINKS · {placement_text(result)}"
+        f"{placement_text(result)}"
     )
     remove = typer.style(
         "REMOVE",
@@ -39,13 +39,6 @@ def render_move_receipt(result: MoveMemoriesResult) -> None:
         typer.echo(
             f"  {remove} '{source}' [{item.source_memory_uid[:8]}] · "
             f"{add} '{target}' [{item.into_memory_uid[:8]}]"
-        )
-    if result.retargeted_link_count:
-        typer.echo(f"Retargeted {result.retargeted_link_count} live Memory Embed(s).")
-    if result.dangling_link_count:
-        typer.echo(
-            f"Left {result.dangling_link_count} live Memory Embed(s) dangling "
-            "as explicitly requested."
         )
     typer.echo(
         "Checkpoints "

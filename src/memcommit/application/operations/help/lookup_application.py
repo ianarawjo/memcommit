@@ -191,18 +191,15 @@ def prepare_help_lookup(
     names = [operation.name for operation in frozen]
     if len(names) != len(set(names)):
         raise HelpLookupError("Help lookup operation names must be unique.")
-    if len(frozen) < HELP_LOOKUP_RESULT_COUNT:
-        raise HelpLookupError(
-            "Help lookup requires at least "
-            f"{HELP_LOOKUP_RESULT_COUNT} catalog operations."
-        )
-
+    # A Study may deliberately expose fewer than three operations. Never fill
+    # the remaining ranks from commands excluded from its discovery catalog.
+    result_count = min(HELP_LOOKUP_RESULT_COUNT, len(frozen))
     normalized_request = request.strip()
-    schema = _output_schema(frozen, HELP_LOOKUP_RESULT_COUNT)
+    schema = _output_schema(frozen, result_count)
     payload = _lookup_payload(
         normalized_request,
         frozen,
-        HELP_LOOKUP_RESULT_COUNT,
+        result_count,
     )
     execution = plan_semantic_execution(
         HELP_LOOKUP_EXECUTION_POLICY,
@@ -210,7 +207,7 @@ def prepare_help_lookup(
             payload,
             item_count=len(frozen),
             output_schema=schema,
-            expected_output_items=HELP_LOOKUP_RESULT_COUNT,
+            expected_output_items=result_count,
         ),
     )
     if execution.mode is not ExecutionMode.ONE_SHOT:
@@ -221,7 +218,7 @@ def prepare_help_lookup(
     return HelpLookupPlan(
         request=normalized_request,
         operations=frozen,
-        result_count=HELP_LOOKUP_RESULT_COUNT,
+        result_count=result_count,
         prompt=_build_prompt(payload),
         output_schema=schema,
     )

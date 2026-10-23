@@ -8,8 +8,8 @@ from memcommit.application.operations.sever.application import (
     SeverApplicationError,
 )
 from memcommit.application.operations.sever.apply.checkpoints import (
-    build_checkpoint_args,
-    checkpoint_args_match,
+    build_checkpoint_command_details,
+    checkpoint_command_details_match,
 )
 from memcommit.application.operations.sever.apply.projection import (
     result_context,
@@ -18,9 +18,7 @@ from memcommit.application.operations.sever.model import (
     SeverApplication,
     SeverSession,
 )
-from memcommit.core.context import (
-    AutoCheckpoint,
-)
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
@@ -51,11 +49,11 @@ def recover_other_save(
     if len(checkpoints) != 1:
         return None
     checkpoint = checkpoints[0]
-    expected_args = build_checkpoint_args(session, expected, sources)
+    expected_args = build_checkpoint_command_details(session, expected, sources)
     if (
         checkpoint.get("command") != "sever"
-        or not checkpoint_args_match(
-            checkpoint.get("args"), expected_args, save_mode=session.save_mode
+        or not checkpoint_command_details_match(
+            checkpoint.get("command_details"), expected_args, save_mode=session.save_mode
         )
         or not isinstance(checkpoint.get("uid"), str)
     ):
@@ -69,36 +67,30 @@ def recover_other_save(
     )
 
 
-def materialize_other_save(store: MemoryStore, session: SeverSession) -> SeverSession:
+def materialize_other_save(
+    store: MemoryStore,
+    session: SeverSession,
+    *,
+    expected_context_catalog: tuple[str, ...],
+) -> SeverSession:
     output, result_uids, sources = result_context(
         session,
         output_uid=str(uuid.uuid4()),
     )
 
-    local_bindings: list[tuple[str, str, str]] = []
-    for binding in (session.source, session.criteria):
-        if binding.granted is None:
-            local_bindings.extend(binding.contexts)
-    deduplicated = tuple(dict.fromkeys(local_bindings))
-    auto_checkpoint = AutoCheckpoint(
-        command="sever",
-        args=build_checkpoint_args(session, output, sources),
-        description=(
-            f"Created local Sever result '{session.output_name}' from "
-            f"'{session.source.root_name}' under '{session.criteria.root_name}'; "
-            "source unchanged"
-        ),
+    local_bindings = tuple(
+        dict.fromkeys((*session.source.contexts, *session.criteria.contexts))
     )
-    if deduplicated:
-        checkpoint = store.create_context_with_sources(
-            output,
-            auto_checkpoint,
-            source_bindings=deduplicated,
-        )
-    else:
-        # Granted frames are retained snapshots and have no local Context
-        # path to lock while the require-new local output is published.
-        checkpoint = store.create_context(output, auto_checkpoint)
+    auto_checkpoint = AutoCheckpointRequest(
+        command="sever",
+        command_details=build_checkpoint_command_details(session, output, sources),
+    )
+    checkpoint = store.create_context_with_sources(
+        output,
+        auto_checkpoint,
+        source_bindings=local_bindings,
+        expected_context_catalog=expected_context_catalog,
+    )
     if checkpoint is None:
         raise SeverApplicationError("Sever output creation produced no checkpoint.")
     return session.with_application(

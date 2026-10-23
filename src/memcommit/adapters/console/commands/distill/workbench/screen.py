@@ -12,12 +12,17 @@ from memcommit.adapters.console.commands.distill.workbench.presentation import (
     project_distill_clipboard,
     project_distill_result,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.components.context_summary import (
     ContextSummaryWorkbenchView,
     run_context_summary_workbench,
 )
-from memcommit.application.operations.distill.application import DistillRequest, DistillResult
+from memcommit.application.operations.distill.application import (
+    DistillRequest,
+    DistillResult,
+)
 
 
 def run_distill_tui(
@@ -38,14 +43,11 @@ def run_distill_tui(
         raise TypeError("Distill TUI requires a DistillRequest.")
     if not isinstance(setup, DistillTuiSetup):
         raise TypeError("Distill TUI requires a frozen setup catalog.")
-    if request.include_descendants != request.follow_embeds:
-        raise ValueError("Distill TUI requires the DIRECT or RECURSIVE preset.")
 
     current_request = DistillRequest(
         context_locator=request.context_locator or setup.selected_context,
         goal=request.goal,
         include_descendants=request.include_descendants,
-        follow_embeds=request.follow_embeds,
     )
     range_mode = setup.initial_range_mode
     result: DistillResult | None = None
@@ -105,7 +107,6 @@ def run_distill_tui(
             context_locator=receipt.context_name,
             goal=request.goal,
             include_descendants=include_descendants,
-            follow_embeds=include_descendants,
         )
         result = execute(current_request)
         if not isinstance(result, DistillResult):

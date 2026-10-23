@@ -6,8 +6,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
-from memcommit.core.context import Context
-from memcommit.core.document import DocumentState
+from memcommit.models.context import Context
+from memcommit.models.corresponding_document_metadata import (
+    CorrespondingDocumentMetadata,
+)
 
 
 class DocumentFormat(str, Enum):
@@ -29,15 +31,42 @@ class InputFile:
 
 
 @dataclass(frozen=True)
+class ProjectDocumentSnapshot:
+    root: Path
+    files: tuple[tuple[str, bytes], ...]
+    ignore_bytes: bytes | None
+    directories: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class MemorySourceRange:
+    context_uid: str
+    context_name: str
+    memory_uid: str
+    start: int
+    end: int
+
+
+@dataclass(frozen=True)
+class DocumentSourceRange:
+    start: int
+    end: int
+    source: MemorySourceRange
+
+
+@dataclass(frozen=True)
 class DocumentBlock:
     kind: str
     text: str
     children: tuple[DocumentBlock, ...] = ()
+    start_byte: int = field(default=0, compare=False)
+    end_byte: int = field(default=0, compare=False)
+    source: MemorySourceRange | None = field(default=None, compare=False)
 
 
 @dataclass(frozen=True)
 class Document:
-    state: DocumentState
+    state: CorrespondingDocumentMetadata
     blocks: tuple[DocumentBlock, ...]
 
 
@@ -59,6 +88,7 @@ class OutputFile:
     path: str
     data: bytes
     attached: bool = False
+    source_ranges: tuple[DocumentSourceRange, ...] = field(default=(), compare=False)
 
 
 @dataclass(frozen=True)

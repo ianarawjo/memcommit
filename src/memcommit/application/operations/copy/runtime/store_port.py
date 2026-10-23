@@ -10,7 +10,7 @@ from memcommit.application.operations.copy.contracts import (
 )
 from memcommit.application.operations.copy.runtime.apply import apply_copy
 from memcommit.application.operations.copy.runtime.prepare import freeze_copy
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore
 
 
@@ -22,23 +22,16 @@ class MemoryStoreCopyPort:
         store: MemoryStore,
         *,
         current_name: str | None,
-        allow_granted_sources: bool = False,
     ):
-        if type(allow_granted_sources) is not bool:
-            raise TypeError("allow_granted_sources must be a boolean.")
         self._store = store
         self._current_name = current_name
-        self._allow_granted_sources = allow_granted_sources
         self._owner = object()
 
     @classmethod
-    def capture(
-        cls, store: MemoryStore, *, allow_granted_sources: bool = False
-    ) -> MemoryStoreCopyPort:
+    def capture(cls, store: MemoryStore) -> MemoryStoreCopyPort:
         return cls(
             store,
             current_name=store.current_context_name(),
-            allow_granted_sources=allow_granted_sources,
         )
 
     @property
@@ -53,10 +46,6 @@ class MemoryStoreCopyPort:
     def current_context_name(self) -> str | None:
         return self._current_name
 
-    @property
-    def allows_granted_sources(self) -> bool:
-        return self._allow_granted_sources
-
     def inspect_local_context(self, name: str) -> Context:
         return self._store.load_direct(name)
 
@@ -66,7 +55,6 @@ class MemoryStoreCopyPort:
             store=self._store,
             current_name=self._current_name,
             owner=self._owner,
-            allow_granted_sources=self._allow_granted_sources,
         )
 
     def apply_copy(self, plan: FrozenCopyMemoriesPlan) -> CopyMemoriesResult:

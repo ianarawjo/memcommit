@@ -48,13 +48,8 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         "memcommit.table.selected": "reverse bold",
         "memcommit.control.focused": "bold",
         "memcommit.choice.active": f"fg:{FOCUS_TEXT_HEX} bg:{FOCUS_HEX}",
-        "memcommit.choice.active.focused": (
-            f"fg:{FOCUS_TEXT_HEX} bg:{FOCUS_HEX} bold"
-        ),
+        "memcommit.choice.active.focused": (f"fg:{FOCUS_TEXT_HEX} bg:{FOCUS_HEX} bold"),
         "memcommit.choice.border.focused": f"fg:{FOCUS_HEX} bold",
-        "source-ownership": (
-            f"fg:{semantic_color_hex(SemanticColorRole.GRANT)} bold"
-        ),
         "source-access": (
             f"fg:{semantic_color_hex(SemanticColorRole.CAPABILITY)} bold"
         ),
@@ -63,15 +58,6 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         ),
         "source-reach": f"fg:{REPORT_HEX}",
         "source-state": f"fg:{PEACH_HEX} bold",
-        "context-embedded": (
-            f"fg:{semantic_color_hex(SemanticColorRole.EMBED)}"
-        ),
-        "context-grant-token": (
-            f"fg:{semantic_color_hex(SemanticColorRole.NAVIGATION_GRANT)} bold"
-        ),
-        "context-query-only": (
-            f"fg:{semantic_color_hex(SemanticColorRole.REFERENCE)}"
-        ),
         **_SEMANTIC_ROLE_STYLES,
     }
 )
@@ -92,12 +78,8 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "viewer-body": f"fg:{REPORT_HEX}",
         "viewer-body.focused": f"fg:{FOCUS_HEX}",
         "loading-label": f"fg:{FOCUS_HEX} bold",
-        "loading-status": (
-            f"fg:{semantic_color_hex(SemanticColorRole.EMBED)} bold"
-        ),
-        "loading-complete": (
-            f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"
-        ),
+        "loading-status": (f"fg:{semantic_color_hex(SemanticColorRole.EMBED)} bold"),
+        "loading-complete": (f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"),
         "loading-placeholder": f"fg:{PLACEHOLDER_HEX}",
         "detail-card": f"fg:{DETAIL_HEX}",
         "detail-card.focused": f"fg:{FOCUS_HEX} bold",
@@ -106,24 +88,16 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "historical-memory-badge": (
             f"fg:{semantic_color_hex(SemanticColorRole.HISTORY)}"
         ),
-        "history-receipt": (
-            f"fg:{semantic_color_hex(SemanticColorRole.HISTORY)} bold"
-        ),
+        "history-receipt": (f"fg:{semantic_color_hex(SemanticColorRole.HISTORY)} bold"),
         "history-source": f"fg:{REPORT_HEX} bold",
-        "reference": (
-            f"fg:{semantic_color_hex(SemanticColorRole.REFERENCE)}"
-        ),
-        "impact.keep": (
-            f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"
-        ),
+        "reference": (f"fg:{semantic_color_hex(SemanticColorRole.REFERENCE)}"),
+        "impact.keep": (f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"),
         "impact.keep.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"
         ),
         "impact.redact": f"fg:{PEACH_HEX} bold",
         "impact.redact.focused": f"fg:{PEACH_HEX} bold",
-        "impact.summarize": (
-            f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"
-        ),
+        "impact.summarize": (f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"),
         "impact.summarize.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"
         ),
@@ -133,35 +107,23 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "impact.reframe.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.REFERENCE)} bold"
         ),
-        "impact.forget": (
-            f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"
-        ),
+        "impact.forget": (f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"),
         "impact.forget.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"
         ),
-        "impact.custom": (
-            f"fg:{semantic_color_hex(SemanticColorRole.EMBED)} bold"
-        ),
+        "impact.custom": (f"fg:{semantic_color_hex(SemanticColorRole.EMBED)} bold"),
         "impact.custom.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.EMBED)} bold"
         ),
         "impact.other": f"fg:{MEMORY_HEX} bold",
         "impact.other.focused": f"fg:{MEMORY_HEX} bold",
-        "impact.edit": (
-            f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"
-        ),
+        "impact.edit": (f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"),
         "impact.edit.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"
         ),
-        "impact.add": (
-            f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"
-        ),
-        "impact.add.focused": (
-            f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"
-        ),
-        "impact.remove": (
-            f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"
-        ),
+        "impact.add": (f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"),
+        "impact.add.focused": (f"fg:{semantic_color_hex(SemanticColorRole.ADD)} bold"),
+        "impact.remove": (f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"),
         "impact.remove.focused": (
             f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"
         ),

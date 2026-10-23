@@ -157,7 +157,7 @@ OPERATION_FAMILIES = (
     OperationFamily(
         id=OperationFamilyId.SEARCH_EXPLAIN,
         title="SEARCH & EXPLAIN",
-        operation_names=("find", "search", "query", "summarize", "compare"),
+        operation_names=("find", "query", "summarize", "compare"),
         description=(
             "Find exact text directly, or use LLM-based semantic retrieval, "
             "answering, summarization, and comparison within the selected "
@@ -168,7 +168,7 @@ OPERATION_FAMILIES = (
             OperationFamilySection(
                 id=OperationFamilySectionId.SEARCH_RETRIEVE_ANSWER,
                 title="RETRIEVE & ANSWER",
-                operation_names=("find", "search", "query"),
+                operation_names=("find", "query"),
             ),
             OperationFamilySection(
                 id=OperationFamilySectionId.SEARCH_SYNTHESIZE,
@@ -250,7 +250,6 @@ OPERATION_FAMILIES = (
             "find-conflicts",
             "audit",
             "dedup",
-            "dedun",
             "resolve",
             "fit",
             "check-conformance",
@@ -275,7 +274,7 @@ OPERATION_FAMILIES = (
             OperationFamilySection(
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_REPAIR,
                 title="REPAIR",
-                operation_names=("dedup", "dedun", "resolve"),
+                operation_names=("dedup", "resolve"),
             ),
             OperationFamilySection(
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_VALIDATE,

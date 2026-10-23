@@ -22,7 +22,9 @@ from prompt_toolkit.widgets import TextArea
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor import (
     CompactReadableScopeControl,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.focus.controller import (
     FocusSurface,
@@ -138,7 +140,6 @@ def run_replace_tui(
         current_name=setup.current_name,
         initial_targets=initial_targets,
         include_descendants=False if request is None else request.include_descendants,
-        follow_embeds=request is not None and request.follow_embeds,
         input_name="replace-context",
         on_change=request_changed,
         on_status=set_status,
@@ -198,7 +199,6 @@ def run_replace_tui(
                 # The compact scope already projects every visible descendant
                 # into the exact checked execution set.
                 include_descendants=include_descendants,
-                follow_embeds=scope.follow_embeds,
                 mode=mode_choice.selected_value,
                 ignore_case=case_choice.selected_value == "IGNORE",
             )
@@ -297,7 +297,6 @@ def run_replace_tui(
                 scope.input,
                 scope.browse_control,
                 scope.range_control,
-                scope.embed_control,
                 scope.tree_control,
             )
         ),

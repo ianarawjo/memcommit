@@ -24,8 +24,8 @@ PROFILE_DETAILS = (
                 label="CREATE",
                 guidance=(
                     "Press N in the picker to choose a project folder, import "
-                    "its documents, and enable automatic Sync. CLI creation "
-                    "accepts --root, --import-files, and --auto-sync. The new "
+                    "its documents. CLI creation accepts --root and "
+                    "--import-files. Run mem sync explicitly after editing. The new "
                     "Profile is not selected automatically."
                 ),
             ),

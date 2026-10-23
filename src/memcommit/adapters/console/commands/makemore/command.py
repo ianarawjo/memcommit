@@ -93,8 +93,7 @@ def cmd(
         typer.Option(
             "--rule",
             help=(
-                "Rule to expand into suggested Case propositions; repeat for "
-                "more Rules"
+                "Rule to expand into suggested Case propositions; repeat for more Rules"
             ),
         ),
     ] = None,
@@ -226,7 +225,7 @@ def cmd(
                 if goal is not None
                 else None
             )
-            inline_rules = bool(rule)
+            inline_rules = bool((rule or ()))
             if source_name is not None and inline_rules:
                 raise MakemoreError(
                     "Inline --rule input cannot be combined with --from."
@@ -293,7 +292,9 @@ def cmd(
             pipeline = distilled_source_name is not None
             with CommandProgress(
                 "MAKEMORE",
-                "distilling Source Rules" if pipeline else "generating review proposals",
+                "distilling Source Rules"
+                if pipeline
+                else "generating review proposals",
                 total=2 if pipeline else 1,
             ) as progress:
                 if frozen_ground is not None and ground_store is not None:
@@ -366,8 +367,10 @@ def cmd(
                 )
                 typer.echo(f"UNDO · mem ground {receipt.workspace_name} --undo")
             return
-        if result is None or ordinary_store is None or (
-            prepared is None and distilled_prepared is None
+        if (
+            result is None
+            or ordinary_store is None
+            or (prepared is None and distilled_prepared is None)
         ):
             raise MakemoreError("Makemore produced no addable proposal.")
         receipt = (
@@ -385,9 +388,7 @@ def cmd(
         )
         source_label = receipt.source_name or "INLINE"
         active_prepared = (
-            distilled_prepared.makemore
-            if distilled_prepared is not None
-            else prepared
+            distilled_prepared.makemore if distilled_prepared is not None else prepared
         )
         assert active_prepared is not None
         typer.echo(

@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.core.context import Context
-from memcommit.core.context import AutoCheckpoint
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.application.operations.init.application import (
     ContextInitError,
     ContextInitPlan,
@@ -42,7 +42,7 @@ class MemoryStoreContextInitPort:
         self._store = store
 
     def apply(self, plan: ContextInitPlan) -> tuple[CreatedContext, ...]:
-        validate_portable_context_name(plan.request.name)
+        validate_context_name(plan.request.name)
         if plan.require_all_new and self._store.context_exists(plan.request.name):
             raise ContextInitError(
                 f"context '{plan.request.name}' already exists."
@@ -50,10 +50,9 @@ class MemoryStoreContextInitPort:
         entries = tuple(
             (
                 Context.create(entry.name),
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="init",
-                    args=entry.checkpoint_args,
-                    description=entry.checkpoint_description,
+                    command_details=entry.checkpoint_command_details,
                 ),
             )
             for entry in plan.entries

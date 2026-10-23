@@ -2,23 +2,23 @@
 
 from __future__ import annotations
 
+
+from memcommit.application.operations.profile.model._storage import (
+    locked_profile_registry,
+)
+
 from memcommit.application.capabilities.operand_resolution import (
     resolve_existing_local_context_operand,
 )
 from memcommit.application.operations.profile.config import (
-    ProfileEntry,
     ProfileRegistry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model._storage import (
-    ProfileError,
-    authority_grant_snapshot_lock,
-)
-from memcommit.core.context import (
-    AutoCheckpoint,
-    Context,
-    Memory,
-)
+from memcommit.models.profile import Profile
+from memcommit.application.operations.profile.model._storage import ProfileError
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 from ._shared import (
@@ -28,7 +28,7 @@ from ._shared import (
 )
 from .contracts import ContextImportPlan, ContextImportResult
 from .context_data import (
-    _closed_import_contexts,
+    remap_imported_context_names,
     _context_name_mapping,
     _reject_context_identity_collisions,
 )
@@ -55,7 +55,7 @@ def _source_context_names(
 def _prepare_context_import(
     registry: ProfileRegistry,
     destination: MemoryStore,
-    source_profile_entry: ProfileEntry,
+    source_profile_entry: Profile,
     source_name: str,
     snapshots: tuple[Context, ...],
     *,
@@ -68,7 +68,7 @@ def _prepare_context_import(
         source_root=source_name,
         target_root=target_root,
     )
-    imported = _closed_import_contexts(snapshots, mapping)
+    imported = remap_imported_context_names(snapshots, mapping)
     _reject_context_identity_collisions(destination, imported)
     return (
         ContextImportPlan(
@@ -78,15 +78,15 @@ def _prepare_context_import(
             target_profile_uid=registry.active.uid,
             source_context=source_name,
             target_contexts=tuple(context.name for context in imported),
-            source_context_versions=tuple(
-                (context.name, context.uid, str(context._store_digest or ""))
+            source_context_identities=tuple(
+                (context.name, context.uid)
                 for context in snapshots
             ),
             context_count=len(imported),
             memory_count=sum(
                 1
                 for context in imported
-                for item in context.iter_items()
+                for item in context.iter_memories()
                 if isinstance(item, Memory)
             ),
             recursive=recursive,
@@ -105,7 +105,7 @@ def plan_context_import(
     """Validate and freeze one read-only Context import preview."""
 
     destination = MemoryStore()
-    with authority_grant_snapshot_lock() as registry:
+    with locked_profile_registry() as registry:
         require_active_profile_snapshot(registry, destination)
         source = source_profile(registry, source_profile_name)
         require_cross_profile_source(registry, source)
@@ -158,7 +158,7 @@ def import_context_from_profile(
     """Import one closed Context set into the active Profile with stable UIDs."""
 
     destination = MemoryStore()
-    with authority_grant_snapshot_lock() as registry:
+    with locked_profile_registry() as registry:
         require_active_profile_snapshot(registry, destination)
         source = source_profile(registry, source_profile_name)
         require_cross_profile_source(registry, source)
@@ -207,22 +207,17 @@ def import_context_from_profile(
                 entries = tuple(
                     (
                         context,
-                        AutoCheckpoint(
+                        AutoCheckpointRequest(
                             command="import",
-                            args={
+                            command_details={
                                 "resource_kind": "context",
                                 "source_profile_uid": source.uid,
                                 "source_profile_name": source.name,
                                 "source_context": source_context.name,
                                 "source_context_uid": source_context.uid,
-                                "source_context_digest": source_context._store_digest,
                                 "target_context": context.name,
                                 "recursive": recursive,
                             },
-                            description=(
-                                f"Imported Context '{source_context.name}' from "
-                                f"Profile '{source.name}' as '{context.name}'."
-                            ),
                         ),
                     )
                     for source_context, context in zip(
@@ -244,7 +239,7 @@ def import_context_from_profile(
         memory_count=sum(
             1
             for context in created
-            for item in context.iter_items()
+            for item in context.iter_memories()
             if isinstance(item, Memory)
         ),
         recursive=recursive,

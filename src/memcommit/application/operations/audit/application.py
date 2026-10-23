@@ -32,7 +32,7 @@ from memcommit.application.operations.audit.repository import AuditRecordReposit
 from memcommit.application.operations.duplicates.find_duplicates.application import (
     analyze_exact_duplicates,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 
 

@@ -8,7 +8,7 @@ from memcommit.application.capabilities.checkpoint_catalog import (
     CheckpointUnitRevertResult,
     ResolvedCheckpointUnit,
 )
-from memcommit.core.context import Checkpoint
+from memcommit.models.checkpoint import Checkpoint
 from memcommit.persistence.store import MemoryStore
 
 
@@ -50,7 +50,6 @@ def restore_checkpoint_unit(
             member.checkpoint_uid,
             keep_history=keep_history,
             expected_context_uid=member.context_uid,
-            expected_context_digest=member.expected_context_digest,
             expected_history_digest=member.expected_history_digest,
         )
         return SingleCheckpointRestoration(

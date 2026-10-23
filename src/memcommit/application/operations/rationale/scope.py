@@ -13,10 +13,7 @@ from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.history.verification import (
-    MemoryState,
-)
+from memcommit.models.context import Context
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistoryCandidate,
     MemoryHistory,
@@ -36,10 +33,6 @@ class RationaleScope:
     root_name: str
     contexts: tuple[Context, ...]
     context_accesses: tuple[tuple[str, ContextAccess], ...]
-
-    @property
-    def granted(self) -> bool:
-        return self.access.is_granted
 
     def access_for(self, context_name: str) -> ContextAccess:
         for name, access in self.context_accesses:
@@ -80,12 +73,10 @@ def load_rationale_scope(
         active_store,
         operand,
         current_name=current_name,
-        required_permission="READ",
     )
     read_store = freeze_readable_context_catalog(
         active_store,
         access,
-        include_query_routes=False,
     )
     return rationale_scope_from_catalog(
         read_store,
@@ -106,12 +97,10 @@ def freeze_rationale_profile_catalog(
         active_store,
         operand,
         current_name=current_name,
-        required_permission="READ",
     )
     return freeze_profile_readable_context_catalog(
         active_store,
         access,
-        include_query_routes=False,
     )
 
 
@@ -134,8 +123,6 @@ def rationale_scope_from_catalog(
     ]
     if root_name not in names:
         raise FileNotFoundError(f"Context {root_name!r} not found.")
-    # Direct loads keep the inference corpus restricted to ordinary Memory
-    # ownership. Embedded pointers and query-only routes never broaden it.
     contexts = tuple(read_store.load_direct(name) for name in names)
     return RationaleScope(
         access=access,
@@ -148,27 +135,17 @@ def rationale_scope_from_catalog(
 
 def rationale_candidates(
     scope: RationaleScope,
-) -> tuple[tuple[MemoryHistoryCandidate, ...], dict[str, tuple[Context, MemoryHistoryCandidate]]]:
+) -> tuple[
+    tuple[MemoryHistoryCandidate, ...],
+    dict[str, tuple[Context, MemoryHistoryCandidate]],
+]:
     """Collect one unambiguous selector catalog across the readable subtree."""
 
     ordered: list[MemoryHistoryCandidate] = []
     owners: dict[str, tuple[Context, MemoryHistoryCandidate]] = {}
     for context in scope.contexts:
         access = scope.access_for(context.name)
-        if access.is_granted:
-            candidates = tuple(
-                MemoryHistoryCandidate(
-                    uid=memory.uid,
-                    content=memory.content,
-                    position=position,
-                    status="CURRENT",
-                )
-                for position, memory in enumerate(
-                    item for item in context.iter_items() if isinstance(item, Memory)
-                )
-            )
-        else:
-            candidates = collect_memory_history_candidates(access.store, context)
+        candidates = collect_memory_history_candidates(access.store, context)
         for candidate in candidates:
             if candidate.uid in owners:
                 raise RationaleError(
@@ -211,29 +188,11 @@ def resolve_rationale_target(
     )
 
 
-def rationale_memory_history(scope: RationaleScope, target: RationaleTarget) -> MemoryHistory:
-    """Build local provenance or a history-free granted READ projection."""
+def rationale_memory_history(
+    scope: RationaleScope, target: RationaleTarget
+) -> MemoryHistory:
+    """Reconstruct local Memory provenance from retained evidence."""
 
-    if not target.access.is_granted:
-        return reconstruct_memory_history(target.access.store, target.owner, target.selector)
-    state = MemoryState(
-        uid=target.candidate.uid,
-        content=target.candidate.content,
-        position=target.candidate.position,
-    )
-    # A granted Rationale needs the selected content identity but must not
-    # inspect authority checkpoints, analysis attachments, or command logs.
-    return MemoryHistory(
-        context_uid=target.owner.uid,
-        context_name=target.owner.name,
-        selected_uid=state.uid,
-        component_uids=(state.uid,),
-        originals=(),
-        current=(state,),
-        events=(),
-        analyses=(),
-        warnings=(
-            "Authority history is outside this granted READ view; Rationale "
-            "uses only the current readable Memory subtree.",
-        ),
+    return reconstruct_memory_history(
+        target.access.store, target.owner, target.selector
     )

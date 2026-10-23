@@ -3,19 +3,13 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import Literal
 
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_selector
-from memcommit.core.context_targeting.model import (
-    ContextScope,
-    DirectMemoryLocator,
-    ExistingContextOperand,
-)
+from memcommit.core.context_targeting.model import DirectMemoryLocator
 
 
 DIRECT_MEMORY_LOCATOR_SEPARATOR = ":"
-
-
-AutoTypedContextMemoryOperand = ExistingContextOperand | DirectMemoryLocator
 
 
 def is_direct_memory_locator_operand(
@@ -33,8 +27,7 @@ def is_direct_memory_locator_operand(
     if explicit_context is not None:
         return True
     return isinstance(operand, str) and (
-        DIRECT_MEMORY_LOCATOR_SEPARATOR in operand
-        or is_memory_uid_selector(operand)
+        DIRECT_MEMORY_LOCATOR_SEPARATOR in operand or is_memory_uid_selector(operand)
     )
 
 
@@ -83,7 +76,7 @@ def parse_auto_typed_context_memory_operand(
     operand: object,
     *,
     explicit_memory_context: str | None = None,
-) -> AutoTypedContextMemoryOperand:
+) -> str | DirectMemoryLocator:
     """Classify one shared positional Context/direct-Memory operand.
 
     New Context roots reserve the public UUID-prefix shape and Context names
@@ -103,25 +96,26 @@ def parse_auto_typed_context_memory_operand(
             operand,
             explicit_context=explicit_memory_context,
         )
-    return ExistingContextOperand(operand)
+    return operand
 
 
-def order_context_names_by_hierarchy(
+def sort_context_names(
     catalog_names: Sequence[str],
+    *,
+    sort_order: Literal["hierarchical", "alphabetical"] = "hierarchical",
 ) -> tuple[str, ...]:
-    """Project a frozen public catalog in depth-first namespace order.
+    """Sort names alphabetically, optionally keeping each subtree together."""
 
-    Siblings retain catalog order. This lets a caller append virtual Grant
-    rows after ordinary local rows while still placing both beneath their
-    nearest real public-name parent, matching the shared Context tree without
-    importing terminal state into a static command.
-    """
-
+    if sort_order not in {"hierarchical", "alphabetical"}:
+        raise ValueError(f"Unknown Context name sort order: {sort_order!r}.")
     catalog = tuple(catalog_names)
     if len(set(catalog)) != len(catalog) or any(
         not isinstance(name, str) or not name for name in catalog
     ):
-        raise ValueError("Context hierarchy catalog must contain distinct names.")
+        raise ValueError("Context name sorting requires distinct names.")
+    catalog = tuple(sorted(catalog, key=lambda name: (name.casefold(), name)))
+    if sort_order == "alphabetical":
+        return catalog
     catalog_set = frozenset(catalog)
     children: dict[str | None, list[str]] = {None: []}
     for name in catalog:
@@ -147,25 +141,31 @@ def order_context_names_by_hierarchy(
 
 
 def expand_lexical_context_names(
-    scope: ContextScope,
+    target_names: Sequence[str],
     catalog_names: Sequence[str],
+    *,
+    include_descendants: bool,
 ) -> tuple[str, ...]:
-    """Expand targets to canonical lexical descendants in catalog order.
+    """Expand targets to canonical lexical descendants in catalog order. Callers own loading and mutation boundaries."""
 
-    This function resolves only public Context names.  It neither follows
-    embedded graph edges nor interprets Grant attachments as hierarchy edges.
-    Callers retain their own authority checks and loading semantics.
-    """
-
+    targets = tuple(target_names)
+    if (
+        not targets
+        or len(set(targets)) != len(targets)
+        or any(not isinstance(name, str) or not name for name in targets)
+    ):
+        raise ValueError("Context scope requires distinct named targets.")
+    if type(include_descendants) is not bool:
+        raise ValueError("Context descendant scope must be a boolean.")
     catalog = tuple(catalog_names)
     if len(set(catalog)) != len(catalog) or any(
         not isinstance(name, str) or not name for name in catalog
     ):
         raise ValueError("Context scope catalog must contain distinct names.")
     expanded: list[str] = []
-    for target_name in scope.target_names:
+    for target_name in targets:
         expanded.append(target_name)
-        if scope.include_descendants:
+        if include_descendants:
             prefix = target_name + "/"
             expanded.extend(name for name in catalog if name.startswith(prefix))
     return tuple(dict.fromkeys(expanded))

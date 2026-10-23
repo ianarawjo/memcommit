@@ -25,49 +25,16 @@ from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
-    EffectPreviewSource,
-    EffectReportPresentation,
-)
-from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.effect_report import (
-    effect_report_fragments,
-    effect_report_sections,
-)
 from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.adapters.console.terminal.components.responses import (
-    response_frame_fragments,
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
+    EffectPreviewSource,
+    EffectReportPresentation,
 )
-from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
-from memcommit.adapters.console.terminal.components.selection import (
-    render_vertical_choice_rows,
-)
-from memcommit.adapters.console.terminal.components.save_location import (
-    save_location_row_fragments,
-    save_location_tree_fragments,
-)
-from memcommit.adapters.console.terminal.components.scrollable_pane import (
-    WrappedScrollbarMargin,
-)
-from memcommit.adapters.console.terminal.components.semantic_viewer import (
-    SemanticViewerController,
-)
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
-    focused_control_style,
-)
-from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.application.capabilities.resolution.workbench import (
-    ResolutionItem,
-    ResolutionWorkbenchView,
-)
-from memcommit.application.capabilities.reviewing.session_navigation import (
-    WorkbenchSection,
-)
-
 from memcommit.adapters.console.terminal.components.resolution.session_shell.controller import (
     ResolutionSessionController,
 )
@@ -91,6 +58,38 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
     resolution_seeded_report_fragments,
     resolution_viewer_fragments,
     resolution_workbench_fragments,
+)
+from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.effect_report import (
+    effect_report_fragments,
+    effect_report_sections,
+)
+from memcommit.adapters.console.terminal.components.responses import (
+    response_frame_fragments,
+)
+from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
+from memcommit.adapters.console.terminal.components.save_location import (
+    save_location_row_fragments,
+    save_location_tree_fragments,
+)
+from memcommit.adapters.console.terminal.components.scrollable_pane import (
+    WrappedScrollbarMargin,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    render_vertical_choice_rows,
+)
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
+    SemanticViewerController,
+)
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    focused_control_style,
+)
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.application.capabilities.resolution.workbench import (
+    ResolutionItem,
+    ResolutionWorkbenchView,
+)
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    WorkbenchSection,
 )
 
 
@@ -567,11 +566,13 @@ class ResolutionShellControls:
         )
         if impact is None:
             return None
+        presentation = self.config.effect_report
+        show_reason = presentation is None or not presentation.inline_memory_diffs
         for index, entry in enumerate(impact.entries, start=1):
             if _impact_entry_section_uid(entry, index) == section.uid and (
-                entry.rules or entry.reason or (
-                    self.config.effect_report is not None
-                    and self.config.effect_report.details_for(entry.uid)
+                entry.rules or (entry.reason and show_reason) or (
+                    presentation is not None
+                    and presentation.details_for(entry.uid)
                 )
             ):
                 return section.uid

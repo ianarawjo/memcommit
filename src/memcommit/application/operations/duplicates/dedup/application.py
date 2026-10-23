@@ -5,13 +5,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.authorization.context_operation import (
-    authorized_context_mutation,
-)
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    grant_checkpoint_args,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
@@ -22,9 +16,8 @@ from memcommit.application.operations.duplicates.find_duplicates.application imp
     ExactDuplicateContextReport,
     ExactDuplicateScopeReport,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.core.context import AutoCheckpoint, MemoryRef
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
@@ -79,24 +72,6 @@ class ExactDedupScopeReceipt:
         )
 
 
-def _inbound_references(
-    store: MemoryStore,
-    *,
-    context_uid: str,
-    absorbed_uids: set[str],
-) -> tuple[tuple[str, str], ...]:
-    inbound: list[tuple[str, str]] = []
-    for context in store.load_direct_context_graph_strict():
-        for item in context.iter_items():
-            if (
-                isinstance(item, MemoryRef)
-                and item.target_context_uid == context_uid
-                and item.target_memory_uid in absorbed_uids
-            ):
-                inbound.append((context.name, item.uid))
-    return tuple(inbound)
-
-
 def apply_exact_dedup(
     access: ContextAccess,
     analysis: ExactDuplicateContextReport,
@@ -124,71 +99,39 @@ def apply_exact_dedup(
 
     expected_digest = analysis.context_digest
     absorbed_uids = tuple(uid for group in groups for uid in group.absorbed_uids)
-    absorbed_memory_uids = {
-        uid
-        for group in groups
-        if group.item_kind == "MEMORY"
-        for uid in group.absorbed_uids
-    }
-    with authorized_context_mutation(
-        access,
-        required_permissions=("READ", "DELETE"),
-    ):
-        # Reference validation and deletion share the command lock so no new
-        # live pointer can appear between the safety check and publication.
-        with access.store._command_write_lock():  # noqa: SLF001
-            current = access.store.load_for_update(access.context_name)
-            if (
-                current.uid != analysis.context_uid
-                or context_record_digest(current) != expected_digest
-                ):
-                    raise ExactDedupConflictError(
-                        "The exact Dedup Context changed after analysis; "
-                        "nothing was written."
-                    )
-            inbound = _inbound_references(
-                access.store,
-                context_uid=analysis.context_uid,
-                absorbed_uids=absorbed_memory_uids,
+    with access.store._command_write_lock():  # noqa: SLF001
+        current = access.store.load_for_update(access.context_name)
+        if (
+            current.uid != analysis.context_uid
+            or context_record_digest(current) != expected_digest
+        ):
+            raise ExactDedupConflictError(
+                "The exact Dedup Context changed after analysis; nothing was written."
             )
-            if inbound:
-                locations = ", ".join(
-                    f"{owner}#{reference_uid[:8]}" for owner, reference_uid in inbound
-                )
-                raise ExactDedupError(
-                    "Exact Dedup cannot remove a Memory with an inbound reference: "
-                    + locations
-                )
-            for uid in absorbed_uids:
-                current.remove(uid)
-            checkpoint = access.store._save_command_locked(  # noqa: SLF001
-                current,
-                AutoCheckpoint(
-                    command="dedup",
-                    args={
-                        "contract": EXACT_DEDUP_CONTRACT_VERSION,
-                        "context": access.access_name,
-                        "groups": [
-                            {
-                                "item_kind": group.item_kind,
-                                "survivor_uid": group.survivor_uid,
-                                "absorbed_uids": list(group.absorbed_uids),
-                            }
-                            for group in groups
-                        ],
-                        **grant_checkpoint_args(access),
-                    },
-                    description=(
-                        f"Removed {len(absorbed_uids)} exact duplicate direct "
-                        f"item(s) from '{access.access_name}'"
-                    ),
-                ),
-                expected_context_digest=expected_digest,
+        for uid in absorbed_uids:
+            current.remove(uid)
+        checkpoint = access.store._save_command_locked(  # noqa: SLF001
+            current,
+            AutoCheckpointRequest(
+                command="dedup",
+                command_details={
+                    "contract": EXACT_DEDUP_CONTRACT_VERSION,
+                    "context": access.access_name,
+                    "groups": [
+                        {
+                            "item_kind": group.item_kind,
+                            "survivor_uid": group.survivor_uid,
+                            "absorbed_uids": list(group.absorbed_uids),
+                        }
+                        for group in groups
+                    ],
+                },
+            ),
+        )
+        if checkpoint is None:
+            raise ExactDedupError(
+                "Exact Dedup removed items without recording a checkpoint."
             )
-            if checkpoint is None:
-                raise ExactDedupError(
-                    "Exact Dedup removed items without recording a checkpoint."
-                )
     return ExactDedupReceipt(access.access_name, groups, checkpoint.uid)
 
 
@@ -196,17 +139,19 @@ def apply_exact_dedup_scope(
     active_store: MemoryStore,
     access: ContextAccess,
     analysis: ExactDuplicateScopeReport,
-    *,
-    registry: ProfileRegistry | None = None,
 ) -> ExactDedupScopeReceipt:
     """Apply one frozen Find Duplicates scope without rediscovering groups."""
 
-    if not isinstance(active_store, MemoryStore) or not isinstance(
-        access,
-        ContextAccess,
-    ) or not isinstance(
-        analysis,
-        ExactDuplicateScopeReport,
+    if (
+        not isinstance(active_store, MemoryStore)
+        or not isinstance(
+            access,
+            ContextAccess,
+        )
+        or not isinstance(
+            analysis,
+            ExactDuplicateScopeReport,
+        )
     ):
         raise TypeError("Exact Dedup requires a Store, access, and frozen analysis.")
     if analysis.root_name != access.access_name:
@@ -221,27 +166,10 @@ def apply_exact_dedup_scope(
             contexts=(receipt,),
         )
 
-    # A recursive mutation must stay inside one Store transaction. Read-only
-    # discovery may include granted public descendants, but following that
-    # namespace during Apply would cross independently owned authority stores.
-    if access.is_granted:
-        raise ExactDedupError(
-            "Recursive exact Dedup cannot start from a granted Context; "
-            "deduplicate that Context exactly."
-        )
-    readable = ReadableContextCatalog(
+    ReadableContextCatalog(
         active_store,
         access,
-        registry=registry,
-        include_query_routes=False,
     )
-    granted_descendants = readable.granted_names_below(access.access_name)
-    if granted_descendants:
-        raise ExactDedupError(
-            "Recursive exact Dedup cannot cross granted Context boundaries: "
-            + ", ".join(repr(name) for name in granted_descendants)
-            + ". Deduplicate those Contexts exactly."
-        )
 
     store = access.store
     catalog_names = analysis.context_catalog
@@ -250,8 +178,7 @@ def apply_exact_dedup_scope(
             "The Context namespace changed after Find Duplicates; nothing was written."
         )
     context_names = expand_lexical_context_names(
-        ContextScope.create((access.context_name,), include_descendants=True),
-        catalog_names,
+        (access.context_name,), catalog_names, include_descendants=True
     )
     if tuple(frame.context_name for frame in analysis.contexts) != context_names:
         raise ExactDedupError(
@@ -287,41 +214,6 @@ def apply_exact_dedup_scope(
             ),
         )
 
-    # Freeze the complete local graph before publication. Supplying every
-    # unchanged record as a source binding closes the gap between this inbound
-    # Reference scan and Store's locked batch validation: a new reference or
-    # namespace member makes the whole command stale before its first write.
-    graph = tuple(store.load_direct_context_graph_strict())
-    graph_digests = {
-        context.name: context_record_digest(context) for context in graph
-    }
-    absorbed_by_context_uid = {
-        context.uid: {
-            uid
-            for group in groups
-            if group.item_kind == "MEMORY"
-            for uid in group.absorbed_uids
-        }
-        for context, _digest, groups in changed
-    }
-    inbound: list[tuple[str, str]] = []
-    for owner in graph:
-        for item in owner.iter_items():
-            if (
-                isinstance(item, MemoryRef)
-                and item.target_memory_uid
-                in absorbed_by_context_uid.get(item.target_context_uid, set())
-            ):
-                inbound.append((owner.name, item.uid))
-    if inbound:
-        locations = ", ".join(
-            f"{owner}#{reference_uid[:8]}" for owner, reference_uid in inbound
-        )
-        raise ExactDedupError(
-            "Recursive exact Dedup cannot remove a Memory with an inbound "
-            "reference: " + locations
-        )
-
     operation_uid = str(uuid.uuid4())
     membership = [
         {"uid": context.uid, "name": context.name}
@@ -333,30 +225,19 @@ def apply_exact_dedup_scope(
         "root": access.access_name,
         "include_descendants": True,
     }
-    total_removed = sum(
-        len(group.absorbed_uids)
-        for _context, _digest, groups in changed
-        for group in groups
-    )
-    description = (
-        f"Removed {total_removed} exact duplicate direct item(s) from "
-        f"{len(changed)} Context(s) under '{access.access_name}'"
-    )
     entries = []
     changed_names: set[str] = set()
     for context, digest, groups in changed:
         changed_names.add(context.name)
-        absorbed_uids = tuple(
-            uid for group in groups for uid in group.absorbed_uids
-        )
+        absorbed_uids = tuple(uid for group in groups for uid in group.absorbed_uids)
         for uid in absorbed_uids:
             context.remove(uid)
         entries.append(
             (
                 context,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="dedup",
-                    args={
+                    command_details={
                         "contract": EXACT_DEDUP_CONTRACT_VERSION,
                         "context": context.name,
                         "recursive": True,
@@ -370,30 +251,23 @@ def apply_exact_dedup_scope(
                         ],
                         "dedup_tree": tree_receipt,
                         "command_contexts": membership,
-                        **grant_checkpoint_args(access),
                     },
-                    description=description,
                 ),
-                digest,
             )
         )
     unchanged_bindings = tuple(
-        (context.name, context.uid, graph_digests[context.name])
-        for context in graph
+        (context.name, context.uid)
+        for context, digest, _groups in frames
         if context.name not in changed_names
     )
-    with authorized_context_mutation(
-        access,
-        required_permissions=("READ", "DELETE"),
-    ):
-        checkpoints = store.save_context_command_batch(
-            entries,
-            source_bindings=unchanged_bindings,
-            expected_context_catalog=catalog_names,
-        )
+    checkpoints = store.save_context_command_batch(
+        entries,
+        source_bindings=unchanged_bindings,
+        expected_context_catalog=catalog_names,
+    )
     checkpoint_by_name = {
         context.name: checkpoint.uid
-        for (context, _checkpoint, _digest), checkpoint in zip(
+        for (context, _checkpoint), checkpoint in zip(
             entries,
             checkpoints,
             strict=True,

@@ -6,10 +6,12 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from memcommit.application.operations.mem_import.context_data import (
-    _closed_import_contexts,
+    remap_imported_context_names,
     _reject_context_identity_collisions,
 )
-from memcommit.core.context import AutoCheckpoint, Context, Memory
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.attached_files import save_attached_file
 
@@ -31,15 +33,18 @@ def publish_document_import(destination, request, content):
     entries = tuple(
         (
             context,
-            AutoCheckpoint(
+            AutoCheckpointRequest(
                 command="import",
-                args={"resource_kind": "document", "target_context": context.name},
-                description="Imported document syntax and current file composition.",
+                command_details={"resource_kind": "document", "target_context": context.name},
             ),
         )
         for context in content.contexts
     )
-    created = import_context_records(destination=destination, entries=entries) if entries else ()
+    created = (
+        import_context_records(destination=destination, entries=entries)
+        if entries
+        else ()
+    )
     checkpoints = tuple(
         str(item["uid"])
         for context in created
@@ -47,21 +52,32 @@ def publish_document_import(destination, request, content):
     )
     files = []
     for context in created:
-        if context.document and context.document.role != "package":
-            files.append((context.document.path, "DOCUMENT", context.name))
-        files.extend((file.path, "ATTACHED", context.name) for file in context.attached_files)
+        if (
+            context.corresponding_document_metadata
+            and context.corresponding_document_metadata.role != "package"
+        ):
+            files.append(
+                (context.corresponding_document_metadata.path, "DOCUMENT", context.name)
+            )
+        files.extend(
+            (file.path, "ATTACHED", context.name) for file in context.asset_metadata
+        )
     return ImportResult(
         source=Path(request.source),
         target_contexts=tuple(context.name for context in created),
         files=tuple(files),
-        memory_count=sum(isinstance(item, Memory) for context in created for item in context.iter_items()),
+        memory_count=sum(
+            isinstance(item, Memory)
+            for context in created
+            for item in context.iter_memories()
+        ),
         checkpoints=checkpoints,
     )
 
 
 def import_context_records(
     destination: MemoryStore,
-    entries: Iterable[tuple[Context, AutoCheckpoint | None]],
+    entries: Iterable[tuple[Context, AutoCheckpointRequest | None]],
     *,
     make_current: str | None = None,
 ) -> tuple[Context, ...]:
@@ -76,7 +92,7 @@ def import_context_records(
     uids = [context.uid for context in contexts]
     if len(names) != len(set(names)) or len(uids) != len(set(uids)):
         raise ValueError("Native Context import repeats a Context name or identity.")
-    imported = _closed_import_contexts(contexts, {name: name for name in names})
+    imported = remap_imported_context_names(contexts, {name: name for name in names})
     # The command lock freezes destination writes across the UID scan and
     # creation. Use the locked persistence entry point to avoid re-locking it.
     with destination._command_write_lock():

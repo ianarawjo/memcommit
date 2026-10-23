@@ -165,33 +165,11 @@ def _report_items_summary(session: SeverSession) -> str:
 
 
 def _overview_sections(session: SeverSession) -> tuple[ResolutionOverviewSection, ...]:
-    sections = [
+    return (
         ResolutionOverviewSection(
-            "source-overview",
-            "SOURCE OVERVIEW",
-            session.overview,
-        )
-    ]
-    excluded = tuple(
-        dict.fromkeys(
-            (
-                *session.source.excluded_query_context_names,
-                *session.criteria.excluded_query_context_names,
-            )
-        )
+            "source-overview", "SOURCE OVERVIEW", session.overview
+        ),
     )
-    if excluded:
-        names = ", ".join(excluded)
-        sections.append(
-            ResolutionOverviewSection(
-                "not-included",
-                "NOT INCLUDED",
-                f"{names}. These query-only Contexts do not grant readable "
-                "Memory access, so they were not part of the Source or "
-                "Criteria frame.",
-            )
-        )
-    return tuple(sections)
 
 
 class SeverResolutionWorkbenchAdapter:

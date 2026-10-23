@@ -2,26 +2,15 @@
 
 from __future__ import annotations
 
+
 from dataclasses import dataclass
 
 import memcommit.core.context_targeting.direct_items as direct_items
-from memcommit.application.authorization.context_operation import (
-    authorized_context_mutation,
-)
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    freeze_granted_context_binding,
-    grant_checkpoint_args,
-    revalidate_granted_context_binding,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
 )
-from memcommit.application.operations.profile.model import (
-    authority_grant_snapshot_lock,
-)
-from memcommit.application.operations.update.model import GrantedUpdateTarget
 from memcommit.application.operations.elaborate.application import (
     ElaborateError,
     ElaboratePrepared,
@@ -35,7 +24,9 @@ from memcommit.application.operations.elaborate.model import (
     ElaborateFrame,
     ElaborateSource,
 )
-from memcommit.core.context import AutoCheckpoint, Context, Memory
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
@@ -61,7 +52,6 @@ class ElaborateReceipt:
 class _StoreElaborateToken:
     owner: object
     access: ContextAccess
-    granted_binding: GrantedUpdateTarget | None
 
 
 def _frame_for(
@@ -77,20 +67,12 @@ def _frame_for(
             content=item.content,
         )
         for index, item in enumerate(
-            (
-                item
-                for item in context.iter_items()
-                if isinstance(item, Memory)
-            ),
+            (item for item in context.iter_memories() if isinstance(item, Memory)),
             start=1,
         )
     )
     target_alias = next(
-        (
-            source.alias
-            for source in sources
-            if source.memory_uid == memory_uid
-        ),
+        (source.alias for source in sources if source.memory_uid == memory_uid),
         None,
     )
     if target_alias is None:
@@ -119,51 +101,36 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
         return cls(store, current_name=store.current_context_name())
 
     def _current_access(self, token: _StoreElaborateToken) -> ContextAccess:
-        if token.granted_binding is None:
-            return token.access
-        with authority_grant_snapshot_lock() as registry:
-            access = revalidate_granted_context_binding(
-                token.granted_binding,
-                required_permission="EDIT",
-                registry=registry,
-                active_store=self._store,
-            )
-            return access
+        return token.access
 
     def freeze(self, request: ElaborateRequest) -> FrozenElaborateSource:
         locator = parse_direct_memory_locator(
             request.memory_selector,
             explicit_context=request.context_locator,
         )
-        with authority_grant_snapshot_lock() as registry:
-            candidates = freeze_profile_context_access_candidates(
-                self._store,
-                current_name=self._current_name,
-                registry=registry,
-            )
-            access = resolve_existing_context_access(
-                self._store,
-                locator.context_locator,
-                current_name=self._current_name,
-                required_permission="EDIT",
-                registry=registry,
-                candidates=candidates,
-            ).value
-            context = access.store.load_direct(access.context_name)
-            target = direct_items.resolve_direct_memory(context, locator.memory_selector)
-            binding = (
-                freeze_granted_context_binding(access)
-                if access.is_granted
-                else None
-            )
+        candidates = freeze_profile_context_access_candidates(
+            self._store,
+            current_name=self._current_name,
+        )
+        access = resolve_existing_context_access(
+            self._store,
+            locator.context_locator,
+            current_name=self._current_name,
+            candidates=candidates,
+        ).value
+        context = access.store.load_direct(access.context_name)
+        target = direct_items.resolve_direct_memory(context, locator.memory_selector)
         return FrozenElaborateSource(
             frame=_frame_for(access, context, memory_uid=target.uid),
-            token=_StoreElaborateToken(self._owner, access, binding),
+            token=_StoreElaborateToken(self._owner, access),
         )
 
     def revalidate(self, source: FrozenElaborateSource) -> ElaborateFrame:
         token = source.token
-        if not isinstance(token, _StoreElaborateToken) or token.owner is not self._owner:
+        if (
+            not isinstance(token, _StoreElaborateToken)
+            or token.owner is not self._owner
+        ):
             raise ValueError("The frozen Elaborate source belongs to another runtime.")
         access = self._current_access(token)
         context = access.store.load_direct(access.context_name)
@@ -215,7 +182,9 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
                 "The selected Memory changed before Elaborate Apply; "
                 "no changes were made."
             )
-        context.replace_memory(Memory(uid=revision.memory_uid, content=revision.content))
+        context.replace_memory(
+            Memory(uid=revision.memory_uid, content=revision.content)
+        )
         effect = {
             "kind": "APPEND",
             "memory_uid": revision.memory_uid,
@@ -225,29 +194,19 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
             "reason": revision.reason,
             "source_memory_uids": list(revision.source_memory_uids),
         }
-        with authorized_context_mutation(
-            access,
-            required_permissions=("EDIT",),
-        ):
-            checkpoint = access.store.save(
-                context,
-                AutoCheckpoint(
-                    command="elaborate",
-                    args={
-                        "contract": "append-only-v1",
-                        "memory_uid": revision.memory_uid,
-                        "continuation": revision.continuation,
-                        "source_memory_uids": list(revision.source_memory_uids),
-                        "effects": [effect],
-                        **grant_checkpoint_args(access),
-                    },
-                    description=(
-                        f"Elaborated memory [{revision.memory_uid[:8]}] by "
-                        "appending supported detail"
-                    ),
-                ),
-                expected_context_digest=revision.context_digest,
-            )
+        checkpoint = access.store.save(
+            context,
+            AutoCheckpointRequest(
+                command="elaborate",
+                command_details={
+                    "contract": "append-only-v1",
+                    "memory_uid": revision.memory_uid,
+                    "continuation": revision.continuation,
+                    "source_memory_uids": list(revision.source_memory_uids),
+                    "effects": [effect],
+                },
+            ),
+        )
         if checkpoint is None:
             raise ElaborateError("Elaborate Apply saved no checkpoint.")
         return ElaborateReceipt(

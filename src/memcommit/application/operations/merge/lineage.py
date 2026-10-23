@@ -6,7 +6,7 @@ from memcommit.application.operations.merge.records import LiteralMergeRound
 from memcommit.application.operations.resolve.review_round.build_update_input_from_decisions import (
     resolution_input_uid,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 
 def project_merge_lineage(rounds, source_uid, target_uid):

@@ -16,10 +16,6 @@ from memcommit.adapters.console.terminal.components.history.presentation import 
 from memcommit.adapters.console.terminal.components.read_only_viewer import (
     interactive_report_terminal,
 )
-from memcommit.application.authorization.checkpoint_read import (
-    authorize_checkpoint_read,
-)
-from memcommit.application.authorization.checkpoint_read_model import CheckpointRead
 from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
     build_checkpoint_history_slice,
 )
@@ -135,7 +131,7 @@ def cmd(
             context_locator = resolved_target.context_name
             checkpoint_selector = resolved_target.checkpoint_uid
         else:
-            context_locator = resolved_target.context_name
+            context_locator = resolved_target
     elif checkpoint_uid is not None and context_name is None:
         try:
             inferred_checkpoint = resolve_local_checkpoint_target(
@@ -164,7 +160,6 @@ def cmd(
             store,
             context_locator,
             current_name=current_context,
-            required_permission="READ",
         )
         canonical_context = resolved_context.name
         access = resolved_context.value
@@ -184,11 +179,6 @@ def cmd(
                 uid=lambda candidate: candidate.uid,
                 label="Checkpoint",
             )
-        )
-        authorize_checkpoint_read(
-            access,
-            CheckpointRead.reference(history.context_uid, (entry.uid,)),
-            history,
         )
         if not raw and not stat and interactive_report_terminal():
             open_checkpoint_revision_viewer(

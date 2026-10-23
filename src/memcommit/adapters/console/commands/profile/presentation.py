@@ -32,14 +32,8 @@ _PROFILE_INVENTORY_ACTION_ROLES = {
 
 
 def _inventory_label(inspection: object) -> str:
-    """Render physical ownership separately from READ-granted knowledge."""
-
-    return (
-        f"Contexts {len(inspection.context_names)} owned + "
-        f"{inspection.granted_context_count} granted · "
-        f"Memories {inspection.ordinary_memory_count} owned + "
-        f"{inspection.granted_memory_count} granted"
-    )
+    """Render the complete local Context and Memory inventory."""
+    return f"Contexts {len(inspection.context_names)} · Memories {inspection.ordinary_memory_count}"
 
 
 def _styled_profile_inventory_action(action: str) -> str:
@@ -55,8 +49,6 @@ def _styled_profile_inventory_action(action: str) -> str:
 def _study_role_label(membership: _ProfileStudyMembership) -> str:
     if membership.role == "PARTICIPANT":
         return "Participant"
-    if membership.role == "GRANTED_MEMORY":
-        return "Granted memory"
     raise ValueError(f"Unknown Study role: {membership.role!r}")
 
 
@@ -111,7 +103,6 @@ def _print_profile_removal(result) -> None:
         "Deleted store and all checkpoints: "
         + display_escape_text(str(result.deleted_store))
     )
-    typer.echo(f"Connected Grants removed: {result.removed_grant_count}")
     typer.echo(
         "Profile registration removed. Internal content and history cannot be recovered."
     )
@@ -142,7 +133,6 @@ def _print_study_removal(result) -> None:
         "Profile stores and checkpoint histories deleted: "
         + str(result.newly_removed_count)
     )
-    typer.echo(f"Connected Grants removed: {result.removed_grant_count}")
     typer.echo(
         "Study and Profile registrations removed. Internal content and history cannot be recovered."
     )
@@ -153,12 +143,10 @@ def _print_study_removal(result) -> None:
 
 
 def _profile_removal_status(result) -> str:
-    grant_label = "Grant" if result.removed_grant_count == 1 else "Grants"
     return (
         "Deleted Profile '"
         + display_escape_text(result.profile.name)
         + "' permanently · store/checkpoints deleted · "
-        + f"{result.removed_grant_count} {grant_label} removed"
     )
 
 
@@ -166,25 +154,37 @@ def _profile_creation_status(result) -> str:
     return (
         "Created '"
         + display_escape_text(result.profile.name)
-        + f"' · Import {result.imported_file_count} files · Auto Sync {'ON' if result.automatic_sync else 'OFF'} · active: "
+        + f"' · Import {result.imported_file_count} files · active: "
         + display_escape_text(result.active_profile_name)
     )
 
 
 def render_profile_create_receipt(result) -> None:
     typer.secho(
-        ("Created empty Profile '" if not result.inspection.context_names else "Created Profile '") + display_escape_text(result.profile.name) + "'.",
+        (
+            "Created empty Profile '"
+            if not result.inspection.context_names
+            else "Created Profile '"
+        )
+        + display_escape_text(result.profile.name)
+        + "'.",
         fg=semantic_color_rgb(SemanticColorRole.CREATE),
     )
     echo_text("Profile UID: {uid}", uid=result.profile.uid)
     echo_text("Store: {path}", path=result.inspection.root)
     echo_text("Project folder: {path}", path=result.profile.root_dir)
-    typer.echo(f"Contexts {len(result.inspection.context_names)} owned + 0 granted · Memories {result.inspection.ordinary_memory_count} owned + 0 granted")
+    typer.echo(
+        f"Contexts {len(result.inspection.context_names)} · Memories {result.inspection.ordinary_memory_count}"
+    )
     typer.echo(f"Imported project documents: {result.imported_file_count}")
-    typer.echo(f"Automatic Sync: {'ON (including future Contexts)' if result.automatic_sync else 'OFF'}")
     if result.skipped_paths:
         typer.echo(f"Excluded paths: {len(result.skipped_paths)}")
-    echo_text("Active Profile: {name}" if result.selected else "Active Profile unchanged: {name}", name=result.active_profile_name)
+    echo_text(
+        "Active Profile: {name}"
+        if result.selected
+        else "Active Profile unchanged: {name}",
+        name=result.active_profile_name,
+    )
     if not result.selected:
         echo_text("Use it with: mem profile use {name}", name=result.profile.name)
     if not result.inspection.context_names:
@@ -245,9 +245,7 @@ def _print_profile_rename(result) -> None:
             "Active Profile unchanged: "
             + display_escape_text(result.active_profile_name)
         )
-    typer.echo(
-        "Store data, Contexts, Memories, grants, and provenance were not modified."
-    )
+    typer.echo("Store data, Contexts, Memories, and provenance were not modified.")
     typer.echo(
         "Use it with: mem profile use " + display_escape_text(result.profile.name)
     )
@@ -266,25 +264,25 @@ def _print_study_rename(result) -> None:
     )
     typer.echo("Study UID unchanged: " + display_escape_text(result.uid))
     typer.echo("Member Profile display names unchanged.")
-    typer.echo("Profile UIDs, stores, Contexts, Memories, and Grants unchanged.")
+    typer.echo("Profile UIDs, stores, Contexts, and Memories unchanged.")
     typer.echo(
         "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
 
 
 def _study_removal_status(result) -> str:
-    grant_label = "Grant" if result.removed_grant_count == 1 else "Grants"
     return (
         "Deleted Study '"
         + display_escape_text(result.name)
         + "' permanently · "
         + f"{result.newly_removed_count} stores/checkpoint histories deleted · "
-        + f"{result.removed_grant_count} {grant_label} removed"
     )
 
 
 def _print_profile_inventory(registry, inspections, memberships) -> None:
-    identity_width = _profile_inventory_identity_width(registry=registry, memberships=memberships)
+    identity_width = _profile_inventory_identity_width(
+        registry=registry, memberships=memberships
+    )
     for profile, inspection in zip(
         registry.visible_profiles,
         inspections,
@@ -294,42 +292,15 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
         action = "CURRENT" if profile.uid == registry.active_uid else "USE"
         profile_label = display_escape_text(profile.name)
         project_location = display_escape_text(str(profile_root_dir(profile)))
-        query_note = (
-            " · query="
-            + ",".join(
-                display_escape_text(name) for name in inspection.query_source_names
-            )
-            if inspection.query_source_names
-            else (
-                f" · {inspection.query_source_count} query-only"
-                if inspection.query_source_count
-                else ""
-            )
-        )
-        placements_by_grant_uid = {
-            placement.grant_uid: placement
-            for placement in registry.grant_placements
-            if placement.grantee_profile_uid == profile.uid
-        }
-        granted_views = [
-            placements_by_grant_uid[grant.uid].access_name
-            for grant in registry.grants
-            if grant.grantee_profile_uid == profile.uid
-            and grant.uid in placements_by_grant_uid
-        ]
-        view_note = (
-            " · views=" + ",".join(display_escape_text(name) for name in granted_views)
-            if granted_views
-            else ""
-        )
+        query_note = ""
+        view_note = ""
         membership = memberships.get(profile.uid)
         if membership is not None:
             if membership.first:
                 _echo_profile_inventory_row(
                     identity="  " + display_escape_text(membership.name),
                     action="STUDY",
-                    detail="created="
-                    + display_escape_text(membership.created_at),
+                    detail="created=" + display_escape_text(membership.created_at),
                     identity_width=identity_width,
                 )
             branch = "└─" if membership.last else "├─"
@@ -350,7 +321,6 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
             f"{query_note}{view_note} · location={project_location}",
             identity_width=identity_width,
         )
-    typer.echo("Granted views are permission projections, not copied Profiles.")
     typer.echo("Authority Profiles are ordinary switchable owners of source data.")
 
 
@@ -371,10 +341,3 @@ def _print_current_profile(registry, inspections) -> None:
         else "(none)"
     )
     typer.echo(f"Current Context: {current_label}")
-    if inspection.query_source_names:
-        typer.echo(
-            "Query-only: "
-            + ", ".join(
-                display_escape_text(name) for name in inspection.query_source_names
-            )
-        )

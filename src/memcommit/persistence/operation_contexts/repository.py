@@ -12,7 +12,7 @@ except ImportError:
 from pathlib import Path
 from uuid import UUID
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 def _unique_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:

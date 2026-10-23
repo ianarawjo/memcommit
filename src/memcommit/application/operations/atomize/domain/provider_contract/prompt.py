@@ -23,7 +23,7 @@ from memcommit.application.capabilities.semantic_execution import (
     plan_semantic_execution,
 )
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from ..model import (
     ATOMIZE_INPUT_CHAR_LIMIT,

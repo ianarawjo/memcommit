@@ -32,7 +32,7 @@ class _CompanionSessionRestorationMixin:
                 ),
                 None,
             )
-            args = checkpoint.get("args") if isinstance(checkpoint, dict) else None
+            args = checkpoint.get("command_details") if isinstance(checkpoint, dict) else None
             record = args.get("sever") if isinstance(args, dict) else None
             if not isinstance(args, dict) or not isinstance(record, dict):
                 raise ValueError(
@@ -81,7 +81,7 @@ class _CompanionSessionRestorationMixin:
                 context_name=context_name,
                 checkpoint_uid=checkpoint_by_identity[(context_uid, context_name)],
             )
-            for context_name, context_uid, _digest in session.source.contexts
+            for context_name, context_uid in session.source.contexts
             if (context_uid, context_name) in checkpoint_by_identity
         )
         if len(receipts) != len(unit.changes):

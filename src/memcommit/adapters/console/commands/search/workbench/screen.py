@@ -1,4 +1,4 @@
-"""Interactive semantic Search, multi-target, and scope surface."""
+"""Interactive semantic Find, multi-target, and scope surface."""
 
 from __future__ import annotations
 
@@ -31,9 +31,6 @@ from memcommit.adapters.console.terminal.components.background_turn import (
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor import (
     CompactReadableScopeControl,
-)
-from memcommit.adapters.console.terminal.components.horizontal_choice import (
-    HorizontalChoiceOption,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -111,7 +108,6 @@ def run_search_workbench(
     initial_target: str,
     initial_targets: Sequence[str] | None = None,
     initial_include_descendants: bool,
-    initial_follow_embeds: bool,
     limit: int,
     run_search: SearchRunner,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
@@ -122,7 +118,7 @@ def run_search_workbench(
     require_tty: bool = True,
     clipboard_writer: Callable[[str], None] | None = None,
 ) -> SearchWorkbenchResult:
-    """Search repeatedly while keeping query, targets, scope, and results visible."""
+    """Find repeatedly while keeping query, targets, scope, and results visible."""
 
     catalog = tuple(names)
     if (
@@ -130,7 +126,7 @@ def run_search_workbench(
         or len(set(catalog)) != len(catalog)
         or any(not isinstance(name, str) or not name for name in catalog)
     ):
-        raise ValueError("Search requires a distinct readable Context catalog.")
+        raise ValueError("Find requires a distinct readable Context catalog.")
     staged_initial_targets = tuple(
         dict.fromkeys((initial_target,) if initial_targets is None else initial_targets)
     )
@@ -140,28 +136,28 @@ def run_search_workbench(
         or not staged_initial_targets
         or any(name not in catalog for name in staged_initial_targets)
     ):
-        raise ValueError("Search's initial Context is outside the readable catalog.")
+        raise ValueError("Find's initial Context is outside the readable catalog.")
     if not callable(run_search):
-        raise ValueError("Search requires a search controller.")
+        raise ValueError("Find requires a search controller.")
     if require_tty:
         require_interactive_terminal(
-            "Interactive Search",
-            snapshot_hint='Pass a query, for example: mem search "parking".',
+            "Interactive Find",
+            snapshot_hint='Pass a query, for example: mem find "parking".',
         )
 
     labels = dict(annotations or {})
     if set(labels) - set(catalog):
-        raise ValueError("Search Context annotations are outside the catalog.")
+        raise ValueError("Find Context annotations are outside the catalog.")
     try:
         for annotation in labels.values():
             normalize_source_display_tokens(annotation)
     except (TypeError, ValueError) as error:
-        raise ValueError("Search received an invalid Context annotation.") from error
+        raise ValueError("Find received an invalid Context annotation.") from error
     local_catalog = tuple(
         dict.fromkeys(catalog if local_context_names is None else local_context_names)
     )
     if any(not isinstance(name, str) or not name for name in local_catalog):
-        raise ValueError("Search local Context names must be nonblank text.")
+        raise ValueError("Find local Context names must be nonblank text.")
 
     state = SearchWorkbenchState()
     background_turn: BackgroundExecutorTurn[SearchResponse] = BackgroundExecutorTurn()
@@ -174,7 +170,6 @@ def run_search_workbench(
         current_name=current,
         initial_targets=staged_initial_targets,
         include_descendants=initial_include_descendants,
-        follow_embeds=initial_follow_embeds,
         annotations=labels,
         input_name="search-context",
         on_change=state.clear_results,
@@ -197,14 +192,14 @@ def run_search_workbench(
     )
     save_panel = RetrieveAnswerSavePanel(
         content_summary=lambda: (
-            f"{len(state.result_selection.selected_values)} CHECKED SEARCH RESULT(S)"
+            f"{len(state.result_selection.selected_values)} CHECKED FIND RESULT(S)"
             if state.result_selection is not None
-            else "CHECK SEARCH RESULTS TO SAVE"
+            else "CHECK FIND RESULTS TO SAVE"
         ),
         action_label=lambda mode: (
-            f"SAVE {len(state.result_selection.selected_values)} CHECKED AS {mode}"
+            f"SAVE {len(state.result_selection.selected_values)} CHECKED AS COPY"
             if state.result_selection is not None
-            else "SAVE CHECKED SEARCH RESULTS"
+            else "SAVE CHECKED FIND RESULTS"
         ),
         initial_location=initial_save_location,
         context_names=local_catalog,
@@ -212,27 +207,7 @@ def run_search_workbench(
         validate_location=validate_save_location,
         input_name="search-save-location",
         on_status=scope_status,
-        mode_options=(
-            HorizontalChoiceOption(
-                value="COPY",
-                label="COPY",
-                description="Create independent Memory values with fresh identities.",
-            ),
-            HorizontalChoiceOption(
-                value="REFERENCE",
-                label="REFERENCE",
-                description="Retain immutable read-only snapshots of the selected values.",
-            ),
-            HorizontalChoiceOption(
-                value="EMBED",
-                label="EMBED",
-                description="Create read-only live links that follow their Source Memories.",
-            ),
-        ),
-        initial_mode="COPY",
     )
-    save_mode_control = save_panel.mode_control
-    assert save_mode_control is not None
 
     def save_location_changed(_buffer) -> None:
         if not state.setting_save_location:
@@ -256,7 +231,7 @@ def run_search_workbench(
     )
 
     header = Window(
-        FormattedTextControl(" MEM SEARCH"),
+        FormattedTextControl(" MEM FIND · SEMANTIC"),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -266,7 +241,7 @@ def run_search_workbench(
     )
     search_frame = Frame(
         search_area,
-        title="SEARCH · ENTER TO RUN",
+        title="FIND · ENTER TO RUN",
         height=Dimension.exact(3),
     )
     results_frame = Frame(
@@ -327,7 +302,6 @@ def run_search_workbench(
                 scope.input,
                 scope.browse_control,
                 scope.range_control,
-                scope.embed_control,
                 scope.tree_control,
             )
         ),
@@ -340,7 +314,7 @@ def run_search_workbench(
     def query_changed(_buffer) -> None:
         if state.response is None or background_turn.busy:
             return
-        state.clear_results("QUERY CHANGED · PRESS ENTER TO SEARCH")
+        state.clear_results("QUERY CHANGED · PRESS ENTER TO FIND")
         app.invalidate()
 
     search_area.buffer.on_text_changed += query_changed
@@ -397,13 +371,11 @@ def run_search_workbench(
         has_focus(scope.input)
         | has_focus(scope.browse_control)
         | has_focus(scope.range_control)
-        | has_focus(scope.embed_control)
         | has_focus(scope.tree_control)
     )
     search_return_focus = (
         scope_focus
         | has_focus(results_control)
-        | has_focus(save_mode_control)
         | has_focus(save_panel.name.input)
         | has_focus(save_panel.browse_control)
         | has_focus(save_panel.action_control)
@@ -433,7 +405,7 @@ def run_search_workbench(
 
     def _search(event) -> SurfaceActionResult:
         if background_turn.busy:
-            state.status = "A Search is already running."
+            state.status = "A Find is already running."
             return "HANDLED"
         try:
             request_targets, request_descendants = scope.request_scope()
@@ -441,7 +413,6 @@ def run_search_workbench(
                 query=search_area.text.strip(),
                 target_names=request_targets,
                 include_descendants=request_descendants,
-                follow_embeds=scope.follow_embeds,
                 limit=limit,
             )
         except ValueError as error:
@@ -473,7 +444,7 @@ def run_search_workbench(
 
         def fail(error: Exception) -> None:
             detail = " ".join(safe_terminal_text(str(error)).split())
-            state.status = f"SEARCH FAILED · {type(error).__name__}: {detail}"
+            state.status = f"FIND FAILED · {type(error).__name__}: {detail}"
 
         def return_to_surface() -> None:
             app.layout.focus(
@@ -566,7 +537,7 @@ def run_search_workbench(
             state.status = str(error)
             event.app.layout.focus(save_panel.name.input)
             return "HANDLED"
-        mode = save_panel.selected_mode
+        mode = "COPY"
         assert mode is not None
         event.app.exit(
             result=SearchWorkbenchResult(
@@ -674,5 +645,5 @@ def run_search_workbench(
     except (EOFError, KeyboardInterrupt):
         return SearchWorkbenchResult("CLOSED", state.response)
     if not isinstance(result, SearchWorkbenchResult):
-        raise ValueError("Search workbench returned an invalid result.")
+        raise ValueError("Find workbench returned an invalid result.")
     return result

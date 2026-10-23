@@ -62,11 +62,10 @@ class FindTuiOutcome:
             return
         if (
             not self.selected_match_indices
-            or self.save_as not in {"COPY", "REFERENCE", "EMBED"}
+            or self.save_as not in {"COPY"}
             or not isinstance(self.save_location, str)
             or not self.save_location.strip()
-            or len(set(self.selected_match_indices))
-            != len(self.selected_match_indices)
+            or len(set(self.selected_match_indices)) != len(self.selected_match_indices)
             or any(
                 isinstance(index, bool)
                 or not isinstance(index, int)

@@ -14,21 +14,11 @@ from types import MappingProxyType
 from typing import Iterable, Literal, Mapping
 
 
-HistoryOccurrenceKind = Literal[
-    "CONTEXT",
-    "MEMORY",
-    "MEMORY_REFERENCE",
-]
+HistoryOccurrenceKind = Literal[("CONTEXT", "MEMORY")]
 HistoryRelationKind = Literal[
-    "INPUT",
-    "OUTPUT",
-    "CONTAINS",
-    "CONTINUES_AS",
-    "DERIVED_FROM",
-    "EMBEDS",
-    "REFERENCES",
+    ("INPUT", "OUTPUT", "CONTAINS", "CONTINUES_AS", "DERIVED_FROM")
 ]
-HistoryEffectChannel = Literal["CONTEXT", "MEMORY", "REFERENCE"]
+HistoryEffectChannel = Literal[("CONTEXT", "MEMORY")]
 HistoryEffectKind = Literal["ADD", "EDIT", "REMOVE", "REORDER"]
 
 
@@ -167,7 +157,9 @@ class HistoryGraph:
             or current_context.context_uid != self.root_context_uid
             or current_context.subject_uid != self.root_context_uid
         ):
-            raise ValueError("History current occurrence does not match its root Context.")
+            raise ValueError(
+                "History current occurrence does not match its root Context."
+            )
         if any(step.operation_node_id not in operation_ids for step in self.steps):
             raise ValueError("History step refers to an unknown operation node.")
         if any(
@@ -195,10 +187,7 @@ class HistoryGraph:
                 relation.operation_step_id is not None
                 and relation.operation_step_id not in step_ids
             )
-            or (
-                relation.effect_id is not None
-                and relation.effect_id not in effect_ids
-            )
+            or (relation.effect_id is not None and relation.effect_id not in effect_ids)
             for relation in self.relations
         ):
             raise ValueError("History relation refers to an unknown topology node.")
@@ -253,17 +242,19 @@ class HistoryGraph:
 
     def memory_event_indexes(self, component: set[str]) -> tuple[int, ...]:
         indexes = {
-            effect.payload_index for effect in self.effects
-            if effect.channel == "MEMORY" and effect.payload_index is not None
+            effect.payload_index
+            for effect in self.effects
+            if effect.channel == "MEMORY"
+            and effect.payload_index is not None
             and self._effect_memory_uids(effect) & component
         }
         indexes.update(
-            relation.payload_index for relation in self.relations
+            relation.payload_index
+            for relation in self.relations
             if relation.payload_index is not None
             and self._relation_memory_uids(relation) & component
         )
         return tuple(sorted(indexes))
-
 
     def memory_operation_counts(
         self,
@@ -277,9 +268,7 @@ class HistoryGraph:
             if effect.channel != "MEMORY":
                 continue
             for uid in self._effect_memory_uids(effect):
-                operations_by_uid.setdefault(uid, set()).add(
-                    effect.operation_node_id
-                )
+                operations_by_uid.setdefault(uid, set()).add(effect.operation_node_id)
         for relation in self.relations:
             if relation.payload_index is None or relation.operation_node_id is None:
                 continue
@@ -302,9 +291,7 @@ class HistoryGraph:
                     pending.append(neighbor)
             visited.update(component)
             count = len(
-                set().union(
-                    *(operations_by_uid.get(uid, set()) for uid in component)
-                )
+                set().union(*(operations_by_uid.get(uid, set()) for uid in component))
             )
             for uid in component:
                 if uid in operations_by_uid:

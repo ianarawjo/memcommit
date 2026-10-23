@@ -440,7 +440,6 @@ def run_atomize_impact_shell(
             review_and_apply=workflow_actions,
             decision_free_behavior=(
                 ownership_aware_application_review(
-                    mutates_granted_authority=False,
                     local_undo_available=True,
                 ).decision_free_behavior
                 if workflow_actions

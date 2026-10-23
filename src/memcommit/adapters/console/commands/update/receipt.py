@@ -77,10 +77,8 @@ def render_update_receipt(receipt: UpdateReceipt, *, color: bool = False) -> str
             )
         )
     lines.append(f"REVIEW · mem review update --session {receipt.uid}")
-    if receipt.inputs.granted_target is None and checkpoints:
+    if checkpoints:
         lines.append("RECOVERY · mem undo")
-    elif receipt.inputs.granted_target is not None:
-        lines.append("RECOVERY · governed by the granted authority owner")
     return "\n".join(lines)
 
 

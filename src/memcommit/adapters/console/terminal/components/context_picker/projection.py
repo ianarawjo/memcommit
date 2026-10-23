@@ -6,20 +6,17 @@ from collections.abc import Sequence
 from typing import AbstractSet, Mapping
 
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTreeRow,
 )
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
-    SourceReach,
-    SourceState,
 )
 from memcommit.source_projection.presentation import (
-    SourceDisplayToken,
     SourceDisplayValue,
-    SourceTokenRole,
     source_object_label,
 )
 from memcommit.adapters.console.terminal.components.context_picker.model import (
@@ -36,13 +33,13 @@ def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
     """Project every direct Context item as one picker row.
 
     Keeping this projection beside the common renderer gives ``mem switch``
-    and embedded browse-only trees the same Memory, pointer, and embedded-
-    Context presentation. It deliberately returns no Context-selection receipt
+    and inline browse-only trees the same owned-Memory presentation.
+    It deliberately returns no Context-selection receipt
     or persistence hook.
     """
 
     rows: list[ContextMemoryRow] = []
-    for item in context.iter_items():
+    for item in context.iter_memories():
         if isinstance(item, Memory):
             rows.append(
                 ContextMemoryRow(
@@ -50,58 +47,8 @@ def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
                     item.content,
                     selector=item.uid,
                     source=SourceDisplayFacts(form=SourceForm.MEMORY),
-                )
-            )
-        elif isinstance(item, MemoryRef):
-            form = (
-                SourceForm.MEMORY_REFERENCE
-                if item.is_snapshot
-                else SourceForm.MEMORY_EMBED
-            )
-            content = (
-                item.target.content
-                if item.target is not None
-                else f"(dangling reference) {item.target_context_name}"
-            )
-            rows.append(
-                ContextMemoryRow(
-                    item.uid[:8],
-                    content,
-                    source=SourceDisplayFacts(
-                        form=form,
-                        states=(
-                            (SourceState.READ_ONLY,)
-                            if item.target is not None
-                            else (SourceState.DANGLING,)
-                        ),
-                    ),
-                )
-            )
-        elif isinstance(item, QueryContextRef):
-            rows.append(
-                ContextMemoryRow(
-                    item.uid[:8],
-                    item.name,
-                    style="report-neutral",
-                    source=SourceDisplayFacts(form=SourceForm.QUERY_VIEW),
-                    object_label_override="context",
-                    supplemental_annotations=(
-                        SourceDisplayToken("QUERY ONLY", SourceTokenRole.FORM),
-                    ),
-                    annotation_style="context-query-only",
-                )
-            )
-        elif isinstance(item, Context):
-            rows.append(
-                ContextMemoryRow(
-                    item.uid[:8],
-                    item.name,
-                    style="report-neutral",
-                    source=SourceDisplayFacts(
-                        form=SourceForm.CONTEXT,
-                        reach=SourceReach.VIA_EMBED,
-                    ),
-                    annotation_style="context-embedded",
+                    owner_context=context,
+                    memory=item,
                 )
             )
     return tuple(rows)

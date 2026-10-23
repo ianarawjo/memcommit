@@ -67,35 +67,21 @@ class MakemoreTargetContextItem:
     def __post_init__(self) -> None:
         if not isinstance(self.alias, str) or not self.alias.startswith("t"):
             raise MakemoreError("Makemore Target item alias is invalid.")
-        if self.kind not in {"MEMORY", "QUERY_ONLY_CONTEXT"}:
+        if self.kind not in {"MEMORY"}:
             raise MakemoreError("Makemore Target item kind is invalid.")
         if not isinstance(self.context_name, str) or not self.context_name.strip():
             raise MakemoreError("Makemore Target item Context is invalid.")
-        if self.kind == "MEMORY":
-            if not isinstance(self.memory_uid, str) or not self.memory_uid:
-                raise MakemoreError("Makemore Target Memory identity is invalid.")
-            if not isinstance(self.content, str) or not self.content.strip():
-                raise MakemoreError("Makemore Target Memory content is invalid.")
-        elif self.memory_uid is not None or self.content is not None:
-            # A query-only route contributes orientation by public name only.
-            # Retaining hidden identity or content here would make a later
-            # prompt adapter capable of crossing the query boundary by accident.
-            raise MakemoreError(
-                "Makemore query-only Target items must remain name-only."
-            )
+        if not isinstance(self.memory_uid, str) or not self.memory_uid:
+            raise MakemoreError("Makemore Target Memory identity is invalid.")
+        if not isinstance(self.content, str) or not self.content.strip():
+            raise MakemoreError("Makemore Target Memory content is invalid.")
 
     def prompt_record(self) -> dict[str, object]:
-        if self.kind == "MEMORY":
-            return {
-                "target_id": self.alias,
-                "kind": self.kind,
-                "context": self.context_name,
-                "content": self.content,
-            }
         return {
             "target_id": self.alias,
             "kind": self.kind,
             "context": self.context_name,
+            "content": self.content,
         }
 
 
@@ -136,9 +122,7 @@ def _text(value: object, label: str, *, limit: int, empty: bool = False) -> str:
     if not normalized and not empty:
         raise MakemoreError(f"Makemore {label} must be nonempty text.")
     if len(normalized) > limit:
-        raise MakemoreError(
-            f"Makemore {label} exceeds its {limit}-character limit."
-        )
+        raise MakemoreError(f"Makemore {label} exceeds its {limit}-character limit.")
     return normalized
 
 
@@ -160,9 +144,7 @@ def normalize_makemore_inputs(
     if len({rule.casefold() for rule in normalized_rules}) != len(normalized_rules):
         raise MakemoreError("Makemore Rules must be distinct.")
     normalized_goal = (
-        None
-        if goal is None
-        else _text(goal, "Goal", limit=config.text_limit)
+        None if goal is None else _text(goal, "Goal", limit=config.text_limit)
     )
     if normalized_goal is not None and normalized_rules:
         raise MakemoreError("Makemore accepts either one Goal or Rules, not both.")
@@ -196,9 +178,7 @@ def normalize_makemore_number(
     )
     if maximum is not None and number > maximum:
         label = "Rule" if mode is MakemoreMode.GOAL_TO_RULES else "Case"
-        raise MakemoreError(
-            f"Makemore {label} number must be between 1 and {maximum}."
-        )
+        raise MakemoreError(f"Makemore {label} number must be between 1 and {maximum}.")
     return number
 
 
@@ -221,7 +201,10 @@ class MakemoreRule:
         if (
             not isinstance(self.target_context_refs, tuple)
             or len(set(self.target_context_refs)) != len(self.target_context_refs)
-            or any(not isinstance(alias, str) or not alias for alias in self.target_context_refs)
+            or any(
+                not isinstance(alias, str) or not alias
+                for alias in self.target_context_refs
+            )
         ):
             raise MakemoreError("Makemore Rule Target references are invalid.")
 
@@ -250,7 +233,10 @@ class MakemoreCaseValidation:
     def __post_init__(self) -> None:
         if self.source_fit != "YES":
             raise MakemoreError("An accepted Makemore Case must Fit its Source.")
-        if not isinstance(self.source_fit_reason, str) or not self.source_fit_reason.strip():
+        if (
+            not isinstance(self.source_fit_reason, str)
+            or not self.source_fit_reason.strip()
+        ):
             raise MakemoreError(
                 "Makemore Case Source-Fit reason must be nonempty text."
             )
@@ -297,13 +283,14 @@ class MakemoreCase:
             raise MakemoreError("Makemore Case role is invalid.")
         indexes = tuple(check.source_rule_index for check in self.rule_checks)
         if not indexes or len(indexes) != len(set(indexes)):
-            raise MakemoreError(
-                "Makemore Case must check source Rules exactly once."
-            )
+            raise MakemoreError("Makemore Case must check source Rules exactly once.")
         if (
             not isinstance(self.target_context_refs, tuple)
             or len(set(self.target_context_refs)) != len(self.target_context_refs)
-            or any(not isinstance(alias, str) or not alias for alias in self.target_context_refs)
+            or any(
+                not isinstance(alias, str) or not alias
+                for alias in self.target_context_refs
+            )
         ):
             raise MakemoreError("Makemore Case Target references are invalid.")
         if self.validation is not None and not isinstance(
@@ -343,14 +330,18 @@ class MakemoreAnalysis:
             raise MakemoreError("Makemore Goal focus must be a typed frame.")
         if self.mode is MakemoreMode.GOAL_TO_RULES:
             if self.cases:
-                raise MakemoreError("Goal elaboration returned an invalid proposal set.")
+                raise MakemoreError(
+                    "Goal elaboration returned an invalid proposal set."
+                )
             if not self.rules:
                 raise MakemoreError(
                     "Goal elaboration requires at least one Rule proposal."
                 )
         else:
             if self.rules:
-                raise MakemoreError("Rule elaboration returned an invalid proposal set.")
+                raise MakemoreError(
+                    "Rule elaboration returned an invalid proposal set."
+                )
             if not self.cases:
                 raise MakemoreError(
                     "Rule elaboration requires at least one Case proposal."
@@ -422,13 +413,17 @@ class MakemoreAnalysis:
         ):
             raise MakemoreError("Makemore analysis Target Context is invalid.")
         available_target_aliases = (
-            set(self.target_context.aliases) if self.target_context is not None else set()
+            set(self.target_context.aliases)
+            if self.target_context is not None
+            else set()
         )
         proposal_refs = (
             *(rule.target_context_refs for rule in self.rules),
             *(case.target_context_refs for case in self.cases),
         )
-        if any(not set(refs).issubset(available_target_aliases) for refs in proposal_refs):
+        if any(
+            not set(refs).issubset(available_target_aliases) for refs in proposal_refs
+        ):
             raise MakemoreError(
                 "A Makemore proposal cited an unavailable Target Context item."
             )
@@ -530,35 +525,27 @@ def validate_makemore_analysis(
     )
     if analysis.mode is MakemoreMode.GOAL_TO_RULES:
         if not analysis.rules:
-            raise MakemoreError(
-                "Makemore requires at least one Rule proposal."
-            )
+            raise MakemoreError("Makemore requires at least one Rule proposal.")
         if (
             config.max_rule_proposals is not None
             and len(analysis.rules) > config.max_rule_proposals
         ):
             raise MakemoreError("Makemore returned too many Rule proposals.")
         if len(analysis.rules) != number:
-            raise MakemoreError(
-                f"Makemore requires exactly {number} Rule proposals."
-            )
+            raise MakemoreError(f"Makemore requires exactly {number} Rule proposals.")
         for rule in analysis.rules:
             _text(rule.content, "Rule content", limit=config.text_limit)
             _text(rule.rationale, "Rule rationale", limit=config.rationale_limit)
     else:
         if not analysis.cases:
-            raise MakemoreError(
-                "Makemore requires at least one Case proposal."
-            )
+            raise MakemoreError("Makemore requires at least one Case proposal.")
         if (
             config.max_case_proposals is not None
             and len(analysis.cases) > config.max_case_proposals
         ):
             raise MakemoreError("Makemore returned too many Case proposals.")
         if len(analysis.cases) != number:
-            raise MakemoreError(
-                f"Makemore requires exactly {number} Case proposals."
-            )
+            raise MakemoreError(f"Makemore requires exactly {number} Case proposals.")
         for case in analysis.cases:
             _text(
                 case.proposition,
@@ -577,8 +564,6 @@ def validate_makemore_analysis(
                     "Case Rule-check evidence",
                     limit=config.rationale_limit,
                 )
-
-
 
 
 def _case_validation_text_limit(config: MakemoreSemanticConfig) -> int:

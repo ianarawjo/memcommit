@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from dataclasses import field
 from typing import Protocol
 
 from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,7 +44,6 @@ class ListSelection:
     catalog: ReadableContextCatalog
     context_names: tuple[str, ...]
     readable_uids: tuple[str, ...]
-    sync_statuses: dict[str, str] = field(default_factory=dict, compare=False)
 
     def __post_init__(self) -> None:
         if self.access.access_name != self.context.name:

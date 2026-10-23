@@ -14,7 +14,7 @@ class ApplicationReviewPolicy:
     """Describe what to do when no semantic decision remains unanswered."""
 
     decision_free_behavior: DecisionFreeBehavior
-    mutation_boundary: Literal["NONE", "LOCAL", "GRANTED_AUTHORITY"]
+    mutation_boundary: Literal["NONE", "LOCAL"]
     recovery: str
 
     def __post_init__(self) -> None:
@@ -27,7 +27,6 @@ class ApplicationReviewPolicy:
         if self.mutation_boundary not in {
             "NONE",
             "LOCAL",
-            "GRANTED_AUTHORITY",
         }:
             raise ValueError("Application mutation boundary is invalid.")
         if not isinstance(self.recovery, str) or not self.recovery.strip():
@@ -36,18 +35,11 @@ class ApplicationReviewPolicy:
 
 def ownership_aware_application_review(
     *,
-    mutates_granted_authority: bool,
     local_undo_available: bool,
     publishes_context_mutation: bool = True,
 ) -> ApplicationReviewPolicy:
-    """Keep authority writes explicit; let reversible local writes use Undo.
+    """Let complete local Undo support decision-free application; otherwise retain review."""
 
-    Reading granted input does not make a derived local result an authority
-    mutation. The boundary follows the Context that will actually be written.
-    """
-
-    if type(mutates_granted_authority) is not bool:
-        raise TypeError("Authority-mutation metadata must be boolean.")
     if type(local_undo_available) is not bool:
         raise TypeError("Local Undo metadata must be boolean.")
     if type(publishes_context_mutation) is not bool:
@@ -57,12 +49,6 @@ def ownership_aware_application_review(
             decision_free_behavior="AUTO_ACCEPT",
             mutation_boundary="NONE",
             recovery="NO CONTEXT MUTATION",
-        )
-    if mutates_granted_authority:
-        return ApplicationReviewPolicy(
-            decision_free_behavior="FINAL_REVIEW",
-            mutation_boundary="GRANTED_AUTHORITY",
-            recovery="EXPLICIT REVIEW BEFORE AUTHORITY WRITE",
         )
     if local_undo_available:
         return ApplicationReviewPolicy(

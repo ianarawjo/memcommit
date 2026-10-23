@@ -8,6 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.application.capabilities.memory_issue_analysis.reading_analysis as memory_readings
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.application.operations.atomize.domain import AtomizeImpactError
 from memcommit.application.operations.atomize.records import AtomizeRecordError
 from memcommit.adapters.console.commands.atomize.review import (
@@ -329,6 +330,7 @@ def cmd(
         ):
             launcher_receipt = choose_review_session(store)
             if launcher_receipt is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Review selection cancelled.")
                 return
             normalized_kind = launcher_receipt.kind

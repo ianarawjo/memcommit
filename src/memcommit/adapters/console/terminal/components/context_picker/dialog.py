@@ -52,14 +52,13 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextReachState,
     render_context_reach,
 )
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     normalize_source_display_tokens,
 )
 from memcommit.adapters.console.terminal.components.context_picker.model import (
     ContextMemoryRow,
-    ContextMemorySelection,
     ContextPickerActionReceipt,
     ContextPickerNavigationUnit,
     ContextSubtreeSelection,
@@ -88,7 +87,7 @@ def choose_context(
     names: Sequence[str],
     *,
     current: str | None,
-    initial_target: str | DirectMemoryTarget | None = None,
+    initial_target: str | tuple[str, str] | None = None,
     local_annotations: Mapping[str, SourceDisplayValue] | None = None,
     virtual_names: Sequence[str] = (),
     selectable_virtual_names: AbstractSet[str] = frozenset(),
@@ -119,7 +118,7 @@ def choose_context(
     context_accept_handler: (Callable[[str], ContextPickerActionReceipt] | None) = None,
     memory_scope_root: str | None = None,
     memory_reach_state: ContextReachState | None = None,
-) -> str | ContextSubtreeSelection | ContextMemorySelection | _NestedSelectionT | None:
+) -> str | ContextSubtreeSelection | tuple[str, str] | _NestedSelectionT | None:
     """Return one caller-authorized Context or exact nested-item receipt."""
     options = tuple(names)
     virtual = tuple(virtual_names)
@@ -174,14 +173,14 @@ def choose_context(
             "An in-place nested action requires an item loader and no "
             "selection factory."
         )
-    if isinstance(initial_target, DirectMemoryTarget):
-        if memory_loader is None or initial_target.context_name not in (
+    if isinstance(initial_target, tuple):
+        if memory_loader is None or initial_target[0] not in (
             frozenset(options) | selectable_virtual
         ):
             raise ValueError(
                 "An initial direct-item target requires its Context in the catalog."
             )
-        initial_context_name = initial_target.context_name
+        initial_context_name = initial_target[0]
     elif initial_target is not None:
         if not isinstance(initial_target, str) or initial_target not in catalog:
             raise ValueError("The initial Context target is outside the catalog.")
@@ -278,10 +277,10 @@ def choose_context(
         state.memory_visibility_overrides.update(
             {name: True for name in initial_memory_contexts}
         )
-    if isinstance(initial_target, DirectMemoryTarget):
+    if isinstance(initial_target, tuple):
         # An exact initial row is also an explicit request to reveal its local
         # Memory layer; callers need not coordinate a second visibility flag.
-        state.memory_visibility_overrides[initial_target.context_name] = True
+        state.memory_visibility_overrides[initial_target[0]] = True
     memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
     memory_anchor: tuple[str, int] | None = None
     copy_status: PlainTextClipboardReceipt | None = None
@@ -335,13 +334,13 @@ def choose_context(
                 )
 
     load_visible_memories()
-    if isinstance(initial_target, DirectMemoryTarget):
-        initial_rows = memory_cache.get(initial_target.context_name, ())
+    if isinstance(initial_target, tuple):
+        initial_rows = memory_cache.get(initial_target[0], ())
         initial_memory_index = next(
             (
                 index
                 for index, row in enumerate(initial_rows)
-                if row.selector == initial_target.selector
+                if row.selector == initial_target[1]
             ),
             None,
         )
@@ -350,7 +349,7 @@ def choose_context(
             # concurrently, retaining its Context is safer than targeting a
             # different item at the same index.
             memory_anchor = (
-                initial_target.context_name,
+                initial_target[0],
                 initial_memory_index,
             )
     # Expansion is deliberately process-local. Opening the picker must never
@@ -565,9 +564,6 @@ def choose_context(
                 success_message = projection.label
             else:
                 success_message = f"Context {projection.label}"
-            # This is deliberately only the operating-system text clipboard.
-            # A visible branch may combine local and granted rows, so it must
-            # not fabricate the single-source typed stage used by `mem ls`.
             copy_status = copy_plain_text(
                 projection.text,
                 success_message=success_message,
@@ -647,10 +643,7 @@ def choose_context(
                                 memory.selector,
                             )
                             if nested_selection_factory is not None
-                            else ContextMemorySelection(
-                                context_name=context_name,
-                                selector=memory.selector,
-                            )
+                            else (context_name, memory.selector)
                         )
                     )
                     return
@@ -929,11 +922,7 @@ def choose_context(
             ]
         )
     app: Application[
-        str
-        | ContextSubtreeSelection
-        | ContextMemorySelection
-        | _NestedSelectionT
-        | None
+        str | ContextSubtreeSelection | tuple[str, str] | _NestedSelectionT | None
     ] = Application(
         layout=Layout(
             body,

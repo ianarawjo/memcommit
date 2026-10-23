@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.impact.catalog import select_saved_session
 from memcommit.adapters.console.commands.impact.sessions import (
     ImpactSessionPresentation,
@@ -32,6 +33,7 @@ def open_saved_sever_impact(
         session_uid=session_uid,
     )
     if selected is None:
+        annotate_command_outcome("CANCELLED")
         typer.echo("Sever Impact selection cancelled.")
         return
     active_session = {"value": None}

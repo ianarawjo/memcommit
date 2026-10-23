@@ -34,18 +34,10 @@ def audit_to_resolution_issues(
 
 
 def build_fixed_suggestion(item: AuditResolutionIssue) -> str:
-    if item.item_kind == "MEMORY":
-        return (
-            f"Keep the first Memory [{item.item_uids[0][:8]}] unchanged and delete "
-            "the duplicate "
-            + ", ".join(f"[{uid[:8]}]" for uid in item.item_uids[1:])
-            + "."
-        )
     return (
-        f"Keep {item.item_kind} [{item.item_uids[0][:8]}] and remove only the duplicate "
-        "placements "
-        + ", ".join(f"[{uid[:8]}]" for uid in item.item_uids[1:])
-        + ". Referenced Source content stays unchanged."
+        f"Keep the first Memory [{item.item_uids[0][:8]}] unchanged and delete the duplicate "
+        + ", ".join((f"[{uid[:8]}]" for uid in item.item_uids[1:]))
+        + "."
     )
 
 
@@ -57,20 +49,16 @@ def build_resolution_choices(
         choices.append(("CONFIRM", "KEEP ONE", issue.proposed_direction))
     choices.append(
         (
-            ("KEEP_BOTH" if len(issue.item_uids) > 1 else "KEEP_AS_IS")
-            if issue.item_kind == "MEMORY"
-            else "FORCE",
-            ("KEEP BOTH" if len(issue.item_uids) > 1 else "KEEP AS IS")
-            if issue.item_kind == "MEMORY"
-            else "LEAVE UNRESOLVED",
-            "Preserve the current texts."
-            if issue.item_kind == "MEMORY"
-            else "Keep the duplicate placements and record this issue as unresolved.",
+            "KEEP_BOTH" if len(issue.item_uids) > 1 else "KEEP_AS_IS",
+            "KEEP BOTH" if len(issue.item_uids) > 1 else "KEEP AS IS",
+            "Preserve the current texts.",
         )
     )
     return tuple(
-        ResolutionOption(kind, label, description)
-        for kind, label, description in choices
+        (
+            ResolutionOption(kind, label, description)
+            for kind, label, description in choices
+        )
     )
 
 
@@ -79,16 +67,10 @@ def duplicate_choice_plan(analysis, decisions, target) -> UpdatePlan:
     removed = {}
     for decision in decisions.decisions:
         issue = issues[decision.issue_uid]
-        if (
-            issue.kind != "REDUNDANCY"
-            or issue.item_kind != "MEMORY"
-            or decision.kind != "CONFIRM"
-        ):
+        if issue.kind != "REDUNDANCY" or decision.kind != "CONFIRM":
             continue
         if "DELETE" not in analysis.frame.allowed_effects:
             raise ResolveError("Keeping one duplicate requires DELETE authority.")
-        # Audit preserves the survivor first. Selecting KEEP ONE never licenses
-        # a provider rewrite of that survivor or removal of unrelated content.
         for uid in issue.item_uids[1:]:
             removed[uid] = RemoveOperation(
                 owner_context_uid=target.uid,

@@ -5,7 +5,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import TYPE_CHECKING, Iterable
 
-from ....context_memory.records import _context_name_parts
+from memcommit.core.context_name_validation import validate_context_name
+
 
 if TYPE_CHECKING:
     from memcommit.application.capabilities.command_recovery.model import (
@@ -76,7 +77,7 @@ def load_creation_receipt(
     checkpoint = next(
         (entry for entry in entries if entry.get("uid") == change.checkpoint_uid), None
     )
-    args = checkpoint.get("args") if isinstance(checkpoint, dict) else None
+    args = checkpoint.get("command_details") if isinstance(checkpoint, dict) else None
     message = "Atomize checkpoint has no valid Save As creation receipt."
     if not isinstance(args, dict) or args.get("context_creation") != {
         "version": 1,
@@ -154,8 +155,8 @@ class AtomizeArchiveManifest:
         }
         if strings["unit_uid"] != f"checkpoint:{strings['checkpoint_uid']}":
             raise ValueError(message)
-        _context_name_parts(strings["context_name"])
-        _context_name_parts(strings["source_context_name"])
+        validate_context_name(strings["context_name"])
+        validate_context_name(strings["source_context_name"])
         workbench = SourceWorkbenchReceipt.from_dict(record["source_workbench"])
         reviewing = record["reviewing_workbench_digest"]
         terminal = record["terminal_workbench_digest"]

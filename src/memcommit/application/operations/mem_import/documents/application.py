@@ -2,27 +2,31 @@
 
 from __future__ import annotations
 
+from memcommit.application.operations.profile.model._storage import (
+    locked_profile_registry,
+)
+
 from dataclasses import dataclass
 from pathlib import Path
 
-from memcommit.application.operations.profile.model._storage import (
-    authority_grant_snapshot_lock,
-)
 from memcommit.application.operations.mem_import._shared import (
     require_active_profile_snapshot,
 )
 from memcommit.application.operations.mem_import.context_data import (
-    _closed_import_contexts,
+    remap_imported_context_names,
     _context_name_mapping,
 )
 from memcommit.application.operations.mem_import.memory import (
     _memory_target_identity,
 )
-from memcommit.core.context import AutoCheckpoint, Memory
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.memory import Memory
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.store import MemoryStore
-from memcommit.persistence.store.attached_files import read_attached_file, save_attached_file
+from memcommit.persistence.store.attached_files import (
+    read_attached_file,
+    save_attached_file,
+)
 
 from .codec import read_context_documents, read_document
 from .publication import import_context_records
@@ -55,8 +59,7 @@ def import_context_from_documents(
         if source_name not in names:
             raise ValueError(f"Context {source_name!r} is absent from the JSON source.")
         selected = expand_lexical_context_names(
-            ContextScope.create((source_name,), include_descendants=recursive),
-            names,
+            (source_name,), names, include_descendants=recursive
         )
         documents = tuple(
             document for document in documents if document.value.name in selected
@@ -66,7 +69,7 @@ def import_context_from_documents(
         )
     else:
         mapping = {name: name for name in names}
-    contexts = _closed_import_contexts(
+    contexts = remap_imported_context_names(
         tuple(document.value for document in documents), mapping
     )
     # Native document packages carry referenced bytes alongside context.json
@@ -74,14 +77,15 @@ def import_context_from_documents(
     input_root = Path(source) if Path(source).is_dir() else Path(source).parent
     attached_data = {
         file.sha256: read_attached_file(input_root, file.sha256)
-        for context in contexts for file in context.attached_files
+        for context in contexts
+        for file in context.asset_metadata
     }
     entries = tuple(
         (
             context,
-            AutoCheckpoint(
+            AutoCheckpointRequest(
                 command="import",
-                args={
+                command_details={
                     "resource_kind": "context",
                     "source_kind": "JSON_FILE",
                     "source_sha256": document.sha256,
@@ -89,13 +93,12 @@ def import_context_from_documents(
                     "source_context_uid": context.uid,
                     "target_context": context.name,
                 },
-                description=f"Imported native JSON Context '{document.value.name}' as '{context.name}'.",
             ),
         )
         for context, document in zip(contexts, documents, strict=True)
     )
     destination = MemoryStore()
-    with authority_grant_snapshot_lock() as registry:
+    with locked_profile_registry() as registry:
         require_active_profile_snapshot(registry, destination)
         for data in attached_data.values():
             save_attached_file(destination.store_dir, data)
@@ -106,7 +109,7 @@ def import_context_from_documents(
         tuple(
             item.uid
             for context in created
-            for item in context.iter_items()
+            for item in context.iter_memories()
             if isinstance(item, Memory)
         ),
     )
@@ -130,7 +133,7 @@ def import_memory_from_document(
         )
     if memory_selector is not None and not memory.uid.startswith(memory_selector):
         raise ValueError("Memory selector does not match the JSON document identity.")
-    with authority_grant_snapshot_lock() as registry:
+    with locked_profile_registry() as registry:
         require_active_profile_snapshot(registry, destination)
         target = destination.load_for_update(target_name)
         if target.uid != target_uid:
@@ -142,16 +145,15 @@ def import_memory_from_document(
         target.add(memory)
         destination.save(
             target,
-            AutoCheckpoint(
+            AutoCheckpointRequest(
                 command="import",
-                args={
+                command_details={
                     "resource_kind": "memory",
                     "source_kind": "JSON_FILE",
                     "source_sha256": document.sha256,
                     "source_memory_uid": memory.uid,
                     "target_context": target.name,
                 },
-                description=f"Imported native JSON Memory [{memory.uid[:8]}] into Context '{target.name}'.",
             ),
         )
     return DocumentImportResult(Path(source), (target.name,), (memory.uid,))

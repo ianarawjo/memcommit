@@ -7,8 +7,8 @@ import hashlib
 import json
 from pathlib import Path
 
-from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
 )
@@ -21,7 +21,10 @@ class NativeDocument:
     value: Context | Memory
 
 
-from memcommit.application.capabilities.import_export.formats.mem import decode_memory, decode_context
+from memcommit.application.capabilities.import_export.formats.mem import (
+    decode_memory,
+    decode_context,
+)
 
 
 def read_document(path: Path) -> NativeDocument:

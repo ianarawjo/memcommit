@@ -54,14 +54,7 @@ class QualityFindingSource:
     item_kind: str = "MEMORY"
 
     def __post_init__(self) -> None:
-        if self.item_kind not in {
-            "MEMORY",
-            "MEMORY_EMBED",
-            "CONTEXT_EMBED",
-            "MEMORY_REFERENCE",
-            "CONTEXT_REFERENCE",
-            "QUERY_CONTEXT_REFERENCE",
-        }:
+        if self.item_kind not in {"MEMORY"}:
             raise QualityFindReportError("Invalid finding Source item kind.")
         _text(self.label, "finding Source label")
         _text(self.context_name, "finding Source Context")

@@ -9,12 +9,12 @@ from memcommit.application.capabilities.context_locator import (
     suggest_context_locators,
 )
 from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
-from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
+
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_selector
 
 
-HistoryReportTarget = ContextTarget | DirectMemoryTarget
+HistoryReportTarget = str | tuple[str, str]
 
 
 def resolve_explicit_context_history_target(
@@ -22,13 +22,13 @@ def resolve_explicit_context_history_target(
     *,
     current_context: str | None,
     available_context_names: Sequence[str],
-) -> ContextTarget | None:
+) -> str | None:
     """Return a Context target or leave explicit Memory grammar untouched."""
 
     names = tuple(dict.fromkeys(available_context_names))
     candidate = resolve_context_locator(operand, current=current_context)
     if candidate in names:
-        return ContextTarget(candidate)
+        return candidate
     if ":" in operand or is_memory_uid_selector(operand):
         return None
     suggestions = suggest_context_locators(
@@ -70,28 +70,27 @@ def resolve_history_report_target(
             raise ValueError(
                 "No current Context is available for this Memory; use CONTEXT:UID."
             )
-        return DirectMemoryTarget(
+        return (
             resolve_context_locator(owner_locator, current=current_context),
             locator.memory_selector,
         )
 
     candidate = resolve_context_locator(operand, current=current_context)
     if candidate in names:
-        return ContextTarget(candidate)
+        return candidate
     if is_memory_uid_selector(operand):
         if current_context is None:
             raise ValueError(
                 "No current Context is available for this Memory; use CONTEXT:UID."
             )
-        return DirectMemoryTarget(current_context, operand)
+        return (current_context, operand)
     suggestions = suggest_context_locators(
         operand,
         current=current_context,
         available_names=names,
     )
     raise ValueError(
-        f"Context {candidate!r} does not exist."
-        + did_you_mean_suffix(suggestions)
+        f"Context {candidate!r} does not exist." + did_you_mean_suffix(suggestions)
     )
 
 

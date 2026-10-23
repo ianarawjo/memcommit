@@ -20,7 +20,10 @@ from memcommit.application.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
-from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus, inline_goal_focus
+from memcommit.application.capabilities.semantic.goal_focus import (
+    FrozenGoalFocus,
+    inline_goal_focus,
+)
 from memcommit.application.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
@@ -37,7 +40,6 @@ class DistillRequest:
     goal: str | None = None
     goal_focus: FrozenGoalFocus | None = None
     include_descendants: bool = False
-    follow_embeds: bool = False
 
     def __post_init__(self) -> None:
         if self.goal is not None and self.goal_focus is not None:
@@ -120,13 +122,9 @@ def run_distill(
         SummarizeRequest(
             context_locator=request.context_locator,
             include_descendants=request.include_descendants,
-            follow_embeds=request.follow_embeds,
         )
     )
-    if (
-        source.frame.include_descendants != request.include_descendants
-        or source.frame.follow_embeds != request.follow_embeds
-    ):
+    if source.frame.include_descendants != request.include_descendants:
         raise DistillError("The frozen Distill Source does not match its request.")
     goal_focus = request.goal_focus
     if goal_focus is None and request.goal is not None:

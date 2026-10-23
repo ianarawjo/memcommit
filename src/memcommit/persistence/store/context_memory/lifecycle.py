@@ -12,7 +12,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable, Iterator
 
-from memcommit.core.context import Context
+from memcommit.core.context_name_validation import validate_context_name
+from memcommit.models.context import Context
 from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
@@ -32,10 +33,6 @@ from ..infrastructure.atomic_io import (
 from .models import (
     ConcurrentContextUpdateError,
     ContextDeletionCommittedError,
-)
-from .records import (
-    _context_name_parts,
-    context_record_digest,
 )
 
 
@@ -104,7 +101,7 @@ class _ContextLifecycleMixin:
     ) -> Path:
         """Publish one immutable Profile-ledger event before destructive work."""
         event.validated()
-        _context_name_parts(event.last_context_name)
+        validate_context_name(event.last_context_name)
         events_dir = self._ensure_context_lifecycle_events_dir()
         path = events_dir / f"{event.event_uid}.json"
         if path.exists() or path.is_symlink():
@@ -136,7 +133,7 @@ class _ContextLifecycleMixin:
     ) -> list[ContextLifecycleEvent]:
         """Read Profile-ledger events, optionally filtering one namespace."""
         if context_name is not None:
-            _context_name_parts(context_name)
+            validate_context_name(context_name)
         if context_uid is not None and (
             not isinstance(context_uid, str) or not context_uid
         ):
@@ -174,7 +171,7 @@ class _ContextLifecycleMixin:
                     raise ValueError(
                         "Context lifecycle event filename does not match its uid."
                     )
-                _context_name_parts(event.last_context_name)
+                validate_context_name(event.last_context_name)
                 if context_uid is not None and event.context_uid != context_uid:
                     continue
                 if context_name is not None:
@@ -231,7 +228,6 @@ class _ContextLifecycleMixin:
         return ContextLifecycleEvent.deleted(
             context_uid=context.uid,
             last_context_name=context.name,
-            last_context_digest=context_record_digest(context),
             previous_checkpoint_status=previous_status,
             previous_checkpoint_uid=previous_uid,
             previous_checkpoint_digest=previous_digest,
@@ -252,7 +248,6 @@ class _ContextLifecycleMixin:
         name: str,
         *,
         expected_context_uid: str,
-        expected_context_digest: str,
     ) -> ContextLifecycleEvent:
         """Delete only the exact Context identity that was previously reviewed."""
         with self._context_graph_lock(exclusive=False):
@@ -266,7 +261,6 @@ class _ContextLifecycleMixin:
                         ) from error
                     if (
                         current.uid != expected_context_uid
-                        or context_record_digest(current) != expected_context_digest
                     ):
                         raise ConcurrentContextUpdateError(
                             f"Context '{name}' changed after deletion was reviewed."
@@ -295,8 +289,6 @@ class _ContextLifecycleMixin:
         if lifecycle_event is not None and (
             lifecycle_event.context_uid != context_uid
             or lifecycle_event.last_context_name != name
-            or lifecycle_event.last_context_digest
-            != context_record_digest(current_context)
         ):
             raise ConcurrentContextUpdateError(
                 "Context changed before its deletion event could be committed."

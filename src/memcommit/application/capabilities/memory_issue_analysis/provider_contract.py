@@ -15,7 +15,8 @@ from dataclasses import dataclass
 from importlib import resources
 from typing import Callable
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
     find_exact_duplicate_groups,
@@ -135,7 +136,7 @@ def collect_direct_memories(
     context_name_by_uid: Mapping[str, str] | None = None,
 ) -> list[MemoryCandidate]:
     """Collect only directly owned Memories in canonical Context order."""
-    memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    memories = [item for item in ctx.iter_memories() if isinstance(item, Memory)]
     owners = dict(context_name_by_uid or {})
     if any(
         not isinstance(uid, str) or not isinstance(name, str) or not name
@@ -370,27 +371,20 @@ def _surface_key(content: str) -> str:
 
 
 def _mechanical_duplicate_forest(
-    candidates: list[MemoryCandidate],
-    exact_groups: tuple[ExactDuplicateGroup, ...],
+    candidates: list[MemoryCandidate], exact_groups: tuple[ExactDuplicateGroup, ...]
 ) -> tuple[list[DuplicateFinding], list[MemoryCandidate]]:
     """Find exact/surface components without constructing their pair cliques."""
     findings: list[DuplicateFinding] = []
     candidate_by_uid = {candidate.memory.uid: candidate for candidate in candidates}
     exact_survivors = {
-        uid: group.survivor_uid
-        for group in exact_groups
-        if group.item_kind == "MEMORY"
-        for uid in group.absorbed_uids
+        uid: group.survivor_uid for group in exact_groups for uid in group.absorbed_uids
     }
     surface_representatives: dict[str, MemoryCandidate] = {}
     semantic_representatives: list[MemoryCandidate] = []
-
     for candidate in candidates:
         content = candidate.memory.content
         exact = candidate_by_uid.get(exact_survivors.get(candidate.memory.uid))
         if exact is not None:
-            # One edge to the first identical occurrence is enough to preserve
-            # the complete component; emitting its clique would be quadratic.
             findings.append(
                 DuplicateFinding(
                     left=exact.memory,
@@ -400,7 +394,6 @@ def _mechanical_duplicate_forest(
                 )
             )
             continue
-
         surface_key = _surface_key(content)
         surface = surface_representatives.get(surface_key)
         if surface is not None:
@@ -409,19 +402,13 @@ def _mechanical_duplicate_forest(
                     left=surface.memory,
                     right=candidate.memory,
                     relation="SURFACE_EQUIVALENT",
-                    reason=(
-                        "Content differs only under conservative Unicode, "
-                        "line-ending, outer-space, or horizontal-space "
-                        "normalization."
-                    ),
+                    reason="Content differs only under conservative Unicode, line-ending, outer-space, or horizontal-space normalization.",
                 )
             )
             continue
-
         surface_representatives[surface_key] = candidate
         semantic_representatives.append(candidate)
-
-    return findings, semantic_representatives
+    return (findings, semantic_representatives)
 
 
 def _ordered_duplicate_findings(
@@ -450,20 +437,13 @@ def find_redundancies(
     exact_groups: tuple[ExactDuplicateGroup, ...] | None = None,
 ) -> DuplicateReport:
     """Discover complete DUN evidence: exact DUP plus semantic redundancy."""
-    candidates = collect_direct_memories(
-        ctx,
-        context_name_by_uid=context_name_by_uid,
-    )
+    candidates = collect_direct_memories(ctx, context_name_by_uid=context_name_by_uid)
     if exact_groups is None:
         exact_groups = find_exact_duplicate_groups(ctx)
     mechanical, semantic_candidates = _mechanical_duplicate_forest(
         candidates, exact_groups
     )
-    # DUN is the inclusive cleanup relation. Deterministic DUP edges and
-    # differently stored semantic edges remain typed so presentation and Apply
-    # can show their composition without hiding either class.
     findings = list(mechanical)
-
     if len(semantic_candidates) >= 2:
         prompt_policy, calibration_cases = _prompt_calibration_cases("duplicates.json")
         candidate_by_id = {
@@ -476,17 +456,9 @@ def find_redundancies(
                     "type": "array",
                     "minItems": 2,
                     "maxItems": len(semantic_candidates),
-                    # Codex's strict-output schema subset rejects uniqueItems;
-                    # the fail-closed local validator below enforces it.
-                    "items": {
-                        "type": "string",
-                        "enum": list(candidate_by_id),
-                    },
+                    "items": {"type": "string", "enum": list(candidate_by_id)},
                 },
-                "relation": {
-                    "type": "string",
-                    "enum": ["SEMANTIC_EQUIVALENT"],
-                },
+                "relation": {"type": "string", "enum": ["SEMANTIC_EQUIVALENT"]},
                 "reason": {
                     "type": "string",
                     "minLength": 1,
@@ -499,28 +471,7 @@ def find_redundancies(
         records = _call_once(
             provider_factory=provider_factory,
             operation="find_duplicates",
-            instructions=(
-                "You discover semantically duplicate atomic Memories inside "
-                "one selected Context frame. The frame may combine several "
-                "readable Contexts, and each candidate carries its original "
-                "context_name. The supplied Memories are one "
-                "representative from each exact/surface-equivalent component; "
-                "do not construct or request an all-pairs comparison table. "
-                "Treat each candidate's complete stored content as one "
-                "indivisible judgment unit: do not split a Memory or extract "
-                "matching substrings or propositions. If only a proper part "
-                "would be redundant, omit the group; Atomize must first make "
-                "that part a separately reviewable Memory. "
-                "Return disjoint groups of two or more candidate IDs only when "
-                "every member is mutually substitutable without information "
-                "loss under the same subject, predicate, object, place, "
-                "audience, time, modality, condition, access method, and "
-                "exception. Do not return mere entailment, overlap, related "
-                "information, uncertain scope, or distinct claims. A candidate "
-                "may occur in at most one returned group. Omit candidates for "
-                "which you discover no semantic-equivalence group. Absence is "
-                "not proof that no duplicate exists."
-            ),
+            instructions="You discover semantically duplicate atomic Memories inside one selected Context frame. The frame may combine several readable Contexts, and each candidate carries its original context_name. The supplied Memories are one representative from each exact/surface-equivalent component; do not construct or request an all-pairs comparison table. Treat each candidate's complete stored content as one indivisible judgment unit: do not split a Memory or extract matching substrings or propositions. If only a proper part would be redundant, omit the group; Atomize must first make that part a separately reviewable Memory. Return disjoint groups of two or more candidate IDs only when every member is mutually substitutable without information loss under the same subject, predicate, object, place, audience, time, modality, condition, access method, and exception. Do not return mere entailment, overlap, related information, uncertain scope, or distinct claims. A candidate may occur in at most one returned group. Omit candidates for which you discover no semantic-equivalence group. Absence is not proof that no duplicate exists.",
             payload={
                 "operation": "find_duplicates",
                 **(
@@ -528,16 +479,12 @@ def find_redundancies(
                     if prompt_policy is not None
                     else {}
                 ),
-                "context": {
-                    "name": ctx.name,
-                    "direct_memory_count": len(candidates),
-                },
+                "context": {"name": ctx.name, "direct_memory_count": len(candidates)},
                 "memories": _memory_payload(semantic_candidates),
                 "calibration_cases": calibration_cases,
             },
             schema=_findings_schema(
-                item_schema,
-                max_items=len(semantic_candidates) // 2,
+                item_schema, max_items=len(semantic_candidates) // 2
             ),
         )
         used_candidate_ids: set[str] = set()
@@ -557,33 +504,37 @@ def find_redundancies(
                 not isinstance(candidate_ids, list)
                 or len(candidate_ids) < 2
                 or len(candidate_ids) > len(semantic_candidates)
-                or len(
-                    set(
-                        candidate_id
+                or (
+                    len(
+                        set(
+                            (
+                                candidate_id
+                                for candidate_id in candidate_ids
+                                if isinstance(candidate_id, str)
+                            )
+                        )
+                    )
+                    != len(candidate_ids)
+                )
+                or any(
+                    (
+                        not isinstance(candidate_id, str)
+                        or candidate_id not in candidate_by_id
                         for candidate_id in candidate_ids
-                        if isinstance(candidate_id, str)
                     )
                 )
-                != len(candidate_ids)
                 or any(
-                    not isinstance(candidate_id, str)
-                    or candidate_id not in candidate_by_id
-                    for candidate_id in candidate_ids
+                    (
+                        candidate_id in used_candidate_ids
+                        for candidate_id in candidate_ids
+                    )
                 )
-                or any(
-                    candidate_id in used_candidate_ids for candidate_id in candidate_ids
-                )
-                or record["relation"] != "SEMANTIC_EQUIVALENT"
+                or (record["relation"] != "SEMANTIC_EQUIVALENT")
             ):
                 raise FindingsError(
-                    "Codex find_duplicates returned an unknown, repeated, "
-                    "overlapping, or invalid duplicate group."
+                    "Codex find_duplicates returned an unknown, repeated, overlapping, or invalid duplicate group."
                 )
-
-            ordered_ids = sorted(
-                candidate_ids,
-                key=candidate_order.__getitem__,
-            )
+            ordered_ids = sorted(candidate_ids, key=candidate_order.__getitem__)
             used_candidate_ids.update(ordered_ids)
             reason = _short_string(
                 record["reason"],
@@ -597,7 +548,6 @@ def find_redundancies(
                     reason,
                 )
             )
-
         semantic_groups.sort(
             key=lambda group: candidate_order[group[0][0].candidate_id]
         )
@@ -612,13 +562,9 @@ def find_redundancies(
                         reason=reason,
                     )
                 )
-
     return DuplicateReport(
         memory_count=len(candidates),
         findings=_ordered_duplicate_findings(candidates, findings),
-        exact_item_groups=tuple(
-            group for group in exact_groups if group.item_kind != "MEMORY"
-        ),
     )
 
 

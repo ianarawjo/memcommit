@@ -2,10 +2,7 @@
 
 from dataclasses import dataclass
 
-from memcommit.core.context import Context
-from memcommit.application.capabilities.semantic.changes import (
-    get_required_permission_for_effect,
-)
+from memcommit.models.context import Context
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,8 +43,7 @@ def validate_target_result(
         effect = "CREATE" if old is None else "DELETE" if new is None else "UPDATE"
         if effect not in policy.allowed_effects or not policy.context_mutable:
             raise ValueError(
-                "Merge Target does not permit "
-                f"{get_required_permission_for_effect(effect)} in the reviewed result."
+                f"Merge Target does not permit {effect} in the reviewed result."
             )
     for uid in policy.protected_uids:
         old, new = before.memories.get(uid), after.memories.get(uid)

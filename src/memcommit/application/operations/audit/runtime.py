@@ -7,7 +7,6 @@ from collections.abc import Callable
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsProvider,
 )
-from memcommit.application.context_access.access import GrantedReadStore
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
@@ -40,13 +39,8 @@ def run_audit(
         store,
         request.context_name,
         current_name=current_name,
-        required_permission="READ",
     ).value
-    source = (
-        GrantedReadStore(access).load_direct(access.access_name)
-        if access.is_granted
-        else store.load_direct(access.context_name)
-    )
+    source = store.load_direct(access.context_name)
     checks = request.checks
     if checks is None:
         checks = standard_quality_audit_checks()

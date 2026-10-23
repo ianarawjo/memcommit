@@ -7,8 +7,6 @@ import uuid
 from collections.abc import Iterable
 from typing import Callable, Protocol
 
-from memcommit.application.authorization import ContextPermission
-from memcommit.application.context_access import GrantedContextBinding
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -20,7 +18,7 @@ from memcommit.application.capabilities.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .changes import (
     AddOperation,
@@ -46,9 +44,7 @@ UPDATE_RESPONSE_CHAR_LIMIT = 1_000_000
 UPDATE_REASON_CHAR_LIMIT = 1_000
 UPDATE_PROVIDER_CONTRACT_VERSION = "update-plan-v2"
 UPDATE_INSTRUCTION_ADDITION_LIMIT = 100
-UPDATE_MUTATION_USES = frozenset(
-    {ContextPermission.CREATE, ContextPermission.EDIT, ContextPermission.DELETE}
-)
+UPDATE_EFFECTS = frozenset({"CREATE", "EDIT", "DELETE"})
 
 UPDATE_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="update planning",
@@ -147,7 +143,7 @@ def _build_update_prompt(
     inputs: UpdateInputs,
     goal_focus: FrozenGoalFocus | None = None,
     *,
-    allowed_target_uses: frozenset[ContextPermission] = UPDATE_MUTATION_USES,
+    allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> str:
     payload_value = _update_payload(source, target, inputs, goal_focus)
     payload = json.dumps(
@@ -161,7 +157,7 @@ def _build_update_prompt(
         _update_execution_workload(
             payload_value,
             inputs,
-            allowed_target_uses=allowed_target_uses,
+            allowed_update_effects=allowed_update_effects,
         ),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
@@ -191,18 +187,18 @@ def _build_update_prompt(
     allowed_labels = [
         label
         for use, label in (
-            (ContextPermission.EDIT, "edit"),
-            (ContextPermission.CREATE, "addition"),
-            (ContextPermission.DELETE, "removal"),
+            ("EDIT", "edit"),
+            ("CREATE", "addition"),
+            ("DELETE", "removal"),
         )
-        if use in allowed_target_uses
+        if use in allowed_update_effects
     ]
     permission_contract = (
-        "Target authorization permits only "
+        "The requested change kinds are "
         + ", ".join(allowed_labels)
         + " operations. Return an empty array for every other operation kind. "
         "Never substitute one operation kind merely to bypass a missing "
-        "Target permission. If the supported change cannot be represented "
+        "requested change kind. If the supported change cannot be represented "
         "honestly with an allowed operation, omit it.\n"
     )
     edit_contract = (
@@ -210,14 +206,14 @@ def _build_update_prompt(
         "revised target text: incorporate the supported source update while "
         "preserving unrelated target facts. Do not return an edit when the "
         "target already captures the source information.\n"
-        if ContextPermission.EDIT in allowed_target_uses
+        if "EDIT" in allowed_update_effects
         else ""
     )
     create_contract = (
         "For genuinely missing information, add a concise self-contained "
         "memory to the most appropriate target Context. Do not duplicate an "
         "existing target memory.\n"
-        if ContextPermission.CREATE in allowed_target_uses
+        if "CREATE" in allowed_update_effects
         else ""
     )
     delete_contract = (
@@ -227,7 +223,7 @@ def _build_update_prompt(
         "partial supersession normally requires an edit that preserves the "
         "supported replacement information; it is not sufficient evidence "
         "for removal.\n"
-        if ContextPermission.DELETE in allowed_target_uses
+        if "DELETE" in allowed_update_effects
         else ""
     )
     if inputs.instruction is not None:
@@ -282,7 +278,7 @@ def _update_execution_workload(
     payload: object,
     inputs: UpdateInputs,
     *,
-    allowed_target_uses: frozenset[ContextPermission] = UPDATE_MUTATION_USES,
+    allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> BudgetVector:
     source_count = len(inputs.source_candidates)
     target_count = len(inputs.target_memories)
@@ -292,16 +288,12 @@ def _update_execution_workload(
         item_count=source_count + target_count + context_count,
         output_schema=_update_output_schema(
             inputs,
-            allowed_target_uses=allowed_target_uses,
+            allowed_update_effects=allowed_update_effects,
         ),
         expected_output_items=(
-            _addition_limit(inputs) if ContextPermission.CREATE in allowed_target_uses else 0
+            _addition_limit(inputs) if "CREATE" in allowed_update_effects else 0
         )
-        + (
-            target_count
-            if allowed_target_uses & {ContextPermission.EDIT, ContextPermission.DELETE}
-            else 0
-        ),
+        + (target_count if allowed_update_effects & {"EDIT", "DELETE"} else 0),
         relation_edges=source_count * target_count,
     )
 
@@ -317,7 +309,7 @@ def _addition_limit(inputs: UpdateInputs) -> int:
 def _update_output_schema(
     inputs: UpdateInputs,
     *,
-    allowed_target_uses: frozenset[ContextPermission] = UPDATE_MUTATION_USES,
+    allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> dict[str, object]:
     target_id: dict[str, object] = {"type": "string"}
     if inputs.target_memories:
@@ -340,7 +332,7 @@ def _update_output_schema(
                 "type": "array",
                 "maxItems": (
                     len(inputs.target_memories)
-                    if ContextPermission.EDIT in allowed_target_uses
+                    if "EDIT" in allowed_update_effects
                     else 0
                 ),
                 "items": {
@@ -377,8 +369,7 @@ def _update_output_schema(
                 "type": "array",
                 "maxItems": (
                     _addition_limit(inputs)
-                    if inputs.target_contexts
-                    and ContextPermission.CREATE in allowed_target_uses
+                    if inputs.target_contexts and "CREATE" in allowed_update_effects
                     else 0
                 ),
                 "items": {
@@ -415,7 +406,7 @@ def _update_output_schema(
                 "type": "array",
                 "maxItems": (
                     len(inputs.target_memories)
-                    if ContextPermission.DELETE in allowed_target_uses
+                    if "DELETE" in allowed_update_effects
                     else 0
                 ),
                 "items": {
@@ -467,7 +458,7 @@ def _parse_provider_operations(
     raw: object,
     inputs: UpdateInputs,
     *,
-    allowed_target_uses: frozenset[ContextPermission] = UPDATE_MUTATION_USES,
+    allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> tuple[UpdateOperation, ...]:
     if not isinstance(raw, str):
         raise UpdateError("Codex update returned invalid structured output.")
@@ -491,16 +482,16 @@ def _parse_provider_operations(
     forbidden = [
         label
         for use, label in (
-            (ContextPermission.EDIT, "edits"),
-            (ContextPermission.CREATE, "additions"),
-            (ContextPermission.DELETE, "removals"),
+            ("EDIT", "edits"),
+            ("CREATE", "additions"),
+            ("DELETE", "removals"),
         )
-        if use not in allowed_target_uses and value[label]
+        if use not in allowed_update_effects and value[label]
     ]
     if forbidden:
         raise UpdateError(
-            "Codex update returned Target operations outside its authorized "
-            "Context uses: " + ", ".join(forbidden) + "."
+            "Codex update returned Target operations outside its requested "
+            "change kinds: " + ", ".join(forbidden) + "."
         )
 
     source_by_id = {
@@ -642,22 +633,22 @@ def _parse_provider_operations(
 
 
 def plan_update(
-    source: Context,
-    target: Context,
+    source_contexts: tuple[Context, ...],
+    target_contexts: tuple[Context, ...],
     provider_factory: Callable[[], UpdateProvider],
     *,
     source_include_descendants: bool = False,
     target_include_descendants: bool = False,
-    granted_source: GrantedContextBinding | None = None,
-    granted_target: GrantedContextBinding | None = None,
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
     inline_source_content: str | None = None,
     goal_focus: FrozenGoalFocus | None = None,
-    allowed_target_uses: Iterable[ContextPermission] | None = None,
+    allowed_update_effects: Iterable[str] | None = None,
     instruction: UpdateInstruction | None = None,
 ) -> UpdatePlan:
     """Ask a provider for a validated, non-mutating update plan."""
+    source = source_contexts[0]
+    target = target_contexts[0]
     if (
         type(source_include_descendants) is not bool
         or type(target_include_descendants) is not bool
@@ -666,16 +657,16 @@ def plan_update(
     if goal_focus is not None and not isinstance(goal_focus, FrozenGoalFocus):
         raise UpdateError("Update Goal focus must be a typed frozen frame.")
     provided_target_uses = (
-        None if allowed_target_uses is None else frozenset(allowed_target_uses)
+        None if allowed_update_effects is None else frozenset(allowed_update_effects)
     )
     if provided_target_uses is not None and any(
-        not isinstance(use, ContextPermission) for use in provided_target_uses
+        use not in UPDATE_EFFECTS for use in provided_target_uses
     ):
-        raise TypeError("Allowed Update Target uses must be ContextPermission values.")
+        raise TypeError("Allowed Update effects must be CREATE, EDIT, or DELETE.")
     allowed_mutations = (
-        UPDATE_MUTATION_USES
+        UPDATE_EFFECTS
         if provided_target_uses is None
-        else provided_target_uses & UPDATE_MUTATION_USES
+        else provided_target_uses & UPDATE_EFFECTS
     )
     if not allowed_mutations:
         raise UpdateError(
@@ -695,19 +686,19 @@ def plan_update(
     if inline_source_content is not None:
         inline_source = inline_update_context(inline_source_content)
         if (
-            source.uid != inline_source.uid
+            len(source_contexts) != 1
+            or source.uid != inline_source.uid
             or source.name != inline_source.name
             or source.to_dict() != inline_source.to_dict()
             or source_include_descendants
             or source_memory_selector is not None
-            or granted_source is not None
         ):
             raise UpdateError(
                 "Inline Update input requires one exact process-local Source Memory."
             )
     inputs = collect_update_inputs(
-        source,
-        target,
+        source_contexts,
+        target_contexts,
         source_memory_selector=source_memory_selector,
         target_memory_selector=target_memory_selector,
         instruction=instruction,
@@ -720,7 +711,7 @@ def plan_update(
         target,
         inputs,
         goal_focus,
-        allowed_target_uses=allowed_mutations,
+        allowed_update_effects=allowed_mutations,
     )
     provider = provider_factory()
     raw = provider.complete(
@@ -728,13 +719,13 @@ def plan_update(
         operation="update planning",
         output_schema=_update_output_schema(
             inputs,
-            allowed_target_uses=allowed_mutations,
+            allowed_update_effects=allowed_mutations,
         ),
     )
     operations = _parse_provider_operations(
         raw,
         inputs,
-        allowed_target_uses=allowed_mutations,
+        allowed_update_effects=allowed_mutations,
     )
     return UpdatePlan(
         uid=str(uuid.uuid4()),

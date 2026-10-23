@@ -10,7 +10,6 @@ from memcommit.adapters.console.commands.profile._support import (
     _fail,
     _interactive_terminal,
 )
-from memcommit.adapters.console.commands.profile.grants import grant_app
 from memcommit.adapters.console.commands.profile.group import ProfileAliasGroup
 from memcommit.adapters.console.commands.profile.inventory import current_cmd, list_cmd
 from memcommit.adapters.console.commands.profile.lifecycle import (
@@ -20,7 +19,6 @@ from memcommit.adapters.console.commands.profile.lifecycle import (
     remove_cmd,
     rename_cmd,
 )
-from memcommit.adapters.console.commands.profile.migration import migrate_context_cmd
 from memcommit.adapters.console.commands.profile.selector import _run_profile_selector
 from memcommit.adapters.console.commands.profile.study_profile import (
     remove_study_cmd,
@@ -38,8 +36,8 @@ app = typer.Typer(
         "Use 'mem profile NAME' to select one."
     ),
 )
-app.add_typer(grant_app, name="grant")
 from .configuration import app as configuration_app
+
 app.add_typer(configuration_app, name="config")
 
 
@@ -86,5 +84,4 @@ app.command("remove")(remove_cmd)
 app.command("remove-study")(remove_study_cmd)
 app.command("rename")(rename_cmd)
 app.command("rename-study")(rename_study_cmd)
-app.command("migrate-context")(migrate_context_cmd)
 app.command("import")(import_cmd)

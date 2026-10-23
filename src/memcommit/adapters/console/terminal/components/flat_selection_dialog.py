@@ -21,13 +21,20 @@ from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.frame import build_focused_frame
-from memcommit.adapters.console.terminal.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.terminal.core.keybindings import (
+    bind_case_insensitive_key,
+)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.console.terminal.components.selection import SingleSelectionState, SelectionOption
-from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
+from memcommit.adapters.console.terminal.components.selection import (
+    SingleSelectionState,
+    SelectionOption,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    render_vertical_choice_rows,
+)
 
 
 def choose_flat_option(
@@ -40,6 +47,7 @@ def choose_flat_option(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    compact: bool = False,
 ) -> SelectionOption | None:
     """Return one checked option without assigning operation semantics."""
 
@@ -73,6 +81,7 @@ def choose_flat_option(
             focused=get_app().layout.has_focus(control),
             content_width=width,
             numbered=False,
+            blank_between=not compact,
         )
 
     control = FormattedTextControl(
@@ -111,22 +120,34 @@ def choose_flat_option(
     header = Window(
         FormattedTextControl(
             [
+                (
+                    "class:report-neutral",
+                    " " + safe_terminal_text(title) + " " + safe_terminal_text(detail),
+                )
+            ]
+            if compact
+            else [
                 ("class:report-label", " " + safe_terminal_text(title) + "\n"),
                 ("class:report-neutral", " " + safe_terminal_text(detail)),
             ]
         ),
-        height=Dimension.exact(2),
+        height=Dimension.exact(1 if compact else 2),
         dont_extend_height=True,
     )
     options_window = Window(
         control,
         wrap_lines=True,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
+        right_margins=[] if compact else [ScrollbarMargin(display_arrows=True)],
+        height=Dimension.exact(len(frozen)) if compact else None,
     )
-    frame = build_focused_frame(
-        options_window,
-        title="OPTIONS · ENTER TO CONTINUE",
-        is_focused=lambda: get_app().layout.has_focus(control),
+    frame = (
+        options_window
+        if compact
+        else build_focused_frame(
+            options_window,
+            title="OPTIONS · ENTER TO CONTINUE",
+            is_focused=lambda: get_app().layout.has_focus(control),
+        )
     )
     footer_text = " ↑/↓ move · Enter select · Esc/Q cancel"
     if footer_note.strip():
@@ -139,7 +160,8 @@ def choose_flat_option(
     app: Application[SelectionOption | None] = Application(
         layout=Layout(HSplit([header, frame, footer]), focused_element=control),
         key_bindings=bindings,
-        full_screen=True,
+        full_screen=not compact,
+        erase_when_done=compact,
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
         input=app_input,

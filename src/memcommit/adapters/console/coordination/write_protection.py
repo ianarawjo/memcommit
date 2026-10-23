@@ -28,7 +28,6 @@ from memcommit.application.capabilities.write_protection.application import (
 )
 from memcommit.application.operations.lock.runtime import execute_lock
 from memcommit.application.operations.unlock.runtime import execute_unlock
-from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.persistence.store import MemoryStore
 
 
@@ -242,8 +241,8 @@ def change_explicit_memory_protection(
         )
         raise typer.Exit(1)
     change_memory_protection(
-        target.memory_uid,
-        target.context_name,
+        target[1].uid,
+        target[0].name,
         protected=protected,
         store=store,
         snapshot=snapshot,
@@ -272,7 +271,7 @@ def change_auto_target_protection(
             err=True,
         )
         raise typer.Exit(1)
-    if isinstance(target, DirectMemoryTarget):
+    if isinstance(target, tuple):
         if direct or recursive:
             typer.secho(
                 "Error: --direct/-d and --recursive/-r apply only to a Context target.",
@@ -281,15 +280,15 @@ def change_auto_target_protection(
             )
             raise typer.Exit(2)
         change_memory_protection(
-            target.memory_uid,
-            target.context_name,
+            target[1].uid,
+            target[0].name,
             protected=protected,
             store=store,
             snapshot=snapshot,
         )
         return
     change_context_protection(
-        target.context_name,
+        target.name,
         protected=protected,
         recursive=recursive_scope(direct=direct, recursive=recursive),
         store=store,

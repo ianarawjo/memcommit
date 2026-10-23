@@ -11,8 +11,8 @@ from memcommit.application.capabilities.semantic_execution.relations import (
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.application.operations.add.application import AddRequest
-from memcommit.application.operations.add.runtime import execute_add
+from memcommit.application.operations.add.application import AddRequest, run_add
+from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
 from memcommit.application.operations.dev_eval.duplicates_coffee.data import (
     CONTENTS,
     EXACT_GROUPS,
@@ -38,14 +38,15 @@ from memcommit.application.operations.init.runtime import (
 )
 from memcommit.application.operations.list.application import ListRequest
 from memcommit.application.operations.list.runtime import execute_list
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 
 def _groups(
     seed: Context, edges: Iterable[Sequence[str]]
 ) -> tuple[tuple[int, ...], ...]:
-    uids = tuple(memory.uid for memory in seed.iter_items())
+    uids = tuple(memory.uid for memory in seed.iter_memories())
     return tuple(
         tuple(uids.index(uid) for uid in component)
         for component in connected_relation_components(uids, edges)
@@ -65,7 +66,7 @@ def _survivors(
 
 
 def _memory_values(context: Context) -> tuple[tuple[str, str], ...]:
-    items = tuple(context.iter_items())
+    items = tuple(context.iter_memories())
     if any(not isinstance(item, Memory) for item in items):
         raise ValueError(
             f"Scenario Context '{context.name}' contains a non-Memory item."
@@ -96,7 +97,10 @@ def run_scenario(
             )
             # Init publishes independently; failed experiments retain completed steps.
             created_names.append(name)
-            added = execute_add(AddRequest(CONTENTS, name), store=store)
+            added = run_add(
+                AddRequest(CONTENTS, name),
+                target_port=MemoryStoreAddTargetPort.capture(store),
+            )
             seed = _list_context(store, name)
             if _memory_values(seed) != tuple(
                 (item.uid, item.content) for item in added.memories
@@ -137,7 +141,7 @@ def run_scenario(
                     )
                 )
                 access = resolve_existing_context_access(
-                    store, seed.name, current_name=seed.name, required_permission="READ"
+                    store, seed.name, current_name=seed.name
                 ).value
                 apply_exact_dedup_scope(store, access, analysis)
                 expected_groups = EXACT_GROUPS
@@ -154,10 +158,6 @@ def run_scenario(
                 edges = [
                     (finding.left.uid, finding.right.uid) for finding in report.findings
                 ]
-                edges.extend(
-                    (group.survivor_uid, *group.absorbed_uids)
-                    for group in report.exact_item_groups
-                )
                 expected_groups = REDUNDANCY_GROUPS
                 checks.append(("DUN groups", _groups(seed, edges) == expected_groups))
             checks.extend(

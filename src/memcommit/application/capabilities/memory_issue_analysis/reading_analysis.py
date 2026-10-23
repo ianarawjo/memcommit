@@ -11,7 +11,7 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
 from memcommit.application.capabilities.memory_issue_analysis.provider_contract import (
     find_ambiguities,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 def analyze_memory_ambiguities(

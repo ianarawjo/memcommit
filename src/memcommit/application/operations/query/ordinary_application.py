@@ -43,7 +43,6 @@ class OrdinaryQueryRequest:
     question: str
     target_names: tuple[str, ...]
     include_descendants: bool = False
-    follow_embeds: bool = True
 
     def __post_init__(self) -> None:
         if not isinstance(self.question, str) or not self.question.strip():
@@ -55,7 +54,7 @@ class OrdinaryQueryRequest:
         ):
             raise ValueError("Select at least one distinct readable Context.")
         if not isinstance(self.include_descendants, bool) or not isinstance(
-            self.follow_embeds, bool
+            False, bool
         ):
             raise ValueError("Query scope choices must be explicit booleans.")
 

@@ -45,29 +45,23 @@ def issue_one_line_fragments(
     inserts an internal newline or truncates Memory or rationale content. The
     Context and Memory identifiers deliberately use separate typed brackets.
     """
-
     focus_style = "class:memcommit.table.selected" if focused else ""
 
     def styled(base: str) -> str:
-        # Focus temporarily overrides semantic foregrounds across the complete
-        # logical row so one control never appears doubly focused.
         return focus_style or base
 
     role = semantic_quality_role(item.category)
-    if role is None:  # pragma: no cover - the typed report validates the union.
+    if role is None:
         raise ValueError("Unsupported quality issue category.")
     marker, issue_label, classification = quality_finding_label_parts(item)
-    # A group heading identifies conflicts, but cannot convey an individual MAY.
     show_issue_label = show_label or (
         item.category == "conflicts" and item.classification == "MAY"
     )
-
-    # Grouped reports already name the category in their section heading.
     fragments: list[tuple[str, str]] = [
         (
             styled("class:report-neutral" if show_label else semantic_role_style(role)),
             f"{marker} ",
-        ),
+        )
     ]
     if show_issue_label:
         fragments.append((styled(semantic_role_style(role)), issue_label))
@@ -81,11 +75,11 @@ def issue_one_line_fragments(
     if show_issue_label or classification:
         fragments.append((styled("class:report-neutral"), " · "))
     prefixes = (
-        collision_safe_uid_prefixes(source.memory_uid for source in item.sources)
+        collision_safe_uid_prefixes((source.memory_uid for source in item.sources))
         if uid_prefixes is None
         else uid_prefixes
     )
-    if any(source.memory_uid not in prefixes for source in item.sources):
+    if any((source.memory_uid not in prefixes for source in item.sources)):
         raise ValueError("Issue presentation is missing a Source Memory prefix.")
     for index, source in enumerate(item.sources):
         if index:
@@ -103,24 +97,13 @@ def issue_one_line_fragments(
                     styled("class:report-label"),
                     f"[{source.item_kind} {_inline(prefixes[source.memory_uid])}] ",
                 ),
-                (
-                    styled(
-                        "class:memory-object"
-                        if source.item_kind == "MEMORY"
-                        else "class:report-neutral"
-                    ),
-                    f"“{_inline(source.content)}”",
-                ),
+                (styled("class:memory-object"), f"“{_inline(source.content)}”"),
             ]
         )
-
-    # Redundancy is understandable from the relation and exact pair alone.
-    # Ambiguity keeps possible readings, but folds them into the rationale
-    # instead of presenting answer-looking numbered choices.
     if item.category != "duplicates":
         rationale = _inline(item.reason)
         if item.category == "ambiguities" and item.readings:
-            readings = " / ".join(_inline(reading.text) for reading in item.readings)
+            readings = " / ".join((_inline(reading.text) for reading in item.readings))
             rationale = f"{rationale.rstrip()} — {readings}"
         fragments.extend(
             [

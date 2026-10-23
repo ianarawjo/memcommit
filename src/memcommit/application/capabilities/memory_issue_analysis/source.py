@@ -8,13 +8,10 @@ import uuid
 from dataclasses import dataclass
 from typing import Literal, Sequence
 
-from memcommit.application.context_access.access import (
-    GrantedReadStore,
-    resolve_context_access,
-)
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.operations.review.model import direct_context_digest
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
@@ -29,7 +26,7 @@ class QualityFindSourceError(ValueError):
 
 
 def _direct_memories(context: Context) -> tuple[Memory, ...]:
-    return tuple(item for item in context.iter_items() if isinstance(item, Memory))
+    return tuple(item for item in context.iter_memories() if isinstance(item, Memory))
 
 
 @dataclass(frozen=True)
@@ -201,7 +198,6 @@ def freeze_quality_find_source(
     *,
     current_name: str | None,
     all_readable: bool = False,
-    registry: ProfileRegistry | None = None,
 ) -> QualityFindSourceFrame:
     """Resolve authority and freeze one exact or Profile-wide Source frame."""
 
@@ -213,15 +209,11 @@ def freeze_quality_find_source(
         store,
         None if all_readable else context_name,
         current_name=current_name,
-        required_permission="READ",
-        registry=registry,
     )
     if all_readable:
         catalog = freeze_profile_readable_context_catalog(
             store,
             access,
-            registry=registry,
-            include_query_routes=False,
         )
         names = tuple(catalog.list_context_names())
         return QualityFindSourceFrame.create(
@@ -233,11 +225,7 @@ def freeze_quality_find_source(
             profile_selected=True,
         )
 
-    context = (
-        GrantedReadStore(access, registry=registry).load_direct(access.access_name)
-        if access.is_granted
-        else access.store.load_direct(access.context_name)
-    )
+    context = access.store.load_direct(access.context_name)
     return QualityFindSourceFrame.create(
         (context,),
         context_names=(access.access_name,),

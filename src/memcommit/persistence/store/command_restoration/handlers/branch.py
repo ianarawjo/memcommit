@@ -4,7 +4,9 @@ from __future__ import annotations
 import uuid
 from pathlib import Path
 from typing import Any, Literal
-from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
 from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
@@ -47,13 +49,13 @@ class _BranchRestorationMixin:
                 change.before is not None or change.after is None
                 for change in unit.changes
             )
-            or not unit.checkpoint_args
+            or not unit.checkpoint_command_details
         ):
             raise ValueError(
                 "Branch lifecycle restoration requires one complete creation unit."
             )
         try:
-            receipts = tuple(branch_tree_receipt(args) for args in unit.checkpoint_args)
+            receipts = tuple(branch_tree_receipt(args) for args in unit.checkpoint_command_details)
         except CommandHistoryError as error:
             raise ValueError(str(error)) from error
         receipt = receipts[0]
@@ -149,14 +151,10 @@ class _BranchRestorationMixin:
                             current = current_by_name[change.context_name]
                             checkpoint = self._save_locked(
                                 current,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command="undo",
-                                    args={"command_restore": restore_metadata},
-                                    description=(
-                                        f"Undo command 'mem branch' [{receipt_uid[:8]}]"
-                                    ),
+                                    command_details={"command_restore": restore_metadata},
                                 ),
-                                expected_context_digest=context_record_digest(current),
                             )
                             if checkpoint is None:
                                 raise RuntimeError(
@@ -336,14 +334,10 @@ class _BranchRestorationMixin:
                             )
                             checkpoint = self._save_locked(
                                 context,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command="redo",
-                                    args={"command_restore": restore_metadata},
-                                    description=(
-                                        f"Redo command 'mem branch' [{receipt_uid[:8]}]"
-                                    ),
+                                    command_details={"command_restore": restore_metadata},
                                 ),
-                                expected_context_digest=context_record_digest(context),
                             )
                             if checkpoint is None:
                                 raise RuntimeError(

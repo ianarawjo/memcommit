@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from ....context_memory.models import ConcurrentContextUpdateError
 from ....context_memory.records import context_record_digest

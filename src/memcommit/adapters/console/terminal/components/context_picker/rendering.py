@@ -17,7 +17,7 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTree,
     ContextTreeRow,
@@ -26,7 +26,6 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
-    SourceTokenRole,
     normalize_source_display_tokens,
     source_annotation_tokens,
     source_object_label,
@@ -52,8 +51,6 @@ _CONTEXT_PICKER_STYLE = merge_styles(
         ),
     ]
 )
-# Embedded browse-only surfaces share the picker's focus grammar without
-# reaching through its complete selection application.
 CONTEXT_PICKER_STYLE = _CONTEXT_PICKER_STYLE
 
 
@@ -121,14 +118,7 @@ def render_context_options(
         if annotation is None and not row.materialized:
             annotation = SourceDisplayFacts(states=(SourceState.UNAVAILABLE,))
         display_tokens = normalize_source_display_tokens(annotation)
-        ownership_tokens = tuple(
-            token for token in display_tokens if token.role is SourceTokenRole.OWNERSHIP
-        )
-        annotation_tokens = tuple(
-            token
-            for token in display_tokens
-            if token.role is not SourceTokenRole.OWNERSHIP
-        )
+        annotation_tokens = display_tokens
         display_name = (display_names or {}).get(row.name, row.name)
         # Keep raw names in the tree for identity and return only an escaped
         # label to prompt-toolkit; selection never returns presentation text.
@@ -138,24 +128,7 @@ def render_context_options(
             depth=row.depth,
             branch=branch,
         )
-        if ownership_tokens:
-            fragments.append((style, prefix))
-            fragments.extend(
-                render_source_display_tokens(
-                    ownership_tokens,
-                    override_style=style,
-                )
-            )
-            fragments.append((style, " "))
-            fragments.append(
-                (
-                    # The shared focus bar must remain the only active color.
-                    style or "class:report-neutral",
-                    display_escape_text(display_name),
-                )
-            )
-        else:
-            fragments.append((style, prefix + display_escape_text(display_name)))
+        fragments.append((style, prefix + display_escape_text(display_name)))
         if annotation_tokens:
             fragments.append((style, "  "))
             fragments.extend(
@@ -186,8 +159,8 @@ def render_context_memory_previews(
     wrap_width: int | None,
     memory_anchor: tuple[str, int] | None,
     selectable_memories: bool = False,
-    selected_memory: DirectMemoryTarget | None = None,
-    selected_memories: AbstractSet[DirectMemoryTarget] | None = None,
+    selected_memory: tuple[str, str] | None = None,
+    selected_memories: AbstractSet[tuple[str, str]] | None = None,
     show_selection_marker: bool = False,
 ) -> list[tuple[str, str]]:
     """Render direct Memory rows nested beneath one shared Context-tree row."""
@@ -213,8 +186,8 @@ def render_memory_rows(
     wrap_width: int | None = None,
     memory_anchor: tuple[str, int] | None = None,
     selectable_memories: bool = False,
-    selected_memory: DirectMemoryTarget | None = None,
-    selected_memories: AbstractSet[DirectMemoryTarget] | None = None,
+    selected_memory: tuple[str, str] | None = None,
+    selected_memories: AbstractSet[tuple[str, str]] | None = None,
     show_selection_marker: bool = False,
     show_item_marker: bool = True,
 ) -> list[tuple[str, str]]:
@@ -236,9 +209,7 @@ def render_memory_rows(
             fragments.append(("[SetCursorPosition]", ""))
         memory_style = "class:focused" if memory_is_focused else f"class:{memory.style}"
         memory_target = (
-            DirectMemoryTarget(context_name, memory.selector)
-            if memory.selector is not None
-            else None
+            (context_name, memory.selector) if memory.selector is not None else None
         )
         memory_is_selected = memory_target is not None and (
             memory_target in (selected_memories or frozenset())

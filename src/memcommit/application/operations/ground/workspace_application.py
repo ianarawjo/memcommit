@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+
 from dataclasses import dataclass
 from typing import Protocol
 
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.application.operations.ground.contracts import validate_ground_goal
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.operations.ground.workspace_model import (
@@ -166,11 +167,9 @@ class AdoptGroundWorkspaceMemoriesRequest:
     contents: tuple[str, ...]
     expected_workspace_uid: str
     expected_revision: int
-    expected_root_digest: str
-    expected_lane_digest: str
     source_operation: str
     analysis_digest: str
-    source_bindings: tuple[tuple[str, str, str], ...] = ()
+    source_bindings: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not isinstance(self.workspace_name, str) or not self.workspace_name.strip():
@@ -198,8 +197,6 @@ class AdoptGroundWorkspaceMemoriesRequest:
         if any(
             not isinstance(value, str) or len(value) != 64
             for value in (
-                self.expected_root_digest,
-                self.expected_lane_digest,
                 self.analysis_digest,
             )
         ):
@@ -211,7 +208,7 @@ class AdoptGroundWorkspaceMemoriesRequest:
             raise GroundWorkspaceError("Semantic Ground adoption operation is invalid.")
         names = tuple(binding[0] for binding in self.source_bindings)
         if len(names) != len(set(names)) or any(
-            len(binding) != 3
+            len(binding) != 2
             or any(not isinstance(value, str) or not value for value in binding)
             for binding in self.source_bindings
         ):
@@ -280,7 +277,7 @@ def create_ground_workspace(
         raise GroundWorkspaceError(
             "Ground workspace creation returned a different physical workspace."
         )
-    goal_items = tuple(created.goals.iter_items())
+    goal_items = tuple(created.goals.iter_memories())
     goal_memory_uid = goal_items[0].uid if goal_items else None
     return CreateGroundWorkspaceResult(
         name=created.name,
@@ -307,7 +304,7 @@ def add_ground_workspace_memory(
             "Ground workspace changed after the reviewed edit was prepared."
         )
     lane_context = workspace.lane(request.lane)
-    memory = lane_context.add(request.content)
+    memory = lane_context.add(Memory.create(request.content))
     assert isinstance(memory, Memory)
     revised = workspace.advance_revision()
     committed, command_uid = port.commit_edit(
@@ -418,18 +415,16 @@ def adopt_ground_workspace_memories(
 
     workspace = port.load(request.workspace_name)
     lane_context = workspace.lane(request.lane)
-    root_digest = getattr(workspace.root, "_store_digest", None)
-    lane_digest = getattr(lane_context, "_store_digest", None)
     if (
         workspace.uid != request.expected_workspace_uid
         or workspace.manifest.revision != request.expected_revision
-        or root_digest != request.expected_root_digest
-        or lane_digest != request.expected_lane_digest
     ):
         raise GroundWorkspaceError(
             "Ground workspace changed after the semantic proposal was reviewed."
         )
-    memories = tuple(lane_context.add(content.strip()) for content in request.contents)
+    memories = tuple(
+        lane_context.add(Memory.create(content.strip())) for content in request.contents
+    )
     if any(not isinstance(memory, Memory) for memory in memories):  # pragma: no cover
         raise GroundWorkspaceError("Ground semantic adoption produced an invalid Memory.")
     memory_uids = tuple(memory.uid for memory in memories)

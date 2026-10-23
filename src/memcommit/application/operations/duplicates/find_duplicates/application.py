@@ -4,10 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
@@ -18,9 +15,8 @@ from memcommit.application.capabilities.reviewing.direct_item_duplicates import 
     ExactDuplicateGroup,
     find_exact_duplicate_groups,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
@@ -89,11 +85,13 @@ def analyze_exact_duplicates(context: Context) -> ExactDuplicateReport:
 
     if not isinstance(context, Context):
         raise TypeError("Find Duplicates requires one Context.")
-    memory_count = sum(1 for item in context.iter_items() if isinstance(item, Memory))
+    memory_count = sum(
+        1 for item in context.iter_memories() if isinstance(item, Memory)
+    )
     return ExactDuplicateReport(
         memory_count=memory_count,
         groups=find_exact_duplicate_groups(context),
-        item_count=len(context.ordered_uids()),
+        item_count=len(context.get_ordered_memory_uids()),
     )
 
 
@@ -102,7 +100,6 @@ def analyze_exact_duplicate_scope(
     access: ContextAccess,
     *,
     include_descendants: bool,
-    registry: ProfileRegistry | None = None,
 ) -> ExactDuplicateScopeReport:
     """Freeze and analyze each readable Context exactly once."""
 
@@ -117,11 +114,7 @@ def analyze_exact_duplicate_scope(
     context_catalog = tuple(active_store.list_context_names())
     if not include_descendants:
         stored_context = access.store.load_direct(access.context_name)
-        context = (
-            GrantedReadStore(access, registry=registry).load_direct(access.access_name)
-            if access.is_granted
-            else stored_context
-        )
+        context = stored_context
         return ExactDuplicateScopeReport(
             root_name=access.access_name,
             include_descendants=False,
@@ -129,8 +122,6 @@ def analyze_exact_duplicate_scope(
                 ExactDuplicateContextReport(
                     context_name=access.access_name,
                     context_uid=context.uid,
-                    # Apply revalidates the authoritative stored record; a
-                    # granted read projection intentionally rewrites names.
                     context_digest=context_record_digest(stored_context),
                     report=analyze_exact_duplicates(context),
                 ),
@@ -141,12 +132,9 @@ def analyze_exact_duplicate_scope(
     catalog = ReadableContextCatalog(
         active_store,
         access,
-        registry=registry,
-        include_query_routes=False,
     )
     names = expand_lexical_context_names(
-        ContextScope.create((access.access_name,), include_descendants=True),
-        catalog.list_context_names(),
+        (access.access_name,), catalog.list_context_names(), include_descendants=True
     )
     return ExactDuplicateScopeReport(
         root_name=access.access_name,
@@ -170,7 +158,6 @@ def find_duplicates(
     request: FindDuplicatesRequest,
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> ExactDuplicateScopeReport:
     """Resolve readable authority and analyze one exact or lexical scope."""
 
@@ -178,14 +165,11 @@ def find_duplicates(
         store,
         request.context_name,
         current_name=current_name,
-        required_permission="READ",
-        registry=registry,
     ).value
     return analyze_exact_duplicate_scope(
         store,
         access,
         include_descendants=request.include_descendants,
-        registry=registry,
     )
 
 

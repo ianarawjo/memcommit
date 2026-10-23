@@ -1,4 +1,4 @@
-"""Apply one explicit instruction to the current or named Target Context."""
+"""Apply one instruction to the current Context and optional descendants."""
 
 import os
 import sys
@@ -17,38 +17,21 @@ from memcommit.providers.connection import connect_semantic_provider
 
 def cmd(
     instruction: Annotated[
-        str | None,
-        typer.Argument(help="One instruction to apply to the Target Context."),
-    ] = None,
-    memory: Annotated[
-        str | None,
-        typer.Option(
-            "--memory",
-            "-m",
-            metavar="UID_OR_CONTEXT:UID",
-            help="Use one stored Memory outside the Target as the instruction.",
-        ),
-    ] = None,
-    target_name: Annotated[
-        str | None,
-        typer.Option(
-            "--to",
-            metavar="CONTEXT",
-            help="Target Context (defaults to current; -r includes descendants and embeds).",
-        ),
-    ] = None,
+        str,
+        typer.Argument(help="One instruction to apply to the current Context."),
+    ],
     recursive: Annotated[
         bool,
         typer.Option(
             "-r",
             "--recursive",
-            help="Update the Target, lexical descendants, and embedded Contexts together.",
+            help="Update the current Context and its lexical descendants together.",
         ),
     ] = False,
 ) -> None:
-    """Apply one instruction or --memory UID, then print the completed changes."""
+    """Apply one instruction, then print the completed changes."""
     try:
-        request = UpdateRequest(instruction, memory, target_name, recursive=recursive)
+        request = UpdateRequest(instruction, recursive=recursive)
     except (ValueError, RuntimeError) as error:
         echo_text("Update error: {error}", error=error, err=True)
         raise typer.Exit(2) from error

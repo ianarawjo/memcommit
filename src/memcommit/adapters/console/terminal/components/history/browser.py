@@ -140,9 +140,9 @@ def _checkpoint_operation_rows(
         source_uid
         for checkpoint in checkpoints
         if checkpoint.get("command") == "init"
-        and isinstance(checkpoint.get("args"), Mapping)
+        and isinstance(checkpoint.get("command_details"), Mapping)
         and isinstance(
-            source_uid := checkpoint["args"].get("source_analysis_uid"),
+            source_uid := checkpoint["command_details"].get("source_analysis_uid"),
             str,
         )
         and source_uid
@@ -151,8 +151,8 @@ def _checkpoint_operation_rows(
         checkpoint_uid
         for checkpoint in checkpoints
         if checkpoint.get("command") == "init"
-        and isinstance(checkpoint.get("args"), Mapping)
-        and checkpoint["args"].get("source_analysis_uid") in creation_atomize_uids
+        and isinstance(checkpoint.get("command_details"), Mapping)
+        and checkpoint["command_details"].get("source_analysis_uid") in creation_atomize_uids
         and isinstance(checkpoint_uid := checkpoint.get("uid"), str)
         and checkpoint_uid
     }
@@ -161,8 +161,8 @@ def _checkpoint_operation_rows(
         for checkpoint in checkpoints
         if not (
             checkpoint.get("command") == "atomize"
-            and isinstance(checkpoint.get("args"), Mapping)
-            and checkpoint["args"].get("analysis_uid") in creation_atomize_uids
+            and isinstance(checkpoint.get("command_details"), Mapping)
+            and checkpoint["command_details"].get("analysis_uid") in creation_atomize_uids
         )
     )
     return _context_rows_from_history(

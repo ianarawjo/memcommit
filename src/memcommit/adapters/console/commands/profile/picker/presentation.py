@@ -43,7 +43,9 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.core.theme import REPORT_HEX
-from memcommit.adapters.console.terminal.components.selection.rendering import render_horizontal_choice_row
+from memcommit.adapters.console.terminal.components.selection.rendering import (
+    render_horizontal_choice_row,
+)
 
 
 def _entry_name_label(entry: ProfilePickerEntry) -> str:
@@ -51,8 +53,6 @@ def _entry_name_label(entry: ProfilePickerEntry) -> str:
         return display_escape_text(entry.name)
     if entry.study_role == "PARTICIPANT":
         role = "Participant"
-    elif entry.study_role == "GRANTED_MEMORY":
-        role = "Granted memory"
     else:
         raise ValueError(f"Unknown Study role: {entry.study_role!r}")
     return f"{role} · {display_escape_text(entry.name)}"
@@ -98,21 +98,7 @@ def render_profile_options(
             action = "CURRENT" if is_current else ("USE" if is_selected else "")
             action_style = row_style or ("class:current" if is_current else "")
             project_location = (
-                display_escape_text(entry.root_dir)
-                if entry.root_dir
-                else "(none)"
-            )
-            query_note = (
-                " · query="
-                + ",".join(
-                    display_escape_text(name) for name in entry.query_source_names
-                )
-                if entry.query_source_names
-                else (
-                    f" · {entry.query_source_count} query-only"
-                    if entry.query_source_count
-                    else ""
-                )
+                display_escape_text(entry.root_dir) if entry.root_dir else "(none)"
             )
             fragments.extend(
                 [
@@ -123,11 +109,7 @@ def render_profile_options(
                     (action_style, f"{action:<7}"),
                     (
                         row_style,
-                        f"  Contexts {entry.context_count} owned + "
-                        f"{entry.granted_context_count} granted · "
-                        f"Memories {entry.memory_count} owned + "
-                        f"{entry.granted_memory_count} granted"
-                        f"{query_note} · location={project_location}",
+                        f"  Contexts {entry.context_count} · Memories {entry.memory_count} · location={project_location}",
                     ),
                 ]
             )
@@ -173,8 +155,17 @@ class ProfilePickerView:
             "RENAME_STUDY": self._name_field("Study"),
         }
         self.folder_field = ExactNameFieldControl.create(
-            ExactNameFieldView(value="", label="PROJECT FOLDER", state="", detail="Tab moves between fields · Enter reviews the exact command", value_label="Project folder", strip_candidate=False),
-            input_name="profile-picker-project-folder", frame_style="class:profile-create-field")
+            ExactNameFieldView(
+                value="",
+                label="PROJECT FOLDER",
+                state="",
+                detail="Tab moves between fields · Enter reviews the exact command",
+                value_label="Project folder",
+                strip_candidate=False,
+            ),
+            input_name="profile-picker-project-folder",
+            frame_style="class:profile-create-field",
+        )
         self.restoring_fields = False
         self.import_control = FormattedTextControl(
             text=lambda: self.render_setup_option(
@@ -182,15 +173,8 @@ class ProfilePickerView:
                 selection=self.state.import_selection,
                 control=self.import_control,
             ),
-            focusable=True, show_cursor=False,
-        )
-        self.sync_control = FormattedTextControl(
-            text=lambda: self.render_setup_option(
-                label="AUTO SYNC",
-                selection=self.state.sync_selection,
-                control=self.sync_control,
-            ),
-            focusable=True, show_cursor=False,
+            focusable=True,
+            show_cursor=False,
         )
         self.layout = self._layout()
         self.style = merge_styles(
@@ -242,14 +226,13 @@ class ProfilePickerView:
 
     def render_setup_option(self, label, selection, control):
         return [("", f" {label:<23}")] + render_horizontal_choice_row(
-            selection, focused=self.layout.has_focus(control),
+            selection,
+            focused=self.layout.has_focus(control),
         )
 
     def active_setup_selection(self):
         if self.layout.has_focus(self.import_control):
             return self.state.import_selection
-        if self.layout.has_focus(self.sync_control):
-            return self.state.sync_selection
         return None
 
     def focus_stage(self) -> None:
@@ -281,7 +264,10 @@ class ProfilePickerView:
             return [
                 ("", "NEW PROFILE (WORKSPACE)\n\n"),
                 ("", "Use the chosen folder and its subfolders as one workspace.\n"),
-                ("", "Review the folder and the two options below, then create your first Profile.\n"),
+                (
+                    "",
+                    "Review the folder and the two options below, then create your first Profile.\n",
+                ),
                 ("", "The new Profile will be selected for subsequent mem commands.\n"),
             ]
         return render_profile_options(
@@ -384,10 +370,14 @@ class ProfilePickerView:
             content=FormattedTextControl(text=self.footer_text),
             # A completed deletion receipt must remain readable alongside the
             # navigation keys, including long Study-generated Profile names.
-            height=lambda: 2 if (
-                self.state.status and self.state.action is None
-                and self.state.edit is None and not self.background_turn.busy
-            ) else 1,
+            height=lambda: 2
+            if (
+                self.state.status
+                and self.state.action is None
+                and self.state.edit is None
+                and not self.background_turn.busy
+            )
+            else 1,
             dont_extend_height=True,
         )
         name_containers = [
@@ -407,19 +397,23 @@ class ProfilePickerView:
                     Window(height=1, char="─"),
                     options_window,
                     *name_containers,
-                    ConditionalContainer(self.folder_field.frame, filter=self.create_mode),
                     ConditionalContainer(
-                        HSplit([
-                            Window(height=1),
-                            Window(content=self.import_control, height=1),
-                            Window(content=FormattedTextControl(
-                                text=" Import supported documents in this folder and its subfolders as Memories.",
-                            ), height=1),
-                            Window(content=self.sync_control, height=1),
-                            Window(content=FormattedTextControl(
-                                text=" Reflect mem changes in managed documents in this folder and its subfolders, including future Contexts.",
-                            ), height=1),
-                        ]), filter=self.create_mode,
+                        self.folder_field.frame, filter=self.create_mode
+                    ),
+                    ConditionalContainer(
+                        HSplit(
+                            [
+                                Window(height=1),
+                                Window(content=self.import_control, height=1),
+                                Window(
+                                    content=FormattedTextControl(
+                                        text=" Import supported documents in this folder and its subfolders as Memories.",
+                                    ),
+                                    height=1,
+                                ),
+                            ]
+                        ),
+                        filter=self.create_mode,
                     ),
                     Window(height=1, char="─"),
                     footer,

@@ -16,14 +16,13 @@ from memcommit.application.operations.chunk.runtime import apply_chunk_proposals
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.operand_resolution import (
     ResolvedExistingContextOperand,
 )
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
-    DirectMemoryTarget,
 )
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
@@ -119,7 +118,7 @@ def cmd(
             "--context",
             "-c",
             metavar="CONTEXT",
-            help="Local Context or granted view containing the direct Memory or Memories",
+            help="Local Context containing the direct Memory or Memories",
         ),
     ] = None,
 ) -> None:
@@ -154,16 +153,14 @@ def cmd(
             if isinstance(resolved, ResolvedExistingContextOperand):
                 context_name = resolved.name
                 memory_selector = None
-            elif isinstance(resolved, DirectMemoryTarget):
-                context_name = resolved.context_name
-                memory_selector = resolved.memory_uid
+            elif isinstance(resolved, tuple):
+                context_name = resolved[0].name
+                memory_selector = resolved[1].uid
             elif (
                 snapshot.current_name is not None
                 and not active_store.context_exists(snapshot.current_name)
                 and is_memory_uid_prefix(memory_selector)
             ):
-                # A selected granted Context is an explicit owner even though
-                # bare prefixes never enumerate arbitrary Grants.
                 context_name = snapshot.current_name
             else:
                 context_name = memory_selector
@@ -172,7 +169,6 @@ def cmd(
             active_store,
             context_name,
             current_name=snapshot.current_name,
-            required_permission="DELETE",
             candidates=context_candidates,
         ).value
         store = access.store
@@ -215,11 +211,8 @@ def cmd(
             )
             proposals = [(original, chunks)] if len(chunks) > 1 else []
         else:
-            # Context scope is deliberately direct-only. Embedded and referenced
-            # content has a different owner and must not be mutated as a side
-            # effect of mechanically refining this Context.
             proposals = []
-            for item in ctx.iter_items():
+            for item in ctx.iter_memories():
                 if not isinstance(item, Memory):
                     continue
                 original, chunks = chunk(
@@ -306,7 +299,6 @@ def cmd(
             context=ctx,
             proposals=proposals,
             method=method,
-            settings=settings,
             memory_selector=memory_selector,
             break_on=break_on,
             min_chars=min_chars,

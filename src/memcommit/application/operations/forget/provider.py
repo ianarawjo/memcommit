@@ -10,7 +10,8 @@ from __future__ import annotations
 import json
 import re
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.semantic.selective_curation import (
     CriterionFrame,
     CurationAnalysis,
@@ -101,8 +102,8 @@ def _curation_frame(ctx: Context, instruction: str):
         CurationBatch(
             source_label=ctx.name,
             source=tuple(
-                CurationItem(uid, info.content, ctx.name)
-                for uid, info in ctx.iter_entries()
+                CurationItem(info.uid, info.content, ctx.name)
+                for info in ctx.iter_memories()
                 if isinstance(info, Memory)
             ),
             criteria=CriterionFrame(
@@ -128,10 +129,10 @@ def _legacy_analysis(
 
     changes = {change.uid: change for change in parse_proposals(data, ctx)}
     decisions = []
-    for uid, item in ctx.iter_entries():
+    for item in ctx.iter_memories():
         if not isinstance(item, Memory):
             continue
-        change = changes.get(uid)
+        change = changes.get(item.uid)
         if isinstance(change, RemoveChange):
             action, variant, content, reason = (
                 "DROP",
@@ -155,7 +156,7 @@ def _legacy_analysis(
             )
         decisions.append(
             CurationDecision(
-                source_uid=uid,
+                source_uid=item.uid,
                 action=action,
                 variant=variant,
                 proposed_content=content,
@@ -201,7 +202,7 @@ def forget_changes(
     """Project a complete decision ledger into its sparse mutation set."""
 
     source = {
-        uid: item for uid, item in ctx.iter_entries() if isinstance(item, Memory)
+        item.uid: item for item in ctx.iter_memories() if isinstance(item, Memory)
     }
     changes: list[ProposedChange] = []
     for decision in analysis.decisions:
@@ -235,7 +236,7 @@ def analyze_forget(
 
     if not isinstance(instruction, str) or not instruction.strip():
         raise ValueError("A Forget instruction must be nonblank.")
-    if not any(isinstance(item, Memory) for item in ctx.iter_items()):
+    if not any(isinstance(item, Memory) for item in ctx.iter_memories()):
         return (
             CurationAnalysis(
                 overview="The Source Context has no direct Memories to review.",

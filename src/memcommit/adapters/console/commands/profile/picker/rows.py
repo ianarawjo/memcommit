@@ -24,12 +24,6 @@ def _validate_entries(
         or not entry.name
         or entry.context_count < 0
         or entry.memory_count < 0
-        or entry.granted_context_count < 0
-        or entry.granted_memory_count < 0
-        or entry.query_source_count < 0
-        or len(entry.query_source_names) > entry.query_source_count
-        or any(not name for name in entry.query_source_names)
-        or len(set(entry.query_source_names)) != len(entry.query_source_names)
         or (entry.uid is not None and not entry.uid)
         or (entry.removal_block is not None and not entry.removal_block.strip())
         or (entry.rename_block is not None and not entry.rename_block.strip())
@@ -50,14 +44,11 @@ def _validate_entries(
                 and bool(entry.study_name)
                 and isinstance(entry.study_created_at, str)
                 and bool(entry.study_created_at)
-                and entry.study_profile_count in {1, 2}
-                and entry.study_role in {"PARTICIPANT", "GRANTED_MEMORY"}
+                and entry.study_profile_count == 1
+                and entry.study_role in {"PARTICIPANT"}
             )
         )
-        or (
-            entry.study_name is None
-            and entry.study_profile_count != 0
-        )
+        or (entry.study_name is None and entry.study_profile_count != 0)
         for entry in options
     ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")

@@ -36,7 +36,7 @@ def _matches_review_operation(
 ) -> bool:
     """Keep legacy Makemore evidence distinct from append-only Elaborate."""
 
-    args = checkpoint.get("args")
+    args = checkpoint.get("command_details")
     append_only = (
         isinstance(args, dict)
         and args.get("contract") == "append-only-v1"
@@ -80,7 +80,7 @@ class AppliedCheckpointReview:
 
 
 def _checkpoint_payload(stored_operation: str, checkpoint: dict) -> dict[str, object]:
-    args = checkpoint.get("args")
+    args = checkpoint.get("command_details")
     if not isinstance(args, dict):
         return {}
     nested = args.get(stored_operation)
@@ -112,7 +112,7 @@ def list_applied_checkpoint_reviews(
                 raise ValueError(
                     f"Stored {operation.title()} checkpoint evidence is invalid."
                 )
-            description = checkpoint.get("description")
+            description = checkpoint.get("checkpoint_message") or stored_operation
             records.append(
                 AppliedCheckpointReview(
                     operation=normalized,

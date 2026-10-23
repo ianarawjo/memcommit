@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.core.context import AutoCheckpoint, Memory
+
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 from .context_translation_result import ContextTranslationResult
@@ -34,9 +36,9 @@ def create_translated_context(
     try:
         store.create_context_with_sources(
             result.baseline,
-            AutoCheckpoint(
+            AutoCheckpointRequest(
                 command="init",
-                args={
+                command_details={
                     "name": destination_name,
                     "source_context": {
                         "uid": plan.context_uid,
@@ -47,40 +49,27 @@ def create_translated_context(
                     "target_language": plan.target_language,
                     "memory_uids": [
                         item.uid
-                        for item in result.baseline.iter_items()
+                        for item in result.baseline.iter_memories()
                         if isinstance(item, Memory)
                     ],
                 },
-                description=(
-                    f"Initialized '{destination_name}' from "
-                    f"'{plan.context_name}' before translation "
-                    f"[{operation_uid[:8]}]"
-                ),
             ),
             source_bindings=(
                 (
                     plan.context_name,
                     plan.context_uid,
-                    plan.context_digest,
                 ),
             ),
         )
         created = True
         # Carry the just-persisted baseline digest so a concurrent destination
         # writer cannot be lost between create and replacement.
-        result.context._store_digest = result.baseline._store_digest
         store.save(
             result.context,
-            AutoCheckpoint(
+            AutoCheckpointRequest(
                 command="translate",
-                args=result.checkpoint_args(),
-                description=(
-                    f"Replaced {len(result.translations)} source "
-                    + ("Memory" if len(result.translations) == 1 else "Memories")
-                    + f" with translations to {plan.target_language}"
-                ),
+                command_details=result.checkpoint_command_details(),
             ),
-            expected_context_digest=result.baseline._store_digest,
         )
         latest_source = store.load_direct(plan.context_name)
         if not translation_plan_matches_context(plan, latest_source):
@@ -97,12 +86,11 @@ def create_translated_context(
             plan.context_name,
             destination_name,
             expected_context_uid=result.context.uid,
-            expected_context_digest=result.context._store_digest or "",
         )
     except Exception as error:
         if created:
-            # The destination may already be referenced after publication;
-            # deleting it could create a dangling pointer.
+            # A published destination may already have been observed by a caller.
+            # A late reporting failure must not silently delete durable data.
             raise TranslateError(
                 f"Translation failed ({error}); destination "
                 f"'{destination_name}' was preserved for manual inspection "

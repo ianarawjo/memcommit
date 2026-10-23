@@ -40,7 +40,6 @@ def resolve_revert_unit(
     *,
     context_name: str | None = None,
     expected_context_uid: str | None = None,
-    expected_context_digest: str | None = None,
     expected_history_digest: str | None = None,
     expected_checkpoint: Mapping[str, Any] | None = None,
 ) -> ResolvedCheckpointUnit:
@@ -54,7 +53,6 @@ def resolve_revert_unit(
         value is not None
         for value in (
             expected_context_uid,
-            expected_context_digest,
             expected_history_digest,
             expected_checkpoint,
         )
@@ -65,11 +63,8 @@ def resolve_revert_unit(
             )
         member = unit.members[0]
         if (
-            (expected_context_uid is not None and member.context_uid != expected_context_uid)
-            or (
-                expected_context_digest is not None
-                and member.expected_context_digest != expected_context_digest
-            )
+            expected_context_uid is not None
+            and member.context_uid != expected_context_uid
             or (
                 expected_history_digest is not None
                 and member.expected_history_digest != expected_history_digest

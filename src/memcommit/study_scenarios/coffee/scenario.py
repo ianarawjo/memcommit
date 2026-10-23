@@ -17,8 +17,9 @@ from memcommit.application.operations.mem_import.documents.codec import (
     read_document,
 )
 
-from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TRANSLATION_ORIGIN_IMPORTED,
@@ -51,29 +52,13 @@ class ContextSpec:
 
 
 @dataclass(frozen=True)
-class ScenarioGrantSpec:
-    """One public authority view or delivery endpoint."""
-
-    key: str
-    authority_context: str
-    attachment_context: str
-    public_name: str
-    permissions: tuple[str, ...]
-    recursive: bool
-
-
-@dataclass(frozen=True)
 class StudyScenarioTask:
-    """One Task's already-public participant and authority namespaces."""
+    """One Task's independent local Contexts and imported translations."""
 
     task: int
-    participant_current: str
-    authority_current: str
-    participant_contexts: tuple[Context, ...]
-    authority_contexts: tuple[Context, ...]
-    participant_catalogs: tuple[MemoryTranslationCatalog, ...]
-    authority_catalogs: tuple[MemoryTranslationCatalog, ...]
-    grants: tuple[ScenarioGrantSpec, ...]
+    current_context: str
+    contexts: tuple[Context, ...]
+    catalogs: tuple[MemoryTranslationCatalog, ...]
 
 
 @dataclass(frozen=True)
@@ -91,7 +76,7 @@ _DATA_ROOT = Path(__file__).resolve().parent / "data"
 
 def _context_document(role: str, language: str, name: str) -> Context:
     task, owner = role.split(":")
-    validate_portable_context_name(name)
+    validate_context_name(name)
     document = read_document(
         _DATA_ROOT / task / owner / language / name / "context.json"
     )
@@ -109,8 +94,8 @@ def _context_specs(role: str, records: list[dict]) -> tuple[ContextSpec, ...]:
             raise ValueError(
                 "Coffee translation identities differ from canonical data."
             )
-        english = tuple(en.iter_items())
-        korean = tuple(ko.iter_items())
+        english = tuple(en.iter_memories())
+        korean = tuple(ko.iter_memories())
         if any(not isinstance(item, Memory) for item in (*english, *korean)):
             raise ValueError("Coffee authoring documents must contain owned Memories.")
         specs.append(
@@ -133,12 +118,6 @@ def _task_context_specs():
         task: (
             _context_specs(f"task-{task}:participant", data[str(task)]["participant"]),
             _context_specs(f"task-{task}:authority", data[str(task)]["authority"]),
-            tuple(
-                ScenarioGrantSpec(
-                    **{**grant, "permissions": tuple(grant["permissions"])}
-                )
-                for grant in data[str(task)]["grants"]
-            ),
         )
         for task in (1, 2, 3)
     }
@@ -168,7 +147,7 @@ def _build_contexts(
             raise ValueError("Coffee Context identity changed.")
         translations: list[tuple[Memory, BilingualMemorySpec]] = []
         for index, (memory, memory_spec) in enumerate(
-            zip(context.iter_items(), spec.memories, strict=True), start=1
+            zip(context.iter_memories(), spec.memories, strict=True), start=1
         ):
             if (
                 not isinstance(memory, Memory)
@@ -212,6 +191,7 @@ def _build_contexts(
 def _scenario_digest() -> str:
     payload: dict[str, object] = {
         "scenario_id": COFFEE_SCENARIO_ID,
+        "scope": "memory-only-local-contexts-v1",
         "canonical_language": "en",
         "translation_languages": ["ko"],
         "tasks": [],
@@ -219,7 +199,7 @@ def _scenario_digest() -> str:
     raw_tasks = payload["tasks"]
     assert isinstance(raw_tasks, list)
     for task in (1, 2, 3):
-        participant_specs, authority_specs, grants = _TASK_CONTEXT_SPECS[task]
+        participant_specs, authority_specs = _TASK_CONTEXT_SPECS[task]
         raw_tasks.append(
             {
                 "task": task,
@@ -251,7 +231,6 @@ def _scenario_digest() -> str:
                     }
                     for spec in authority_specs
                 ],
-                "grants": [grant.__dict__ for grant in grants],
             }
         )
     encoded = json.dumps(
@@ -263,11 +242,11 @@ def _scenario_digest() -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-COFFEE_DIGEST = "d00cdd0c419c20a7295d57338ba608130074afc3c67a03e23bbf5fea9f213589"
+COFFEE_DIGEST = "7c8ba51948729167661d6c655884f9d042ecd49a8f8f408a53a2e9cfce614015"
 if _scenario_digest() != COFFEE_DIGEST:
-    # The concise public name still identifies one pinned experiment. A data
-    # change must deliberately refresh the recorded digest.
-    raise RuntimeError("coffee data changed without updating its pinned digest.")
+    raise ValueError(
+        "Packaged Coffee Study inputs differ from their pinned fingerprint."
+    )
 
 
 def build_coffee_scenario() -> StudyScenario:
@@ -275,7 +254,7 @@ def build_coffee_scenario() -> StudyScenario:
 
     tasks: list[StudyScenarioTask] = []
     for task in (1, 2, 3):
-        participant_specs, authority_specs, grants = _TASK_CONTEXT_SPECS[task]
+        participant_specs, authority_specs = _TASK_CONTEXT_SPECS[task]
         participant_contexts, participant_catalogs = _build_contexts(
             f"task-{task}:participant",
             participant_specs,
@@ -287,13 +266,9 @@ def build_coffee_scenario() -> StudyScenario:
         tasks.append(
             StudyScenarioTask(
                 task=task,
-                participant_current=("practice" if task == 1 else f"task-{task}"),
-                authority_current=authority_specs[0].name,
-                participant_contexts=participant_contexts,
-                authority_contexts=authority_contexts,
-                participant_catalogs=participant_catalogs,
-                authority_catalogs=authority_catalogs,
-                grants=grants,
+                current_context=("practice" if task == 1 else f"task-{task}"),
+                contexts=(*participant_contexts, *authority_contexts),
+                catalogs=(*participant_catalogs, *authority_catalogs),
             )
         )
     return StudyScenario(

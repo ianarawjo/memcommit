@@ -95,10 +95,7 @@ def _candidate_payload(candidate: RetrievalCandidate) -> dict[str, object]:
         "type": candidate.kind,
         "contexts": list(candidate.context_names),
     }
-    if candidate.kind == "query_context":
-        payload["name"] = candidate.search_text
-    else:
-        payload["content"] = candidate.search_text
+    payload["content"] = candidate.search_text
     return payload
 
 
@@ -203,8 +200,6 @@ def _build_search_prompt(
         "defensible.\n"
         "Select at most the requested limit in either result tier. Copy "
         "candidate_id exactly and preserve ranking through each array order.\n"
-        "A query_context candidate exposes only its name. Judge only that "
-        "visible name; do not infer or request its concealed contents.\n"
         "An artifact candidate is a bounded local projection of a saved "
         "session, operation, trace event, or rationale. Select it only when "
         "that recorded activity materially answers the search.\n"

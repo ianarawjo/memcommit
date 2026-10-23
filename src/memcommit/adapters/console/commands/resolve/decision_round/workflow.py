@@ -25,7 +25,9 @@ from memcommit.adapters.console.commands.resolve.decision_round.screen_content i
     build_decision_view,
 )
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
-from memcommit.application.operations.resolve.review_round.finalize_review_decisions import ResolveDecision
+from memcommit.application.operations.resolve.review_round.finalize_review_decisions import (
+    ResolveDecision,
+)
 from memcommit.application.operations.resolve.model import ResolveAnalysis, ResolveError
 
 RESOLVE_PRESENTATION = CompactScreenPresentation(
@@ -93,10 +95,7 @@ def prepare_decision_state(
     }
     if prepare_choice is not None:
         for issue in analysis.issues:
-            if (
-                issue.item_kind == "MEMORY"
-                and f"{issue.uid}:confirm" in options_by_uid[issue.uid]
-            ):
+            if f"{issue.uid}:confirm" in options_by_uid[issue.uid]:
                 choice = run_command_wait(
                     "RESOLVE",
                     "preparing suggestion preview",
@@ -111,18 +110,22 @@ def prepare_decision_state(
         view = replace(
             view,
             items=tuple(
-                replace(
-                    item,
-                    options=tuple(
-                        replace(option, label="USE SUGGESTION")
-                        if option.uid.endswith(":confirm")
-                        and option.uid in choice_previews
-                        and item.kind != "REDUNDANCY"
-                        else option
-                        for option in item.options
-                    ),
+                (
+                    replace(
+                        item,
+                        options=tuple(
+                            (
+                                replace(option, label="USE SUGGESTION")
+                                if option.uid.endswith(":confirm")
+                                and option.uid in choice_previews
+                                and (item.kind != "REDUNDANCY")
+                                else option
+                                for option in item.options
+                            )
+                        ),
+                    )
+                    for item in view.items
                 )
-                for item in view.items
             ),
         )
     state = DecisionRoundState(
@@ -142,8 +145,7 @@ def prepare_decision_state(
                 )
         else:
             state.select_choice(
-                decision.issue_uid,
-                f"{decision.issue_uid}:{decision.kind.lower()}",
+                decision.issue_uid, f"{decision.issue_uid}:{decision.kind.lower()}"
             )
     return state
 

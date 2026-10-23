@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import asdict, dataclass, field
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.resolution.workbench import ResolutionOption
 from memcommit.application.operations.audit.model import QualityAuditSession
 from memcommit.application.operations.update.model.changes import (

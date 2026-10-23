@@ -19,7 +19,6 @@ from memcommit.application.capabilities.command_recovery.restore_receipt import 
     command_restore_metadata,
 )
 from memcommit.application.capabilities.command_recovery.execution import (
-    GrantedCommandRestorer,
     restore_context_command,
 )
 
@@ -31,7 +30,6 @@ __all__ = [
     "CommandRestoreResult",
     "CommandStacks",
     "ContextCommandUnit",
-    "GrantedCommandRestorer",
     "RestoreDirection",
     "branch_tree_receipt",
     "build_command_stacks",

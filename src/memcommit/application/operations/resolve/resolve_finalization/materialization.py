@@ -9,7 +9,8 @@ from memcommit.application.operations.update.model import (
     RemoveOperation,
     UpdatePlan,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 from ..model import ResolveError
 
@@ -22,7 +23,9 @@ def compose_plan(before: Context, after: Context, plans, *, refs=None) -> Update
             for operation in plan.operations:
                 by_uid.setdefault(operation.memory_uid, []).append(operation)
     operations = []
-    for uid in dict.fromkeys((*before.ordered_uids(), *after.ordered_uids())):
+    for uid in dict.fromkeys(
+        (*before.get_ordered_memory_uids(), *after.get_ordered_memory_uids())
+    ):
         old, new = before.memories.get(uid), after.memories.get(uid)
         if not isinstance(old, Memory) and not isinstance(new, Memory):
             continue
@@ -32,7 +35,7 @@ def compose_plan(before: Context, after: Context, plans, *, refs=None) -> Update
             or new is not None
             and not isinstance(new, Memory)
         ):
-            raise ResolveError("Memory planning cannot replace a pointer.")
+            raise ResolveError("Memory planning received an unsupported item.")
         parents = tuple(
             dict.fromkeys(
                 ref

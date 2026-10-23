@@ -1,14 +1,15 @@
 """Retain exact Context creation records for later Redo."""
 
 from __future__ import annotations
+
 import json
+from ..infrastructure.checkpoint_records import normalize_checkpoint_record
 import uuid
 from pathlib import Path
-from memcommit.core.context import Context
-from ..context_memory.records import (
-    _context_name_parts,
-    _validate_context_header,
-)
+
+from memcommit.core.context_name_validation import validate_context_name
+from memcommit.models.context import Context
+from ..context_memory.records import _validate_context_header
 from ..infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
 )
@@ -88,7 +89,7 @@ class _CommandArchiveMixin:
                 or unit_uid != f"checkpoint:{checkpoint_uid}"
             ):
                 raise ValueError("Command Context archive manifest is invalid.")
-        elif command in {"merge", "meld"}:
+        elif command in {"merge", "meld", "sync"}:
             if (
                 set(manifest) != lifecycle_manifest_fields
                 or not isinstance(unit_uid, str)
@@ -130,7 +131,7 @@ class _CommandArchiveMixin:
                 or not isinstance(manifest.get("application"), dict)
             ):
                 raise ValueError("Command Context archive manifest is invalid.")
-        _context_name_parts(context_name)
+        validate_context_name(context_name)
         with open(context_path, encoding="utf-8") as file:
             context_record = json.load(
                 file,
@@ -152,7 +153,7 @@ class _CommandArchiveMixin:
                 )
             if not isinstance(value, dict):
                 raise ValueError("Command Context archive checkpoint is invalid.")
-            entries.append(value)
+            entries.append(normalize_checkpoint_record(value))
         if not any(entry.get("uid") == checkpoint_uid for entry in entries):
             raise ValueError("Command Context archive lost its source checkpoint.")
         return (

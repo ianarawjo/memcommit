@@ -5,12 +5,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
-    SourceReach,
-    SourceState,
 )
 
 
@@ -55,49 +54,12 @@ class DirectItemGap:
             raise ValueError("The first direct-item gap cannot have a previous item.")
 
 
-def _preview(item: Memory | MemoryRef | QueryContextRef | Context) -> DirectItemPreview:
-    if isinstance(item, Memory):
-        return DirectItemPreview(
-            item.uid[:8],
-            item.content,
-            "memory-object",
-            SourceDisplayFacts(form=SourceForm.MEMORY),
-        )
-    if isinstance(item, MemoryRef):
-        form = (
-            SourceForm.MEMORY_REFERENCE
-            if item.is_snapshot
-            else SourceForm.MEMORY_EMBED
-        )
-        return DirectItemPreview(
-            item.uid[:8],
-            (
-                item.target.content
-                if item.target is not None
-                else f"{item.target_context_name}#{item.target_memory_uid[:8]}"
-            ),
-            "memory-object" if item.target is not None else "report-neutral",
-            SourceDisplayFacts(
-                form=form,
-                states=(
-                    (SourceState.READ_ONLY,)
-                    if item.target is not None
-                    else (SourceState.DANGLING,)
-                ),
-            ),
-        )
-    if isinstance(item, QueryContextRef):
-        return DirectItemPreview(
-            item.uid[:8],
-            item.name,
-            "report-neutral",
-            SourceDisplayFacts(form=SourceForm.QUERY_VIEW),
-        )
+def _preview(item: Memory) -> DirectItemPreview:
     return DirectItemPreview(
         item.uid[:8],
-        item.name,
-        "report-neutral",
-        SourceDisplayFacts(form=SourceForm.CONTEXT, reach=SourceReach.VIA_EMBED),
+        item.content,
+        "memory-object",
+        SourceDisplayFacts(form=SourceForm.MEMORY),
     )
 
 
@@ -106,7 +68,7 @@ def direct_item_placement_rows(context: Context) -> tuple[DirectItemPlacementRow
 
     return tuple(
         DirectItemPlacementRow(uid=item.uid, preview=_preview(item))
-        for item in context.iter_items()
+        for item in context.iter_memories()
     )
 
 

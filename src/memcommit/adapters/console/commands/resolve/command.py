@@ -40,9 +40,6 @@ from memcommit.application.operations.resolve.analysis.convert_audit_to_issues i
 from memcommit.application.operations.resolve.analysis.resolution_options.generate_resolution_directions import (
     ProviderResolveOptionsPort,
 )
-from memcommit.application.operations.resolve.console_input_targets.finalize_console_targets import (
-    finalize_console_targets,
-)
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.connection import connect_semantic_provider
@@ -50,35 +47,6 @@ from memcommit.providers.errors import QueryProviderError
 
 
 def cmd(
-    auto_operands: Annotated[
-        Optional[list[str]],
-        typer.Argument(
-            help=(
-                "Auto operand: existing Context locator, Memory UID prefix, "
-                "or CONTEXT:UID; omit to use the current Context"
-            )
-        ),
-    ] = None,
-    context_name: Annotated[
-        Optional[str],
-        typer.Option(
-            "--context",
-            "-c",
-            help="Exact local Context or readable granted Context to repair",
-        ),
-    ] = None,
-    memory_operands: Annotated[
-        Optional[list[str]],
-        typer.Option(
-            "--memory",
-            "-m",
-            metavar="[CONTEXT:]UID_OR_PREFIX",
-            help=(
-                "Repeatable direct Memory restriction; short prefixes are "
-                "accepted because --memory makes their role explicit"
-            ),
-        ),
-    ] = None,
     allow_create: Annotated[
         bool,
         typer.Option(
@@ -103,14 +71,6 @@ def cmd(
             help="Additional context available while deriving Audit directions",
         ),
     ] = None,
-    recursive: Annotated[
-        bool,
-        typer.Option(
-            "-r",
-            "--recursive",
-            help="Resolve conflicts across the Context, lexical descendants, and embeds together.",
-        ),
-    ] = False,
 ) -> None:
     """Review conflicts, choose resolutions, and apply the resulting changes."""
 
@@ -118,21 +78,11 @@ def cmd(
         require_interactive_terminal("Resolve")
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
-        targets = finalize_console_targets(
-            store,
-            tuple(auto_operands or ()),
-            context_locator=context_name,
-            memory_operands=tuple(memory_operands or ()),
-            current_context_name=snapshot.current_name,
-            recursive=recursive,
-        )
         request = ResolveRequest(
-            context_name=targets.context_name,
-            memory_selectors=targets.memory_selectors,
+            context_name=snapshot.current_name,
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance or "",
-            recursive=recursive,
         )
         run_resolve_request(request, store=store, current_name=snapshot.current_name)
     except (
@@ -197,11 +147,6 @@ def run_resolve_request(
         (ResolveReviewSession(analysis),),
         revalidate_target=revalidate_target,
         provider_factory=connect_semantic_provider,
-        **(
-            {"preview_choices": True, "header_label": "RESOLVE · RECURSIVE"}
-            if request.recursive
-            else {}
-        ),
     )
     if proposal is None:
         return

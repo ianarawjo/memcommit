@@ -71,7 +71,6 @@ class StudyFixtureSpec:
     purpose_sidecar_key: PurposeSidecarKey
     sidecar_prefix: str
     fixture_ids_required: bool
-    query_only: bool = False
 
 
 @dataclass(frozen=True)
@@ -95,7 +94,10 @@ class FixtureMemory:
     @property
     def source_location(self) -> str:
         """Keep native source links unambiguous across Context directories."""
-        return self.source_relative_path or f"{self.source_path.parent.name}/{self.source_path.name}"
+        return (
+            self.source_relative_path
+            or f"{self.source_path.parent.name}/{self.source_path.name}"
+        )
 
     @property
     def identity_key(self) -> str:
@@ -200,7 +202,6 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T1-Q-",
         fixture_ids_required=True,
-        query_only=True,
     ),
     "task2-description": StudyFixtureSpec(
         name="task2-description",
@@ -253,7 +254,6 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
         purpose_sidecar_key=PurposeSidecarKey.FIXTURE_ID,
         sidecar_prefix="T2-Q-",
         fixture_ids_required=True,
-        query_only=True,
     ),
     "task3-description": StudyFixtureSpec(
         name="task3-description",
@@ -310,7 +310,6 @@ STUDY_FIXTURE_SPECS: Mapping[str, StudyFixtureSpec] = {
             "remote/government/healthcare-agent/info-request/questions-and-answers/"
         ),
         fixture_ids_required=False,
-        query_only=True,
     ),
     "task3-healthcare-public-guidance": StudyFixtureSpec(
         name="task3-healthcare-public-guidance",
@@ -507,7 +506,9 @@ def pair_fixture_translations(
                 f"{source.fixture_id!r} != {target.fixture_id!r}."
             )
         if source.memory_uid != target.memory_uid:
-            raise StudyFixtureError(f"Memory UID drift at {source.canonical_locator!r}.")
+            raise StudyFixtureError(
+                f"Memory UID drift at {source.canonical_locator!r}."
+            )
         if source.purpose != target.purpose:
             raise StudyFixtureError(
                 f"Purpose drift at {source.canonical_locator!r}: "

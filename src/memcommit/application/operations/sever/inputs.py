@@ -2,20 +2,11 @@
 
 from __future__ import annotations
 
-from memcommit.application.capabilities.semantic.disclosure import (
-    SemanticDisclosureError,
-    require_semantic_disclosure_authority,
-)
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
-    freeze_granted_context_binding,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.sever.application import (
     FrozenSeverInputs,
     SeverAnalysisRequest,
@@ -26,19 +17,13 @@ from memcommit.application.operations.sever.model import (
     SeverMemory,
     sever_frame_digest,
 )
-from memcommit.core.context import (
-    Context,
-    Memory,
-    MemoryRef,
-    QueryContextRef,
-)
-from memcommit.core.context_targeting.model import ContextScope
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
     MemoryStore,
-    context_record_digest,
 )
 
 
@@ -46,32 +31,21 @@ def capture_sever_binding(
     access: ContextAccess,
     *,
     include_descendants: bool,
-    registry: ProfileRegistry | None = None,
 ) -> SeverContextBinding:
     """Freeze one authorized ordinary-Memory frame for analysis and later CAS."""
 
-    read_store: MemoryStore | GrantedReadStore = (
-        GrantedReadStore(access, registry=registry)
-        if access.is_granted
-        else access.store
-    )
-    root_name = access.access_name if access.is_granted else access.context_name
+    read_store: MemoryStore = access.store
+    root_name = access.context_name
     load_direct = read_store.load_direct
     load_recursive = read_store.load
-    scope = ContextScope.create(
-        (root_name,),
-        include_descendants=include_descendants,
-    )
     root = load_recursive(root_name) if include_descendants else load_direct(root_name)
     roots = [root]
     if include_descendants:
         seen_root_uids = {root.uid}
-        # Namespace descendants and embedded children are independent routes
-        # into the same semantic frame, so UID de-duplication prevents double
-        # provider exposure when both routes reach one Context.
         for name in expand_lexical_context_names(
-            scope,
+            (root_name,),
             read_store.list_context_names(),
+            include_descendants=include_descendants,
         )[1:]:
             descendant = load_recursive(name)
             if descendant.uid in seen_root_uids:
@@ -79,26 +53,16 @@ def capture_sever_binding(
             seen_root_uids.add(descendant.uid)
             roots.append(descendant)
 
-    try:
-        require_semantic_disclosure_authority(
-            roots,
-            operation="Sever",
-            follow_contexts=include_descendants,
-        )
-    except SemanticDisclosureError as error:
-        raise SeverApplicationError(str(error)) from error
-
-    contexts: list[tuple[str, str, str]] = []
+    contexts: list[tuple[str, str]] = []
     memories: list[SeverMemory] = []
-    excluded_query_context_names: list[str] = []
     seen_contexts: set[str] = set()
 
     def visit(context: Context) -> None:
         if context.uid in seen_contexts:
             return
         seen_contexts.add(context.uid)
-        contexts.append((context.name, context.uid, context_record_digest(context)))
-        for item in context.iter_items():
+        contexts.append((context.name, context.uid))
+        for item in context.iter_memories():
             if isinstance(item, Memory):
                 memories.append(
                     SeverMemory(
@@ -106,17 +70,6 @@ def capture_sever_binding(
                         context_name=context.name,
                         content=item.content,
                     )
-                )
-            elif isinstance(item, Context):
-                if include_descendants:
-                    visit(item)
-            elif isinstance(item, QueryContextRef):
-                # QUERY authority does not disclose hidden content to Sever.
-                if item.name not in excluded_query_context_names:
-                    excluded_query_context_names.append(item.name)
-            elif isinstance(item, MemoryRef):
-                raise SeverApplicationError(
-                    f"Sever does not copy live Memory references from '{context.name}'."
                 )
 
     for frame_root in roots:
@@ -135,13 +88,7 @@ def capture_sever_binding(
         ),
         contexts=context_tuple,
         memories=memory_tuple,
-        granted=(
-            freeze_granted_context_binding(access).to_dict()
-            if access.is_granted
-            else None
-        ),
         include_descendants=include_descendants,
-        excluded_query_context_names=tuple(excluded_query_context_names),
     )
 
 
@@ -150,7 +97,6 @@ def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
         store=store,
         context_name=name,
         access_name=name,
-        permission="CREATE",
     )
 
 
@@ -175,14 +121,12 @@ class MemoryStoreSeverInputPort:
             self._store,
             request.source_locator,
             current_name=self._current_name,
-            required_permission="READ",
             candidates=candidates,
         ).value
         criteria_access = resolve_existing_context_access(
             self._store,
             request.criteria_locator,
             current_name=self._current_name,
-            required_permission="READ",
             candidates=candidates,
         ).value
         if (
@@ -192,19 +136,16 @@ class MemoryStoreSeverInputPort:
             raise SeverApplicationError(
                 "Source and Criteria Contexts must be distinct."
             )
-        validate_portable_context_name(request.output_name)
+        validate_context_name(request.output_name)
         same_source_name = request.output_name == source_access.access_name
         if same_source_name and (
-            source_access.is_granted
-            or source_access.store.store_dir != self._store.store_dir
+            False or source_access.store.store_dir != self._store.store_dir
         ):
             raise SeverApplicationError(
                 "In-place Sever requires an ordinary local Source."
             )
         self_save = (
-            same_source_name
-            and not source_access.is_granted
-            and source_access.store.store_dir == self._store.store_dir
+            same_source_name and source_access.store.store_dir == self._store.store_dir
         )
         if self._store.context_exists(request.output_name) and not self_save:
             raise SeverApplicationError(
@@ -236,10 +177,6 @@ class MemoryStoreSeverInputPort:
                 else "THIS_CONTEXT_ONLY"
             ),
             criteria_memory_count=len(frozen.criteria.memories),
-            excluded_query_context_count=len(
-                set(frozen.source.excluded_query_context_names)
-                | set(frozen.criteria.excluded_query_context_names)
-            ),
         )
         # New Sever invocations have no output endpoint to report. Keep the
         # legacy field only for resumable OTHER_SAVE sessions and their logs.

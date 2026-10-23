@@ -46,7 +46,6 @@ class _ActiveStorePath(os.PathLike[str]):
 STORE_DIR = _ActiveStorePath()
 CONTEXTS_DIR = _ActiveStorePath("contexts")
 STATE_FILE = _ActiveStorePath("state.json")
-QUERY_SOURCES_DIR = _ActiveStorePath("query-sources")
 IMPACT_PLAN_FILE = _ActiveStorePath("impact-plan.json")
 STAGED_UPDATE_FILE = _ActiveStorePath("staged-update.json")
 REVIEW_SESSION_FILE = _ActiveStorePath("review-session.json")
@@ -65,7 +64,6 @@ class _StorePathsMixin:
         *,
         create: bool = True,
         root: Path | None = None,
-        resolve_granted_links: bool = True,
     ):
         """
         Open the store.
@@ -73,29 +71,25 @@ class _StorePathsMixin:
         Normal commands create missing store infrastructure. Read-only
         inspection commands can pass create=False to guarantee that merely
         checking absent state does not create a Profile Store or state.json. ``root``
-        is an explicit, already-authorized store boundary used by profile
-        grants; omitting it resolves and freezes the active Profile now.
-        ``resolve_granted_links=False`` keeps live granted relationships opaque
-        and prevents this Store from consulting process-global Profile state.
+        is an explicit store boundary; omitting it resolves and freezes the
+        active Profile now.
         """
-        if type(resolve_granted_links) is not bool:
-            raise TypeError("resolve_granted_links must be a boolean.")
         # Explicit roots are already selected by the caller and must not touch
         # HOME Profile state. Profile-backed stores resolve exactly once here
         # so a later process-global Profile switch cannot retarget this object.
         self._store_dir = Path(root).absolute() if root is not None else Path(STORE_DIR)
-        # Store-root authority and Grant-resolution authority are independent.
-        # In particular, a public explicit-root client may inspect a persisted
-        # pointer but must not inherit the host process's active Profile Grants.
-        self._resolve_granted_links = resolve_granted_links
-        if root is None:
-            from memcommit.application.operations.mem_sync.automatic.run_after_commit import register_default_store_for_completion
-            register_default_store_for_completion(self)
         if create:
             ensure_private_directory(self.store_dir, parents=True)
             if root is None:
-                from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
-                from memcommit.application.operations.profile.project_root import write_profile_marker, validate_profile_marker
+                from memcommit.application.operations.profile.config import (
+                    load_profile_registry,
+                    profile_store_dir,
+                )
+                from memcommit.application.operations.profile.project_root import (
+                    write_profile_marker,
+                    validate_profile_marker,
+                )
+
                 profile = load_profile_registry().active
                 if profile_store_dir(profile).resolve() == self.store_dir.resolve():
                     if (self.store_dir / "profile.json").exists():
@@ -117,10 +111,6 @@ class _StorePathsMixin:
     @property
     def state_file(self) -> Path:
         return self.store_dir / "state.json"
-
-    @property
-    def query_sources_dir(self) -> Path:
-        return self.store_dir / "query-sources"
 
     @property
     def impact_plan_file(self) -> Path:

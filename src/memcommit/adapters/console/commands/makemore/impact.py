@@ -305,7 +305,7 @@ def makemore_cmd(
             if goal is not None
             else None
         )
-        inline_rules = bool(rule)
+        inline_rules = bool((rule or ()))
         frozen_source = None
         distilled_source_name = None
         distill_result = None
@@ -351,9 +351,7 @@ def makemore_cmd(
                 current=snapshot.current_name,
             )
             if as_role not in {"auto", "goal", "rules"}:
-                raise MakemoreError(
-                    "Makemore --as must be 'auto', 'goal', or 'rules'."
-                )
+                raise MakemoreError("Makemore --as must be 'auto', 'goal', or 'rules'.")
             if as_role == "auto":
                 distilled_source_name = endpoints.source_name
                 request = None

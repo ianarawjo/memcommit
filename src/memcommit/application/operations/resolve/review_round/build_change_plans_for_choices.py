@@ -5,19 +5,13 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass, field, replace
 
-from memcommit.application.authorization import ContextPermission
 from memcommit.application.operations.merge.analysis.candidate import digest
 from memcommit.application.operations.update.application import (
-    apply_update,
-    materialize_update_post_image,
+    apply_update_to_working_contexts,
 )
-from memcommit.application.operations.update.model import UpdatePlan
+from memcommit.application.operations.update.model import UpdatePlan, plan_update
 from memcommit.application.operations.update.model.instruction import UpdateInstruction
-from memcommit.core.context import Context
-from memcommit.application.capabilities.context_memory_target import (
-    plan_context_memory_update,
-    ContextMemoryOrigin,
-)
+from memcommit.models.context import Context
 from ..model import ResolveError
 from ..analysis.resolution_options.catalog import build_resolution_options
 from ..analysis.resolution_options.kinds.duplicates import duplicate_choice_plan
@@ -32,11 +26,11 @@ from .in_round_change_review.choose_change_for_memory import (
 )
 
 
-def allowed_target_uses(analysis):
+def allowed_update_effects(analysis):
     mapping = {
-        "CREATE": ContextPermission.CREATE,
-        "UPDATE": ContextPermission.EDIT,
-        "DELETE": ContextPermission.DELETE,
+        "CREATE": "CREATE",
+        "UPDATE": "EDIT",
+        "DELETE": "DELETE",
     }
     return frozenset(mapping[value] for value in analysis.frame.allowed_effects)
 
@@ -49,7 +43,6 @@ class ResolveChoicePlan:
     _after: Context = field(repr=False)
     _source: Context = field(repr=False)
     plan: UpdatePlan
-    memory_origins: tuple[ContextMemoryOrigin, ...] = ()
 
     def __post_init__(self):
         for name in ("_before", "_after", "_source"):
@@ -68,12 +61,10 @@ class ResolveChoicePlan:
 def prepare_resolve_choice(analysis, decision, *, provider_factory):
     """Generate one complete, detached choice; this never re-Audits or publishes."""
     issue = next(
-        (item for item in analysis.issues if item.uid == decision.issue_uid),
-        None,
+        (item for item in analysis.issues if item.uid == decision.issue_uid), None
     )
     if (
         issue is None
-        or issue.item_kind != "MEMORY"
         or decision.kind not in {"CONFIRM", "INTENT"}
         or decision.kind
         not in {choice.uid for choice in build_resolution_options(analysis, issue)}
@@ -82,28 +73,22 @@ def prepare_resolve_choice(analysis, decision, *, provider_factory):
     before = analysis.frame.source.context()
     selected = ResolveDecisionSet(analysis.frame.revision, (decision,))
     source = build_update_input_from_decisions(analysis, selected)
-    memory_origins = ()
     if issue.kind == "REDUNDANCY":
         plan = duplicate_choice_plan(analysis, selected, before)
     else:
-        plan, memory_origins = plan_context_memory_update(
-            analysis.frame.memory_target,
-            source,
-            before,
+        plan = plan_update(
+            (source,),
+            (before,),
             provider_factory,
             instruction=UpdateInstruction(next(iter(source.memories.values())).content),
-            granted_target=analysis.frame.granted_binding,
-            allowed_target_uses=allowed_target_uses(analysis),
+            allowed_update_effects=allowed_update_effects(analysis),
         )
-    after = materialize_update_post_image(apply_update(plan, before), before)
+    result = apply_update_to_working_contexts(plan=plan, target_contexts=(before,))
+    after = result.post_image_for(context_uid=before.uid)
+    if after is None:
+        after = before
     return ResolveChoicePlan(
-        analysis.frame.revision,
-        decision,
-        before,
-        after,
-        source,
-        plan,
-        memory_origins,
+        analysis.frame.revision, decision, before, after, source, plan
     )
 
 
@@ -147,8 +132,10 @@ def reviewed_choice_plans(analysis, decisions, choices, target):
     source = build_update_input_from_decisions(analysis, decisions)
     plans = []
     for decision in decisions.decisions:
-        issue = next(item for item in analysis.issues if item.uid == decision.issue_uid)
-        if decision.kind not in {"CONFIRM", "INTENT"} or issue.item_kind != "MEMORY":
+        issue = next(
+            (item for item in analysis.issues if item.uid == decision.issue_uid)
+        )
+        if decision.kind not in {"CONFIRM", "INTENT"}:
             continue
         choice = choices.get(decision)
         if (
@@ -163,21 +150,24 @@ def reviewed_choice_plans(analysis, decisions, choices, target):
             raise ResolveError(
                 "The reviewed change no longer matches this round's input."
             )
-        if (
-            materialize_update_post_image(
-                apply_update(choice.plan, target), target
-            ).to_dict()
-            != choice.after().to_dict()
-        ):
+        result = apply_update_to_working_contexts(
+            plan=choice.plan, target_contexts=(target,)
+        )
+        after = result.post_image_for(context_uid=target.uid)
+        if after is None:
+            after = target
+        if after.to_dict() != choice.after().to_dict():
             raise ResolveError("The reviewed diff no longer matches its frozen plan.")
         if any(
-            {"add": "CREATE", "edit": "UPDATE", "remove": "DELETE"}[operation.operation]
-            not in analysis.frame.allowed_effects
-            for operation in choice.plan.operations
+            (
+                {"add": "CREATE", "edit": "UPDATE", "remove": "DELETE"}[
+                    operation.operation
+                ]
+                not in analysis.frame.allowed_effects
+                for operation in choice.plan.operations
+            )
         ):
             raise ResolveError("The reviewed change exceeds this frame's authority.")
-        # The final decision set has a different instruction Context identity.
-        # Rebind only the same authored instruction; effects and result IDs stay frozen.
         if issue.kind == "REDUNDANCY":
             if choice.plan != duplicate_choice_plan(
                 analysis,
@@ -195,21 +185,26 @@ def reviewed_choice_plans(analysis, decisions, choices, target):
         if old_source.memories[old_uid].content != source.memories[new_uid].content:
             raise ResolveError("The reviewed instruction changed after preview.")
         operations = tuple(
-            replace(
-                operation,
-                source_refs=tuple(
-                    replace(
-                        ref,
-                        context_uid=source.uid,
-                        context_name=source.name,
-                        memory_uid=new_uid,
-                    )
-                    if ref.context_uid == old_source.uid and ref.memory_uid == old_uid
-                    else ref
-                    for ref in operation.source_refs
-                ),
+            (
+                replace(
+                    operation,
+                    source_refs=tuple(
+                        (
+                            replace(
+                                ref,
+                                context_uid=source.uid,
+                                context_name=source.name,
+                                memory_uid=new_uid,
+                            )
+                            if ref.context_uid == old_source.uid
+                            and ref.memory_uid == old_uid
+                            else ref
+                            for ref in operation.source_refs
+                        )
+                    ),
+                )
+                for operation in choice.plan.operations
             )
-            for operation in choice.plan.operations
         )
         plans.append((decision, replace(choice.plan, operations=operations)))
     return tuple(plans)

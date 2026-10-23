@@ -9,13 +9,15 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.terminal.components.progress import (
     progressing_provider_factory,
 )
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.application.operations.translate.application import (
     PreparedTranslation,
@@ -44,16 +46,6 @@ from memcommit.core.memory_translation import (
 )
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
-from memcommit.source_projection.model import (
-    SourceDisplayFacts,
-    SourceForm,
-    SourceReach,
-    SourceState,
-)
-from memcommit.source_projection.presentation import (
-    source_annotation_text,
-    source_object_label,
-)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -120,7 +112,7 @@ def _render_catalog(
         f"{'Memory' if len(effective) == 1 else 'Memories'}"
     )
     typer.echo("─" * 64)
-    for item in context.iter_items():
+    for item in context.iter_memories():
         entry = by_source_uid.get(item.uid)
         if isinstance(item, Memory):
             if entry is None:
@@ -137,34 +129,6 @@ def _render_catalog(
             continue
         if selector is not None:
             continue
-        if isinstance(item, Context):
-            facts = SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
-            typer.echo(
-                f"[{source_object_label(facts)} {item.uid[:8]}] "
-                f"{safe_terminal_text(item.name)} · "
-                f"{source_annotation_text(facts)} (not translated)"
-            )
-        elif isinstance(item, QueryContextRef):
-            label = source_object_label(SourceForm.QUERY_VIEW)
-            typer.echo(
-                f"[{label} {item.uid[:8]}] "
-                f"{safe_terminal_text(item.name)} (not translated)"
-            )
-        elif isinstance(item, MemoryRef):
-            facts = SourceDisplayFacts(
-                form=SourceForm.MEMORY_REF,
-                states=(
-                    (SourceState.READ_ONLY,)
-                    if item.is_resolved
-                    else (SourceState.DANGLING,)
-                ),
-            )
-            typer.echo(
-                f"[{source_object_label(facts)} {item.uid[:8]}] "
-                f"{safe_terminal_text(item.target_context_name)}"
-                f"#{item.target_memory_uid[:8]} · "
-                f"{source_annotation_text(facts)} (not translated)"
-            )
     typer.echo("─" * 64)
     stale = catalog.stale_curated_uids(context)
     if stale:
@@ -239,6 +203,7 @@ def _render_prepared_without_context_write(
     """Render a completed result that does not write a Context."""
 
     if prepared.kind == "CANCELLED":
+        annotate_command_outcome("CANCELLED")
         typer.echo("Translation edit cancelled.")
         return True
     if prepared.kind == "EMPTY":

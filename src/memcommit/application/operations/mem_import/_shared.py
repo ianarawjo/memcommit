@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from memcommit.application.operations.profile.config import (
-    ProfileEntry,
     ProfileRegistry,
     profile_store_dir,
     validate_profile_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.model._storage import (
     ProfileError,
     inspect_store,
@@ -18,7 +18,7 @@ from memcommit.persistence.store import MemoryStore
 def source_profile(
     registry: ProfileRegistry,
     name: str,
-) -> ProfileEntry:
+) -> Profile:
     """Resolve one visible registered source without changing selection."""
 
     canonical = validate_profile_name(name)
@@ -31,7 +31,7 @@ def source_profile(
 
 def require_cross_profile_source(
     registry: ProfileRegistry,
-    source: ProfileEntry,
+    source: Profile,
 ) -> None:
     """Keep import-by-value distinct from same-Profile copy operations."""
 

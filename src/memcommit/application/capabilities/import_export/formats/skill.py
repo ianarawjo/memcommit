@@ -1,15 +1,20 @@
 """Agent Skills composition; metadata is editable YAML, never opaque side data."""
 
+from dataclasses import replace
+
 import yaml
 
-from .markdown import parse_markdown, render_markdown
-from .yaml import parse_yaml, render_yaml
+from memcommit.models.corresponding_document_metadata import (
+    CorrespondingDocumentMetadata,
+)
+
 from ..model import DocumentPackage, PackageFormat, fail
 from ..spacing import SpacingPolicy
-from memcommit.core.document import DocumentState
+from .markdown import parse_markdown, render_markdown
+from .yaml import parse_yaml, render_yaml
 
 
-def parse_skill(files) -> DocumentPackage:
+def parse_skill(files, *, path_scope="PACKAGE") -> DocumentPackage:
     entries = [f for f in files if f.path == "SKILL.md"]
     if len(entries) != 1:
         fail("missing-skill", "SKILL.md", "A skill requires exactly one root SKILL.md.")
@@ -17,6 +22,26 @@ def parse_skill(files) -> DocumentPackage:
         text = entries[0].data.decode("utf-8")
     except UnicodeError as error:
         fail("encoding", "SKILL.md", str(error))
+    opening, header, closing, content = split_skill_text(text)
+    metadata = parse_yaml(
+        header,
+        state=CorrespondingDocumentMetadata(
+            "SKILL.md", "yaml", "skill_metadata", "skill", opening, closing, path_scope
+        ),
+    )
+    body = parse_markdown(
+        content,
+        state=CorrespondingDocumentMetadata(
+            "SKILL.md", "md", "skill_body", "skill", path_scope=path_scope
+        ),
+    )
+    package = DocumentPackage((body, metadata), format=PackageFormat.SKILL)
+    validate_skill(package)
+    return package
+
+
+def split_skill_text(text):
+    """Return raw delimiters, YAML and Markdown without changing whitespace."""
     lines = text.splitlines(keepends=True)
     if not lines or lines[0].lstrip("\ufeff").rstrip("\r\n") != "---":
         fail("frontmatter", "SKILL.md", "Expected YAML frontmatter delimited by ---.")
@@ -26,19 +51,12 @@ def parse_skill(files) -> DocumentPackage:
     )
     if end is None:
         fail("frontmatter", "SKILL.md", "YAML frontmatter has no closing delimiter.")
-    metadata = parse_yaml(
+    return (
+        lines[0],
         "".join(lines[1:end]),
-        state=DocumentState(
-            "SKILL.md", "yaml", "skill_metadata", "skill", lines[0], lines[end]
-        ),
-    )
-    body = parse_markdown(
+        lines[end],
         "".join(lines[end + 1 :]),
-        state=DocumentState("SKILL.md", "md", "skill_body", "skill"),
     )
-    package = DocumentPackage((body, metadata), format=PackageFormat.SKILL)
-    validate_skill(package)
-    return package
 
 
 def validate_skill(package) -> dict:
@@ -95,20 +113,31 @@ def validate_skill(package) -> dict:
     return values
 
 
-def render_skill(package, policy=SpacingPolicy()) -> str:
+def render_skill(package, policy=SpacingPolicy(), *, source_ranges=None) -> str:
     validate_skill(package)
     body = [d for d in package.documents if d.state.role == "skill_body"]
     if len(body) != 1:
         fail("skill-body", "SKILL.md", "Exactly one skill body is required.")
     metadata = next(d for d in package.documents if d.state.role == "skill_metadata")
-    header = render_yaml(metadata)
+    header_ranges, body_ranges = [], []
+    header = render_yaml(metadata, source_ranges=header_ranges)
     if header and not header.endswith(("\n", "\r")):
         header += "\n"
-    content = render_markdown(body[0], policy)
-    return (
-        (metadata.state.opening or "---\n")
+    content = render_markdown(body[0], policy, source_ranges=body_ranges)
+    opening = metadata.state.opening or "---\n"
+    prefix = (
+        opening
         + header
         + (metadata.state.closing or "---\n")
-        + ("\n" if content else "")
-        + content
+        + ("\n" if content and body[0].state.path_scope != "PROFILE" else "")
     )
+    if source_ranges is not None:
+        for spans, offset in (
+            (header_ranges, len(opening.encode("utf-8"))),
+            (body_ranges, len(prefix.encode("utf-8"))),
+        ):
+            source_ranges.extend(
+                replace(span, start=span.start + offset, end=span.end + offset)
+                for span in spans
+            )
+    return prefix + content

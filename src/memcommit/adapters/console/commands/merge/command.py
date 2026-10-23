@@ -4,13 +4,16 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.merge.endpoint_setup import (
     choose_merge_request,
 )
 from memcommit.adapters.console.commands.merge.preview import (
     run_merge_preview,
 )
-from memcommit.adapters.console.commands.resolve.resolution_rounds import run_resolution_rounds
+from memcommit.adapters.console.commands.resolve.resolution_rounds import (
+    run_resolution_rounds,
+)
 from memcommit.adapters.console.coordination.endpoint_operand import (
     choose_endpoint_operand,
 )
@@ -39,10 +42,7 @@ from memcommit.application.operations.merge.resolve_preparation import (
     prepare_semantic_review,
 )
 from memcommit.application.operations.merge.result import finish_merge
-from memcommit.application.operations.merge.setup import (
-    build_merge_setup,
-    merge_target_permission,
-)
+from memcommit.application.operations.merge.setup import build_merge_setup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
@@ -138,6 +138,7 @@ def cmd(
             )
             request = choose_merge_request(setup, literal_only=bulk is not None)
             if request is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Merge cancelled; no changes made.")
                 return
         else:
@@ -150,7 +151,6 @@ def cmd(
                 store,
                 target,
                 current_name=current_name,
-                required_permission=merge_target_permission(method),
             ).value
             request = MergeRequest(
                 source_access.access_name, target_access.access_name, method
@@ -164,6 +164,7 @@ def cmd(
             review_before_apply=from_setup,
         )
         if result is None:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Merge cancelled; no changes made.")
         else:
             from memcommit.adapters.console.commands.merge.receipt import (

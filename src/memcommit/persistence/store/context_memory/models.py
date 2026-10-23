@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store.context_memory.lifecycle_model import (
     ContextLifecycleEvent,
 )
@@ -44,11 +44,10 @@ class ContextBranchMemoryBinding:
 
 @dataclass(frozen=True)
 class ContextBranchBinding:
-    """One freshness-bound Source and its newly identified Branch Context."""
+    """One reviewed Source identity/history and its newly identified Branch Context."""
 
     source_name: str
     expected_source_uid: str
-    expected_source_digest: str
     expected_history_digest: str
     target: Context
     memories: tuple[ContextBranchMemoryBinding, ...] = ()
@@ -71,8 +70,6 @@ class ContextRenamePlan:
     new_name: str
     bindings: tuple[ContextRenameBinding, ...]
     changed_owner_names: tuple[str, ...]
-    reference_count: int
-    checkpoint_reference_count: int
     translation_artifact_count: int
     current_before: str | None
     current_after: str | None
@@ -89,8 +86,6 @@ class ContextRenameResult:
 
     renamed_context_count: int
     changed_owner_count: int
-    reference_count: int
-    checkpoint_reference_count: int
     translation_artifact_count: int
     current_context: str | None
 

@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import json
-from dataclasses import replace
+
 from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
@@ -79,15 +80,7 @@ from memcommit.application.operations.rationale.skills.memory_rationale.executio
 from memcommit.application.operations.rationale.skills.memory_rationale.response import (
     RationaleNarrativeProjection,
 )
-from memcommit.application.operations.trace.granted_view import (
-    GrantedMemoryTraceReport,
-    build_granted_memory_trace,
-)
-from memcommit.application.operations.trace.reference_lineage import (
-    MemoryReferenceTraceReport,
-    build_reference_trace,
-)
-from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
+
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
@@ -102,7 +95,6 @@ def render_rationale(
     projection: RationaleNarrativeProjection,
     *,
     verbose: bool = False,
-    granted_trace: GrantedMemoryTraceReport | None = None,
 ) -> None:
     typer.secho(
         f"Rationale [{_uid(report.trace.selected_uid, verbose)}] · "
@@ -115,21 +107,8 @@ def render_rationale(
     for line in safe_terminal_text(report.target.content).splitlines() or [""]:
         typer.echo(f"  {line}")
 
-    if granted_trace is not None:
-        typer.secho("\nACCESS ROUTE", bold=True)
-        typer.echo(
-            f"  GRANT {_uid(granted_trace.grant_uid, verbose)} · "
-            f"REVISION {granted_trace.grant_revision} · "
-            + " + ".join(granted_trace.permissions)
-        )
-        if verbose:
-            typer.echo(
-                f"  RESOURCE · {display_escape_text(granted_trace.resource_name)} "
-                f"[{granted_trace.resource_uid}]"
-            )
-
     if projection.status is RationaleNarrativeStatus.HIDDEN:
-        typer.secho("\nPROVENANCE — hidden by Grant", bold=True)
+        typer.secho("\nPROVENANCE — unavailable", bold=True)
     elif projection.status is RationaleNarrativeStatus.EMPTY:
         typer.secho("\nPROVENANCE — no retained history", bold=True)
     else:
@@ -138,84 +117,6 @@ def render_rationale(
     if not report.trace.current_matches_last_checkpoint:
         typer.secho("\nATTENTION", bold=True)
         for warning in report.trace.warnings:
-            typer.echo(f"  {display_escape_text(warning)}")
-
-
-def render_reference_rationale(
-    reference_trace: MemoryReferenceTraceReport,
-    target_report: RationaleReport | None,
-    target_projection: RationaleNarrativeProjection | None,
-    *,
-    verbose: bool = False,
-) -> None:
-    """Explain a pointer relation and, independently, its target provenance."""
-
-    reference = reference_trace.reference
-    typer.secho(
-        f"Rationale [{_uid(reference.uid, verbose)}] · "
-        f"{display_escape_text(reference_trace.context_name)}",
-        bold=True,
-    )
-    typer.secho("\nREFERENCE", bold=True)
-    relationship = "LIVE EMBED" if reference.mode == "LIVE" else "IMMUTABLE SNAPSHOT"
-    typer.echo(
-        f"  {relationship} → {display_escape_text(reference.target_context_name)}:"
-        f"{_uid(reference.target_memory_uid, verbose)}"
-    )
-
-    typer.secho("\nRELATION PROVENANCE", bold=True)
-    material_events = tuple(
-        event for event in reference_trace.events if event.kind != "HISTORY_GAP"
-    )
-    if material_events:
-        first = material_events[0]
-        detail = first.description.strip()
-        if detail:
-            typer.echo(f"  {safe_terminal_text(detail)}")
-        else:
-            typer.echo(
-                f"  The reference first appears in retained {first.command} evidence."
-            )
-    else:
-        typer.echo("  No retained occurrence change explains this reference.")
-    if reference.mode == "LIVE":
-        typer.echo(
-            "  The pointer and target keep separate identities; Source changes "
-            "may change the resolved content without changing this pointer."
-        )
-    else:
-        typer.echo(
-            "  This snapshot keeps the reviewed content; later Source changes "
-            "do not rewrite it."
-        )
-
-    typer.secho("\nTARGET MEMORY", bold=True)
-    if target_report is not None:
-        for line in safe_terminal_text(target_report.target.content).splitlines() or [
-            ""
-        ]:
-            typer.echo(f"  {line}")
-    else:
-        for line in safe_terminal_text(
-            reference.snapshot_content or ""
-        ).splitlines() or [""]:
-            typer.echo(f"  {line}")
-
-    if target_projection is not None:
-        if target_projection.status is RationaleNarrativeStatus.EMPTY:
-            typer.secho("\nTARGET PROVENANCE — no retained history", bold=True)
-        elif target_projection.status is RationaleNarrativeStatus.HIDDEN:
-            typer.secho("\nTARGET PROVENANCE — hidden", bold=True)
-        else:
-            typer.secho("\nTARGET PROVENANCE", bold=True)
-            typer.echo("  " + safe_terminal_text(target_projection.text))
-    elif reference.mode == "SNAPSHOT":
-        typer.secho("\nTARGET PROVENANCE — snapshot fixed at reference time", bold=True)
-    else:
-        typer.secho("\nTARGET PROVENANCE — unavailable", bold=True)
-    if reference_trace.warnings:
-        typer.secho("\nATTENTION", bold=True)
-        for warning in reference_trace.warnings:
             typer.echo(f"  {display_escape_text(warning)}")
 
 
@@ -241,7 +142,7 @@ def render_context_rationale(
         f"{'s' if len(report.events) != 1 else ''}"
     )
     if projection.status is RationaleNarrativeStatus.HIDDEN:
-        typer.secho("\nRATIONALE — hidden by Grant", bold=True)
+        typer.secho("\nRATIONALE — unavailable", bold=True)
     elif projection.status is RationaleNarrativeStatus.EMPTY:
         typer.secho("\nRATIONALE — no retained history", bold=True)
     else:
@@ -305,7 +206,7 @@ def cmd(
             help=(
                 "browse the current readable subtree for one exact Context or "
                 "Memory when omitted; otherwise accepts CONTEXT, "
-                "Memory/MemoryRef UID/prefix, or CONTEXT:UID"
+                "Memory UID/prefix, or CONTEXT:UID"
             )
         ),
     ] = None,
@@ -376,7 +277,6 @@ def cmd(
                 store,
                 context_name,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             ).name
             _execute_context_rationale(
                 store,
@@ -393,10 +293,9 @@ def cmd(
                 store,
                 selector,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             )
             explicit_target = (
-                ContextTarget(context_identity.name)
+                context_identity.name
                 if context_identity is not None
                 else resolve_explicit_context_history_target(
                     selector,
@@ -404,10 +303,10 @@ def cmd(
                     available_context_names=store.list_context_names(),
                 )
             )
-            if isinstance(explicit_target, ContextTarget):
+            if isinstance(explicit_target, str):
                 _execute_context_rationale(
                     store,
-                    context_name=explicit_target.context_name,
+                    context_name=explicit_target,
                     current_context_name=context_snapshot.current_name,
                     as_json=as_json,
                     verbose=verbose,
@@ -454,12 +353,13 @@ def cmd(
                 catalog_context_names=scope_names,
             )
             if selected is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Rationale cancelled.")
                 return
-            if isinstance(selected, ContextTarget):
+            if isinstance(selected, str):
                 _execute_context_rationale(
                     store,
-                    context_name=selected.context_name,
+                    context_name=selected,
                     current_context_name=context_snapshot.current_name,
                     as_json=False,
                     verbose=verbose,
@@ -467,10 +367,10 @@ def cmd(
                     unit=unit,
                 )
                 return
-            if not isinstance(selected, DirectMemoryTarget):
+            if not isinstance(selected, tuple):
                 raise RationaleError("Rationale browser returned an invalid target.")
-            context_name = selected.context_name
-            selector = selected.memory_uid
+            context_name = selected[0]
+            selector = selected[1]
             selected_from_profile = True
             # Re-read live state after the full-screen picker so the report is
             # tied to the exact Memory the person selected.
@@ -487,26 +387,19 @@ def cmd(
                 store,
                 owner_locator,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             )
-            if access.is_granted:
-                context_name = access.access_name
+            try:
+                resolved_target = resolve_local_memory_report_target(
+                    store,
+                    item_selector,
+                    current=context_snapshot.current_name,
+                    context_locator=access.context_name,
+                )
+            except ValueError as error:
+                if qualified_selector or "No reportable" not in str(error):
+                    raise
+                context_name = owner_locator
                 selector = item_selector
-                if qualified_selector:
-                    include_descendants = False
-            else:
-                try:
-                    resolved_target = resolve_local_memory_report_target(
-                        store,
-                        item_selector,
-                        current=context_snapshot.current_name,
-                        context_locator=access.context_name,
-                    )
-                except ValueError as error:
-                    if qualified_selector or "No reportable" not in str(error):
-                        raise
-                    context_name = owner_locator
-                    selector = item_selector
         else:
             try:
                 readable_catalog = freeze_memory_report_readable_catalog(
@@ -524,21 +417,13 @@ def cmd(
             except ReadableMemoryTargetNotFoundError:
                 readable_target = None
             if readable_target is not None:
-                if readable_target.access.is_granted:
-                    context_name = readable_target.context_name
-                    selector = readable_target.uid
-                    include_descendants = False
-                else:
-                    resolved_target = resolve_local_memory_report_target(
-                        store,
-                        readable_target.uid,
-                        current=context_snapshot.current_name,
-                        context_locator=readable_target.context_name,
-                    )
+                resolved_target = resolve_local_memory_report_target(
+                    store,
+                    readable_target.uid,
+                    current=context_snapshot.current_name,
+                    context_locator=readable_target.context_name,
+                )
             else:
-                # Current readable Memories are the round-trip namespace for
-                # Find/List/Search. Retained local history and MemoryRefs remain
-                # addressable when no current row matches that UID.
                 resolved_target = resolve_local_memory_report_target(
                     store,
                     item_selector,
@@ -551,87 +436,8 @@ def cmd(
             selector = resolved_target.uid
             include_descendants = False
             selected_from_profile = False
-            if resolved_target.kind == "MEMORY_REFERENCE":
-                reference_trace = build_reference_trace(
-                    store,
-                    store.load_direct(resolved_target.context_name),
-                    resolved_target.uid,
-                )
-                target_report: RationaleReport | None = None
-                target_projection: RationaleNarrativeProjection | None = None
-                if reference_trace.target_trace is not None:
-                    target_context = store.load_direct(
-                        reference_trace.target_trace.context_name
-                    )
-                    target_report = build_rationale(
-                        store,
-                        target_context,
-                        reference_trace.target_trace,
-                        None,
-                    )
-                    try:
-                        with progressing_provider_factory(
-                            "RATIONALE",
-                            "writing target provenance",
-                            connect_semantic_provider,
-                        ) as provider_factory:
-                            target_projection = generate_memory_rationale(
-                                target_report.trace,
-                                provider_factory=provider_factory,
-                                history_available=True,
-                                limit=limit,
-                                unit=unit,
-                            )
-                    except (
-                        QueryProviderError,
-                        ProfileConfigError,
-                        ProfileError,
-                        RuntimeError,
-                    ) as error:
-                        # The retained pointer relation remains useful even
-                        # when its optional natural-language target projection
-                        # cannot connect. Never discard deterministic evidence.
-                        reference_trace = replace(
-                            reference_trace,
-                            warnings=(
-                                *reference_trace.warnings,
-                                f"Target provenance narrative is unavailable: {error}",
-                            ),
-                        )
-                if as_json:
-                    target_payload = None
-                    if target_report is not None:
-                        target_payload = target_report.to_dict()
-                        target_payload["provenance_projection"] = (
-                            target_projection.to_dict()
-                            if target_projection is not None
-                            else None
-                        )
-                    typer.echo(
-                        json.dumps(
-                            {
-                                "kind": "memory_reference_rationale",
-                                "trace": reference_trace.to_dict(),
-                                "target_rationale": target_payload,
-                            },
-                            ensure_ascii=False,
-                            indent=2,
-                        )
-                    )
-                    return
-                render_reference_rationale(
-                    reference_trace,
-                    target_report,
-                    target_projection,
-                    verbose=verbose,
-                )
-                return
 
         if selected_from_profile:
-            # Revalidate through the same Profile-wide namespace used by the
-            # picker.  Re-anchoring a granted target to its grant-only catalog
-            # here could silently drop local or separately granted lexical
-            # contributors that were visible in the reviewed range.
             refreshed_profile_catalog = freeze_rationale_profile_catalog(
                 store,
                 context_name,
@@ -651,22 +457,12 @@ def cmd(
             )
         target = resolve_rationale_target(scope, selector)
         trace = rationale_memory_history(scope, target)
-        granted_trace = (
-            build_granted_memory_trace(
-                target.access,
-                target.candidate.uid,
-                context=target.owner,
-                display_name=target.owner.name,
-            )
-            if target.access.is_granted
-            else None
-        )
         report = build_rationale(
             target.access.store,
             target.owner,
             trace,
             None,
-            recorded_evidence_available=not target.access.is_granted,
+            recorded_evidence_available=True,
         )
         with progressing_provider_factory(
             "RATIONALE",
@@ -704,9 +500,6 @@ def cmd(
     if as_json:
         payload = report.to_dict()
         payload["provenance_projection"] = projection.to_dict()
-        if granted_trace is not None:
-            payload["access_route"] = granted_trace.to_dict()["access_route"]
-            payload["history"] = granted_trace.to_dict()["history"]
         typer.echo(
             json.dumps(
                 payload,
@@ -721,5 +514,4 @@ def cmd(
         report,
         projection,
         verbose=verbose,
-        granted_trace=granted_trace,
     )

@@ -13,12 +13,12 @@ from memcommit.application.capabilities.write_protection.application import (
     WriteProtectionRequest,
     WriteProtectionResult,
 )
-from memcommit.core.context import Memory
-from memcommit.core.context_targeting.model import ContextTarget
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
-    context_record_digest,
 )
 
 
@@ -27,7 +27,7 @@ def _context_target(
     locator: str | None,
     *,
     current_context_name: str | None,
-) -> ResolvedExistingContextOperand[ContextTarget]:
+) -> ResolvedExistingContextOperand[Context]:
     return resolve_existing_local_context_operand(
         store,
         locator,
@@ -74,14 +74,13 @@ class MemoryStoreWriteProtectionPort:
                     (
                         candidate.name,
                         candidate.uid,
-                        context_record_digest(candidate),
                     )
                     for candidate in self._store.load_direct_context_graph_strict()
                     if candidate.name == name or candidate.name.startswith(prefix)
                 )
                 if not any(
                     candidate_name == name
-                    for candidate_name, _, _ in expected_contexts
+                    for candidate_name, _ in expected_contexts
                 ):
                     raise FileNotFoundError(f"Context '{name}' not found.")
                 total, changed_count = (
@@ -103,7 +102,6 @@ class MemoryStoreWriteProtectionPort:
                 name,
                 protected=protected,
                 expected_context_uid=context.uid,
-                expected_context_digest=context_record_digest(context),
             )
             return WriteProtectionResult(
                 target_kind="CONTEXT",
@@ -124,7 +122,6 @@ class MemoryStoreWriteProtectionPort:
             item.uid,
             protected=protected,
             expected_context_uid=context.uid,
-            expected_context_digest=context_record_digest(context),
         )
         return WriteProtectionResult(
             target_kind="MEMORY",

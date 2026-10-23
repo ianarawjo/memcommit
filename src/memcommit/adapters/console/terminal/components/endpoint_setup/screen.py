@@ -75,7 +75,7 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     focused_control_style,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 
 
 def run_endpoint_setup_screen(
@@ -197,7 +197,7 @@ def run_endpoint_setup_screen(
             names=role.names,
             operation_validator=role.new_context.name_validator,
         ) -> None:
-            validate_portable_context_name(candidate)
+            validate_context_name(candidate)
             if candidate in names:
                 raise ValueError(
                     "That Context already exists; choose its available tree row."

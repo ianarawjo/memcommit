@@ -2,7 +2,7 @@
 
 Checkpoint JSON stores the command post-image in ``snapshot`` and, for newer
 automatic checkpoints, the exact pre-image in ``command_before``. Revert can
-also retain complete checkpoint records recursively in ``args.log_snapshot``.
+also retain complete checkpoint records recursively in ``command_details.log_snapshot``.
 Any identity-preserving graph migration must visit all of those frames; a
 partial traversal can leave Revert readable while making command Undo/Redo
 unreconstructable.
@@ -10,7 +10,7 @@ unreconstructable.
 
 from __future__ import annotations
 
-import copy
+from ..infrastructure.checkpoint_records import normalize_checkpoint_record
 from collections.abc import Callable
 
 
@@ -41,7 +41,7 @@ def map_restorable_checkpoint_frames(
     through this function rather than maintaining a second field inventory.
     """
 
-    rewritten = copy.deepcopy(value)
+    rewritten = normalize_checkpoint_record(value)
     for field in RESTORABLE_CONTEXT_FRAME_FIELDS:
         frame = rewritten.get(field)
         if not isinstance(frame, dict):
@@ -53,7 +53,7 @@ def map_restorable_checkpoint_frames(
             )
         rewritten[field] = mapped
 
-    args = rewritten.get("args")
+    args = rewritten.get("command_details")
     if not isinstance(args, dict) or "log_snapshot" not in args:
         return rewritten
     log_snapshot = args["log_snapshot"]

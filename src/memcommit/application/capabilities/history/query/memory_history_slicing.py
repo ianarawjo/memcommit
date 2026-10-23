@@ -11,7 +11,7 @@ from dataclasses import dataclass, replace
 import json
 from typing import Iterable, Literal
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.history.history_evidence_source import (
     HistoryEvidenceSource,
 )
@@ -47,8 +47,6 @@ class MemoryHistoryCandidate:
     content: str
     position: int
     status: Literal["CURRENT", "HISTORICAL"]
-    # ``None`` is an authority boundary, not a zero: granted READ content may
-    # be selectable for Rationale without exposing its owner's retained log.
     change_count: int | None = None
 
 
@@ -221,7 +219,7 @@ def _analysis_attachments(
     current_frame = _frame_from_context(ctx)
     applied = False
     for checkpoint in store.list_checkpoints(ctx.name):
-        args = checkpoint.get("args")
+        args = checkpoint.get("command_details")
         trace = args.get("trace") if isinstance(args, dict) else None
         if not (isinstance(trace, dict) and trace.get("operation_id") == session.uid):
             continue

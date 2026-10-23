@@ -53,7 +53,7 @@ def _run(
 ) -> None:
     """Connect console progress and receipts to the application-owned execution."""
 
-    operation_label = "Dedun" if operation == "dedun" else "Find Redundancies"
+    operation_label = "Dedup" if operation == "dedun" else "Find Redundancies"
     store = MemoryStore(create=False)
     try:
         with ExitStack() as progress:

@@ -21,7 +21,8 @@ from memcommit.application.operations.atomize.domain import (
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.operations.duplicates.dedun.application import (
     DedunRequest,
     DedunSelection,
@@ -98,7 +99,7 @@ def _dedun_projection(
     )
     request = DedunRequest(quality_finding_handoffs(workbench))
     memories = tuple(
-        item for item in projected.iter_items() if isinstance(item, Memory)
+        item for item in projected.iter_memories() if isinstance(item, Memory)
     )
     plan = freeze_dedun_analysis(
         request,

@@ -4,10 +4,8 @@ from memcommit.application.operations.summarize.application import SummarizeResu
 
 
 def summarize_scope_label(result: SummarizeResult) -> str:
-    """Return the stable public label for the result's two reach axes."""
+    """Return the stable public label for the result's lexical Context reach."""
 
-    if result.include_descendants and result.follow_embeds:
-        return "RECURSIVE"
-    if not result.include_descendants and not result.follow_embeds:
+    if not result.include_descendants:
         return "DIRECT"
-    return "CUSTOM"
+    return "RECURSIVE"

@@ -5,7 +5,7 @@ from collections import Counter
 from memcommit.application.operations.dev_eval.terminal import ScenarioTerminal
 from memcommit.application.operations.list.application import ListRequest
 from memcommit.application.operations.list.runtime import execute_list
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 
@@ -16,7 +16,10 @@ def run(
     context_name: str,
     contents: tuple[str, ...],
 ) -> bool:
-    add_result = terminal.run("add", "--to", context_name, "--", *contents)
+    switch_result = terminal.run("switch", context_name)
+    if switch_result.returncode != 0:
+        return False
+    add_result = terminal.run("add", "--", *contents)
     if add_result.returncode != 0:
         return False
     try:
@@ -33,7 +36,7 @@ def run(
         return False
     stored_contents = Counter(
         memory.content
-        for memory in listed_context.iter_items()
+        for memory in listed_context.iter_memories()
         if isinstance(memory, Memory)
     )
     return stored_contents == Counter(contents)

@@ -1,18 +1,20 @@
 """Structured change types proposed by semantic operations."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, TypeAlias
 
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 if TYPE_CHECKING:
-    from memcommit.core.context import Context
+    from memcommit.models.context import Context
 
 
 @dataclass
 class AddChange:
     """Proposed addition of new information as a fresh memory."""
+
     content: str
     reason: str
 
@@ -20,14 +22,16 @@ class AddChange:
 @dataclass
 class RemoveChange:
     """Proposed deletion of an entire memory."""
+
     uid: str
-    content: str   # snapshot of the memory text, for display only
+    content: str  # snapshot of the memory text, for display only
     reason: str
 
 
 @dataclass
 class EditChange:
     """Proposed in-place edit of a memory (partial relevance to the forget query)."""
+
     uid: str
     old_content: str
     new_content: str
@@ -37,22 +41,13 @@ class EditChange:
 ProposedChange: TypeAlias = AddChange | RemoveChange | EditChange
 
 
-def get_required_permission_for_effect(effect: str) -> str:
-    """Map a semantic effect to its required Context permission."""
-
-    # Saved effect labels are separate from the accepted Grant vocabulary.
-    return {"CREATE": "CREATE", "UPDATE": "EDIT", "DELETE": "DELETE"}[effect]
-
-
 def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
     """
     Convert a parsed LLM response dict into ProposedChange objects.
     Silently skips entries with unknown uids (hallucinations) or missing fields.
     """
     valid_uids = {
-        uid
-        for uid, info in ctx.iter_entries()
-        if isinstance(info, Memory)
+        memory.uid for memory in ctx.iter_memories() if isinstance(memory, Memory)
     }
     changes: list[ProposedChange] = []
 
@@ -66,11 +61,13 @@ def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
         if op == "remove":
             mem = ctx.memories[uid]
             assert isinstance(mem, Memory)
-            changes.append(RemoveChange(
-                uid=uid,
-                content=mem.content,
-                reason=item.get("reason", ""),
-            ))
+            changes.append(
+                RemoveChange(
+                    uid=uid,
+                    content=mem.content,
+                    reason=item.get("reason", ""),
+                )
+            )
 
         elif op == "edit":
             new_content = item.get("new_content", "").strip()
@@ -78,12 +75,14 @@ def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
                 continue
             mem = ctx.memories[uid]
             assert isinstance(mem, Memory)
-            changes.append(EditChange(
-                uid=uid,
-                old_content=mem.content,
-                new_content=new_content,
-                reason=item.get("reason", ""),
-            ))
+            changes.append(
+                EditChange(
+                    uid=uid,
+                    old_content=mem.content,
+                    new_content=new_content,
+                    reason=item.get("reason", ""),
+                )
+            )
 
     return changes
 
@@ -94,6 +93,7 @@ def apply_changes(ctx: Context, changes: list[ProposedChange]) -> None:
     Call store.save(ctx) afterwards to persist.
     """
     import uuid
+
     for change in changes:
         if isinstance(change, AddChange):
             ctx.add(Memory(uid=str(uuid.uuid4()), content=change.content))
@@ -101,5 +101,7 @@ def apply_changes(ctx: Context, changes: list[ProposedChange]) -> None:
             if change.uid in ctx.memories:
                 ctx.remove(change.uid)
         elif isinstance(change, EditChange):
-            if change.uid in ctx.memories and isinstance(ctx.memories[change.uid], Memory):
+            if change.uid in ctx.memories and isinstance(
+                ctx.memories[change.uid], Memory
+            ):
                 ctx.replace_memory(Memory(uid=change.uid, content=change.new_content))

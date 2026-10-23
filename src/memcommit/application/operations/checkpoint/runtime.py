@@ -17,10 +17,9 @@ from memcommit.application.operations.checkpoint.application import (
     apply_checkpoint,
     plan_checkpoint,
 )
-from memcommit.core.context import Context
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.models.context import Context
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,8 +54,7 @@ class MemoryStoreCheckpointPort:
         else:
             expected_catalog = tuple(self._store.list_context_names())
             context_names = expand_lexical_context_names(
-                ContextScope.create((context_name,), include_descendants=True),
-                expected_catalog,
+                (context_name,), expected_catalog, include_descendants=True
             )
             contexts = tuple(
                 root if name == context_name else self._store.load_direct(name)
@@ -71,7 +69,6 @@ class MemoryStoreCheckpointPort:
                 CheckpointMemberPlan(
                     context_name=context.name,
                     context_uid=context.uid,
-                    context_digest=context_record_digest(context),
                     checkpoint_uid=checkpoint_uid,
                 )
                 for context, checkpoint_uid in zip(contexts, checkpoint_uids)
@@ -87,13 +84,13 @@ class MemoryStoreCheckpointPort:
         if not plan.request.recursive:
             checkpoint = self._store.checkpoint(
                 token.contexts[0],
-                plan.request.message,
+                plan.request.checkpoint_message,
             )
             return CheckpointResult(
                 root_context_name=plan.root_context_name,
                 root_checkpoint_uid=checkpoint.uid,
                 timestamp=checkpoint.timestamp,
-                message=plan.request.message,
+                checkpoint_message=plan.request.checkpoint_message,
                 recursive=False,
                 member_count=1,
             )
@@ -102,9 +99,7 @@ class MemoryStoreCheckpointPort:
             {"uid": member.context_uid, "name": member.context_name}
             for member in plan.members
         ]
-        checkpoint_uids = tuple(
-            member.checkpoint_uid for member in plan.members
-        )
+        checkpoint_uids = tuple(member.checkpoint_uid for member in plan.members)
         assert all(uid is not None for uid in checkpoint_uids)
         root_checkpoint_uid = checkpoint_uids[0]
         assert root_checkpoint_uid is not None
@@ -128,23 +123,13 @@ class MemoryStoreCheckpointPort:
             ],
         }
         checkpoints = self._store.checkpoint_context_batch(
-            (
-                (context, member.context_digest)
-                for context, member in zip(token.contexts, plan.members)
-            ),
-            message=plan.request.message,
+            token.contexts,
+            checkpoint_message=plan.request.checkpoint_message,
             command="checkpoint",
-            args={
+            command_details={
                 "checkpoint_set": checkpoint_set,
                 "command_contexts": membership,
             },
-            description=(
-                plan.request.message
-                or (
-                    f"Manual checkpoint set for {len(plan.members)} Context(s) "
-                    f"under '{plan.root_context_name}'"
-                )
-            ),
             expected_context_catalog=plan.expected_context_catalog,
             checkpoint_uids=(uid for uid in checkpoint_uids if uid is not None),
         )
@@ -152,7 +137,7 @@ class MemoryStoreCheckpointPort:
             root_context_name=plan.root_context_name,
             root_checkpoint_uid=root_checkpoint_uid,
             timestamp=checkpoints[0].timestamp,
-            message=plan.request.message,
+            checkpoint_message=plan.request.checkpoint_message,
             recursive=True,
             member_count=len(checkpoints),
         )

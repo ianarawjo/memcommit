@@ -1,4 +1,4 @@
-"""Console provider composition and static Search progress."""
+"""Console provider composition and static Find progress."""
 
 from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
@@ -22,7 +22,7 @@ def run_search_request(
     *,
     observer: SearchObserver | None = None,
 ) -> SearchResponse:
-    """Connect the configured provider to the terminal-independent Search runtime."""
+    """Connect the configured provider to the terminal-independent Find runtime."""
 
     return execute_search(
         request,
@@ -44,7 +44,7 @@ def run_static_search(
 
     if not show_progress:
         return run_search_request(store, catalog, request)
-    with CommandProgress("SEARCH", "connecting provider", total=3) as progress:
+    with CommandProgress("FIND", "connecting provider", total=3) as progress:
 
         def observe(stage: SearchStage) -> None:
             if stage == "SEARCHING":

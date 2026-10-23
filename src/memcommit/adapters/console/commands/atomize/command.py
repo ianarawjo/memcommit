@@ -6,6 +6,8 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.models.context import Context
+
 from memcommit.adapters.console.commands.atomize.receipt import (
     render_atomize_apply_result,
 )
@@ -27,12 +29,7 @@ from memcommit.application.capabilities.operand_resolution import (
     freeze_local_context_operand_candidates,
     resolve_existing_context_operand,
 )
-from memcommit.core.context_targeting.model import (
-    ContextTarget,
-    DirectMemoryLocator,
-    DirectMemoryTarget,
-    ExistingContextOperand,
-)
+from memcommit.core.context_targeting.model import DirectMemoryLocator
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
@@ -67,13 +64,8 @@ def _parse_target(
             raise ValueError("Memory was supplied both positionally and with --memory.")
         return parsed_operand.context_locator, parsed_operand.memory_selector
 
-    positional_context = (
-        parsed_operand.locator
-        if isinstance(parsed_operand, ExistingContextOperand)
-        else context_operand
-    )
     return (
-        choose_context_operand(positional_context, option=context_name),
+        choose_context_operand(context_operand, option=context_name),
         memory_selector,
     )
 
@@ -142,16 +134,16 @@ def cmd(
                 context_operand,
                 current=context_snapshot.current_name,
             )
-            if isinstance(target, DirectMemoryTarget):
+            if isinstance(target, tuple):
                 if memory_selector is not None:
                     raise ValueError(
                         "Memory was supplied both positionally and with --memory."
                     )
-                context_name = target.context_name
-                memory_selector = target.memory_uid
+                context_name = target[0].name
+                memory_selector = target[1].uid
             else:
-                assert isinstance(target, ContextTarget)
-                context_name = target.context_name
+                assert isinstance(target, Context)
+                context_name = target.name
 
         canonical_name = (
             resolve_existing_context_operand(

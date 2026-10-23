@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import Protocol
 
 from memcommit.application.capabilities.memory_transfer.contracts import (
-    MemoryTransferAuthorityError,
     MemoryTransferError,
     MemoryTransferItemResult,
     validate_transfer_plan_fields,
@@ -28,8 +27,6 @@ def validate_move_request(request: MoveMemoriesRequest) -> MoveMemoriesRequest:
         before=request.before,
         after=request.after,
     )
-    if request.link_policy not in {"BLOCK", "RETARGET", "BREAK"}:
-        raise MemoryTransferError("Move link_policy must be BLOCK, RETARGET, or BREAK.")
     return request
 
 
@@ -44,17 +41,11 @@ def _validate_move_plan(plan: FrozenMoveMemoriesPlan) -> None:
         plan.memories,
         into_name=plan.into_name,
         into_uid=plan.into_uid,
-        into_digest=plan.into_digest,
         placement=plan.placement,
         plan_digest=plan.plan_digest,
     )
     if any(item.output_memory_uid != item.source_memory_uid for item in plan.memories):
         raise MemoryTransferError("Move must preserve every selected Memory UID.")
-    if any(item.source_authority is not None for item in plan.memories):
-        raise MemoryTransferAuthorityError(
-            "Move cannot use granted Source Memories; Copy them into a local "
-            "Context first, then move the local copies."
-        )
     if len({item.output_memory_uid for item in plan.memories}) != len(plan.memories):
         raise MemoryTransferError(
             "Move cannot place same-UID branch copies in one Target Context."
@@ -99,18 +90,11 @@ def run_move(
         )
         for item in plan.memories
     )
-    inbound_count = len(plan.inbound_links)
-    expected_retargeted = inbound_count if request.link_policy == "RETARGET" else 0
-    expected_dangling = inbound_count if request.link_policy == "BREAK" else 0
     if (
         result.into_name != plan.into_name
         or result.into_uid != plan.into_uid
-        or result.link_policy != request.link_policy
         or result.placement != plan.placement
         or result.items != expected
-        or result.inbound_link_count != inbound_count
-        or result.retargeted_link_count != expected_retargeted
-        or result.dangling_link_count != expected_dangling
         or result.plan_digest != plan.plan_digest
         or not result.checkpoints
     ):

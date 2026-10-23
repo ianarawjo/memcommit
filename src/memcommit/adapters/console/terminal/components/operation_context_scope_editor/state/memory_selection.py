@@ -1,96 +1,80 @@
-"""Process-local exact Memory selection for terminal Context controls."""
+"""Process-local selection of already loaded owner/Memory pairs."""
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 
-from memcommit.core.context_targeting.model import ContextSelectionMode, DirectMemoryTarget
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_targeting.model import ContextSelectionMode
 
 
 class DirectMemorySelectionState:
-    """Keep one or many exact selections independent from the hover cursor.
-
-    MULTIPLE mode intentionally permits an empty staged set.  The composing
-    operation owns minimum-cardinality validation when it constructs an exact
-    request, matching the shared Context-selection contract.
-    """
+    """Keep one or many loaded selections independent from the hover cursor."""
 
     def __init__(
         self,
-        selected: DirectMemoryTarget | None = None,
+        selected: tuple[Context, Memory] | None = None,
         *,
         mode: ContextSelectionMode = "SINGLE",
-        selected_targets: Sequence[DirectMemoryTarget] = (),
+        selected_targets: Sequence[tuple[Context, Memory]] = (),
     ) -> None:
         if mode not in {"SINGLE", "MULTIPLE"}:
             raise ValueError("Direct Memory selection mode must be SINGLE or MULTIPLE.")
-        values = list(dict.fromkeys(selected_targets))
-        if selected is not None:
-            if values:
-                raise ValueError(
-                    "Use selected or selected_targets, not both, for direct Memory selection."
-                )
-            values = [selected]
-        if any(not isinstance(target, DirectMemoryTarget) for target in values):
-            raise TypeError("Direct Memory selection requires typed targets.")
-        if mode == "SINGLE" and len(values) > 1:
-            raise ValueError("Single direct Memory selection accepts at most one target.")
+        if selected is not None and selected_targets:
+            raise ValueError("Use selected or selected_targets, not both.")
         self.mode = mode
-        self._selected_order = values
+        self._selected: dict[tuple[str, str], tuple[Context, Memory]] = {}
+        self.replace((selected,) if selected is not None else selected_targets)
 
     @property
     def multiple(self) -> bool:
         return self.mode == "MULTIPLE"
 
     @property
-    def selected(self) -> DirectMemoryTarget | None:
-        """Return the sole selection used by existing single-cardinality callers."""
-
+    def selected(self) -> tuple[Context, Memory] | None:
         if self.multiple:
             raise ValueError("Multiple direct Memory selection has no single target.")
-        return self._selected_order[0] if self._selected_order else None
+        return next(iter(self._selected.values()), None)
 
     @property
-    def selected_targets(self) -> tuple[DirectMemoryTarget, ...]:
-        return tuple(self._selected_order)
+    def selected_targets(self) -> tuple[tuple[Context, Memory], ...]:
+        return tuple(self._selected.values())
 
-    @property
-    def selected_set(self) -> frozenset[DirectMemoryTarget]:
-        return frozenset(self._selected_order)
-
-    def choose(self, target: DirectMemoryTarget) -> bool:
-        if not isinstance(target, DirectMemoryTarget):
-            raise TypeError("Direct Memory selection requires a typed target.")
+    def choose(self, target: tuple[Context, Memory]) -> bool:
+        context, memory = target
+        key = context.uid, memory.uid
         if self.multiple:
-            if target in self._selected_order:
-                self._selected_order.remove(target)
+            if key in self._selected:
+                del self._selected[key]
             else:
-                self._selected_order.append(target)
+                self._selected[key] = target
             return True
-        changed = self._selected_order != [target]
-        self._selected_order = [target]
+        changed = tuple(self._selected) != (key,)
+        self._selected = {key: target}
         return changed
 
-    def replace(self, targets: Sequence[DirectMemoryTarget]) -> bool:
-        values = list(dict.fromkeys(targets))
-        if any(not isinstance(target, DirectMemoryTarget) for target in values):
-            raise TypeError("Direct Memory selection requires typed targets.")
+    def replace(self, targets: Sequence[tuple[Context, Memory]]) -> bool:
+        values = {
+            (context.uid, memory.uid): (context, memory) for context, memory in targets
+        }
         if not self.multiple and len(values) > 1:
-            raise ValueError("Single direct Memory selection accepts at most one target.")
-        changed = values != self._selected_order
-        self._selected_order = values
+            raise ValueError(
+                "Single direct Memory selection accepts at most one target."
+            )
+        changed = tuple(values) != tuple(self._selected)
+        self._selected = values
         return changed
 
     def clear(self) -> bool:
-        if not self._selected_order:
-            return False
-        self._selected_order = []
-        return True
+        changed = bool(self._selected)
+        self._selected.clear()
+        return changed
 
     def clear_unless_context(self, context_name: str) -> bool:
         if self.multiple:
             return False
         selected = self.selected
-        if selected is None or selected.context_name == context_name:
+        if selected is None or selected[0].name == context_name:
             return False
         return self.clear()

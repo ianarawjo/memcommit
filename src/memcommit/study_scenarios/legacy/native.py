@@ -12,8 +12,9 @@ from typing import TYPE_CHECKING
 from memcommit.application.operations.mem_import.documents.codec import (
     read_document,
 )
-from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 
 if TYPE_CHECKING:
     from .fixtures import FixtureDataset, StudyFixtureSpec
@@ -45,8 +46,8 @@ def load_native_fixture(
     for row in rows:
         if row["task"] != str(spec.task):
             raise StudyFixtureError("Native fixture task differs from its dataset.")
-        profile = validate_portable_context_name(row["profile"])
-        name = validate_portable_context_name(row["context"])
+        profile = validate_context_name(row["profile"])
+        name = validate_context_name(row["context"])
         path = (
             root
             / "native"
@@ -122,7 +123,7 @@ def load_native_fixture(
     actual = {
         item.uid
         for context in documents.values()
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory)
     }
     if actual != set(uids):

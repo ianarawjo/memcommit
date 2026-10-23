@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 
 @dataclass(frozen=True)
@@ -39,7 +39,7 @@ class ContextImportPlan:
     target_profile_uid: str
     source_context: str
     target_contexts: tuple[str, ...]
-    source_context_versions: tuple[tuple[str, str, str], ...]
+    source_context_identities: tuple[tuple[str, str], ...]
     context_count: int
     memory_count: int
     recursive: bool
@@ -55,9 +55,7 @@ class MemoryImportPlan:
     target_profile_uid: str
     source_context: str
     source_context_uid: str
-    source_context_digest: str
     source_memory_uid: str
     source_memory_content_sha256: str
     target_context: str
     target_context_uid: str
-    target_context_digest: str

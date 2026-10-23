@@ -7,13 +7,12 @@ from dataclasses import dataclass
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.authorization.study_operation_policy import require_trace_access
 
 
 @dataclass(frozen=True)
@@ -37,15 +36,7 @@ def load_retained_history_context(
         store,
         context_locator,
         current_name=current_name,
-        required_permission="READ",
     ).value
-    # A Grant attachment authorizes current content projection, not the
-    # authority Profile's checkpoints, command receipts, or saved analyses.
-    require_trace_access(
-        access.access_name,
-        granted=access.is_granted,
-        store_root=store.store_dir,
-    )
     return RetainedHistoryContext(
         display_name=access.access_name,
         storage_name=access.context_name,
@@ -75,9 +66,6 @@ def load_retained_history_scope(
         if name == root.storage_name
         or (include_descendants and name.startswith(root.storage_name + "/"))
     )
-    # The root access check above rejects a granted authority view before this
-    # local catalog is opened. Every descendant is therefore owned by the same
-    # active store rather than inferred from a public Grant hierarchy.
     return tuple(
         RetainedHistoryContext(
             display_name=name,

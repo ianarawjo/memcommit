@@ -9,17 +9,11 @@ from typing import Literal
 from memcommit.application.capabilities.durable_uid_resolution import (
     DurableUidCandidate,
 )
-from memcommit.application.capabilities.semantic.disclosure import (
-    SemanticDisclosureError,
-    require_semantic_disclosure_authority,
-)
-from memcommit.application.capabilities.retrieval_corpus.errors import (
-    RetrievalCorpusError,
-)
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
-RetrievalKind = Literal["memory", "memory_ref", "query_context", "artifact"]
+RetrievalKind = Literal[("memory", "artifact")]
 
 
 @dataclass(frozen=True)
@@ -45,7 +39,7 @@ class RetrievalArtifact:
             raise ValueError("Retrieval artifact summary must be text.")
 
 
-RetrievalItem = Memory | MemoryRef | QueryContextRef | RetrievalArtifact
+RetrievalItem = Memory | RetrievalArtifact
 
 
 @dataclass(frozen=True)
@@ -71,14 +65,6 @@ def retrieval_candidate_uid_catalog(
     identities: list[DurableUidCandidate[RetrievalCandidate]] = []
     for candidate in candidates:
         candidate_uids = [candidate.item.uid]
-        if (
-            isinstance(candidate.item, MemoryRef)
-            and candidate.item.target_memory_uid != candidate.item.uid
-        ):
-            # Retrieval consumers expose the reference UID and its Source
-            # Memory UID, so both public identities select the same authorized
-            # result row.
-            candidate_uids.append(candidate.item.target_memory_uid)
         identities.extend(
             DurableUidCandidate(
                 uid=uid,
@@ -93,13 +79,11 @@ def retrieval_candidate_uid_catalog(
 def collect_candidates(
     ctx: Context,
     *,
-    recursive: bool = True,
     operation: str = "Retrieval",
 ) -> list[RetrievalCandidate]:
-    """Collect searchable items from one in-memory Context graph."""
+    """Collect directly owned Memories from one in-memory Context."""
     return collect_candidates_from_roots(
         (ctx,),
-        recursive=recursive,
         operation=operation,
     )
 
@@ -107,25 +91,9 @@ def collect_candidates(
 def collect_candidates_from_roots(
     roots: Sequence[Context],
     *,
-    recursive: bool = True,
     operation: str = "Retrieval",
 ) -> list[RetrievalCandidate]:
-    """
-    Collect visible searchable items from one or more frozen Context roots.
-
-    QueryContextRefs contribute only their public name. Their concealed source
-    is never opened. Shared/cyclic Context graphs are visited once by Context
-    identity, including when a materialized namespace Context is also reached
-    through an explicit embed.
-    """
-    try:
-        require_semantic_disclosure_authority(
-            roots,
-            operation=operation,
-            follow_contexts=recursive,
-        )
-    except SemanticDisclosureError as error:
-        raise RetrievalCorpusError(str(error)) from error
+    """Collect each selected local Context once in frozen root order."""
     candidates: list[RetrievalCandidate] = []
     visited_contexts: set[str] = set()
     by_logical_identity: dict[tuple[str, str, str], int] = {}
@@ -162,7 +130,7 @@ def collect_candidates_from_roots(
         if current.uid in visited_contexts:
             return
         visited_contexts.add(current.uid)
-        for item in current.iter_items():
+        for item in current.iter_memories():
             if isinstance(item, Memory):
                 add_candidate(
                     "memory",
@@ -171,33 +139,6 @@ def collect_candidates_from_roots(
                     item.content,
                     ("memory", current.uid, item.uid),
                 )
-            elif isinstance(item, MemoryRef):
-                if item.target is not None:
-                    add_candidate(
-                        "memory_ref",
-                        current,
-                        item,
-                        item.target.content,
-                        (
-                            "memory",
-                            item.target_context_uid,
-                            item.target_memory_uid,
-                        ),
-                    )
-            elif isinstance(item, QueryContextRef):
-                add_candidate(
-                    "query_context",
-                    current,
-                    item,
-                    item.name,
-                    (
-                        "query_context",
-                        item.provider,
-                        item.target_source_uid,
-                    ),
-                )
-            elif isinstance(item, Context) and recursive:
-                visit(item)
 
     for root in roots:
         visit(root)

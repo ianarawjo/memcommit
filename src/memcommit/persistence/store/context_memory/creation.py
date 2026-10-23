@@ -7,10 +7,11 @@ import uuid
 from pathlib import Path
 from typing import Iterable, Optional
 
-from memcommit.core.context import AutoCheckpoint, Checkpoint, Context, Memory
-from memcommit.core.context_targeting.naming import (
-    validate_portable_context_name,
-)
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
@@ -31,19 +32,14 @@ from .models import (
     ContextBranchMemoryBinding,
     _NO_CURRENT_CONTEXT_EXPECTATION,
 )
-from .records import (
-    _context_name_parts,
-    _rewrite_branched_checkpoint_record,
-    checkpoint_history_digest,
-    context_record_digest,
-)
+from .records import validate_checkpoint_context_frames, checkpoint_history_digest
 
 
 class _ContextCreationMixin:
     def create_context(
         self,
         ctx: Context,
-        auto_checkpoint: Optional[AutoCheckpoint] = None,
+        auto_checkpoint: Optional[AutoCheckpointRequest] = None,
     ) -> Checkpoint | None:
         """Create one new Context without overwriting a concurrent owner."""
         with self._command_write_lock():
@@ -52,18 +48,17 @@ class _ContextCreationMixin:
                     checkpoint = self._save_locked(
                         ctx,
                         auto_checkpoint,
-                        expected_context_digest=None,
                         require_new=True,
                     )
-        ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
     def create_context_with_sources(
         self,
         ctx: Context,
-        auto_checkpoint: Optional[AutoCheckpoint] = None,
+        auto_checkpoint: Optional[AutoCheckpointRequest] = None,
         *,
-        source_bindings: Iterable[tuple[str, str, str]],
+        source_bindings: Iterable[tuple[str, str]],
+        expected_context_catalog: Iterable[str] | None = None,
     ) -> Checkpoint | None:
         """Publish a new Context from exact source snapshots.
 
@@ -72,24 +67,35 @@ class _ContextCreationMixin:
         both stale locators and a concurrent owner from reaching the new path.
         """
         bindings = tuple(source_bindings)
-        source_names = tuple(name for name, _, _ in bindings)
+        source_names = tuple(name for name, _ in bindings)
         if (
             not bindings
             or len(source_names) != len(set(source_names))
             or ctx.name in source_names
         ):
             raise ValueError("Invalid Context creation source lock set.")
+        expected_catalog = (
+            tuple(expected_context_catalog)
+            if expected_context_catalog is not None
+            else None
+        )
         with self._command_write_lock():
             with self._context_graph_lock(exclusive=False):
                 with self._context_write_locks((*source_names, ctx.name)):
+                    # Membership and content belong to the same publication boundary.
+                    if (
+                        expected_catalog is not None
+                        and tuple(self.list_context_names()) != expected_catalog
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            "Context namespace changed before the result could be saved."
+                        )
                     self._assert_source_bindings_locked(bindings)
                     checkpoint = self._save_locked(
                         ctx,
                         auto_checkpoint,
-                        expected_context_digest=None,
                         require_new=True,
                     )
-        ctx._store_digest = context_record_digest(ctx)
         return checkpoint
 
     def create_branch_context(
@@ -98,17 +104,16 @@ class _ContextCreationMixin:
         *,
         source_name: str,
         expected_source_uid: str,
-        expected_source_digest: str,
         expected_history_digest: str,
         expected_current: str | None,
     ) -> None:
         """Create, inherit history, and select one exact branch atomically."""
         source = self.load_direct(source_name)
         source_memories = tuple(
-            item for item in source.iter_items() if isinstance(item, Memory)
+            item for item in source.iter_memories() if isinstance(item, Memory)
         )
         target_memories = tuple(
-            item for item in ctx.iter_items() if isinstance(item, Memory)
+            item for item in ctx.iter_memories() if isinstance(item, Memory)
         )
         if len(source_memories) != len(target_memories) or any(
             source_item.content != target_item.content
@@ -124,7 +129,6 @@ class _ContextCreationMixin:
                 ContextBranchBinding(
                     source_name=source_name,
                     expected_source_uid=expected_source_uid,
-                    expected_source_digest=expected_source_digest,
                     expected_history_digest=expected_history_digest,
                     target=ctx,
                     memories=tuple(
@@ -172,15 +176,15 @@ class _ContextCreationMixin:
             raise ValueError("A Branch requires at least one Context binding.")
         if type(include_descendants) is not bool:
             raise ValueError("Branch descendant scope must be a boolean.")
-        _context_name_parts(source_root)
-        validate_portable_context_name(target_root)
+        validate_context_name(source_root)
+        validate_context_name(target_root)
         if source_root == target_root:
             raise ValueError("A Branch must have a new Context root name.")
 
         source_names = tuple(binding.source_name for binding in records)
         target_names = tuple(binding.target.name for binding in records)
         for target_name in target_names:
-            validate_portable_context_name(target_name)
+            validate_context_name(target_name)
         if (
             len(source_names) != len(set(source_names))
             or len(target_names) != len(set(target_names))
@@ -197,7 +201,7 @@ class _ContextCreationMixin:
             target_memory_uids = tuple(item.target_uid for item in binding.memories)
             target_memories = {
                 item.uid: item
-                for item in binding.target.iter_items()
+                for item in binding.target.iter_memories()
                 if isinstance(item, Memory)
             }
             if (
@@ -234,13 +238,6 @@ class _ContextCreationMixin:
             binding.target.uid in source_uids for binding in records
         ):
             raise ValueError("Every Branch Context requires one new identity.")
-        targets_by_source_uid = {
-            binding.expected_source_uid: (
-                binding.target.uid,
-                binding.target.name,
-            )
-            for binding in records
-        }
         operation_uid = str(uuid.uuid4())
         command_contexts = [
             {
@@ -281,17 +278,11 @@ class _ContextCreationMixin:
                 for memory in binding.memories
             ),
         )
-        branch_description = (
-            f"Branched subtree '{source_root}' to '{target_root}'."
-            if include_descendants
-            else f"Branched '{source_root}' to '{target_root}'."
-        )
 
         source_receipts = tuple(
             (
                 binding.source_name,
                 binding.expected_source_uid,
-                binding.expected_source_digest,
             )
             for binding in records
         )
@@ -303,17 +294,14 @@ class _ContextCreationMixin:
             with self._context_graph_lock(exclusive=include_descendants):
                 with self._context_write_locks(lock_names):
                     if include_descendants:
-                        from memcommit.core.context_targeting.model import ContextScope
                         from memcommit.core.context_targeting.resolution import (
                             expand_lexical_context_names,
                         )
 
                         live_source_names = expand_lexical_context_names(
-                            ContextScope.create(
-                                (source_root,),
-                                include_descendants=True,
-                            ),
+                            (source_root,),
                             self.list_context_names(),
+                            include_descendants=True,
                         )
                         if live_source_names != source_names:
                             raise ConcurrentContextUpdateError(
@@ -328,7 +316,7 @@ class _ContextCreationMixin:
                         live_source = self.load_direct(binding.source_name)
                         live_memories = {
                             item.uid: item
-                            for item in live_source.iter_items()
+                            for item in live_source.iter_memories()
                             if isinstance(item, Memory)
                         }
                         if set(live_memories) != {
@@ -406,10 +394,8 @@ class _ContextCreationMixin:
                                         f"Checkpoint history for "
                                         f"'{binding.source_name}' is invalid."
                                     )
-                                rewritten = _rewrite_branched_checkpoint_record(
-                                    raw,
-                                    targets_by_source_uid=targets_by_source_uid,
-                                )
+                                validate_checkpoint_context_frames(raw)
+                                rewritten = raw
                             prepared_files.append((path, rewritten))
                         checkpoint_files[binding.source_name] = tuple(prepared_files)
 
@@ -436,7 +422,6 @@ class _ContextCreationMixin:
                                 self._save_locked(
                                     target,
                                     None,
-                                    expected_context_digest=None,
                                     require_new=True,
                                 )
                                 created.append(target)
@@ -459,17 +444,13 @@ class _ContextCreationMixin:
                                         _write_json_atomic(destination, rewritten)
                                 checkpoint = self._save_locked(
                                     target,
-                                    AutoCheckpoint(
+                                    AutoCheckpointRequest(
                                         command="branch",
-                                        args={
+                                        command_details={
                                             "branch_tree": branch_tree,
                                             "command_contexts": command_contexts,
                                             "memory_lineage": branch_memory_lineage,
                                         },
-                                        description=branch_description,
-                                    ),
-                                    expected_context_digest=context_record_digest(
-                                        target
                                     ),
                                 )
                                 if checkpoint is None:
@@ -494,12 +475,10 @@ class _ContextCreationMixin:
                                 "hierarchy could not be fully rolled back."
                             ) from rollback_error
                         raise branch_error
-        for binding in records:
-            binding.target._store_digest = context_record_digest(binding.target)
 
     def create_missing_contexts(
         self,
-        entries: Iterable[tuple[Context, Optional[AutoCheckpoint]]],
+        entries: Iterable[tuple[Context, Optional[AutoCheckpointRequest]]],
         *,
         make_current: str | None = None,
         require_all_new: bool = False,
@@ -516,7 +495,7 @@ class _ContextCreationMixin:
 
     def _create_missing_contexts_command_locked(
         self,
-        entries: Iterable[tuple[Context, Optional[AutoCheckpoint]]],
+        entries: Iterable[tuple[Context, Optional[AutoCheckpointRequest]]],
         *,
         make_current: str | None = None,
         require_all_new: bool = False,
@@ -544,7 +523,7 @@ class _ContextCreationMixin:
             raise TypeError("Expected Context records.")
         names = tuple(context.name for context, _ in records)
         for name in names:
-            validate_portable_context_name(name)
+            validate_context_name(name)
         if len(names) != len(set(names)):
             raise ValueError("Context batch contains duplicate names.")
         if make_current is not None and make_current not in names:
@@ -576,10 +555,8 @@ class _ContextCreationMixin:
                         self._save_locked(
                             context,
                             auto_checkpoint,
-                            expected_context_digest=None,
                             require_new=True,
                         )
-                        context._store_digest = context_record_digest(context)
                         created.append(context)
                     if make_current is not None:
                         with self._state_write_lock():

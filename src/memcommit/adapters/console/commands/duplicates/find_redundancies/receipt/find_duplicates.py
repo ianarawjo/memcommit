@@ -42,7 +42,7 @@ def render_find_duplicates_receipt(scope: ExactDuplicateScopeReport) -> None:
             )
             _render_context_report(frame)
         if scope.group_count:
-            typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup -r.")
+            typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup --literal -r.")
         return
 
     frame = scope.contexts[0]
@@ -58,7 +58,7 @@ def render_find_duplicates_receipt(scope: ExactDuplicateScopeReport) -> None:
     )
     _render_context_report(frame)
     if report.groups:
-        typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup.")
+        typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup --literal.")
 
 
 def _render_context_report(frame: ExactDuplicateContextReport) -> None:

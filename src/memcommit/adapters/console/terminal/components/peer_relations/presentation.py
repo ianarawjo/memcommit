@@ -16,8 +16,6 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
-from memcommit.source_projection.presentation import source_display_text
 
 
 def _single_line(value: str, *, limit: int = 110) -> str:
@@ -27,23 +25,10 @@ def _single_line(value: str, *, limit: int = 110) -> str:
 
 def _memory_provenance(memory, frame) -> str:
     source = memory.source
-    if source is None or (
-        source.source_form == "OWNED"
-        and source.owner_context_uid == frame.context_uid
-    ):
+    if source is None or source.owner_context_uid == frame.context_uid:
         return ""
-    labels = {
-        "LIVE_MEMORY_EMBED": "EMBED",
-        "MEMORY_REFERENCE": "REFERENCE",
-        "CONTEXT_GRAPH": "CONTEXT GRAPH",
-        "CONTEXT_REFERENCE": "CONTEXT REFERENCE",
-        "GRANTED_CONTEXT": "GRANTED CONTEXT",
-        "OWNED": "OWNED",
-    }
     return (
-        " · "
-        + labels[source.source_form]
-        + " FROM "
+        " · FROM "
         + display_escape_text(source.owner_context_name)
         + ":"
         + source.source_memory_uid[:8]
@@ -121,14 +106,7 @@ def _header_lines(
 ) -> list[str]:
     reference, compared = analysis.frames
     counts = Counter(relation.kind for relation in analysis.relations)
-    read_grant_label = source_display_text(
-        SourceDisplayFacts(access=SourceAccess.READ_GRANT)
-    )
-    analysis_state = (
-        "REUSED"
-        if reused
-        else "NEW"
-    )
+    analysis_state = "REUSED" if reused else "NEW"
     return [
         heading,
         f"Reference: {display_escape_text(reference.context_name)}",
@@ -155,11 +133,9 @@ def _header_lines(
                 if origin == "PROJECTED"
                 else " · SAVED · RETAINED"
                 if retention == "RETAINED"
-                else f" · SAVED · {read_grant_label} BOUND"
-                if retention == "GRANT_BOUND"
                 else ""
                 if durable
-                else f" · TEMPORARY · {read_grant_label}"
+                else " · TEMPORARY"
             )
         ),
         (

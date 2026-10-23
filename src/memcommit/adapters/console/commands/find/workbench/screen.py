@@ -34,7 +34,9 @@ from memcommit.adapters.console.commands.find.presentation import (
 from memcommit.adapters.console.terminal.components.retrieve_answer_save import (
     RetrieveAnswerSavePanel,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.commands.find.source_row import (
     render_find_reference_row,
@@ -53,7 +55,9 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import suggest_fresh_context_name
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
+    suggest_fresh_context_name,
+)
 from memcommit.adapters.console.terminal.components.selection import (
     MultiSelectionState,
     SelectionOption,
@@ -163,7 +167,7 @@ def run_find_workbench(
     if require_tty:
         require_interactive_terminal(
             "Interactive Find",
-            snapshot_hint='Pass a pattern, for example: mem find "parking".',
+            snapshot_hint='Pass a pattern, for example: mem find --literal "parking".',
         )
     if not isinstance(setup, FindTuiSetup):
         raise TypeError("Find TUI requires a FindTuiSetup.")
@@ -230,7 +234,6 @@ def run_find_workbench(
         current_name=setup.current_name,
         initial_targets=initial_targets,
         include_descendants=False if request is None else request.include_descendants,
-        follow_embeds=request is not None and request.follow_embeds,
         annotations=dict(setup.annotations),
         input_name="find-context",
         on_change=clear_result,
@@ -252,7 +255,7 @@ def run_find_workbench(
             else "CHECK FIND MATCHES TO SAVE"
         ),
         action_label=lambda mode: (
-            f"SAVE {len(result_selection.selected_values)} CHECKED AS {mode}"
+            f"SAVE {len(result_selection.selected_values)} CHECKED AS COPY"
             if result_selection is not None
             else "SAVE CHECKED FIND MATCHES"
         ),
@@ -264,12 +267,6 @@ def run_find_workbench(
         validate_location=validate_save_location,
         input_name="find-save-location",
         on_status=set_status,
-        mode_options=(
-            HorizontalChoiceOption(value="COPY", label="COPY"),
-            HorizontalChoiceOption(value="REFERENCE", label="REFERENCE"),
-            HorizontalChoiceOption(value="EMBED", label="EMBED"),
-        ),
-        initial_mode="COPY",
     )
     save_location_edit = {"edited": False, "programmatic": False}
 
@@ -335,7 +332,6 @@ def run_find_workbench(
                 pattern=pattern,
                 target_names=targets,
                 include_descendants=include_descendants,
-                follow_embeds=scope.follow_embeds,
                 mode=mode_choice.selected_value,
                 ignore_case=case_choice.selected_value == "IGNORE",
             )
@@ -384,9 +380,7 @@ def run_find_workbench(
             )
             if result.identity_match_count:
                 uid_label = (
-                    "UID MATCH"
-                    if result.identity_match_count == 1
-                    else "UID MATCHES"
+                    "UID MATCH" if result.identity_match_count == 1 else "UID MATCHES"
                 )
                 status += f" · {result.identity_match_count} {uid_label}"
         else:
@@ -437,9 +431,7 @@ def run_find_workbench(
         if result is None or result_selection is None:
             set_status("RUN FIND AND CHECK AT LEAST ONE MATCH")
             return "HANDLED"
-        selected_indices = tuple(
-            int(uid) for uid in result_selection.selected_values
-        )
+        selected_indices = tuple(int(uid) for uid in result_selection.selected_values)
         if not selected_indices:
             set_status("CHECK AT LEAST ONE FIND MATCH")
             return "HANDLED"
@@ -449,7 +441,7 @@ def run_find_workbench(
             set_status(str(error))
             event.app.layout.focus(save_panel.name.input)
             return "HANDLED"
-        mode = save_panel.selected_mode
+        mode = "COPY"
         assert mode is not None
         event.app.exit(
             result=FindTuiOutcome(
@@ -540,14 +532,10 @@ def run_find_workbench(
             if whole or not result.matches
             else project_find_match(
                 result.matches[
-                    0
-                    if result_selection is None
-                    else result_selection.cursor_index
+                    0 if result_selection is None else result_selection.cursor_index
                 ],
                 number=(
-                    1
-                    if result_selection is None
-                    else result_selection.cursor_index + 1
+                    1 if result_selection is None else result_selection.cursor_index + 1
                 ),
             )
         )
@@ -596,7 +584,7 @@ def run_find_workbench(
         event.app.exit(result=None if result is None else FindTuiOutcome(result))
 
     header = Window(
-        FormattedTextControl([("class:report-label", "MEM FIND")]),
+        FormattedTextControl([("class:report-label", "MEM FIND · LITERAL")]),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -609,7 +597,6 @@ def run_find_workbench(
                 scope.input,
                 scope.browse_control,
                 scope.range_control,
-                scope.embed_control,
                 scope.tree_control,
             )
         ),

@@ -8,7 +8,10 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "sync": LocalizedOperationCopy('소유한 Context 문서를 외부 파일에 한 번 또는 명령 완료 후 자동으로 동기화합니다.', 'Context 이름과 같은 외부 문서 트리를 유지하고 선택 범위의 자동 Sync를 켜거나 끌 때.'),
+    "sync": LocalizedOperationCopy(
+        "Profile의 프로젝트 문서를 탐색해 소유한 Context와 동기화합니다.",
+        ".memignore를 적용하고 파일 생성·수정·이름 변경·삭제를 반영하거나 mem 변경을 파일에 내보낼 때.",
+    ),
     "export": LocalizedOperationCopy(
         "현재 Context 내용을 문서, Agent Skill 또는 mem 형식으로 내보낸다.",
         "편집한 메모리 문서를 외부에서 사용할 수 있는 파일로 출력할 때 사용한다.",
@@ -65,13 +68,9 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "전환하지 않고 로컬 Context와 읽을 수 있는 Profile 간 Context view를 탐색합니다.",
         "현재 Profile에서 사용할 수 있는 모든 Context를 살펴볼 때.",
     ),
-    "dedup": _copy(
-        "확인된 중복 그룹을 검토하여 각 그룹에서 기존 Memory 하나를 남기고 Apply 시 나머지를 삭제합니다.",
-        "정확한 기존 Memory 하나와 그 UID를 보존하면서 확인된 의미적 중복을 제거할 때.",
-    ),
     "delete": _copy(
-        "삭제할 Context 또는 직접 항목을 선택하거나 locator, 이름 또는 UID로 지정합니다.",
-        "더 이상 필요하지 않은 특정 Context나 항목을 제거할 때.",
+        "현재 Context의 Memory를 UID로 삭제하거나 --context로 현재 Context 자체를 삭제합니다.",
+        "현재 Context 또는 그 안의 Memory를 제거할 때.",
     ),
     "diff": _copy(
         "Context checkpoint 하나가 기록한 직전 상태와 결과의 차이를 보여줍니다.",
@@ -82,7 +81,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "여러 구체적인 사례나 예시에서 더 일반적인 Rule 또는 조건 명제를 추론할 때.",
     ),
     "edit": _copy(
-        "UID 또는 prefix로 선택한 하나 이상의 Memory 내용을 직접 교체합니다.",
+        "현재 Context 안에서 UID 또는 고유한 prefix로 선택한 Memory 내용을 교체합니다.",
         "특정 기존 Memory의 내용을 직접 바로잡거나 교체할 때.",
     ),
     "elaborate": _copy(
@@ -102,8 +101,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "재사용할 테스트 데이터를 만들고 반복 가능한 시나리오로 operation을 검증할 때.",
     ),
     "find": _copy(
-        "읽을 수 있는 Memory에서 정확한 텍스트 또는 명시적인 정규식(regex) 일치를 찾습니다.",
-        "선택한 Context 범위 안에서 정확한 단어, 식별자 또는 텍스트 패턴을 찾을 때.",
+        "Memory를 의미로 검색합니다. --literal은 LLM 없이 정확한 텍스트 또는 정규식 일치를 찾습니다.",
+        "의미와 맥락으로 관련 Memory를 찾거나, --literal로 정확한 단어·식별자·텍스트 패턴을 찾을 때.",
     ),
     "find-ambiguities": _copy(
         "현재 또는 지정한 Context에서 모호한 직접 Memory를 보고하며 Context는 변경하지 않습니다.",
@@ -150,7 +149,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "재현 가능하고 격리된 사용자 연구 환경을 준비할 때.",
     ),
     "list": _copy(
-        "Context의 직접 항목—Memory, Memory reference, query view, embedded Context—과 읽을 수 있는 하위 Context를 나열합니다. -r은 descendant 및 embedded Context 항목까지 재귀적으로 포함하며 ls는 짧은 alias입니다.",
+        "Context의 Memory와 별도로 저장된 하위 Context를 나열합니다. -r은 하위 Context의 Memory까지 포함하며 ls는 짧은 alias입니다.",
         "Context의 구조와 직접 내용을 살펴볼 때.",
     ),
     "lock": _copy(
@@ -182,7 +181,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "script나 terminal에서 활성 Context를 확인할 때.",
     ),
     "query": _copy(
-        "읽을 수 있는 Context 지식 또는 허가된 concealed query-only view에서 LLM 기반 답변을 생성합니다.",
+        "로컬 Context의 Memory를 근거로 LLM 기반 답변을 생성합니다.",
         "일치하는 Memory 목록 대신 근거 있는 자연어 답변을 얻을 때.",
     ),
     "rationale": _copy(
@@ -206,7 +205,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "알고 있는 로컬 Context 범위 전체에서 정확한 텍스트를 수정·이름 변경·가림 처리할 때.",
     ),
     "resolve": _copy(
-        "의미적 충돌을 찾아 해결 선택을 받고, 결과를 충돌 재검사한 뒤 적용합니다.",
+        "현재 Context 전체의 충돌을 찾아 해결 선택을 받고, 충돌을 재검사한 뒤 적용합니다.",
         "제한된 Context frame 안의 의미적 충돌을 어떻게 고칠지 결정할 때.",
     ),
     "revert": _copy(
@@ -217,10 +216,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "저장된 semantic artifact를 열어 분석·제안·결과 상태를 살펴보고 지원되는 경우 검토 응답을 기록합니다. Review는 Memory를 적용하지 않습니다.",
         "저장된 분석, 제안 또는 결과 상태를 다시 살펴볼 때.",
     ),
-    "search": _copy(
-        "선택한 Context에서 자연어 요청과 관련된 Memory를 의미적으로 순위화합니다.",
-        "의미와 맥락으로 관련 Memory를 찾고, 명시적 키워드가 겹치지 않는 관련 내용까지 포함할 때.",
-    ),
     "sever": _copy(
         "Criteria Context에 따라 Source Memory를 선택·변환·제외하여 Result를 만듭니다.",
         "정해진 기준에 따라 Source 내용을 선택하거나 변환할 때.",
@@ -230,7 +225,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "소유한 Context를 권한 있는 수신자에게 전달할 때.",
     ),
     "show": _copy(
-        "Memory, reference, embedded Context 또는 현재/지정 Context의 직접 내용을 보여줍니다.",
+        "하나의 Memory 또는 현재/지정 Context의 내용을 보여줍니다.",
         "알고 있는 항목이나 Context의 전체 내용을 읽을 때.",
     ),
     "status": _copy(
@@ -262,22 +257,17 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "보호된 자료를 의도적으로 수정할 수 있도록 다시 열 때.",
     ),
     "update": _copy(
-        "Source Context의 Memory를 사용해 Target Context의 Memory를 업데이트하며 필요할 때 사용자에게 검토와 선택을 요청합니다.",
-        "새로 검증된 Memory로 기존 Context를 업데이트할 때.",
+        "입력한 지시문을 현재 Context에 적용합니다. -r을 지정하면 하위 Context도 함께 처리합니다.",
+        "지시문으로 현재 Context와 선택적인 하위 Context를 업데이트할 때.",
     ),
 }
 
-# These names were split after the original semantic Dedup contract was
-# separated into exact Dedup and inclusive semantic Dedun operations.
+# Dedup exposes semantic cleanup by default and exact cleanup with --literal.
 TRANSLATIONS.update(
     {
-        "dedun": _copy(
-            "정확한 DUP과 의미론적 DUN 그룹을 즉시 정리하고 각 연결 그룹에서 가장 먼저 저장된 UID를 유지합니다.",
-            "정확 중복과 의미 중복을 하나의 체크포인트로 함께 정리할 때.",
-        ),
         "dedup": _copy(
-            "현재 또는 지정된 Context에서 바이트 단위로 내용이 같은 직접 Memory를 즉시 제거하고 각 그룹의 첫 기존 UID를 유지합니다.",
-            "의미 추론 없이 내용이 정확히 같은 저장 복사본을 정리할 때.",
+            "정확 중복과 의미 중복을 즉시 제거하고 각 그룹의 첫 기존 UID를 유지합니다. --literal은 같은 역할의 정확한 복사본만 의미 추론 없이 제거합니다.",
+            "정확 중복과 의미 중복을 함께 정리하거나 --literal로 정확한 복사본만 정리할 때.",
         ),
         "find-duplicates": _copy(
             "바이트 단위로 내용이 같은 직접 Memory 그룹을 보고하며 Context는 변경하지 않습니다.",

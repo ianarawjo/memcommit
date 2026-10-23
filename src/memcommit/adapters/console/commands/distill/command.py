@@ -18,7 +18,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.distill.application import (
     DistillApplyRequest,
@@ -126,7 +126,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Include readable lexical descendants and embedded Contexts",
+            help="Include local lexical descendants",
         ),
     ] = False,
     save_as: Annotated[
@@ -211,7 +211,6 @@ def cmd(
                 context_locator=endpoints.source_name,
                 goal_focus=goal_focus,
                 include_descendants=traversal.include_descendants,
-                follow_embeds=traversal.follow_embeds,
             )
             with CommandProgress(
                 "DISTILL",
@@ -251,7 +250,7 @@ def cmd(
         )
         ground_result: GroundDistillResult | None = None
         if save_as is not None:
-            validate_portable_context_name(save_as)
+            validate_context_name(save_as)
             if store.context_exists(save_as):
                 raise DistillError(
                     f"Distill Result Context already exists: '{save_as}'."
@@ -304,7 +303,6 @@ def cmd(
                     else None
                 ),
                 include_descendants=traversal.include_descendants,
-                follow_embeds=traversal.follow_embeds,
             )
         )
         # The hidden compatibility Apply form is still execution-first: its

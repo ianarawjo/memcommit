@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.application.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,
@@ -58,7 +58,7 @@ def _latest_timestamp(store: MemoryStore, workspace: GroundWorkspace) -> float:
 
 def _goal_text(workspace: GroundWorkspace) -> str:
     goals = tuple(
-        item for item in workspace.goals.iter_items() if isinstance(item, Memory)
+        item for item in workspace.goals.iter_memories() if isinstance(item, Memory)
     )
     if not goals:
         return "(Goal not yet stated)"
@@ -83,7 +83,7 @@ def list_ground_workspace_catalog(
     for name in list_ground_workspace_names(store):
         workspace = load_ground_workspace(store, name)
         counts = {
-            lane: len(tuple(workspace.lane(lane).iter_items()))
+            lane: len(tuple(workspace.lane(lane).iter_memories()))
             for lane in ("goals", "rules", "examples", "contexts", "relations")
         }
         detail = "\n".join(

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import memcommit.application.operations.branch.materialization as branch_materialization
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.history.reconstruction.memory_lineage_relations import memory_content_sha256
 from memcommit.application.operations.branch.application import (
     BranchError,
@@ -20,7 +20,6 @@ from memcommit.persistence.store import (
     ContextBranchMemoryBinding,
     MemoryStore,
     checkpoint_history_digest,
-    context_record_digest,
 )
 
 
@@ -80,7 +79,6 @@ class MemoryStoreBranchPort:
             ContextBranchBinding(
                 source_name=source.name,
                 expected_source_uid=source.uid,
-                expected_source_digest=context_record_digest(source),
                 expected_history_digest=checkpoint_history_digest(
                     histories[source.name]
                 ),
@@ -99,12 +97,12 @@ class MemoryStoreBranchPort:
                     for source_memory, target_memory in zip(
                         (
                             item
-                            for item in source.iter_items()
+                            for item in source.iter_memories()
                             if isinstance(item, Memory)
                         ),
                         (
                             item
-                            for item in target.iter_items()
+                            for item in target.iter_memories()
                             if isinstance(item, Memory)
                         ),
                         strict=True,

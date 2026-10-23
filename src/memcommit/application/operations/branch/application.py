@@ -5,8 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 
 
@@ -179,24 +178,19 @@ def plan_branch(request: BranchRequest) -> BranchPlan:
     """Freeze lexical Source membership and its require-new name mapping."""
 
     try:
-        validate_portable_context_name(request.target_name)
+        validate_context_name(request.target_name)
     except ValueError as error:
         raise BranchError(str(error)) from error
 
     source_names = expand_lexical_context_names(
-        ContextScope.create(
-            (request.source_name,),
-            include_descendants=request.include_descendants,
-        ),
+        (request.source_name,),
         request.local_context_names,
+        include_descendants=request.include_descendants,
     )
     contexts = tuple(
         BranchContextPlan(
             source_name=source_name,
-            target_name=(
-                request.target_name
-                + source_name[len(request.source_name) :]
-            ),
+            target_name=(request.target_name + source_name[len(request.source_name) :]),
         )
         for source_name in source_names
     )

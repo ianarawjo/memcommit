@@ -147,7 +147,7 @@ def cmd(
             CheckpointRequest(
                 context_locator=operands.context_locator,
                 current_context_name=snapshot.current_name,
-                message=operands.message or "",
+                checkpoint_message=operands.message or "",
                 recursive=preset is ContextScopePreset.RECURSIVE,
             ),
         )
@@ -164,7 +164,7 @@ def cmd(
         typer.secho(
             f"[{result.root_checkpoint_uid[:8]}] {ts}  "
             f"Context '{display_escape_text(result.root_context_name)}'  "
-            f"{_label(result.message)}",
+            f"{_label(result.checkpoint_message)}",
             fg=typer.colors.GREEN,
         )
         return
@@ -172,7 +172,7 @@ def cmd(
         f"[{result.root_checkpoint_uid[:8]}] {ts}  Checkpoint set · "
         f"{result.member_count} Context(s) under "
         f"'{display_escape_text(result.root_context_name)}'  "
-        f"{_label(result.message)}",
+        f"{_label(result.checkpoint_message)}",
         fg=typer.colors.GREEN,
     )
     typer.echo(f"Revert: mem revert {result.root_checkpoint_uid} --keep")

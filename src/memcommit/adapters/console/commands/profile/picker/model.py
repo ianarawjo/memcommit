@@ -14,10 +14,6 @@ class ProfilePickerEntry:
     context_count: int
     current_context: str | None
     memory_count: int = 0
-    granted_context_count: int = 0
-    granted_memory_count: int = 0
-    query_source_count: int = 0
-    query_source_names: tuple[str, ...] = ()
     uid: str | None = None
     study_uid: str | None = None
     study_name: str | None = None
@@ -48,7 +44,6 @@ class ProfilePickerAction:
     row_index: int | None = None
     root_dir: str | None = None
     import_project_files: bool = False
-    automatic_sync: bool = False
     imported_file_count: int = 0
     skipped_file_count: int = 0
     import_digest: str | None = None

@@ -5,23 +5,23 @@ bounded operation metadata. A RUNNING record is published before command
 dispatch so process loss still leaves evidence that an attempt began; ordinary
 completion replaces that same file atomically.
 """
+
 from __future__ import annotations
 
-from contextvars import ContextVar
-from dataclasses import dataclass, replace
-from datetime import datetime, timezone
 import json
 import math
 import os
-from pathlib import Path
 import re
 import shlex
 import time
-from typing import Literal
 import uuid
+from contextvars import ContextVar
+from dataclasses import dataclass, replace
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Literal
 
 from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
-
 
 AttemptStatus = Literal["RUNNING", "COMPLETED", "FAILED", "INTERRUPTED"]
 CommandOutcome = Literal["NO_CHANGE", "CANCELLED"]
@@ -78,9 +78,13 @@ class CommandAttempt:
             if self.completed_at is not None:
                 datetime.fromisoformat(self.completed_at)
         except (TypeError, ValueError) as error:
-            raise CommandAttemptError("Command attempt identity or time is invalid.") from error
+            raise CommandAttemptError(
+                "Command attempt identity or time is invalid."
+            ) from error
         if canonical_uid != self.uid or _OPERATION.fullmatch(self.operation) is None:
-            raise CommandAttemptError("Command attempt identity or operation is invalid.")
+            raise CommandAttemptError(
+                "Command attempt identity or operation is invalid."
+            )
         if self.command is not None and (
             not isinstance(self.command, str)
             or not self.command.strip()
@@ -91,7 +95,9 @@ class CommandAttempt:
             raise CommandAttemptError("Command attempt status is invalid.")
         if self.status == "RUNNING":
             if self.completed_at is not None or self.elapsed_seconds is not None:
-                raise CommandAttemptError("Running command attempt has terminal timing.")
+                raise CommandAttemptError(
+                    "Running command attempt has terminal timing."
+                )
         elif (
             self.completed_at is None
             or not isinstance(self.elapsed_seconds, (int, float))
@@ -100,7 +106,9 @@ class CommandAttempt:
             or self.elapsed_seconds < 0
         ):
             raise CommandAttemptError("Finished command attempt timing is invalid.")
-        if not isinstance(self.stdin_tty, bool) or not isinstance(self.stdout_tty, bool):
+        if not isinstance(self.stdin_tty, bool) or not isinstance(
+            self.stdout_tty, bool
+        ):
             raise CommandAttemptError("Command attempt terminal flags are invalid.")
         if self.outcome is not None and self.outcome not in _COMPLETION_OUTCOMES:
             raise CommandAttemptError("Command attempt outcome is invalid.")
@@ -159,7 +167,10 @@ class CommandAttempt:
         ):
             raise CommandAttemptError("Command attempt record is invalid.")
         terminal = value.get("terminal")
-        if not isinstance(terminal, dict) or set(terminal) != {"stdin_tty", "stdout_tty"}:
+        if not isinstance(terminal, dict) or set(terminal) != {
+            "stdin_tty",
+            "stdout_tty",
+        }:
             raise CommandAttemptError("Command attempt terminal record is invalid.")
         attempt = cls(
             uid=value.get("uid"),  # type: ignore[arg-type]
@@ -198,7 +209,9 @@ def _validated_details(value: object) -> None:
         try:
             ReadReportTarget.from_metadata(read_report)
         except ValueError as error:
-            raise CommandAttemptError("Read Report attempt details are invalid.") from error
+            raise CommandAttemptError(
+                "Read Report attempt details are invalid."
+            ) from error
     memory_report = value.get("memory_report")
     if memory_report is not None:
         required = {"operation", "context_name", "memory_uid"}
@@ -269,7 +282,9 @@ def _validated_details(value: object) -> None:
 def _validated_failure(value: object, *, status: AttemptStatus) -> None:
     if status in {"RUNNING", "COMPLETED"}:
         if value is not None:
-            raise CommandAttemptError("Successful command attempt has failure metadata.")
+            raise CommandAttemptError(
+                "Successful command attempt has failure metadata."
+            )
         return
     if not isinstance(value, dict) or set(value) != {"kind", "exit_code"}:
         raise CommandAttemptError("Failed command attempt metadata is invalid.")
@@ -290,7 +305,10 @@ class CommandAttemptLedger:
 
     def _validated_directory(self, *, create: bool) -> Path:
         ledger = self.directory.parent
-        for path, label in ((ledger, "Profile ledger"), (self.directory, "command attempt ledger")):
+        for path, label in (
+            (ledger, "Profile ledger"),
+            (self.directory, "command attempt ledger"),
+        ):
             if path.is_symlink() or path.exists() and not path.is_dir():
                 raise CommandAttemptError(f"{label} storage is invalid.")
         if create:
@@ -373,7 +391,9 @@ class CommandAttemptLedger:
             if path.suffix != ".json" or not path.is_file() or path.is_symlink():
                 raise CommandAttemptError("Unexpected command attempt ledger entry.")
             records.append(self.load(path.stem))
-        return tuple(sorted(records, key=lambda item: (item.started_at, item.uid), reverse=True))
+        return tuple(
+            sorted(records, key=lambda item: (item.started_at, item.uid), reverse=True)
+        )
 
 
 @dataclass
@@ -404,11 +424,7 @@ def begin_command_attempt(
     attempt = CommandAttempt(
         uid=str(uuid.uuid4()),
         operation=operation,
-        command=(
-            None
-            if command_argv is None
-            else shlex.join(("mem", *command_argv))
-        ),
+        command=(None if command_argv is None else shlex.join(("mem", *command_argv))),
         status="RUNNING",
         started_at=_timestamp(),
         completed_at=None,
@@ -454,6 +470,8 @@ def annotate_command_outcome(outcome: CommandOutcome) -> None:
     updated = replace(active.record, outcome=outcome)
     active.ledger.replace(updated)
     active.record = updated
+
+
 
 
 def annotate_sever_attempt(**updates: object) -> None:

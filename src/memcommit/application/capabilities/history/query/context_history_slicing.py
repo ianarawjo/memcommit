@@ -5,7 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import cast
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     HistoryTimeline,
     HistoryTransitionKind,
@@ -341,7 +342,7 @@ def current_context_history_slice(
     current = tuple(
         ContextHistoryMemoryState(memory.uid, memory.content, position)
         for position, memory in enumerate(
-            item for item in context.iter_items() if isinstance(item, Memory)
+            item for item in context.iter_memories() if isinstance(item, Memory)
         )
     )
     return ContextHistorySlice(

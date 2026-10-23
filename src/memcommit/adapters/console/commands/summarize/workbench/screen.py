@@ -7,7 +7,9 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.commands.summarize.workbench.presentation import (
     project_summarize_clipboard,
     project_summarize_outcome,
@@ -20,7 +22,10 @@ from memcommit.adapters.console.terminal.components.context_summary import (
     ContextSummaryWorkbenchView,
     run_context_summary_workbench,
 )
-from memcommit.application.operations.summarize.application import SummarizeRequest, SummarizeResult
+from memcommit.application.operations.summarize.application import (
+    SummarizeRequest,
+    SummarizeResult,
+)
 
 
 def run_summarize_tui(
@@ -41,15 +46,10 @@ def run_summarize_tui(
         raise TypeError("Summarize TUI requires a SummarizeRequest.")
     if not isinstance(setup, SummarizeTuiSetup):
         raise TypeError("Summarize TUI requires a frozen setup catalog.")
-    if request.include_descendants != request.follow_embeds:
-        raise ValueError(
-            "Summarize TUI requires the shared DIRECT or RECURSIVE range preset."
-        )
 
     current_request = SummarizeRequest(
         context_locator=request.context_locator or setup.selected_context,
         include_descendants=request.include_descendants,
-        follow_embeds=request.follow_embeds,
     )
     range_mode = setup.initial_range_mode
     outcome: SummarizeTuiOutcome | None = None
@@ -101,16 +101,11 @@ def run_summarize_tui(
         if receipt is None:
             return outcome
         range_mode = receipt.range_mode
-        reaches = (
-            (False, True)
-            if range_mode == "BOTH"
-            else (range_mode == "SUBTREE",)
-        )
+        reaches = (False, True) if range_mode == "BOTH" else (range_mode == "SUBTREE",)
         requests = tuple(
             SummarizeRequest(
                 context_locator=receipt.context_name,
                 include_descendants=include_descendants,
-                follow_embeds=include_descendants,
             )
             for include_descendants in reaches
         )

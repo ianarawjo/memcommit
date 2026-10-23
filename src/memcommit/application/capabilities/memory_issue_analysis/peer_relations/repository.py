@@ -14,12 +14,14 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.mod
     MemoryRelationError,
     memory_relation_canonical_digest,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     project_memory_relation_context,
 )
-from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.application.capabilities.context_scope_loading import (
+    load_context_and_descendants,
+)
+
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 
 
@@ -176,38 +178,29 @@ def save_memory_relation_analysis(
             analysis.include_descendants,
             strict=True,
         ):
-            scope = ContextScope.create(
-                (frame.context_name,),
-                include_descendants=include_descendants,
-            )
-            lock_names.update(expand_lexical_context_names(scope, catalog))
-            # A live Embed contributes bytes owned outside the containing
-            # Context record. Lock that owner too so revalidation and artifact
-            # publication observe one stable evidence set. Immutable snapshot
-            # References need only the containing record lock.
             lock_names.update(
-                memory.source.owner_context_name
-                for memory in (*frame.memories, *frame.context_evidence)
-                if memory.source is not None
-                and memory.source.is_live_external
-                and memory.source.owner_context_name in catalog
+                expand_lexical_context_names(
+                    (frame.context_name,),
+                    catalog,
+                    include_descendants=include_descendants,
+                )
             )
         locks.enter_context(store._context_write_locks(lock_names))
         locks.enter_context(store.profile_write_guard())
 
         try:
             reference = _memory_relation_projection(
-                load_context_scope(
-                    store,
-                    reference_frame.context_name,
-                    include_descendants=analysis.include_descendants[0],
+                (
+                    load_context_and_descendants(store, reference_frame.context_name)
+                    if analysis.include_descendants[0]
+                    else (store.load(reference_frame.context_name),)
                 )
             )
             compared = _memory_relation_projection(
-                load_context_scope(
-                    store,
-                    compared_frame.context_name,
-                    include_descendants=analysis.include_descendants[1],
+                (
+                    load_context_and_descendants(store, compared_frame.context_name)
+                    if analysis.include_descendants[1]
+                    else (store.load(compared_frame.context_name),)
                 )
             )
         except FileNotFoundError as error:
@@ -249,10 +242,10 @@ def save_memory_relation_analysis(
         store_module._write_json_atomic(path, analysis.to_dict())
 
 
-def _memory_relation_projection(root: Context) -> Context:
+def _memory_relation_projection(contexts: tuple[Context, ...]) -> Context:
     """Mirror relation evidence projection at the locked save boundary."""
 
-    return project_memory_relation_context(root)
+    return project_memory_relation_context(contexts)
 
 
 def memory_relation_paths_for_context(context_uid: str) -> tuple[Path, ...]:

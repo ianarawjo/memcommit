@@ -9,22 +9,11 @@ from memcommit.adapters.console.clipboard import (
     ClipboardError,
     write_system_clipboard,
 )
-from memcommit.core.context import (
-    Context,
-    Information,
-    MemoryRef,
-    QueryContextRef,
-)
-from memcommit.application.capabilities.context_snapshot import (
-    ContextSnapshotRef,
-)
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
-)
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    context_access_display_facts,
 )
 from memcommit.adapters.console.terminal.core.identity import (
     collision_safe_uid_prefixes,
@@ -42,9 +31,6 @@ from memcommit.application.operations.list.runtime import (
     execute_list,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.authorization.study_operation_policy import (
-    analysis_boundary_label,
-)
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
@@ -52,16 +38,12 @@ from memcommit.source_projection.model import (
     SourceState,
 )
 from memcommit.source_projection.console import (
-    styled_source_object_label,
     styled_source_reach_label,
-    styled_source_relationship_label,
 )
 from memcommit.source_projection.presentation import (
     source_annotation_text,
-    source_display_text,
     source_object_label,
     source_reach_label,
-    source_relationship_label,
 )
 
 
@@ -168,13 +150,13 @@ def _is_immediate_namespace_child(
 def _snapshot_context_entry(
     ctx: Context,
     *,
-    kind: Literal["context", "namespace_context"],
+    kind: Literal["namespace_context"],
     store: MemoryStore,
     context_names: tuple[str, ...],
     recursive: bool,
     ancestors: frozenset[str],
 ) -> dict[str, object]:
-    """Freeze one embedded or namespace-derived Context occurrence."""
+    """Freeze one local namespace Context occurrence."""
     cycle = recursive and ctx.uid in ancestors
     children: list[dict[str, object]] | None = None
     if recursive and not cycle:
@@ -195,69 +177,14 @@ def _snapshot_context_entry(
 
 
 def _snapshot_item(
-    item: Information,
+    item: Memory,
     *,
     store: MemoryStore,
     context_names: tuple[str, ...],
     recursive: bool,
     ancestors: frozenset[str],
 ) -> dict[str, object]:
-    """Freeze one persisted item without opening query-only source content."""
-    if isinstance(item, ContextSnapshotRef):
-        cycle = recursive and item.uid in ancestors
-        return {
-            "kind": "context_snapshot_ref",
-            "uid": item.uid,
-            "name": item.target_context_name,
-            "source_uid": item.target_context_uid,
-            "scope": "RECURSIVE" if item.include_descendants else "DIRECT",
-            "cycle": cycle,
-            "children": (
-                _snapshot_visible_items(
-                    item,
-                    store=store,
-                    context_names=(),
-                    recursive=True,
-                    ancestors=ancestors | {item.uid},
-                )
-                if recursive and not cycle
-                else None
-            ),
-        }
-    if isinstance(item, Context):
-        return _snapshot_context_entry(
-            item,
-            kind=(
-                "namespace_context"
-                if getattr(item, "_snapshot_relation", None) == "DESCENDANT"
-                else "context"
-            ),
-            store=store,
-            context_names=context_names,
-            recursive=recursive,
-            ancestors=ancestors,
-        )
-    if isinstance(item, QueryContextRef):
-        # Routing metadata is part of the opaque pointer. The query-only source
-        # itself is deliberately neither loaded nor copied.
-        return {
-            "kind": "query_context_ref",
-            "uid": item.uid,
-            "name": item.name,
-            "target_source_uid": item.target_source_uid,
-            "provider": item.provider,
-        }
-    if isinstance(item, MemoryRef):
-        return {
-            "kind": ("memory_snapshot_ref" if item.is_snapshot else "memory_ref"),
-            "uid": item.uid,
-            "target_context_uid": item.target_context_uid,
-            "target_context_name": item.target_context_name,
-            "target_memory_uid": item.target_memory_uid,
-            "resolved_content": (
-                item.target.content if item.target is not None else None
-            ),
-        }
+    """Freeze one directly owned Memory as a read-only list row."""
     return {
         "kind": "memory",
         "uid": item.uid,
@@ -274,13 +201,7 @@ def _snapshot_visible_items(
     ancestors: frozenset[str],
 ) -> list[dict[str, object]]:
     """Combine read-only namespace navigation with persisted direct items."""
-    direct_items = list(ctx.iter_items())
-    embedded_contexts = {
-        item.name: item
-        for item in direct_items
-        if isinstance(item, Context) and not isinstance(item, ContextSnapshotRef)
-    }
-    listed_embed_uids: set[str] = set()
+    direct_items = list(ctx.iter_memories())
     child_items: list[dict[str, object]] = []
     for child_name in _immediate_namespace_child_names(
         ctx.name,
@@ -295,27 +216,10 @@ def _snapshot_visible_items(
             # disappearing or newly broken child must not hide valid parent
             # Memories from this read-only navigation command.
             continue
-        embedded = embedded_contexts.get(child.name)
-        if embedded is not None and embedded.uid == child.uid:
-            # Keep the persisted relation typed as an embed, but place it in
-            # the sorted namespace-child group so merely embedding a child
-            # cannot reorder the directory-like listing.
-            child = embedded
-            kind: Literal["context", "namespace_context"] = "context"
-            listed_embed_uids.add(embedded.uid)
-        else:
-            kind = "namespace_context"
-            if embedded is not None:
-                # A delete/recreate race can leave the already loaded parent
-                # holding the old UID while the later child read sees the new
-                # UID. The canonical locator can name only the new Context, so
-                # suppress the stale occurrence instead of printing one path
-                # twice with conflicting identities.
-                listed_embed_uids.add(embedded.uid)
         child_items.append(
             _snapshot_context_entry(
                 child,
-                kind=kind,
+                kind="namespace_context",
                 store=store,
                 context_names=context_names,
                 recursive=recursive,
@@ -323,8 +227,6 @@ def _snapshot_visible_items(
             )
         )
 
-    # Namespace rows are a list-time projection. They must never be added to
-    # the in-memory Context, where they could later be mistaken for embeds.
     return [
         *child_items,
         *[
@@ -336,7 +238,6 @@ def _snapshot_visible_items(
                 ancestors=ancestors,
             )
             for item in direct_items
-            if not (isinstance(item, Context) and item.uid in listed_embed_uids)
         ],
     ]
 
@@ -409,14 +310,9 @@ def _group_snapshot_items(
     memories: list[dict[str, object]] = []
     for item in items:
         kind = _require_string(item, "kind")
-        if kind in {
-            "context",
-            "context_snapshot_ref",
-            "namespace_context",
-            "query_context_ref",
-        }:
+        if kind == "namespace_context":
             contexts.append(item)
-        elif kind in {"memory", "memory_ref", "memory_snapshot_ref"}:
+        elif kind == "memory":
             memories.append(item)
         else:
             raise _snapshot_error()
@@ -432,13 +328,11 @@ def _snapshot_display_uids(
     for item in items:
         kind = _require_string(item, "kind")
         values.append(_require_string(item, "uid"))
-        if kind in {"memory_ref", "memory_snapshot_ref"}:
-            values.append(_require_string(item, "target_memory_uid"))
-        elif kind in {"context", "context_snapshot_ref", "namespace_context"}:
+        if kind == "namespace_context":
             children = item.get("children")
             if children is not None:
                 values.extend(_snapshot_display_uids(_require_items(children)))
-        elif kind not in {"memory", "query_context_ref"}:
+        elif kind != "memory":
             raise _snapshot_error()
     return tuple(values)
 
@@ -477,25 +371,12 @@ def _render_snapshot_item(
     separate_context_blocks: bool,
     style_relationships: bool,
     uid_prefixes: dict[str, str],
-    sync_statuses: dict[str, str] | None = None,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
     uid = _require_string(item, "uid")
-    if kind in {"context", "context_snapshot_ref", "namespace_context"}:
-        expected = (
-            {
-                "kind",
-                "uid",
-                "name",
-                "source_uid",
-                "scope",
-                "cycle",
-                "children",
-            }
-            if kind == "context_snapshot_ref"
-            else {"kind", "uid", "name", "cycle", "children"}
-        )
+    if kind == "namespace_context":
+        expected = {"kind", "uid", "name", "cycle", "children"}
         if set(item) != expected:
             raise _snapshot_error()
         name = _require_string(item, "name")
@@ -512,71 +393,33 @@ def _render_snapshot_item(
             children = _require_items(children_value)
         if cycle and children is not None:
             raise _snapshot_error()
-        if kind == "context_snapshot_ref":
-            _require_string(item, "source_uid")
-            scope = _require_string(item, "scope")
-            if scope not in {"DIRECT", "RECURSIVE"}:
-                raise _snapshot_error()
-            context_facts = SourceDisplayFacts(
-                form=SourceForm.CONTEXT_REFERENCE,
-                states=(
-                    *((SourceState.CYCLE,) if cycle else ()),
-                    SourceState.READ_ONLY,
-                ),
+        context_facts = SourceDisplayFacts(
+            reach=SourceReach.DESCENDANT,
+            states=(SourceState.CYCLE,) if cycle else (),
+        )
+        # Reach explains why this Context row occurs in the selected tree,
+        # so it leads the row instead of looking like a trailing property
+        # of the canonical Context identity.
+        reach_label = (
+            styled_source_reach_label(context_facts.reach)
+            if style_relationships
+            else source_reach_label(context_facts.reach)
+        )
+        context_label = source_object_label(context_facts)
+        state_annotation = source_annotation_text(
+            SourceDisplayFacts(states=context_facts.states)
+        )
+        if with_ids:
+            lines.append(
+                f"{prefix}{reach_label} · "
+                f"[{context_label} {uid_prefixes[uid]}] {name}"
+                + (f"  {state_annotation}" if state_annotation else "")
             )
         else:
-            scope = None
-            context_facts = SourceDisplayFacts(
-                reach=(
-                    SourceReach.VIA_EMBED
-                    if kind == "context"
-                    else SourceReach.DESCENDANT
-                ),
-                states=(SourceState.CYCLE,) if cycle else (),
+            lines.append(
+                f"{prefix}{reach_label} · {name}/"
+                + (f" · {state_annotation}" if state_annotation else "")
             )
-        if kind == "context_snapshot_ref":
-            context_annotation = source_annotation_text(context_facts)
-            if scope is not None:
-                context_annotation = f"{context_annotation} · {scope}"
-            relationship_label = (
-                styled_source_object_label(context_facts)
-                if style_relationships
-                else source_object_label(context_facts)
-            )
-            if with_ids:
-                lines.append(
-                    f"{prefix}[{relationship_label} {uid_prefixes[uid]}] "
-                    f"{name}  {context_annotation}"
-                )
-            else:
-                lines.append(f"{prefix}{name}/ · {context_annotation}")
-        else:
-            # Reach explains why this Context row occurs in the selected tree,
-            # so it leads the row instead of looking like a trailing property
-            # of the canonical Context identity.
-            reach_label = (
-                styled_source_reach_label(context_facts.reach)
-                if style_relationships
-                else source_reach_label(context_facts.reach)
-            )
-            context_label = source_object_label(context_facts)
-            state_annotation = source_annotation_text(
-                SourceDisplayFacts(states=context_facts.states)
-            )
-            if with_ids:
-                lines.append(
-                    f"{prefix}{reach_label} · "
-                    f"[{context_label} {uid_prefixes[uid]}] {name}"
-                    + (f"  {state_annotation}" if state_annotation else "")
-                )
-            else:
-                lines.append(
-                    f"{prefix}{reach_label} · {name}/"
-                    + (f" · {state_annotation}" if state_annotation else "")
-                )
-        if kind != "context_snapshot_ref" and sync_statuses:
-            from memcommit.adapters.console.terminal.components.context_sync_status import context_sync_status_text
-            lines[-1] += context_sync_status_text(sync_statuses.get(name))
         if not cycle and children is not None:
             if not children:
                 lines.append(f"{' ' * (indent + 2)}(empty)")
@@ -592,101 +435,7 @@ def _render_snapshot_item(
                     separate_context_blocks=separate_context_blocks,
                     style_relationships=style_relationships,
                     uid_prefixes=uid_prefixes,
-                    sync_statuses=sync_statuses,
                 )
-        return
-    if kind == "query_context_ref":
-        expected = {
-            "kind",
-            "uid",
-            "name",
-            "target_source_uid",
-            "provider",
-        }
-        if set(item) != expected:
-            raise _snapshot_error()
-        name = _require_string(item, "name")
-        _require_string(item, "target_source_uid")
-        _require_string(item, "provider")
-        query_facts = SourceDisplayFacts(form=SourceForm.QUERY_VIEW)
-        query_label = source_object_label(query_facts)
-        if with_ids:
-            lines.append(f"{prefix}[{query_label} {uid_prefixes[uid]}] {name}")
-        else:
-            lines.append(f"{prefix}{name}/ · {query_label}")
-        return
-    if kind in {"memory_ref", "memory_snapshot_ref"}:
-        expected = {
-            "kind",
-            "uid",
-            "target_context_uid",
-            "target_context_name",
-            "target_memory_uid",
-            "resolved_content",
-        }
-        if set(item) != expected:
-            raise _snapshot_error()
-        _require_string(item, "target_context_uid")
-        target_context_name = _require_string(item, "target_context_name")
-        target_memory_uid = _require_string(item, "target_memory_uid")
-        content = item.get("resolved_content")
-        if content is None:
-            reference_facts = SourceDisplayFacts(
-                form=(
-                    SourceForm.MEMORY_REFERENCE
-                    if kind == "memory_snapshot_ref"
-                    else SourceForm.MEMORY_EMBED
-                ),
-                states=(SourceState.DANGLING,),
-            )
-            reference_label = source_object_label(reference_facts)
-            relationship_label = (
-                styled_source_relationship_label(reference_facts)
-                if style_relationships
-                else source_relationship_label(reference_facts)
-            )
-            annotation = source_annotation_text(reference_facts)
-            if with_ids:
-                lines.append(
-                    f"{prefix}[{relationship_label} {uid_prefixes[uid]}] "
-                    f"[{target_context_name}]"
-                    f"[memory {uid_prefixes[target_memory_uid]}]  "
-                    f"{annotation}"
-                )
-            else:
-                lines.append(
-                    f"{prefix}{reference_label} · {target_context_name} · {annotation}"
-                )
-        elif isinstance(content, str):
-            reference_facts = SourceDisplayFacts(
-                form=(
-                    SourceForm.MEMORY_REFERENCE
-                    if kind == "memory_snapshot_ref"
-                    else SourceForm.MEMORY_EMBED
-                ),
-                states=(SourceState.READ_ONLY,),
-            )
-            reference_label = source_object_label(reference_facts)
-            relationship_label = (
-                styled_source_relationship_label(reference_facts)
-                if style_relationships
-                else source_relationship_label(reference_facts)
-            )
-            annotation = source_annotation_text(reference_facts)
-            if with_ids:
-                lines.append(
-                    f"{prefix}[{relationship_label} {uid_prefixes[uid]}] "
-                    f"[{target_context_name}]"
-                    f"[memory {uid_prefixes[target_memory_uid]}] "
-                    f"{_one_line(content)}  {annotation}"
-                )
-            else:
-                lines.append(
-                    f"{prefix}{reference_label} · {_one_line(content)} "
-                    f"-> {target_context_name} · {annotation}"
-                )
-        else:
-            raise _snapshot_error()
         return
     if kind == "memory":
         if set(item) != {"kind", "uid", "content"}:
@@ -724,7 +473,6 @@ def _render_snapshot_items(
     separate_context_blocks: bool,
     style_relationships: bool,
     uid_prefixes: dict[str, str],
-    sync_statuses: dict[str, str] | None = None,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for index, item in enumerate(contexts):
@@ -743,11 +491,8 @@ def _render_snapshot_items(
             separate_context_blocks=separate_context_blocks,
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
-            sync_statuses=sync_statuses,
         )
     if contexts and memories:
-        # Namespace/embedded Contexts and direct Memories are different
-        # semantic groups even though both belong to this displayed Context.
         lines.append("")
     for item in memories:
         _render_snapshot_item(
@@ -761,7 +506,6 @@ def _render_snapshot_items(
             separate_context_blocks=separate_context_blocks,
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
-            sync_statuses=sync_statuses,
         )
 
 
@@ -780,9 +524,8 @@ def _render_snapshot(
     memory_layout: _MemoryLayout,
     terminal_width: int = 100,
     style_relationships: bool = False,
-    sync_statuses: dict[str, str] | None = None,
 ) -> str:
-    from memcommit.adapters.console.terminal.components.context_sync_status import context_sync_status_text
+
     if memory_layout not in {"hanging", "inline"}:
         raise _snapshot_error()
     if terminal_width < 1:
@@ -809,7 +552,8 @@ def _render_snapshot(
 
     contexts, memories = _group_snapshot_items(items)
     lines = [
-        f"Context: {name}" + context_sync_status_text(sync_statuses.get(name) if sync_statuses else None),
+        f"Context: {name}"
+        ,
         f"  {_memory_count_text(len(memories))}",
         f"  {_subcontext_count_text(len(contexts))}",
     ]
@@ -828,7 +572,6 @@ def _render_snapshot(
             separate_context_blocks=recursive,
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
-            sync_statuses=sync_statuses,
         )
     return "\n".join(lines) + "\n"
 
@@ -874,48 +617,6 @@ def _emit_snapshot_text(
         typer.echo(line)
 
 
-def _permission_text(permissions: tuple[str, ...]) -> str:
-    return " + ".join(permissions)
-
-
-def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
-    view = access.view
-    if view is None:
-        return ()
-    grant = view.grant
-    return (
-        "  Access: "
-        + source_display_text(
-            context_access_display_facts(
-                access,
-                states=(SourceState.READ_ONLY,),
-            ),
-            include_permissions=True,
-        )
-        + " · FROM "
-        + display_escape_text(view.authority.name)
-        + f" · GRANT {grant.uid[:8]} · REVISION {grant.revision}",
-        "  Permissions: " + _permission_text(grant.permissions),
-        "  Analysis: "
-        + analysis_boundary_label(
-            access.access_name,
-            granted=True,
-            readable="READ" in grant.permissions,
-        ),
-    )
-
-
-def _local_analysis_notes(
-    context_name: str,
-    store: MemoryStore,
-) -> tuple[str, ...]:
-    # Local retained history is always readable by its owning Profile.  Only
-    # Grant rows need an annotation because READ does not expose authority
-    # checkpoints or command receipts.
-    del context_name, store
-    return ()
-
-
 def render_index(ctx: Context, *, recursive: bool = False) -> None:
     """Print a compact index of a Context's visible navigation children."""
     store = MemoryStore(create=False)
@@ -957,7 +658,7 @@ def cmd(
             "-R",
             "--recursive",
             "--expand",
-            help=("Expand every descendant namespace and embedded Context."),
+            help=("Expand every descendant namespace."),
         ),
     ] = False,
     direct: Annotated[
@@ -1019,7 +720,6 @@ def cmd(
                 recursive=recursive,
             ),
         )
-        access = selection.access
         ctx = selection.context
         store = selection.catalog
         context_names = selection.context_names
@@ -1048,15 +748,10 @@ def cmd(
         memory_layout="hanging",
         terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
         style_relationships=True,
-        sync_statuses=selection.sync_statuses,
     )
     _emit_snapshot_text(
         annotated_text,
-        header_notes=(
-            _granted_access_notes(access)
-            if access.is_granted
-            else _local_analysis_notes(access.context_name, active_store)
-        ),
+        header_notes=(()),
     )
     if copy_result:
         clipboard_text = _render_snapshot(

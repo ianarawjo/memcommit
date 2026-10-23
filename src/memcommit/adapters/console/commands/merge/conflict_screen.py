@@ -33,7 +33,6 @@ from memcommit.application.operations.merge.analysis.choices import (
     finalize_merge_decisions,
     initial_review_decisions,
     merge_sides,
-    structural_item_description,
 )
 from memcommit.application.operations.merge.analysis.materialization import (
     materialize_exact_decisions,
@@ -119,7 +118,7 @@ def run_merge_conflicts(
         MergeConflictDecision(issue.uid, selected[issue.uid].rpartition(":")[2].upper())
         for issue in issues
     )
-    finalize_merge_decisions(review.analysis, decisions)
+    finalize_merge_decisions(review.analysis, (decisions or ()))
     return review.prepare_result(decisions)
 
 
@@ -132,14 +131,11 @@ def project_choice_previews(analyses, *, copy_uids=None, retained_uids=frozenset
             continue
         before = candidate.context()
         for issue in analysis.review_issues:
-            if issue.item_kind != "MEMORY":
-                continue
             for choice in issue.choices:
                 if choice.uid not in EXACT_DECISIONS:
                     continue
                 decisions = MergeDecisionSet(
-                    analysis.revision,
-                    (MergeConflictDecision(issue.uid, choice.uid),),
+                    analysis.revision, (MergeConflictDecision(issue.uid, choice.uid),)
                 )
                 after = materialize_exact_decisions(analysis, decisions, before)
                 fragments = []
@@ -166,8 +162,6 @@ def project_choice_previews(analyses, *, copy_uids=None, retained_uids=frozenset
                         )
                         continue
                     if new is not None and origin.context_name != origin.placement:
-                        # Literal freezes a new copy ID; Semantic retains its frozen
-                        # candidate ID. Neither ID may be allocated during rendering.
                         result_uid = (copy_uids or {}).get(issue.uid, uid)
                         identity += f" → [{origin.placement}:{result_uid[:8]}]"
                         if uid not in retained_uids:
@@ -204,11 +198,7 @@ def project_choice_previews(analyses, *, copy_uids=None, retained_uids=frozenset
 
 
 def _merge_choice_text(analysis, issue, choice):
-    if issue.item_kind != "MEMORY" or choice.uid not in {
-        "KEEP_TARGET",
-        "TAKE_SOURCE",
-        "KEEP_BOTH",
-    }:
+    if choice.uid not in {"KEEP_TARGET", "TAKE_SOURCE", "KEEP_BOTH"}:
         return choice.text
     targets, sources = merge_sides(analysis.candidate, issue)
     members = {
@@ -219,7 +209,7 @@ def _merge_choice_text(analysis, issue, choice):
     blocks = dict(
         zip(issue.item_uids, _issue_memory_blocks(analysis, issue), strict=True)
     )
-    return "\n".join(f"{blocks[uid].heading} {blocks[uid].text}" for uid in members)
+    return "\n".join((f"{blocks[uid].heading} {blocks[uid].text}" for uid in members))
 
 
 def _issue_memory_blocks(analysis: MergeConflictAnalysis, issue: MergeConflictIssue):
@@ -233,9 +223,7 @@ def _issue_memory_blocks(analysis: MergeConflictAnalysis, issue: MergeConflictIs
         blocks.append(
             ResolutionDetailBlock(
                 heading=f"[{location}:{memory_uid[:8]}]",
-                text=by_uid[uid].content
-                if issue.item_kind == "MEMORY"
-                else structural_item_description(candidate.original_item(uid)),
+                text=by_uid[uid].content,
             )
         )
     return tuple(blocks)
@@ -243,7 +231,6 @@ def _issue_memory_blocks(analysis: MergeConflictAnalysis, issue: MergeConflictIs
 
 def compact_resolve_view(analysis: MergeConflictAnalysis) -> ResolutionWorkbenchView:
     """Project unresolved meanings, never mutations, for finalization."""
-
     return ResolutionWorkbenchView(
         operation="MERGE",
         artifact_uid=analysis.candidate.context().uid,
@@ -255,36 +242,40 @@ def compact_resolve_view(analysis: MergeConflictAnalysis) -> ResolutionWorkbench
         overview="",
         list_label="MERGE CONFLICTS",
         items=tuple(
-            ResolutionItem(
-                uid=issue.uid,
-                kind=issue.kind,
-                status="OPEN",
-                priority="REQUIRED",
-                title=issue.classification,
-                kind_label=issue.kind.replace("_", " "),
-                blocks=_issue_memory_blocks(analysis, issue),
-                summary=issue.reason,
-                obligation="REQUIRED",
-                response_state="OPEN",
-                question=issue.question or issue.reason,
-                options=tuple(
-                    ResolutionOption(
-                        f"{issue.uid}:{c.uid.lower()}",
-                        c.label,
-                        _merge_choice_text(analysis, issue, c),
-                    )
-                    for c in issue.choices
-                ),
-                selected_option_uid=f"{issue.uid}:{issue.default_choice.lower()}"
-                if issue.default_choice is not None
-                else None,
-                commentable=issue.item_kind == "MEMORY"
-                and (
-                    not issue.choices
-                    or any(choice.uid == "INTENT" for choice in issue.choices)
-                ),
+            (
+                ResolutionItem(
+                    uid=issue.uid,
+                    kind=issue.kind,
+                    status="OPEN",
+                    priority="REQUIRED",
+                    title=issue.classification,
+                    kind_label=issue.kind.replace("_", " "),
+                    blocks=_issue_memory_blocks(analysis, issue),
+                    summary=issue.reason,
+                    obligation="REQUIRED",
+                    response_state="OPEN",
+                    question=issue.question or issue.reason,
+                    options=tuple(
+                        (
+                            ResolutionOption(
+                                f"{issue.uid}:{c.uid.lower()}",
+                                c.label,
+                                _merge_choice_text(analysis, issue, c),
+                            )
+                            for c in issue.choices
+                        )
+                    ),
+                    selected_option_uid=f"{issue.uid}:{issue.default_choice.lower()}"
+                    if issue.default_choice is not None
+                    else None,
+                    commentable=True
+                    and (
+                        not issue.choices
+                        or any((choice.uid == "INTENT" for choice in issue.choices))
+                    ),
+                )
+                for issue in analysis.review_issues
             )
-            for issue in analysis.review_issues
         ),
         empty_message="No Merge decision is available.",
         results_label="MERGE RESULT",

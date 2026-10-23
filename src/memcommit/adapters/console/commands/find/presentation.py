@@ -56,7 +56,7 @@ def find_result_header_lines(
         (
             f"SCOPE · {safe_terminal_text(scope)}"
             f" · {'DESCENDANTS' if result.request.include_descendants else 'EXACT'}"
-            f" · {'FOLLOW EMBEDS' if result.request.follow_embeds else 'EXCLUDE EMBEDS'}"
+            f" · {('EXCLUDE EMBEDS')}"
         ),
         (
             f"SCANNED {result.scanned_item_count}"

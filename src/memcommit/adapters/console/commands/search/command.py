@@ -1,4 +1,4 @@
-"""Search CLI options, route selection, and terminal error translation."""
+"""Find CLI options, route selection, and terminal error translation."""
 
 import sys
 from typing import Annotated, NoReturn, Optional
@@ -33,7 +33,7 @@ def _interactive_terminal() -> bool:
 
 
 def _exit_error(
-    error: Exception, *, prefix: str = "Search error", code: int = 1
+    error: Exception, *, prefix: str = "Find error", code: int = 1
 ) -> NoReturn:
     typer.secho(
         f"{prefix}: {display_escape_text(str(error))}",
@@ -51,8 +51,7 @@ def cmd(
             help=(
                 "Natural-language query; omit in a terminal to open the "
                 "interactive search with compact exact-Context Scope, "
-                "Browse-only Profile/multiple selection, independent range "
-                "and Embed choices, and checked-result COPY/REFERENCE/EMBED Save"
+                "Browse-only Profile/multiple selection, lexical range choices, and checked-result COPY Save"
             ),
         ),
     ] = None,
@@ -73,7 +72,7 @@ def cmd(
         typer.Option(
             "--all",
             "-a",
-            help="Search all readable Contexts in the active Profile",
+            help="Find all readable Contexts in the active Profile",
         ),
     ] = False,
     limit: Annotated[
@@ -88,20 +87,7 @@ def cmd(
         Optional[bool],
         typer.Option(
             "--descendants/--context-only",
-            help=(
-                "Include each selected Context root's readable lexical "
-                "descendants, independently of embedded Context traversal"
-            ),
-        ),
-    ] = None,
-    follow_embeds: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--follow-embeds/--exclude-embeds",
-            help=(
-                "Follow embedded Context links from the selected lexical "
-                "scope, independently of descendant expansion"
-            ),
+            help=("Include each selected Context root's readable lexical descendants"),
         ),
     ] = None,
     direct: Annotated[
@@ -109,7 +95,7 @@ def cmd(
         typer.Option(
             "-d",
             "--direct",
-            help="Search only the selected Context roots",
+            help="Find only the selected Context roots",
         ),
     ] = False,
     recursive: Annotated[
@@ -117,16 +103,11 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Include descendants and follow embedded Contexts",
+            help="Include lexical descendants",
         ),
     ] = False,
 ) -> None:
-    scope_flags_supplied = (
-        direct
-        or recursive
-        or include_descendants is not None
-        or follow_embeds is not None
-    )
+    scope_flags_supplied = direct or recursive or include_descendants is not None
     try:
         preset = resolve_scope_preset(
             direct=direct,
@@ -140,10 +121,8 @@ def cmd(
         traversal = resolve_context_traversal(
             preset=preset,
             include_descendants=include_descendants,
-            follow_embeds=follow_embeds,
         )
         include_descendants = traversal.include_descendants
-        follow_embeds = traversal.follow_embeds
     except (TypeError, ValueError) as error:
         _exit_error(error, code=2)
     store = MemoryStore()
@@ -153,7 +132,6 @@ def cmd(
             context_names=context_name,
             all_contexts=all_contexts,
             interactive=query is None,
-            follow_embeds=follow_embeds,
         )
     except (
         OSError,
@@ -165,12 +143,12 @@ def cmd(
         _exit_error(error, prefix="Error")
 
     if not 1 <= limit <= 20:
-        _exit_error(ValueError("Search limit must be between 1 and 20."))
+        _exit_error(ValueError("Find limit must be between 1 and 20."))
     if query is None and not _interactive_terminal():
         _exit_error(
             ValueError(
                 "QUERY is required outside a terminal. In a "
-                "terminal, run 'mem search' to open the interactive search."
+                "terminal, run 'mem find' to open the interactive search."
             )
         )
     try:
@@ -179,7 +157,6 @@ def cmd(
                 store,
                 prepared,
                 include_descendants=include_descendants,
-                follow_embeds=follow_embeds,
                 limit=limit,
             )
             return
@@ -187,7 +164,6 @@ def cmd(
             query=query,
             target_names=prepared.target_names,
             include_descendants=include_descendants,
-            follow_embeds=follow_embeds,
             limit=limit,
         )
         response = run_static_search(

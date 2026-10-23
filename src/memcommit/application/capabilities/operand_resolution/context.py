@@ -3,8 +3,7 @@
 This module owns interpretation order, not authority discovery.  A caller
 freezes the Context identities that its operation may disclose and supplies
 them here.  Exact or relative public names win, then an exact or unique public
-UID prefix may select one identity.  Only operations whose grammar explicitly
-allows prose may use the final inline-text fallback.
+UID prefix may select one identity.
 """
 
 from __future__ import annotations
@@ -12,19 +11,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Generic, Protocol, TypeVar
 
-from memcommit.application.capabilities.context_locator import (
-    is_relative_context_locator,
-    resolve_context_locator,
-)
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.capabilities.durable_uid_resolution import (
     DurableUidAmbiguityError,
     DurableUidCandidate,
     is_unresolved_uid_selector,
     try_resolve_durable_uid,
 )
-from memcommit.core.context import Context
-from memcommit.core.context_targeting.model import ContextTarget, InlineTextOperand
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
 
 
 T = TypeVar("T")
@@ -110,10 +104,8 @@ def try_resolve_existing_context_operand(
     """Resolve name first, then one UID inside the frozen candidate frame.
 
     Missing values return ``None`` so a caller with a typed multi-kind grammar
-    may continue into its Memory or artifact candidate frame.  A caller whose
-    only remaining fallback is prose or a new name must use one of this
-    module's required wrappers, which fails an unmatched UUID-shaped value
-    closed instead of changing its semantic kind.
+    may continue into its Memory or artifact candidate frame. A caller that
+    requires an existing Context uses `resolve_existing_context_operand`.
     """
 
     if not isinstance(operand, str) or not operand:
@@ -122,9 +114,7 @@ def try_resolve_existing_context_operand(
         )
     frozen = _frozen_candidates(candidates)
     canonical_name = resolve_context_locator(operand, current=current)
-    named = tuple(
-        candidate for candidate in frozen if candidate.name == canonical_name
-    )
+    named = tuple(candidate for candidate in frozen if candidate.name == canonical_name)
     if len(named) == 1:
         return _resolved(operand, named[0])
     if len(named) > 1:
@@ -179,67 +169,23 @@ def resolve_existing_context_operand(
     canonical_name = resolve_context_locator(operand, current=current)
     if is_unresolved_uid_selector(operand):
         raise ContextOperandNotFoundError(
-            f"Context UID {operand!r} is unavailable in this authorized view."
+            f"Context UID {operand!r} is unavailable in this Profile."
         )
     raise ContextOperandNotFoundError(
-        f"Context {canonical_name!r} does not exist in this authorized view."
-    )
-
-
-def resolve_context_or_inline_text_operand(
-    candidates: tuple[ContextOperandCandidate[T], ...],
-    operand: str,
-    *,
-    current: str | None,
-) -> ResolvedExistingContextOperand[T] | InlineTextOperand:
-    """Use inline text only after existing Context name and UID interpretation.
-
-    Relative locators and portable-looking names are explicit Context syntax.
-    Their absence therefore remains a Context error.  Nonportable prose may be
-    returned as inline text, while an operation-specific ``--memory`` or
-    ``text:`` route remains the unambiguous way to force short literal content.
-    """
-
-    resolved = try_resolve_existing_context_operand(
-        candidates,
-        operand,
-        current=current,
-    )
-    if resolved is not None:
-        return resolved
-    if is_unresolved_uid_selector(operand):
-        return resolve_existing_context_operand(
-            candidates,
-            operand,
-            current=current,
-        )
-    if is_relative_context_locator(operand):
-        return resolve_existing_context_operand(
-            candidates,
-            operand,
-            current=current,
-        )
-    try:
-        validate_portable_context_name(operand)
-    except ValueError:
-        return InlineTextOperand(operand)
-    return resolve_existing_context_operand(
-        candidates,
-        operand,
-        current=current,
+        f"Context {canonical_name!r} does not exist in this Profile."
     )
 
 
 def freeze_local_context_operand_candidates(
     store: LocalContextOperandStore,
-) -> tuple[ContextOperandCandidate[ContextTarget], ...]:
+) -> tuple[ContextOperandCandidate[Context], ...]:
     """Freeze every strict ordinary-local Context as one typed target catalog."""
 
     return tuple(
         ContextOperandCandidate(
             uid=context.uid,
             name=context.name,
-            value=ContextTarget(context.name),
+            value=context,
         )
         for context in store.load_direct_context_graph_strict()
     )
@@ -250,15 +196,9 @@ def resolve_existing_local_context_operand(
     operand: str | None,
     *,
     current: str | None,
-    candidates: tuple[ContextOperandCandidate[ContextTarget], ...] | None = None,
-) -> ResolvedExistingContextOperand[ContextTarget]:
-    """Require one ordinary-local Context from one frozen identity frame.
-
-    The helper keeps local-only operations on the same name/relative/UID
-    interpretation order as Grant-aware operations without letting them open
-    the active Profile's Grant catalog.  Supplying ``candidates`` lets a
-    multi-operand command freeze its local namespace once at command start.
-    """
+    candidates: tuple[ContextOperandCandidate[Context], ...] | None = None,
+) -> ResolvedExistingContextOperand[Context]:
+    """Require a local Context from one frozen name/relative/UID identity frame. Multi-operand commands can reuse the same command-start catalog."""
 
     if operand is None:
         if current is None:
@@ -282,7 +222,6 @@ __all__ = [
     "ContextOperandResolutionError",
     "ResolvedExistingContextOperand",
     "freeze_local_context_operand_candidates",
-    "resolve_context_or_inline_text_operand",
     "resolve_existing_context_operand",
     "resolve_existing_local_context_operand",
     "try_resolve_existing_context_operand",

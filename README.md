@@ -32,9 +32,9 @@ model changes; unavailable efforts return visibly to the new model's default.
 Enter checks the exact model and effort before saving them. Claude Code and
 GitHub Copilot are planned additions.
 
-A **Profile is a folder workspace**. Import existing supported documents and
-Auto Sync are both enabled initially. Import includes this folder's subfolders;
-Sync reflects mem changes in managed documents there, including future Contexts.
+A **Profile is a folder workspace**. Import of existing supported documents is
+enabled initially and includes this folder's subfolders. Run `mem sync` explicitly
+to synchronize the Profile's documents and Memories.
 Review the folder, document count, options and exact creation command. Creating
 the first Profile also selects it. If setup starts from your home directory,
 its editable folder suggestion is `~/mem`.
@@ -151,18 +151,16 @@ rejected. When `--root` is omitted, a new Profile gets a separate directory unde
 `~/.memcommit/projects/`. The interactive `mem profile` creation screen lets you
 choose a folder, initially suggesting the current directory.
 
-To import the supported documents and enable automatic outbound Sync during
-creation, use:
+To import supported documents during creation, use:
 
 ```sh
-mem profile create my-project --root /path/to/my-project --import-files --auto-sync
+mem profile create my-project --root /path/to/my-project --import-files
 mem profile use my-project
 ```
 
-Choose either flag independently. Import includes supported nested and hidden
-document paths; automatic Sync also covers Contexts created later. Creation
-preserves existing document bytes and keeps the previous Profile selected.
-The interactive `mem profile` creation screen exposes the same two options.
+Import includes supported nested and hidden document paths. Creation preserves
+existing document bytes and keeps the previous Profile selected. The interactive
+`mem profile` creation screen exposes the same Import option.
 
 From the registered project folder, import supported existing documents and
 synchronize them back to those paths:
@@ -170,21 +168,19 @@ synchronize them back to those paths:
 ```sh
 cd /path/to/my-project
 mem import .
-mem sync -a
-mem sync -a --always
+mem sync
 ```
 
 Import retains paths such as `AGENTS.md`, `.agents/skills/reviewer/SKILL.md`, and
 `.claude/rules/project.md`. Ordinary document import supports Markdown, text,
 YAML, and YML; `.mdc` is not yet supported. `.mem` and `.git` are excluded.
-An initial Sync adopts identical files, creates missing files, and reports a
-conflict when existing bytes differ. Unmanaged project files are preserved.
-
-`--always` toggles automatic outbound Sync for the selected scope. Once enabled,
-successful mem commands synchronize changed Memories to the project files;
-Undo and Redo can synchronize their resulting content too. Repeating
-`mem sync -a --always` disables it. External edits are detected as conflicts;
-there is no background or automatic inbound file watcher.
+With no Context argument, Sync discovers and synchronizes the selected Profile's
+project documents. It compares both sides against checkpoint history. When only
+one side changed, that version is used. When both sides changed differently,
+choose the external or mem version once for every conflict in the Profile.
+Both versions remain in checkpoint history, and Undo/Redo restores the entire
+Sync action at once. Sync is explicit; automatic Sync and `--always` are reserved
+for future work.
 
 For an independent copy, use Export:
 
@@ -208,7 +204,7 @@ Use `mem --help` for the command list and `mem COMMAND --help` for exact options
 
 ## Study scenarios
 
-The built-in Coffee Study includes its participant and granted-memory data:
+The built-in Coffee Study includes its task Contexts and Memories:
 
 ```sh
 mem init-study demo-study
@@ -216,17 +212,31 @@ mem profile list
 mem contexts
 ```
 
-`init-study` creates an isolated pair of Profiles and switches to the participant
-Profile. An interactive terminal can also enter its Study shell. The older
+`init-study` creates one isolated Study Profile containing the task Contexts and
+switches to it. An interactive terminal can also enter its Study shell. The older
 fixture is available explicitly with `mem init-study NAME --scenario legacy`.
 Both scenarios and their required data are included in the installed package.
-New runs default to `~/.memcommit/studies/<Study UID>/participant/` and
-`authority/`, each with its own `.mem/`. The participant shell starts in its
-registered project folder. To choose the parent for future runs:
+New runs default to `~/.memcommit/studies/<Study UID>/participant/`, with their
+own `.mem/`. The participant shell starts in its registered project folder.
+To choose the parent for future runs:
 
 ```sh
 mem config set study_root_dir /path/to/studies
 ```
+
+Study `mem help` shows these 20 commands to reduce the number of commands a
+participant needs to learn:
+
+```text
+add       audit     branch    contexts  delete
+edit      find      help      init      list
+merge     profile   pwd       query     redo
+resolve   switch    sync      undo      update
+```
+
+This list controls Study Help visibility. Contexts directly contain Memories;
+Embed, Reference, Share, and Grant execution are reserved for future work in
+this snapshot.
 
 ## Semantic operations
 
@@ -283,17 +293,15 @@ Use `mem provider --help` for Ollama, OpenRouter, and the complete settings.
 
 ## Update
 
-Apply one instruction to the current Context or an explicit Target:
+Apply one instruction to the current Context:
 
 ```sh
-mem update "Set the cafe opening time to ten." --to demo
-mem update -m instructions:MEMORY_UID --to demo
+mem switch demo
+mem update "Set the cafe opening time to ten."
 ```
 
-`-m` uses one stored Memory outside the Target as the instruction; it does not
-select a Memory to edit. Update considers the Target's direct contents, without
-expanding embedded or descendant Contexts by default. Use `--recursive` to
-update the Target, lexical descendants, and embedded Contexts together.
+Update considers the current Context's direct contents. Use `-r` or `--recursive`
+to update the current Context and its lexical descendants together.
 Submitting the command plans and applies the changes, then prints their diff
 and completed receipt. Checkpoints,
 Review, Undo and Redo retain the completed evidence.
@@ -343,7 +351,8 @@ the Console CLI/TUI.
 All executable package code and bundled resources live under `src/memcommit/`:
 
 ```text
-core/             Core memory concepts and invariants
+models/           Memory, Context, Checkpoint, Profile, and metadata models
+core/             Remaining shared memory concepts and pure helpers
 application/      Operations, capabilities, and authorization
 adapters/console/ CLI commands and terminal components
 providers/        Language-model provider integrations
@@ -361,10 +370,11 @@ Codex's ChatGPT login and initial Provider/model/Profile choices. Plain
 flow. The installer opens it automatically when a terminal is available and
 otherwise prints that next step. Interrupted setup resumes by opening mem.
 
-Import and automatic Sync start ON and can be changed on the Profile creation
-screen before exact approval. Authentication stays with Codex; do not collect
-or write the person's tokens. The active Profile remains selected until
-changed with `mem profile use NAME`. Existing registered Profiles are kept.
+Import starts ON and can be changed on the Profile creation screen before exact
+approval. Document synchronization uses explicit `mem sync`. Authentication
+stays with Codex; do not collect or write the person's tokens. The active Profile
+remains selected until changed with `mem profile use NAME`. Existing registered
+Profiles are kept.
 
-First setup writes Profile registry version 7. Existing version-6 registries
-are read and preserved through upgrades; older runtimes cannot read version 7.
+First setup writes Profile registry version 8. This snapshot does not migrate
+older registry or Context storage formats.

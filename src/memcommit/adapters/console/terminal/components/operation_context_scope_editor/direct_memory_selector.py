@@ -5,9 +5,12 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+
 from prompt_toolkit.application.current import get_app
 
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+
 from memcommit.core.context_targeting.model import ContextSelectionMode
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.memory_selection import (
     DirectMemorySelectionState,
@@ -86,22 +89,27 @@ class DirectMemorySelectorControl:
         return self.contexts.frame
 
     @property
-    def selected(self) -> DirectMemoryTarget | None:
+    def selected(self) -> tuple[Context, Memory] | None:
         return self.selection.selected
 
     @property
-    def selected_many(self) -> tuple[DirectMemoryTarget, ...]:
+    def selected_many(self) -> tuple[tuple[Context, Memory], ...]:
         """Return checked targets in explicit check or command-edit order."""
 
         selected = self.selection.selected_targets
-        for target in selected:
-            rows = self.preview.memory_cache.get(target.context_name, ())
-            if not any(row.selector == target.memory_uid for row in rows):
+        for context, memory in selected:
+            rows = self.preview.memory_cache.get(context.name, ())
+            if not any(row.selector == memory.uid for row in rows):
                 raise RuntimeError("A selected direct Memory left the frozen selector.")
         return selected
 
     def _project_row(self, row, focused: bool) -> ContextSelectorRowProjection:
         width = max(1, get_app().output.get_size().columns - 8)
+        selected = None if self.selection.multiple else self.selection.selected
+        selected_coordinate = None
+        if selected is not None:
+            context, memory = selected
+            selected_coordinate = context.name, memory.uid
         memory_focused = (
             self.preview.memory_focused
             and self.preview.memory_anchor is not None
@@ -113,11 +121,14 @@ class DirectMemorySelectorControl:
                 row,
                 wrap_width=width,
                 selectable_memories=True,
-                selected_memory=(
-                    None if self.selection.multiple else self.selection.selected
-                ),
+                selected_memory=selected_coordinate,
                 selected_memories=(
-                    self.selection.selected_set if self.selection.multiple else None
+                    frozenset(
+                        (context.name, memory.uid)
+                        for context, memory in self.selection.selected_targets
+                    )
+                    if self.selection.multiple
+                    else None
                 ),
             ),
             show_context_cursor=not (focused and memory_focused),
@@ -139,14 +150,15 @@ class DirectMemorySelectorControl:
         if target is None:
             raise ValueError("Only a directly owned ordinary Memory can be selected.")
         changed = self.selection.choose(target)
-        self.contexts.selection.choose(target.context_name)
+        context, _memory = target
+        self.contexts.selection.choose(context.name)
         return changed
 
     def resolve_target(
         self,
         context_name: str,
         selector: str,
-    ) -> DirectMemoryTarget:
+    ) -> tuple[Context, Memory]:
         """Resolve one exact/unambiguous visible Memory selector without staging it."""
 
         if context_name not in self.contexts.selectable:
@@ -158,7 +170,7 @@ class DirectMemorySelectorControl:
             rows = tuple(self.preview.memory_loader(context_name))
             self.preview.memory_cache[context_name] = rows
         matches = tuple(
-            row.selector
+            row
             for row in rows
             if row.selector is not None and row.selector.startswith(selector)
         )
@@ -170,50 +182,52 @@ class DirectMemorySelectorControl:
             raise ValueError(
                 f"Memory selector '{selector}' is ambiguous in '{context_name}'."
             )
-        return DirectMemoryTarget(context_name, matches[0])
+        row = matches[0]
+        if row.owner_context is None or row.memory is None:
+            raise ValueError("The selected row has no loaded Memory.")
+        return row.owner_context, row.memory
 
-    def select_target(self, target: DirectMemoryTarget) -> bool:
+    def select_target(self, target: tuple[Context, Memory]) -> bool:
         """Stage one previously resolved target through the common selector state."""
 
-        if not isinstance(target, DirectMemoryTarget):
-            raise TypeError("Direct Memory selection requires a typed target.")
-        resolved = self.resolve_target(target.context_name, target.memory_uid)
-        if resolved != target:
+        context, memory = target
+        resolved = self.resolve_target(context.name, memory.uid)
+        owner, resolved_memory = resolved
+        if (owner.uid, resolved_memory.uid) != (context.uid, memory.uid):
             raise ValueError("Direct Memory target changed before it was selected.")
-        self.contexts.select_name(target.context_name)
-        self.contexts.tree.memory_visibility_overrides[target.context_name] = True
-        rows = self.preview.memory_cache[target.context_name]
+        self.contexts.select_name(context.name)
+        self.contexts.tree.memory_visibility_overrides[context.name] = True
+        rows = self.preview.memory_cache[context.name]
         self.preview.memory_anchor = (
-            target.context_name,
+            context.name,
             next(
-                index
-                for index, row in enumerate(rows)
-                if row.selector == target.memory_uid
+                index for index, row in enumerate(rows) if row.selector == memory.uid
             ),
         )
-        return self.selection.choose(target)
+        return self.selection.choose(resolved)
 
-    def replace_targets(self, targets: Sequence[DirectMemoryTarget]) -> bool:
+    def replace_targets(self, targets: Sequence[tuple[Context, Memory]]) -> bool:
         """Resolve and atomically stage an exact set through the shared control."""
 
         resolved = tuple(
-            self.resolve_target(target.context_name, target.memory_uid)
-            for target in targets
+            self.resolve_target(context.name, memory.uid) for context, memory in targets
         )
-        if resolved != tuple(targets):
+        if tuple((context.uid, memory.uid) for context, memory in resolved) != tuple(
+            (context.uid, memory.uid) for context, memory in targets
+        ):
             raise ValueError("A direct Memory target changed before it was selected.")
         changed = self.selection.replace(resolved)
         if resolved:
-            target = resolved[-1]
-            self.contexts.select_name(target.context_name)
-            self.contexts.tree.memory_visibility_overrides[target.context_name] = True
-            rows = self.preview.memory_cache[target.context_name]
+            context, memory = resolved[-1]
+            self.contexts.select_name(context.name)
+            self.contexts.tree.memory_visibility_overrides[context.name] = True
+            rows = self.preview.memory_cache[context.name]
             self.preview.memory_anchor = (
-                target.context_name,
+                context.name,
                 next(
                     index
                     for index, row in enumerate(rows)
-                    if row.selector == target.memory_uid
+                    if row.selector == memory.uid
                 ),
             )
         return changed

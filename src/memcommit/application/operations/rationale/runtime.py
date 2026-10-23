@@ -7,7 +7,6 @@ from typing import Callable
 from memcommit.application.capabilities.history.query.context_history_slicing import (
     ContextHistorySlice,
     build_context_history_slice,
-    current_context_history_slice,
 )
 from memcommit.application.capabilities.history.verification import MemoryState
 from memcommit.application.context_access.access import resolve_context_access
@@ -30,7 +29,7 @@ from memcommit.application.operations.rationale.skills.context_inference import 
     _inference_request,
     _parse_inference,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.providers.errors import QueryProviderError
 
@@ -41,23 +40,15 @@ def load_context_rationale_history(
     *,
     current_context_name: str | None,
 ) -> tuple[ContextHistorySlice, bool]:
-    """Prepare the existing exact Context route without opening granted history."""
+    """Prepare retained history for one exact local Context."""
 
     access = resolve_context_access(
         store,
         context_name,
         current_name=current_context_name,
-        required_permission="READ",
     )
-    report = (
-        current_context_history_slice(
-            access.store.load_direct(access.context_name),
-            warnings=("Authority history is outside this granted READ view.",),
-        )
-        if access.is_granted
-        else build_context_history_slice(access.store, access.context_name)
-    )
-    return report, not access.is_granted
+    report = build_context_history_slice(access.store, access.context_name)
+    return report, True
 
 
 def run_context_inference(
@@ -103,9 +94,6 @@ def run_context_inference(
                 "Rationale inference character budget changed during planning."
             )
         input_digest: str | None = None
-        # A subtree cache needs a multi-Context publication transaction.
-        # Until that exists, keep recursive and granted inference ephemeral
-        # rather than publishing a result after validating only one owner.
         cache_enabled = (
             cache_inference
             and recorded_evidence_available

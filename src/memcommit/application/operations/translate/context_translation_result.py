@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .runtime import AppliedTranslation, TranslationPlan
 

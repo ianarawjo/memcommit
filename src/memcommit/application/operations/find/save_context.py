@@ -49,27 +49,12 @@ def save_context_request_from_find(
     for index in selected_match_indices:
         match = result.matches[index]
         source = match.source
-        if source.kind == "memory":
-            source_name = source.context_name
-            source_context_uid = source.context_uid
-            source_memory_uid = source.item_uid
-        else:
-            if not (
-                source.source_context_name
-                and source.source_context_uid
-                and source.source_memory_uid
-            ):
-                raise SaveContextFromSelectionError(
-                    "This Find match has no frozen source-Memory identity."
-                )
-            source_name = source.source_context_name
-            source_context_uid = source.source_context_uid
-            source_memory_uid = source.source_memory_uid
+        source_name = source.context_name
+        source_context_uid = source.context_uid
+        source_memory_uid = source.item_uid
         public_name = resolve_selection_source_public_name(
             catalog,
-            containing_name=source.context_name,
             source_name=source_name,
-            is_reference=source.kind == "memory_ref",
         )
         selection.append(
             SelectedMemory(

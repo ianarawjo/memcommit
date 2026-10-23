@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import uuid
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from ..model import ResolveAnalysis, ResolveError
 from ..analysis.resolution_options.catalog import build_update_instruction
 from .finalize_review_decisions import ResolveDecisionSet
@@ -44,11 +45,9 @@ def resolution_input_uid(decisions: ResolveDecisionSet, issue_uid: str) -> str:
 
 
 def build_update_input_from_decisions(
-    analysis: ResolveAnalysis,
-    decisions: ResolveDecisionSet,
+    analysis: ResolveAnalysis, decisions: ResolveDecisionSet
 ) -> Context:
     """Build the process-local Source Context consumed by ordinary Update."""
-
     if decisions.revision != analysis.frame.revision:
         raise ResolveError("Resolve decisions no longer match this Context revision.")
     issues = {issue.uid: issue for issue in analysis.issues}
@@ -59,11 +58,9 @@ def build_update_input_from_decisions(
     )
     for decision in decisions.decisions:
         if decision.kind not in {"CONFIRM", "INTENT"}:
-            # FORCE is control/audit state. Treating it as evidence would let
-            # an unresolved choice authorize an unrelated target mutation.
             continue
         issue = issues[decision.issue_uid]
-        if issue.item_kind != "MEMORY" or issue.kind == "REDUNDANCY":
+        if issue.kind == "REDUNDANCY":
             continue
         content = build_update_instruction(analysis, issue, decision)
         memory_uid = resolution_input_uid(decisions, decision.issue_uid)

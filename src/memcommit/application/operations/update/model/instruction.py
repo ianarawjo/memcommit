@@ -1,4 +1,4 @@
-"""One explicit Update instruction, independent of its stored or inline origin."""
+"""One explicit instruction for the current Context and optional descendants."""
 
 from dataclasses import dataclass
 
@@ -16,19 +16,10 @@ class UpdateInstruction:
 
 @dataclass(frozen=True, slots=True)
 class UpdateRequest:
-    instruction: str | None = None
-    memory: str | None = None
-    target: str | None = None
+    instruction: str
     recursive: bool = False
 
     def __post_init__(self):
-        if (self.instruction is None) == (self.memory is None):
-            raise UpdateError("Supply one instruction or --memory UID, not both.")
-        if self.instruction is not None:
-            UpdateInstruction(self.instruction)
+        UpdateInstruction(self.instruction)
         if type(self.recursive) is not bool:
             raise UpdateError("Update recursive scope must be boolean.")
-        for name in ("memory", "target"):
-            value = getattr(self, name)
-            if value is not None and (not isinstance(value, str) or not value.strip()):
-                raise UpdateError(f"Update {name} must be nonblank text.")

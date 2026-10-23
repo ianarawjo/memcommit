@@ -41,7 +41,7 @@ from memcommit.application.operations.sever.model import (
 )
 from memcommit.application.operations.sever.provider import SeverProviderError
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
     MemoryStore,
@@ -91,15 +91,10 @@ class MemoryStoreSeverDestinationPort:
 
     store: MemoryStore
     source_name: str
-    self_save_allowed: bool
 
     def validate(self, output_name: str, *, current_output_name: str) -> None:
-        validate_portable_context_name(output_name)
+        validate_context_name(output_name)
         if output_name == self.source_name:
-            if not self.self_save_allowed:
-                raise SeverApplicationError(
-                    "In-place Sever requires an ordinary local Source root."
-                )
             return
         if output_name != current_output_name and self.store.context_exists(
             output_name
@@ -232,7 +227,6 @@ def execute_sever_session_destination_change(
         destination_port=MemoryStoreSeverDestinationPort(
             store,
             source_name=session.source.root_name,
-            self_save_allowed=(session.source.granted is None),
         ),
     )
 

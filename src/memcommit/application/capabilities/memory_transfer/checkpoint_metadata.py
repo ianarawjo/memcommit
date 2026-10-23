@@ -1,4 +1,4 @@
-"""Durable transfer checkpoint metadata; field names remain version-1 compatible."""
+"""Durable transfer checkpoint identities, placement, and affected Contexts."""
 
 from __future__ import annotations
 
@@ -19,14 +19,13 @@ def transfer_checkpoint_metadata(
     into_uid: str,
     placement: MemoryTransferPlacement,
     memories: tuple[FrozenTransferMemory, ...],
-    inbound_links: tuple[dict[str, object], ...],
     affected_contexts: tuple[tuple[str, str], ...],
 ) -> dict[str, object]:
     return {
         # This key predates the package rename and is durable checkpoint schema;
         # changing it would make existing Copy/Move history ungroupable.
         "memory_transfer": {
-            "version": 1,
+            "version": 2,
             "operation_uid": operation_uid,
             "kind": kind,
             "plan_digest": plan_digest,
@@ -44,18 +43,11 @@ def transfer_checkpoint_metadata(
                 {
                     "source_context_name": item.source_context_name,
                     "source_context_uid": item.source_context_uid,
-                    "source_context_digest": item.source_context_digest,
                     "source_memory_uid": item.source_memory_uid,
                     "output_memory_uid": item.output_memory_uid,
-                    "source_authority": (
-                        item.source_authority.to_dict()
-                        if item.source_authority is not None
-                        else None
-                    ),
                 }
                 for item in memories
             ],
-            "inbound_links": list(inbound_links),
         },
         "command_contexts": [
             {"uid": uid, "name": name} for name, uid in affected_contexts

@@ -25,24 +25,12 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_action_role,
     semantic_color_rgb,
 )
-from memcommit.core.context import Checkpoint
+from memcommit.models.checkpoint import Checkpoint
 from memcommit.source_projection.console import (
     styled_source_object_label,
-    styled_source_relationship_label,
 )
-from memcommit.source_projection.model import (
-    SourceAccess,
-    SourceDisplayFacts,
-    SourceForm,
-    SourceReach,
-    SourceState,
-)
+from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
-    SourceDisplayToken,
-    SourceTokenRole,
-    source_annotation_tokens,
-    source_annotation_text,
-    source_display_text,
     source_object_label,
 )
 
@@ -52,9 +40,6 @@ _MAX_CONTENT_CODEPOINTS = 240
 _MAX_DESCRIPTION_CODEPOINTS = 240
 
 _MEMORY_KIND = source_object_label(SourceForm.MEMORY, title=True)
-_MEMORY_REF_KIND = source_object_label(SourceForm.MEMORY_REF, title=True)
-_QUERY_VIEW_KIND = source_object_label(SourceForm.QUERY_VIEW, title=True)
-_EMBEDDED_CONTEXT_KIND = "Embedded " + source_object_label(SourceForm.CONTEXT)
 _CHANGE_COLOR_ROLES = {
     "added": SemanticColorRole.ADD,
     "edited": SemanticColorRole.EDIT,
@@ -70,26 +55,6 @@ class _ItemChange:
     uid: str
     before: Mapping[str, Any] | None
     after: Mapping[str, Any] | None
-
-
-MemoryRefTargetKey = tuple[str, str, str]
-
-
-def memory_ref_target_key(item: Mapping[str, Any]) -> MemoryRefTargetKey | None:
-    """Identify a Memory relationship by its exact persisted Source target."""
-
-    target_context = item.get("target_context")
-    if not isinstance(target_context, Mapping):
-        return None
-    target_name = target_context.get("name")
-    target_context_uid = target_context.get("uid")
-    target_memory_uid = item.get("target_memory_uid")
-    if not all(
-        isinstance(value, str) and value
-        for value in (target_name, target_context_uid, target_memory_uid)
-    ):
-        return None
-    return target_name, target_context_uid, target_memory_uid
 
 
 def _snapshot_items(
@@ -158,153 +123,33 @@ def _quoted_content(value: object) -> str:
     return '"' + escaped.replace('"', r"\"") + '"'
 
 
-def _item_kind(item: Mapping[str, Any] | None) -> str:
-    raw = item.get("type") if item is not None else None
-    return {
-        "memory": _MEMORY_KIND,
-        "memory_ref": _MEMORY_REF_KIND,
-        # Snapshot References carry retained bytes in the checkpoint record.
-        # Classify them as pointers so restoration receipts never fall back to
-        # rendering the raw record and disclosing that content.
-        "memory_snapshot_ref": _MEMORY_REF_KIND,
-        # Granted Memory Embed records are content-free live pointers. Keep
-        # their authority metadata out of restoration receipt prose.
-        "granted_memory_ref": _MEMORY_REF_KIND,
-        "query_context_ref": _QUERY_VIEW_KIND,
-        "context_ref": _EMBEDDED_CONTEXT_KIND,
-    }.get(raw, "direct item")
-
-
-def _item_source(
-    item: Mapping[str, Any] | None,
-) -> SourceDisplayFacts | SourceForm | None:
-    """Return the shared public Source classification for a receipt item."""
-
-    raw = item.get("type") if item is not None else None
-    if raw == "context_ref":
-        return SourceDisplayFacts(form=SourceForm.CONTEXT, reach=SourceReach.VIA_EMBED)
-    return {
-        "memory": SourceForm.MEMORY,
-        "memory_ref": SourceForm.MEMORY_REF,
-        "memory_snapshot_ref": SourceForm.MEMORY_REFERENCE,
-        "granted_memory_ref": SourceForm.MEMORY_EMBED,
-        "query_context_ref": SourceForm.QUERY_VIEW,
-    }.get(raw)
-
-
-def _styled_item_identity_label(item: Mapping[str, Any] | None) -> str:
-    source = _item_source(item)
-    if source is None:
-        return "direct item"
-    if isinstance(source, SourceForm) and source in {
-        SourceForm.MEMORY_REF,
-        SourceForm.MEMORY_REFERENCE,
-    }:
-        return styled_source_relationship_label(source)
-    return styled_source_object_label(source)
-
-
-def _memory_ref_description_parts(
-    item: Mapping[str, Any],
-    *,
-    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
-) -> tuple[str, str | None, str]:
-    key = memory_ref_target_key(item)
-    target_name = key[0] if key is not None else "(unknown)"
-    target_memory_uid = key[2] if key is not None else "unknown"
-    locator = (
-        _short(target_name, limit=_MAX_CONTENT_CODEPOINTS)
-        + ":"
-        + _short(target_memory_uid, limit=64)[:8]
+def _item_kind(item):
+    return (
+        _MEMORY_KIND
+        if item is not None and item.get("type") == "memory"
+        else "direct item"
     )
-    kind = item.get("type")
-    if kind == "memory_snapshot_ref":
-        retained = item.get("content")
-        content = retained if isinstance(retained, str) else None
-        form = SourceForm.MEMORY_REFERENCE
-    else:
-        content = resolved_memory_ref_contents.get(key) if key is not None else None
-        form = SourceForm.MEMORY_EMBED
-    if kind == "granted_memory_ref":
-        if content is not None:
-            annotation = source_annotation_text(
-                SourceDisplayFacts(
-                    access=SourceAccess.READ_GRANT,
-                    form=form,
-                    states=(SourceState.READ_ONLY,),
-                )
-            )
-        else:
-            # Restoration receipts deliberately do not reauthorize external
-            # Grants after mutation. The persisted relationship is still a
-            # live, read-only Grant link; lack of receipt-preview content is
-            # therefore OPAQUE, not evidence that the link is DANGLING.
-            facts = SourceDisplayFacts(
-                form=form,
-                states=(SourceState.READ_ONLY, SourceState.OPAQUE),
-            )
-            annotation = source_display_text(
-                (
-                    SourceDisplayToken("GRANT", SourceTokenRole.OWNERSHIP),
-                    *source_annotation_tokens(facts),
-                )
-            )
-        return locator, content, annotation
-    state = SourceState.READ_ONLY if content is not None else SourceState.DANGLING
-    annotation = source_annotation_text(SourceDisplayFacts(form=form, states=(state,)))
-    return locator, content, annotation
 
 
-def _item_description(
-    item: Mapping[str, Any],
-    *,
-    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
-) -> str:
-    kind = item.get("type")
-    if kind == "memory":
-        return _quoted_content(item.get("content", ""))
-    if kind in {"memory_ref", "memory_snapshot_ref", "granted_memory_ref"}:
-        locator, content, annotation = _memory_ref_description_parts(
-            item,
-            resolved_memory_ref_contents=resolved_memory_ref_contents,
-        )
-        body = f" {_quoted_content(content)}" if content is not None else ""
-        return f"{locator}{body}  {annotation}"
-    if kind in {"query_context_ref", "context_ref"}:
-        return _quoted_content(item.get("name", "(unknown)"))
-    return _quoted_content(item)
+def _styled_item_identity_label(item):
+    return (
+        styled_source_object_label(SourceForm.MEMORY)
+        if _item_kind(item) == _MEMORY_KIND
+        else "direct item"
+    )
+
+
+def _item_description(item):
+    return _quoted_content(item.get("content", ""))
 
 
 def _styled_item_description(
     item: Mapping[str, Any],
     *,
-    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
     effect_role: SemanticColorRole | None = None,
 ) -> str:
-    if item.get("type") in {
-        "memory_ref",
-        "memory_snapshot_ref",
-        "granted_memory_ref",
-    }:
-        locator, content, annotation = _memory_ref_description_parts(
-            item,
-            resolved_memory_ref_contents=resolved_memory_ref_contents,
-        )
-        body = (
-            " "
-            + typer.style(
-                _quoted_content(content),
-                fg=memory_object_color_rgb(),
-            )
-            if content is not None
-            else ""
-        )
-        # The marker describes adding/removing the relationship; the Source
-        # Memory itself remains a read-only object and keeps its own color.
-        return f"{locator}{body}  {annotation}"
     description = _item_description(
         item,
-        resolved_memory_ref_contents=resolved_memory_ref_contents,
     )
     if effect_role is not None:
         return typer.style(description, fg=semantic_color_rgb(effect_role))
@@ -315,8 +160,6 @@ def _styled_item_description(
 
 def _styled_change_line(
     change: _ItemChange,
-    *,
-    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
 ) -> str:
     """Compose Revert's effect, object, and before/after color axes."""
 
@@ -331,7 +174,6 @@ def _styled_change_line(
             f"  {marker} [{_styled_item_identity_label(change.before)} {uid}] "
             + _styled_item_description(
                 change.before,
-                resolved_memory_ref_contents=resolved_memory_ref_contents,
                 effect_role=SemanticColorRole.REMOVE,
             )
         )
@@ -340,7 +182,6 @@ def _styled_change_line(
             f"  {marker} [{_styled_item_identity_label(change.after)} {uid}] "
             + _styled_item_description(
                 change.after,
-                resolved_memory_ref_contents=resolved_memory_ref_contents,
             )
         )
     assert change.before is not None and change.after is not None
@@ -355,13 +196,11 @@ def _styled_change_line(
         f"  {marker} [{label} {uid}] "
         + _styled_item_description(
             change.before,
-            resolved_memory_ref_contents=resolved_memory_ref_contents,
             effect_role=SemanticColorRole.REMOVE,
         )
         + " → "
         + _styled_item_description(
             change.after,
-            resolved_memory_ref_contents=resolved_memory_ref_contents,
             effect_role=SemanticColorRole.EDIT,
         )
     )
@@ -391,36 +230,19 @@ def _change_item_kind(change: _ItemChange) -> str:
     return "direct item"
 
 
-def _impact_summary(changes: list[_ItemChange], reordered: bool) -> str:
-    counts: dict[tuple[str, str], int] = {}
-    for change in changes:
-        item_kind = _change_item_kind(change)
-        key = (item_kind, change.kind)
-        counts[key] = counts.get(key, 0) + 1
-
-    plural = {
-        _MEMORY_KIND: "Memories",
-        _MEMORY_REF_KIND: _MEMORY_REF_KIND + "s",
-        _QUERY_VIEW_KIND: _QUERY_VIEW_KIND + "s",
-        _EMBEDDED_CONTEXT_KIND: _EMBEDDED_CONTEXT_KIND + "s",
-        "direct item": "direct items",
+def _impact_summary(changes, reordered):
+    counts = {
+        kind: sum(change.kind == kind for change in changes)
+        for kind in ("added", "edited", "removed")
     }
-    parts: list[str] = []
-    for change_kind in ("added", "edited", "removed"):
-        for item_kind in (
-            _MEMORY_KIND,
-            _MEMORY_REF_KIND,
-            _QUERY_VIEW_KIND,
-            _EMBEDDED_CONTEXT_KIND,
-            "direct item",
-        ):
-            count = counts.get((item_kind, change_kind), 0)
-            if count:
-                label = item_kind if count == 1 else plural[item_kind]
-                parts.append(f"{count} {label} {change_kind}")
+    parts = [
+        f"{count} {'Memory' if count == 1 else 'Memories'} {kind}"
+        for kind, count in counts.items()
+        if count
+    ]
     if reordered:
-        parts.append("direct-item order changed")
-    return ", ".join(parts) if parts else "no direct Context changes"
+        parts.append("Memory order restored")
+    return ", ".join(parts) or "no content changes"
 
 
 def _action_name(command: str | None, *, fallback: str) -> str:
@@ -443,15 +265,6 @@ def _command_arg(value: object) -> str:
 def _sole_context(unit: ContextCommandUnit) -> str | None:
     names = {change.context_name for change in unit.changes}
     return next(iter(names)) if len(names) == 1 else None
-
-
-def _operand_context(args: Mapping[str, object], fallback: str | None) -> str | None:
-    """Prefer the retained public Grant operand over its authority owner."""
-
-    grant = args.get("authority_grant")
-    if isinstance(grant, Mapping) and isinstance(grant.get("public_context"), str):
-        return grant["public_context"]
-    return fallback
 
 
 def _with_context(command: str, context_name: str | None) -> str:
@@ -606,8 +419,8 @@ def _restored_command(unit: ContextCommandUnit) -> str:
     """Render a canonical effective command from retained checkpoint args."""
 
     context_name = _sole_context(unit)
-    args = unit.checkpoint_args[0] if unit.checkpoint_args else {}
-    operand_context = _operand_context(args, context_name)
+    args = unit.checkpoint_command_details[0] if unit.checkpoint_command_details else {}
+    operand_context = context_name
     if unit.command == "add":
         if isinstance(args.get("content"), str):
             return _with_context("mem add <CONTENT>", operand_context)
@@ -625,7 +438,7 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             and contents
             and all(isinstance(content, str) for content in contents)
         ):
-            return _with_context("mem add <MEMORY>...", operand_context)
+            return "mem add <MEMORY>..."
     if unit.command == "edit":
         if isinstance(args.get("input"), str):
             return _with_context(
@@ -693,23 +506,6 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             and isinstance(tree.get("root"), str)
         ):
             return f"mem dedun {_command_arg(tree['root'])} --recursive"
-    if (
-        unit.command == "embed"
-        and isinstance(args.get("child"), str)
-        and isinstance(args.get("into"), str)
-    ):
-        return (
-            f"mem embed {_command_arg(args['child'])} "
-            f"--into {_command_arg(args['into'])}"
-        )
-    if unit.command == "reference" and all(
-        isinstance(args.get(key), str) for key in ("memory_uid", "source", "into")
-    ):
-        return (
-            f"mem reference {_command_arg(args['memory_uid'])} "
-            f"--from {_command_arg(args['source'])} "
-            f"--into {_command_arg(args['into'])}"
-        )
     if unit.command == "branch":
         command = _branch_command(args)
         if command is not None:
@@ -750,34 +546,24 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             if unit.changes and unit.changes[0].before is None:
                 return f"mem atomize --save-as {_command_arg(context_name)}"
             return f"mem atomize {_command_arg(context_name)}"
-    if unit.command == "dev query-source install" and all(
-        isinstance(args.get(key), str) for key in ("name", "into")
-    ):
-        command = f"mem dev query-source install {_command_arg(args['name'])} "
-        source_file = args.get("source_file")
-        if isinstance(source_file, str):
-            command += f"--from {_command_arg(source_file)} "
-        # Legacy checkpoints omit the concealed source path. Keep their exact
-        # retained operands and do not fabricate a --from value.
-        return command + f"--into {_command_arg(args['into'])}"
     if unit.command != "update":
         return _action_name(unit.command, fallback="recorded Context command")
 
     sources = {
         args.get("source_context_name")
-        for args in unit.checkpoint_args
+        for args in unit.checkpoint_command_details
         if isinstance(args.get("source_context_name"), str)
     }
     targets = {
         args.get("target_context_name")
-        for args in unit.checkpoint_args
+        for args in unit.checkpoint_command_details
         if isinstance(args.get("target_context_name"), str)
     }
     if not targets and len(unit.changes) == 1:
         targets = {unit.changes[0].context_name}
     instruction_records = [
         args
-        for args in unit.checkpoint_args
+        for args in unit.checkpoint_command_details
         if args.get("instruction_kind") in {"TEXT", "MEMORY"}
     ]
     if instruction_records and len(targets) == 1:
@@ -807,10 +593,8 @@ def _render_impact(
     context_name: str,
     before_snapshot: object,
     after_snapshot: object,
-    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None] | None = None,
 ) -> None:
     changes, reordered = _changes(before_snapshot, after_snapshot)
-    resolved_contents = resolved_memory_ref_contents or {}
     typer.echo(
         "Affected Context: " + _short(context_name, limit=_MAX_CONTENT_CODEPOINTS)
     )
@@ -819,7 +603,6 @@ def _render_impact(
         typer.echo(
             _styled_change_line(
                 change,
-                resolved_memory_ref_contents=resolved_contents,
             )
         )
     omitted = len(changes) - _MAX_ITEM_LINES
@@ -920,7 +703,6 @@ def render_revert_receipt(
     before_snapshot: object,
     target: Checkpoint,
     recovery: Checkpoint,
-    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None] | None = None,
 ) -> None:
     """Report Revert's Context impact and the action that made its target."""
     typer.secho(
@@ -932,12 +714,11 @@ def render_revert_receipt(
         "Restored state recorded by: "
         + _styled_action_name(target.command, fallback="manual checkpoint")
     )
-    _render_action_detail(target.description or target.message)
+    _render_action_detail(target.checkpoint_message)
     _render_impact(
         context_name=context_name,
         before_snapshot=before_snapshot,
         after_snapshot=target.snapshot,
-        resolved_memory_ref_contents=resolved_memory_ref_contents,
     )
     target_ts = target.timestamp.strftime("%Y-%m-%d %H:%M")
     typer.echo(
@@ -973,13 +754,9 @@ def render_revert_receipt(
 
 def render_checkpoint_unit_revert_receipt(
     result,
-    *,
-    resolved_memory_ref_contents: Mapping[str, Mapping[MemoryRefTargetKey, str | None]]
-    | None = None,
 ) -> None:
     """Report one atomic recursive Checkpoint recovery unit."""
 
-    resolved_by_context = resolved_memory_ref_contents or {}
     typer.secho(
         f"Reverted checkpoint unit: [{result.unit.canonical_uid[:8]}] · "
         f"Affected Contexts: {len(result.members)}",
@@ -996,15 +773,11 @@ def render_checkpoint_unit_revert_receipt(
             "Restored state recorded by: "
             + _styled_action_name(member.target.command, fallback="manual checkpoint")
         )
-        _render_action_detail(member.target.description or member.target.message)
+        _render_action_detail(member.target.checkpoint_message)
         _render_impact(
             context_name=member.context_name,
             before_snapshot=member.recovery.snapshot,
             after_snapshot=member.target.snapshot,
-            resolved_memory_ref_contents=resolved_by_context.get(
-                member.context_name,
-                {},
-            ),
         )
         target_ts = member.target.timestamp.strftime("%Y-%m-%d %H:%M")
         typer.echo(

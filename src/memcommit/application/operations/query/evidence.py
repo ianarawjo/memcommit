@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Sequence
 
-from memcommit.core.context import Memory, MemoryRef, QueryContextRef
+from memcommit.models.memory import Memory
 from memcommit.application.operations.query.reference_document import (
     OrdinaryQueryEvidence,
 )
@@ -23,22 +23,12 @@ def _candidate_to_evidence(
     candidate: RetrievalCandidate,
     alias: str,
 ) -> OrdinaryQueryEvidence:
-    """Project one candidate without opening concealed query-only content."""
+    """Project a frozen Memory or retained artifact as answer evidence."""
 
     item = candidate.item
     if isinstance(item, Memory):
         kind = "memory"
         content = item.content
-    elif isinstance(item, MemoryRef):
-        if item.target is None:
-            raise OrdinaryQueryEvidenceError(
-                "A dangling Memory reference cannot become Query evidence."
-            )
-        kind = "ref"
-        content = item.target.content
-    elif isinstance(item, QueryContextRef):
-        kind = "query"
-        content = f"{item.name} (query-only)"
     elif isinstance(item, RetrievalArtifact):
         kind = "artifact"
         content = f"{item.title}\n{item.content}"

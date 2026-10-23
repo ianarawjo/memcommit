@@ -5,11 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from memcommit.application.operations.profile.config import (
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     study_run_identity,
 )
+from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.errors import ProfileError
 from memcommit.application.operations.profile.model._storage import (
     _registry_lock,
@@ -78,7 +78,7 @@ def migrate_visible_study_provider_policy(
                 migrated_profile_count=0,
             )
 
-        profiles: list[ProfileEntry] = []
+        profiles: list[Profile] = []
         for profile in registry.profiles:
             if profile.uid not in migrated_uids:
                 profiles.append(profile)
@@ -93,8 +93,6 @@ def migrate_visible_study_provider_policy(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
             profiles=tuple(profiles),
-            grants=registry.grants,
-            grant_placements=registry.grant_placements,
         )
         _write_registry(updated)
         return StudyProviderPolicyMigrationResult(

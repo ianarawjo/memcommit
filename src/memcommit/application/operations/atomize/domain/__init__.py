@@ -11,7 +11,7 @@ from typing import Callable
 from memcommit.application.capabilities.semantic.prompt_policy import (
     resolve_semantic_prompt_policy,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .analysis import (
     _SEGMENT_BOUNDARY,

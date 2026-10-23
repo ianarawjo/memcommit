@@ -8,11 +8,11 @@ import uuid
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
 
-from memcommit.application.authorization import ContextPermission
-
 
 class UpdateError(RuntimeError):
     """Safe, user-facing semantic update error."""
+
+
 def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
@@ -70,6 +70,8 @@ def _require_uuid(value: object, label: str) -> str:
     if str(parsed) != text:
         raise ValueError(f"Invalid {label}.")
     return text
+
+
 @dataclass(frozen=True)
 class SourceReference:
     context_uid: str
@@ -206,6 +208,8 @@ UpdateOperation: TypeAlias = EditOperation | AddOperation | RemoveOperation
 def operation_digest(operations: tuple[UpdateOperation, ...]) -> str:
     """Hash the exact ordered operation set approved for one update."""
     return _sha256_json([operation.to_dict() for operation in operations])
+
+
 def _parse_owner(value: object) -> tuple[str, str]:
     owner = _require_exact_keys(value, {"uid", "name"}, "operation owner")
     return (
@@ -324,42 +328,3 @@ def _operation_from_dict(value: object) -> UpdateOperation:
             reason=_require_string(data["reason"], "removal reason"),
         )
     raise ValueError("Invalid update operation type.")
-def required_update_context_uses(
-    operations: tuple[UpdateOperation, ...],
-) -> frozenset[ContextPermission]:
-    """Return the exact Target uses needed to apply one Update plan."""
-
-    required = {ContextPermission.READ}
-    if any(isinstance(operation, EditOperation) for operation in operations):
-        required.add(ContextPermission.EDIT)
-    if any(isinstance(operation, AddOperation) for operation in operations):
-        required.add(ContextPermission.CREATE)
-    if any(isinstance(operation, RemoveOperation) for operation in operations):
-        required.add(ContextPermission.DELETE)
-    return frozenset(required)
-
-
-def update_operations_are_authorized(
-    operations: tuple[UpdateOperation, ...],
-    allowed: frozenset[ContextPermission],
-) -> bool:
-    """Return whether one exact plan fits a frozen Target authorization."""
-
-    if any(not isinstance(use, ContextPermission) for use in allowed):
-        raise TypeError("Expected ContextPermission values for Update authorization.")
-    return required_update_context_uses(operations) <= allowed
-
-
-def required_grant_permissions(
-    operations: tuple[UpdateOperation, ...],
-) -> tuple[str, ...]:
-    """Return the legacy string projection of required Target uses."""
-
-    required = required_update_context_uses(operations)
-    order = (
-        ContextPermission.READ,
-        ContextPermission.CREATE,
-        ContextPermission.EDIT,
-        ContextPermission.DELETE,
-    )
-    return tuple(use.value for use in order if use in required)

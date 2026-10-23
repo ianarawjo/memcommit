@@ -6,7 +6,8 @@ from dataclasses import dataclass
 from typing import Iterable
 
 
-from memcommit.core.context import AutoCheckpoint
+from memcommit.models.memory import Memory
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.application.capabilities.operand_resolution import (
     freeze_local_context_operand_candidates,
     resolve_existing_context_operand,
@@ -15,7 +16,7 @@ from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)
@@ -32,7 +33,6 @@ class FrozenMemorizationTarget:
 
     context_name: str
     context_uid: str
-    context_digest: str
 
 
 @dataclass(frozen=True)
@@ -58,13 +58,7 @@ def resolve_existing_semantic_result_endpoints(
     target_locator: str | None,
     current: str | None,
 ) -> SemanticResultEndpoints:
-    """Resolve one readable Source and one existing ordinary-local Target.
-
-    The Source may be a READ-granted public Context. The memorization Target
-    stays ordinary-local because this capability freezes and later mutates its
-    record directly. Both operands share one command-start current snapshot,
-    while their candidate catalogs remain separate authority namespaces.
-    """
+    """Resolve a local Source and existing local Target against the same command-start current Context snapshot."""
 
     if source_locator is None and current is None:
         raise ValueError("No current Source Context.")
@@ -78,7 +72,6 @@ def resolve_existing_semantic_result_endpoints(
         store,
         source_locator if source_locator is not None else current,
         current_name=current,
-        required_permission="READ",
         candidates=source_candidates,
     )
     target = resolve_existing_context_operand(
@@ -121,7 +114,6 @@ def freeze_memorization_target(
     return FrozenMemorizationTarget(
         context_name=context.name,
         context_uid=context.uid,
-        context_digest=context_record_digest(context),
     )
 
 
@@ -132,14 +124,13 @@ def memorize_semantic_result(
     source_name: str | None,
     target: FrozenMemorizationTarget,
     contents: tuple[str, ...],
-    source_bindings: Iterable[tuple[str, str, str]],
+    source_bindings: Iterable[tuple[str, str]],
     operation_args: dict[str, object],
-    description: str,
 ) -> SemanticResultMemorizationReceipt:
     """Memorize every result item or publish none of them.
 
     A separate Source remains locked and exact through the Target write. When
-    Source and Target are the same, Target CAS protects the consumed pre-image
+    Source and Target are the same, the common write lock keeps one publication unit
     and the duplicate Source binding is deliberately omitted.
     """
 
@@ -150,20 +141,17 @@ def memorize_semantic_result(
     current = store.load_direct(target.context_name)
     if (
         current.uid != target.context_uid
-        or context_record_digest(current) != target.context_digest
     ):
         raise RuntimeError(
             f"Target Context '{target.context_name}' changed while {operation.title()} "
             "was running; no generated Memories were added."
         )
 
-    memories = [current.add(content) for content in contents]
+    memories = [current.add(Memory.create(content)) for content in contents]
     bindings = tuple(
-        binding
-        for binding in source_bindings
-        if binding[0] != target.context_name
+        binding for binding in source_bindings if binding[0] != target.context_name
     )
-    checkpoint_args = {
+    checkpoint_command_details = {
         operation: {
             **operation_args,
             "effect": "ADD",
@@ -172,23 +160,20 @@ def memorize_semantic_result(
             "result_memory_uids": [memory.uid for memory in memories],
         }
     }
-    checkpoint_request = AutoCheckpoint(
+    checkpoint_request = AutoCheckpointRequest(
         command=operation,
-        args=checkpoint_args,
-        description=description,
+        command_details=checkpoint_command_details,
     )
     if bindings:
         checkpoint = store.save_context_with_sources(
             current,
             checkpoint_request,
-            expected_context_digest=target.context_digest,
             source_bindings=bindings,
         )
     else:
         checkpoint = store.save(
             current,
             checkpoint_request,
-            expected_context_digest=target.context_digest,
         )
     if checkpoint is None:
         raise RuntimeError(

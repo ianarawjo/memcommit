@@ -18,8 +18,6 @@ from memcommit.adapters.console.terminal.components.resolution import (
 
 def run_forget_review_workbench(
     snapshot: ForgetSessionSnapshot,
-    *,
-    mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | None:
     """Inspect the frozen batch and return it only after Apply; never mutate it."""
 
@@ -29,12 +27,13 @@ def run_forget_review_workbench(
     # Only the presentation uses the public name. The returned snapshot keeps
     # its original owner identity and opaque authority/CAS binding unchanged.
     displayed_review = replace(
-        snapshot.review, context_name=snapshot.source.display_name,
+        snapshot.review,
+        context_name=snapshot.source.display_name,
     )
     view = forget_application_view(
-        displayed_review, source_granted=snapshot.source.granted,
+        displayed_review,
     )
-    ownership = "granted" if mutates_granted_authority else "local"
+    ownership = "local"
     action = run_resolution_workbench_shell(
         view,
         terminal_label="Interactive Forget",

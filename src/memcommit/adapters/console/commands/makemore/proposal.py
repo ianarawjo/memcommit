@@ -6,7 +6,9 @@ import typer
 
 from memcommit.application.operations.makemore.model import MakemoreMode
 from memcommit.application.operations.makemore.application import MakemoreResult
-from memcommit.adapters.console.terminal.components.content_row import render_numbered_content_row
+from memcommit.adapters.console.terminal.components.content_row import (
+    render_numbered_content_row,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 
 
@@ -38,17 +40,11 @@ def makemore_result_lines(result: MakemoreResult) -> tuple[str, ...]:
             )
         )
         for item in analysis.target_context.items:
-            if item.kind == "MEMORY":
-                lines.append(
-                    f"{item.alias} · MEMORY · "
-                    f"{safe_terminal_text(item.context_name)} · "
-                    f"{safe_terminal_text(item.content or '')}"
-                )
-            else:
-                lines.append(
-                    f"{item.alias} · QUERY ONLY · "
-                    f"{safe_terminal_text(item.context_name)} · NAME ONLY"
-                )
+            lines.append(
+                f"{item.alias} · MEMORY · "
+                f"{safe_terminal_text(item.context_name)} · "
+                f"{safe_terminal_text(item.content or '')}"
+            )
     if analysis.mode is MakemoreMode.GOAL_TO_RULES:
         lines.extend(("", f"PROPOSED RULES · {len(analysis.rules)}"))
         for index, rule in enumerate(analysis.rules, 1):

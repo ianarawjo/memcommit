@@ -84,7 +84,7 @@ def meld_creation_preimage(entry: dict, after: _Frame) -> _Frame | None:
     """Prove an empty predecessor only for an exact newly created Result."""
     from ..frame import _empty_frame
 
-    args = entry.get("args")
+    args = entry.get("command_details")
     if (
         entry.get("command") != "meld"
         or entry.get("auto") is not True

@@ -13,7 +13,7 @@ from memcommit.application.capabilities.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .model import (
     ATOMIZE_ANALYSIS_SCHEMA_VERSION,

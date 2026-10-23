@@ -11,13 +11,16 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.focus.controller import (
     FocusSurface,
@@ -32,15 +35,19 @@ from memcommit.adapters.console.terminal.components.frame import (
 from memcommit.adapters.console.terminal.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
 )
-from memcommit.adapters.console.terminal.core.keybindings import bind_case_insensitive_key
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import MEMCOMMIT_TUI_STYLE
+from memcommit.adapters.console.terminal.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
 from memcommit.adapters.console.commands.ground.workspace.viewer.model import (
     GroundWorkspaceViewerResult,
 )
 
 
 def _context_fragments(context: Context) -> list[tuple[str, str]]:
-    items = tuple(context.iter_items())
+    items = tuple(context.iter_memories())
     fragments: list[tuple[str, str]] = [
         ("class:memcommit.heading", safe_terminal_text(context.name)),
         ("", f"\nUID · {safe_terminal_text(context.uid)}"),
@@ -52,32 +59,9 @@ def _context_fragments(context: Context) -> list[tuple[str, str]]:
     for item in items:
         fragments.append(("", "\n\n"))
         fragments.append(("class:viewer-muted", f"[{item.uid[:8]}] "))
-        if isinstance(item, MemoryRef):
-            fragments.append(("class:memory", "MEMORY REF"))
-            fragments.append(
-                (
-                    "",
-                    "\n"
-                    + safe_terminal_text(item.target_context_name)
-                    + " · ["
-                    + safe_terminal_text(item.target_memory_uid[:8])
-                    + "]",
-                )
-            )
-            if item.target is not None:
-                fragments.append(
-                    ("class:memory", "\n" + safe_terminal_text(item.target.content))
-                )
-        elif isinstance(item, QueryContextRef):
-            fragments.append(("", "QUERY CONTEXT"))
-            fragments.append(("", "\n" + safe_terminal_text(item.name)))
-        elif isinstance(item, Context):
-            fragments.append(("", "CONTEXT"))
-            fragments.append(("", "\n" + safe_terminal_text(item.name)))
-        else:
-            assert isinstance(item, Memory)
-            fragments.append(("class:memory", "MEMORY"))
-            fragments.append(("class:memory", "\n" + safe_terminal_text(item.content)))
+        assert isinstance(item, Memory)
+        fragments.append(("class:memory", "MEMORY"))
+        fragments.append(("class:memory", "\n" + safe_terminal_text(item.content)))
     return fragments
 
 

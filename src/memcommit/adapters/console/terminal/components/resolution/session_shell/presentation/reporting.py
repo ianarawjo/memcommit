@@ -2,36 +2,24 @@
 
 from __future__ import annotations
 
+import os
+
+from prompt_toolkit.application.current import get_app_or_none
+from prompt_toolkit.output import ColorDepth
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.adapters.console.terminal.components.content_row import (
     render_numbered_content_row,
 )
+from memcommit.adapters.console.terminal.components.inline_diff import (
+    render_inline_memory_change,
+)
+from memcommit.adapters.console.terminal.components.report_card import boxed_lines
 from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
     EffectPreviewSource,
     EffectPreviewView,
     EffectReportDetail,
 )
-from memcommit.adapters.console.terminal.components.report_card import boxed_lines
-from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
-from memcommit.adapters.console.terminal.components.semantic_viewer import (
-    semantic_viewer_block_fragments,
-)
-from memcommit.adapters.console.terminal.components.tree_row import (
-    navigable_tree_row_prefix,
-)
-from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
-from memcommit.application.capabilities.resolution.workbench import (
-    ResolutionItem,
-    ResolutionWorkbenchView,
-)
-from memcommit.application.capabilities.reviewing.memory_diff import (
-    MemoryChange,
-    MemoryDiffSpan,
-    memory_diff_lines,
-)
-
 from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.formatting import (
     _item_kind_label,
     _line,
@@ -44,6 +32,27 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
     _item_draft,
     _report_action,
     session_review_action_view,
+)
+from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
+    semantic_viewer_block_fragments,
+)
+from memcommit.adapters.console.terminal.components.tree_row import (
+    navigable_tree_row_prefix,
+)
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    semantic_action_style,
+)
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.text_layout import wrap_terminal_fragments
+from memcommit.application.capabilities.resolution.workbench import (
+    ResolutionItem,
+    ResolutionWorkbenchView,
+)
+from memcommit.application.capabilities.reviewing.memory_diff import (
+    MemoryChange,
+    MemoryDiffSpan,
+    memory_diff_lines,
 )
 
 
@@ -221,6 +230,27 @@ def _impact_treatment_style(label: str, *, focused: bool) -> str:
     return f"class:impact.{key}"
 
 
+def _inline_effect_diff_fragments(change, *, identity, active, content_width):
+    app = get_app_or_none()
+    color = "NO_COLOR" not in os.environ and (
+        app is None or app.output.get_default_color_depth() != ColorDepth.DEPTH_1_BIT
+    )
+    row = list(render_inline_memory_change(change, identity=identity, color=color))
+    row[0] = (semantic_action_style(change.treatment, fallback=row[0][0]), row[0][1])
+    row[1] = ("class:report-label", row[1][1])
+    fragments = []
+    for line in wrap_terminal_fragments(row, max(12, content_width - 2)):
+        fragments.extend((("", " "), *line, ("", "\n")))
+    return semantic_viewer_block_fragments(
+        fragments,
+        active=active,
+        focus_indices=tuple(
+            index for index, (style, _text) in enumerate(fragments)
+            if style == "class:report-label" or style.startswith("class:semantic.")
+        ),
+    )
+
+
 def _impact_entry_fragments(
     view: ResolutionWorkbenchView,
     entry,
@@ -235,12 +265,15 @@ def _impact_entry_fragments(
     compact: bool = False,
     source_location: str = "",
     extra_details: tuple[EffectReportDetail, ...] = (),
+    inline_memory_diff: bool = False,
 ) -> list[tuple[str, str]]:
     """Share exact diff, rationale, styling, and wrapping between report layouts."""
 
     fragments: list[tuple[str, str]] = []
     entry_section_uid = _impact_entry_section_uid(entry, index)
-    expandable = bool(entry.rules or entry.reason or extra_details)
+    # Inline rows follow the result diff; rationale stays on the operation artifact.
+    displayed_reason = "" if inline_memory_diff else entry.reason
+    expandable = bool(entry.rules or displayed_reason or extra_details)
     expanded = expandable and expanded_impact_section_uid == entry_section_uid
     disclosure = "▾" if expanded else "▸" if expandable else "·"
     prefix = navigable_tree_row_prefix(
@@ -280,24 +313,6 @@ def _impact_entry_fragments(
         # Memory object. Keep it neutral while the Context/Memory
         # identity above retains the shared lavender treatment.
         expanded_detail_style = ""
-        location_identity = (
-            (displayed_location + " " if displayed_location else "") + uid_field + "\n"
-        )
-        header = (
-            [
-                ("", f" {prefix}"),
-                (treatment_style, f"{treatment_field} "),
-                ("", location_identity),
-            ]
-            if compact else [
-                (treatment_style, f" {prefix}{treatment_field} "),
-                ("class:memory-object", location_identity),
-            ]
-        )
-        fragments.extend(
-            semantic_viewer_block_fragments(header, active=active, focus_indices=(1,))
-            if compact else header
-        )
         change = MemoryChange(
             marker=entry.marker,
             treatment=entry.label,
@@ -308,38 +323,67 @@ def _impact_entry_fragments(
             reason=entry.reason,
             rules=entry.rules,
         )
-        for diff_line in memory_diff_lines(change):
-            marker = diff_line.marker
-            diff_prefix = f"{content_indent}{marker} "
-            style_key = {
-                "-": "remove",
-                "+": "add",
-                "=": "equal",
-                " ": "equal",
-            }[marker]
-            for line_index, content_spans in enumerate(
-                _visual_wrap_diff_spans(diff_line.spans, row_content_width)
-            ):
-                lead = (
-                    diff_prefix
-                    if line_index == 0
-                    else " " * _visual_width(diff_prefix)
+        if inline_memory_diff:
+            fragments.extend(
+                _inline_effect_diff_fragments(
+                    change,
+                    identity=f"[memory {change.memory_uid[:8]}]"
+                    if entry.location == source_location else None,
+                    active=active,
+                    content_width=content_width,
                 )
-                fragments.append((f"class:memory-diff.{style_key}", f" {lead}"))
-                for content_text, changed in content_spans:
-                    fragments.append(
-                        (
-                            f"class:memory-diff.{style_key}"
-                            + (".changed" if changed else ""),
-                            content_text,
-                        )
+            )
+        else:
+            location_identity = (
+                (displayed_location + " " if displayed_location else "") + uid_field + "\n"
+            )
+            header = (
+                [
+                    ("", f" {prefix}"),
+                    (treatment_style, f"{treatment_field} "),
+                    ("", location_identity),
+                ]
+                if compact else [
+                    (treatment_style, f" {prefix}{treatment_field} "),
+                    ("class:memory-object", location_identity),
+                ]
+            )
+            fragments.extend(
+                semantic_viewer_block_fragments(header, active=active, focus_indices=(1,))
+                if compact else header
+            )
+            for diff_line in memory_diff_lines(change):
+                marker = diff_line.marker
+                diff_prefix = f"{content_indent}{marker} "
+                style_key = {
+                    "-": "remove",
+                    "+": "add",
+                    "=": "equal",
+                    " ": "equal",
+                }[marker]
+                for line_index, content_spans in enumerate(
+                    _visual_wrap_diff_spans(diff_line.spans, row_content_width)
+                ):
+                    lead = (
+                        diff_prefix
+                        if line_index == 0
+                        else " " * _visual_width(diff_prefix)
                     )
+                    fragments.append((f"class:memory-diff.{style_key}", f" {lead}"))
+                    for content_text, changed in content_spans:
+                        fragments.append(
+                            (
+                                f"class:memory-diff.{style_key}"
+                                + (".changed" if changed else ""),
+                                content_text,
+                            )
+                        )
+                    fragments.append(("", "\n"))
+            if not compact and (change.before is None or change.after is None):
+                # A one-sided ADD/REMOVE has half the visual body of an
+                # EDIT. One trailing spacer preserves comparable grouping
+                # without fabricating a missing before/after line.
                 fragments.append(("", "\n"))
-        if not compact and (change.before is None or change.after is None):
-            # A one-sided ADD/REMOVE has half the visual body of an
-            # EDIT. One trailing spacer preserves comparable grouping
-            # without fabricating a missing before/after line.
-            fragments.append(("", "\n"))
     else:
         # Legacy result rows keep treatment-colored focus to bind
         # their UID, content, and expanded basis together.
@@ -383,14 +427,14 @@ def _impact_entry_fragments(
                 fragments.append(
                     (expanded_detail_style, f" {lead}{rule_line}\n")
                 )
-    if entry.reason and expanded:
+    if displayed_reason and expanded:
         reason_prefix = content_indent + "WHY · "
         reason_width = max(
             12,
             content_width - _visual_width(reason_prefix) - 1,
         )
         for line_index, reason_line in enumerate(
-            _visual_wrap(entry.reason, reason_width)
+            _visual_wrap(displayed_reason, reason_width)
         ):
             lead = (
                 reason_prefix
@@ -436,7 +480,7 @@ def _impact_entry_fragments(
             fragments.append(
                 (expanded_detail_style, f" {lead}{comment_line}\n")
             )
-    if compact:
+    if compact and not inline_memory_diff:
         fragments.append(("", "\n"))
     if active:
         # Anchor after the complete row so wrapped or expanded detail

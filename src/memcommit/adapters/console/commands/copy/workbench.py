@@ -1,9 +1,4 @@
-"""Copy-owned interactive workbench reused by direct-Memory Move.
-
-One command package owns the screen so sharing it does not introduce a third
-command. Each setup adapter supplies its own catalogs and plan-freeze callback;
-screen ownership does not give Move Copy's granted-Source authority.
-"""
+"""Interactive local Memory transfer setup shared by Copy and Move."""
 
 from __future__ import annotations
 
@@ -39,11 +34,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
 from memcommit.adapters.console.terminal.components.frame import (
     build_focused_frame,
     build_tui_frame,
-)
-from memcommit.adapters.console.terminal.components.horizontal_choice import (
-    HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector import (
     DirectMemorySelectorControl,
@@ -82,7 +72,7 @@ from memcommit.application.operations.move.contracts import (
     FrozenMoveMemoriesPlan,
     MoveMemoriesRequest,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 def run_copy_and_move_workbench(
@@ -146,21 +136,6 @@ def run_copy_and_move_workbench(
         height=min(7, max(3, len(into_names))),
         row_projector=placement.project,
     )
-    link_policy = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption(
-                value="RETARGET",
-                label="FOLLOW MOVE",
-                description="Live Embeds follow the moved Memory; snapshots stay unchanged.",
-            ),
-            HorizontalChoiceOption(
-                value="BREAK",
-                label="BREAK LINKS",
-                description="Live Embeds may become dangling; snapshots stay unchanged.",
-            ),
-        ),
-        selected_value="RETARGET",
-    )
     status = {"value": ""}
     bindings = KeyBindings()
 
@@ -175,9 +150,7 @@ def run_copy_and_move_workbench(
         # Keep durable coordinates exact; shortening exists only for display.
         before = gap.next_uid
         after = gap.previous_uid if before is None else None
-        locators = tuple(
-            f"{target.context_name}:{target.memory_uid}" for target in selected
-        )
+        locators = tuple(f"{context.name}:{memory.uid}" for context, memory in selected)
         if operation == "COPY":
             return validate_copy_request(
                 CopyMemoriesRequest(
@@ -193,7 +166,6 @@ def run_copy_and_move_workbench(
                 into_locator=selected_into_name(),
                 before=before,
                 after=after,
-                link_policy=link_policy.selected_value,
             )
         )
 
@@ -210,21 +182,6 @@ def run_copy_and_move_workbench(
     action_line = Window(
         action_control, height=Dimension.exact(2), dont_extend_height=True
     )
-    policy_control = FormattedTextControl(
-        lambda: render_horizontal_choice(
-            link_policy,
-            title="LIVE EMBEDS",
-            focused=get_app().layout.has_focus(policy_control),
-            inline_boxed=True,
-            show_description=True,
-        ),
-        focusable=True,
-        show_cursor=False,
-    )
-    policy_line = Window(
-        policy_control, height=Dimension.exact(2), dont_extend_height=True
-    )
-
     into_position_frame = build_focused_frame(
         Window(
             into_selector.control,
@@ -240,11 +197,6 @@ def run_copy_and_move_workbench(
             (
                 f" MEM {operation} · DIRECT MEMORIES → INTO\n"
                 " CHECK ONE OR MORE SOURCE MEMORIES, THEN CHOOSE ONE LOCAL TARGET GAP"
-                + (
-                    " · CHOOSE LIVE EMBED BEHAVIOR BELOW"
-                    if operation == "MOVE"
-                    else " · GRANTED SOURCES REQUIRE EXPLICIT PUBLIC OWNERS"
-                )
             )
         ),
         height=Dimension.exact(2),
@@ -256,8 +208,6 @@ def run_copy_and_move_workbench(
             return f" {display_escape_text(status['value'])}"
         if get_app().layout.has_focus(action_control):
             return " Enter Apply · Esc cancel"
-        if get_app().layout.has_focus(policy_control):
-            return " ←/→ choose live Embed behavior · Tab Apply · Esc cancel"
         if get_app().layout.has_focus(into_selector.control) and placement.editing:
             return (
                 " ↑/↓ move one position line · Enter/Space stage · "
@@ -397,17 +347,6 @@ def run_copy_and_move_workbench(
                     activate=choose_into_or_position,
                     on_vertical_enter=enter_into,
                 ),
-                *(
-                    (
-                        FocusSurface(
-                            "LINK_POLICY",
-                            policy_control,
-                            move_vertical=lambda _event, _delta: "BOUNDARY",
-                        ),
-                    )
-                    if operation == "MOVE"
-                    else ()
-                ),
                 FocusSurface(
                     "APPLY",
                     action_control,
@@ -456,17 +395,6 @@ def run_copy_and_move_workbench(
         and not placement.editing
     )
     action_focus = Condition(lambda: get_app().layout.has_focus(action_control))
-    policy_focus = Condition(lambda: get_app().layout.has_focus(policy_control))
-
-    @bindings.add("left", filter=policy_focus, eager=True)
-    def _policy_left(event) -> None:
-        link_policy.move(-1)
-        event.app.invalidate()
-
-    @bindings.add("right", filter=policy_focus, eager=True)
-    def _policy_right(event) -> None:
-        link_policy.move(1)
-        event.app.invalidate()
 
     @bindings.add("left", filter=source_focus, eager=True)
     def _collapse_source(event) -> None:
@@ -533,7 +461,6 @@ def run_copy_and_move_workbench(
     regions.extend(
         (
             into_position_frame,
-            *([policy_line] if operation == "MOVE" else []),
             action_line,
             footer,
         )

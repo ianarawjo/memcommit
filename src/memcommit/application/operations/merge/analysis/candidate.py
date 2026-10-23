@@ -9,14 +9,8 @@ from copy import deepcopy
 from dataclasses import asdict, dataclass
 from typing import Mapping
 
-from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
-from memcommit.core.context import (
-    Context,
-    Information,
-    Memory,
-    MemoryRef,
-    QueryContextRef,
-)
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
 @dataclass(frozen=True)
@@ -38,7 +32,7 @@ class CandidateOrigin:
 
 @dataclass(frozen=True)
 class MergeCandidate:
-    """Detached union; original pointer records must be used for materialization."""
+    """Detached Memory union; reviewed owner records drive materialization."""
 
     record_json: str
     origins: tuple[CandidateOrigin, ...]
@@ -120,12 +114,12 @@ def combine_contexts(
     placement: str,
     identities: Mapping[tuple[int, str], str] | None = None,
     uid: str | None = None,
-    name: str = "MERGE CANDIDATE",
+    name: str = "merge-candidate",
 ) -> MergeCandidate:
     """Retain every direct occurrence, with baseline/earlier frames first.
 
     A Merge-owned lineage map may equate fresh occurrences. It is evidence,
-    not permission to overwrite a member or to open an embedded Context.
+    not permission to overwrite a member before review.
     """
     if not contexts or not placement:
         raise ValueError("Merge candidate requires frames and a destination placement.")
@@ -133,9 +127,9 @@ def combine_contexts(
     keys = {
         (index, item.uid)
         for index, context in enumerate(contexts)
-        for item in context.iter_items()
+        for item in context.iter_memories()
     }
-    if not set(identities) <= keys:
+    if not set((identities or {})) <= keys:
         raise ValueError("Merge lineage names an unavailable candidate occurrence.")
     records = tuple(context.to_dict() for context in contexts)
     identity = digest(
@@ -227,26 +221,16 @@ def rebase_candidate(previous: MergeCandidate, context: Context) -> MergeCandida
 
 
 def copy_direct_item(
-    item: Information,
+    item: Memory,
     *,
     memory_uid: str | None = None,
-) -> Information:
+) -> Memory:
     """Copy a direct item without sharing a writable Memory value."""
 
     if isinstance(item, Memory):
         return Memory(uid=memory_uid or item.uid, content=item.content)
     if memory_uid is not None:
         raise ValueError("Only a Memory may receive a new Merge occurrence UID.")
-    if isinstance(item, (MemoryRef, QueryContextRef)):
-        return item.copy()
-    if isinstance(item, ContextSnapshotRef):
-        return item.copy()
-    if isinstance(item, Context):
-        # A Context item is a placement pointer. Copy only that pointer here;
-        # recursive path materialization is handled before this layer.
-        copied = Context(uid=item.uid, name=item.name)
-        copied._granted_link = item._granted_link  # noqa: SLF001
-        return copied
     raise TypeError("Merge received an unsupported direct item.")
 
 
@@ -256,11 +240,12 @@ def copy_direct_context(context: Context) -> Context:
     copied = Context(uid=context.uid, name=context.name)
     # Merge changes direct items; it must retain the Target's export layout
     # and attachment membership rather than silently turning it into plain text.
-    copied.document = deepcopy(context.document)
-    copied.attached_files = deepcopy(context.attached_files)
-    for item in context.iter_items():
+    copied.corresponding_document_metadata = deepcopy(
+        context.corresponding_document_metadata
+    )
+    copied.asset_metadata = deepcopy(context.asset_metadata)
+    for item in context.iter_memories():
         copied.add(copy_direct_item(item))
-    copied._store_digest = context._store_digest  # noqa: SLF001
     return copied
 
 

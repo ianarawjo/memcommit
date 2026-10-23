@@ -6,10 +6,10 @@ from uuid import UUID
 
 from memcommit.application.operations.mem_sync.model import SyncConnection
 from memcommit.configuration.config import resolve_external_document_locator
-from memcommit.core.document import relative_document_path
+from memcommit.core.document_path import relative_document_path
 from memcommit.persistence.store.infrastructure.atomic_io import (
-    _write_json_atomic,
     _reject_duplicate_json_keys,
+    _write_json_atomic,
 )
 
 
@@ -27,12 +27,16 @@ def sync_record_path(store, *segments):
     return path
 
 
-def read_sync_record(path: Path, default):
+def read_sync_record(path: Path, default, *, schema_versions=(1,)):
     if not path.exists():
         return default
     with path.open(encoding="utf-8") as stream:
         record = json.load(stream, object_pairs_hook=_reject_duplicate_json_keys)
-    if not isinstance(record, dict) or record.get("schema_version") != 1:
+    if (
+        not isinstance(record, dict)
+        or type(record.get("schema_version")) is not int
+        or record.get("schema_version") not in schema_versions
+    ):
         raise ValueError("Invalid Sync record schema.")
     return record
 

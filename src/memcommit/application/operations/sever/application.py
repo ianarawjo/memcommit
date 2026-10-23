@@ -87,7 +87,9 @@ class SeverSessionSnapshot:
 
     def __post_init__(self) -> None:
         if not self.version_token:
-            raise SeverApplicationError("A saved Sever session requires a version token.")
+            raise SeverApplicationError(
+                "A saved Sever session requires a version token."
+            )
 
 
 @dataclass(frozen=True)

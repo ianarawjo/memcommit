@@ -12,7 +12,9 @@ from memcommit.application.operations.sever.model import (
     SeverMemory,
     SeverSession,
 )
-from memcommit.application.operations.update.application import apply_update
+from memcommit.application.operations.update.application import (
+    apply_update_to_working_contexts,
+)
 from memcommit.application.operations.update.model import (
     AddOperation,
     EditOperation,
@@ -22,13 +24,8 @@ from memcommit.application.operations.update.model import (
     UpdateOperation,
     UpdatePlan,
 )
-from memcommit.core.context import (
-    Context,
-    Memory,
-)
-from memcommit.persistence.store import (
-    context_record_digest,
-)
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
 def sever_result_memory_uid(session_uid: str, source_uid: str, content: str) -> str:
@@ -52,7 +49,7 @@ def source_reference(
         raise SeverApplicationError(
             "The reviewed Sever Source does not identify one exact owner."
         )
-    _context_name, context_uid, _context_digest = matches[0]
+    _context_name, context_uid = matches[0]
     return SourceReference(
         context_uid=context_uid,
         context_name=source.context_name,
@@ -69,14 +66,14 @@ def apply_projection(
     """Apply exact Sever effects through Update without publishing them."""
 
     try:
-        result = apply_update(
+        result = apply_update_to_working_contexts(
             UpdatePlan(
                 uid=session.uid,
                 target_uid=target.uid,
                 target_name=target.name,
                 operations=operations,
             ),
-            target,
+            (target,),
         )
     except UpdateError as error:
         raise SeverApplicationError(
@@ -128,14 +125,10 @@ def result_context(
 
 def self_save_source_receipts(
     session: SeverSession,
-) -> tuple[tuple[str, str, str], ...]:
+) -> tuple[tuple[str, str], ...]:
     """Return every exact local Source owner updated by in-place Sever."""
 
-    if (
-        session.save_mode != "SELF_SAVE"
-        or session.source.granted is not None
-        or not session.source.contexts
-    ):
+    if session.save_mode != "SELF_SAVE" or not session.source.contexts:
         raise SeverApplicationError(
             "In-place Sever requires one ordinary local Source scope."
         )
@@ -143,8 +136,8 @@ def self_save_source_receipts(
     if (
         receipts[0][0] != session.source.root_name
         or receipts[0][1] != session.source.root_uid
-        or len({name for name, _uid, _digest in receipts}) != len(receipts)
-        or len({uid for _name, uid, _digest in receipts}) != len(receipts)
+        or len({name for name, _uid in receipts}) != len(receipts)
+        or len({uid for _name, uid in receipts}) != len(receipts)
     ):
         raise SeverApplicationError(
             "The in-place Source receipts do not identify one rooted owner scope."
@@ -161,16 +154,15 @@ def self_save_contexts(
     receipts = self_save_source_receipts(session)
     original_by_name = {context.name: context for context in originals}
     if len(original_by_name) != len(originals) or set(original_by_name) != {
-        name for name, _uid, _digest in receipts
+        name for name, _uid in receipts
     }:
         raise SeverApplicationError(
             "The in-place Source owner set changed after review. Re-run Sever."
         )
-    for source_name, source_uid, source_digest in receipts:
+    for source_name, source_uid in receipts:
         original = original_by_name[source_name]
         if (
             original.uid != source_uid
-            or context_record_digest(original) != source_digest
         ):
             raise SeverApplicationError(
                 "The in-place Source changed after review. Re-run Sever."
@@ -181,7 +173,7 @@ def self_save_contexts(
         for candidate, source, content in session.results()
     }
     operations_by_owner: dict[str, list[UpdateOperation]] = {
-        name: [] for name, _uid, _digest in receipts
+        name: [] for name, _uid in receipts
     }
     result_uids: list[str] = []
     sources: list[dict[str, str]] = []
@@ -239,7 +231,7 @@ def self_save_contexts(
             original_by_name[name],
             tuple(operations_by_owner[name]),
         )
-        for name, _uid, _digest in receipts
+        for name, _uid in receipts
     )
     return outputs, tuple(result_uids), sources
 

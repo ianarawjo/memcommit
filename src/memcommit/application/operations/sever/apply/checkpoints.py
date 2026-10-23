@@ -6,12 +6,12 @@ from memcommit.application.operations.sever.model import (
     SeverSession,
     sever_record_digest,
 )
-from memcommit.core.context import (
+from memcommit.models.context import (
     Context,
 )
 
 
-def build_checkpoint_args(
+def build_checkpoint_command_details(
     session: SeverSession,
     output: Context,
     sources: list[dict[str, str]],
@@ -48,12 +48,12 @@ def build_checkpoint_args(
         # The root remains the primary receipt, while descendants retain
         # their own Context and Memory identities.
         args["command_contexts"] = [
-            {"uid": uid, "name": name} for name, uid, _digest in session.source.contexts
+            {"uid": uid, "name": name} for name, uid in session.source.contexts
         ]
     return args
 
 
-def checkpoint_args_match(
+def checkpoint_command_details_match(
     actual: object, expected: dict[str, object], *, save_mode: str
 ) -> bool:
     """Accept only the exact metadata or its save-mode-specific legacy shape."""

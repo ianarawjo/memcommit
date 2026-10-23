@@ -14,7 +14,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     HistoryError,
     flatten_checkpoint_entries,
@@ -45,7 +45,7 @@ class _OriginalPart:
     description: str
     timestamp: str
     expected_contexts: tuple[tuple[str, str], ...] | None
-    args: dict[str, object]
+    command_details: dict[str, object]
     change: CommandContextChange
 
 
@@ -122,9 +122,9 @@ def _entry_fields(
     command = (
         raw_command if isinstance(raw_command, str) and raw_command else "checkpoint"
     )
-    raw_description = entry.get("description") or entry.get("message")
+    raw_description = entry.get("checkpoint_message") or entry.get("command") or "checkpoint"
     description = raw_description if isinstance(raw_description, str) else ""
-    raw_args = entry.get("args")
+    raw_args = entry.get("command_details")
     args = raw_args if isinstance(raw_args, dict) else {}
     return uid, timestamp, command, description, args, bool(entry.get("auto"))
 
@@ -419,6 +419,9 @@ def _context_parts(
         )
         for entry in entries
     }
+    from memcommit.persistence.operations.mem_sync.run_repository import SyncRunRepository
+    grouped_sync_children = {uid for record in SyncRunRepository(store).profile_history()
+                             for uid in record["profile"].get("child_checkpoint_uids", ())}
     originals: list[_OriginalPart] = []
     restorations: list[_RestorePart] = []
     effective: dict[str, object] | None = None
@@ -430,6 +433,16 @@ def _context_parts(
             context_uid=context.uid,
             context_name=context.name,
         )
+
+        if "sync_agreement" in args:
+            effective = snapshot
+            continue
+
+        if (isinstance(args.get("sync_operation"), dict) and args["sync_operation"].get("version") == 2) or "sync_restore" in args:
+            # Lifecycle receipts retain exact names, absent states and their
+            # shared operation outside any one live/archived Context owner.
+            effective = snapshot
+            continue
 
         restore = _restore_part(
             entry,
@@ -490,7 +503,7 @@ def _context_parts(
                     f"Revert checkpoint [{uid[:8]}] does not retain its target."
                 )
             before = snapshot
-            if owned and before != target:
+            if owned and before != target and uid not in grouped_sync_children:
                 unit_uid = (
                     f"revert:{revert_unit[0]}"
                     if revert_unit is not None
@@ -509,7 +522,7 @@ def _context_parts(
                         expected_contexts=(
                             revert_unit[2] if revert_unit is not None else None
                         ),
-                        args=args,
+                        command_details=args,
                         change=CommandContextChange(
                             context_uid=context.uid,
                             context_name=context.name,
@@ -561,7 +574,7 @@ def _context_parts(
                     description=description,
                     timestamp=timestamp,
                     expected_contexts=_command_contexts(args.get("command_contexts")),
-                    args=args,
+                    command_details=args,
                     change=CommandContextChange(
                         context_uid=context.uid,
                         context_name=context.name,
@@ -659,7 +672,7 @@ def _context_parts(
                     description=description,
                     timestamp=timestamp,
                     expected_contexts=None,
-                    args=args,
+                    command_details=args,
                     change=CommandContextChange(
                         context_uid=context.uid,
                         context_name=context.name,
@@ -700,7 +713,7 @@ def _context_parts(
                 description=description,
                 timestamp=timestamp,
                 expected_contexts=_command_contexts(args.get("command_contexts")),
-                args=args,
+                command_details=args,
                 change=CommandContextChange(
                     context_uid=context.uid,
                     context_name=context.name,
@@ -753,7 +766,7 @@ def _group_originals(parts: list[_OriginalPart]) -> dict[str, ContextCommandUnit
             started_at=min(member.timestamp for member in members),
             completed_at=max(member.timestamp for member in members),
             changes=tuple(member.change for member in ordered),
-            checkpoint_args=tuple(member.args for member in ordered),
+            checkpoint_command_details=tuple(member.command_details for member in ordered),
         )
     return units
 
@@ -845,6 +858,9 @@ def build_command_stacks(store: MemoryStore) -> CommandStacks:
         for unit in units.values()
     ]
     events.extend(_restore_events(restore_parts, units))
+    from .sync import sync_command_events
+
+    events.extend(sync_command_events(store))
     events.sort(
         key=lambda event: (
             event.completed_at,

@@ -14,7 +14,6 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 )
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
-    SourceTokenRole,
     normalize_source_display_tokens,
 )
 from memcommit.source_projection.tui import render_source_display_tokens
@@ -70,32 +69,12 @@ def render_context_tree_rows(
             f"{display_escape_text(name)}{display_escape_text(decoration.value_suffix)}"
         )
         display_tokens = normalize_source_display_tokens(decoration.annotation)
-        ownership_tokens = tuple(
-            token for token in display_tokens if token.role is SourceTokenRole.OWNERSHIP
-        )
-        annotation_tokens = tuple(
-            token
-            for token in display_tokens
-            if token.role is not SourceTokenRole.OWNERSHIP
-        )
+        annotation_tokens = display_tokens
         if decoration.value_style is None:
-            if ownership_tokens:
-                fragments.append((decoration.cursor_style, prefix))
-                fragments.extend(
-                    render_source_display_tokens(
-                        ownership_tokens,
-                        override_style=decoration.cursor_style,
-                    )
-                )
-                fragments.append((decoration.cursor_style, " " + value))
-            else:
-                fragments.append((decoration.cursor_style, prefix + value))
+            fragments.append((decoration.cursor_style, prefix + value))
             annotation_style = decoration.cursor_style
         else:
             fragments.append((decoration.cursor_style, prefix))
-            if ownership_tokens:
-                fragments.extend(render_source_display_tokens(ownership_tokens))
-                fragments.append((decoration.cursor_style, " "))
             fragments.append((decoration.value_style, value))
             annotation_style = decoration.value_style
         if annotation_tokens:

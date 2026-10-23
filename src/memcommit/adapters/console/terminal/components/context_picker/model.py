@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
-from memcommit.core.context_targeting.model import (
-    ContextSubtreeTarget,
-    DirectMemoryTarget,
-)
+from memcommit.core.context_targeting.model import ContextSubtreeTarget
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.source_projection.model import SourceDisplayFacts
 from memcommit.source_projection.presentation import SourceDisplayToken
 
@@ -47,6 +46,8 @@ class ContextMemoryRow:
     section_label: str | None = None
     detail_title: str | None = None
     details: tuple[ContextMemoryDetail, ...] = ()
+    owner_context: Context | None = field(default=None, repr=False, compare=False)
+    memory: Memory | None = field(default=None, repr=False, compare=False)
 
 
 @dataclass(frozen=True)
@@ -90,5 +91,4 @@ class ContextPickerClipboardProjection:
 
 # Compatibility spellings for established terminal callers. The receipts
 # themselves are operation-neutral and owned by core Context targeting.
-ContextMemorySelection = DirectMemoryTarget
 ContextSubtreeSelection = ContextSubtreeTarget

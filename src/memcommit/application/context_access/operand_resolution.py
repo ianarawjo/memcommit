@@ -1,13 +1,10 @@
-"""Resolve Context operands into exact local or Grant-aware access."""
+"""Resolve Context operands into exact local access."""
 
 from __future__ import annotations
 
 import json
 
-from memcommit.application.capabilities.context_locator import (
-    is_relative_context_locator,
-    resolve_context_locator,
-)
+from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.capabilities.durable_uid_resolution import (
     DurableUidAmbiguityError,
     DurableUidCandidate,
@@ -27,35 +24,25 @@ from memcommit.application.capabilities.local_target_lookup import (
 )
 from memcommit.application.context_access.access import (
     ContextAccess,
-    GrantedReadStore,
     resolve_context_access,
 )
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.core.context_targeting.model import InlineTextOperand
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+from memcommit.models.context import Context
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
-from memcommit.core.context import Memory
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 
 ResolvedContextAccess = ResolvedExistingContextOperand[ContextAccess]
-ContextAccessOrLocalMemory = ResolvedContextAccess | DirectMemoryTarget
+ContextAccessOrLocalMemory = ResolvedContextAccess | tuple[Context, Memory]
 
 
 def _access_uid(
     access: ContextAccess,
-    *,
-    registry: ProfileRegistry | None = None,
 ) -> str:
-    context = (
-        GrantedReadStore(access, registry=registry).load_direct(access.access_name)
-        if access.is_granted
-        else access.store.load_direct(access.context_name)
-    )
+    context = access.store.load_direct(access.context_name)
     return context.uid
 
 
@@ -63,9 +50,8 @@ def freeze_profile_context_access_candidates(
     active_store: MemoryStore,
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> tuple[ContextOperandCandidate[ContextAccess], ...]:
-    """Freeze every ordinary-local and READ-granted access identity."""
+    """Freeze every local Context access identity."""
 
     local_names = tuple(active_store.list_context_names())
     if current_name is not None:
@@ -73,8 +59,6 @@ def freeze_profile_context_access_candidates(
             active_store,
             current_name,
             current_name=current_name,
-            required_permission="READ",
-            registry=registry,
         )
     elif local_names:
         selected_name = local_names[0]
@@ -82,15 +66,12 @@ def freeze_profile_context_access_candidates(
             store=active_store,
             context_name=selected_name,
             access_name=selected_name,
-            permission="READ",
         )
     else:
         return ()
     catalog = freeze_profile_readable_context_catalog(
         active_store,
         selected_access,
-        include_query_routes=False,
-        registry=registry,
     )
     return tuple(
         ContextOperandCandidate(
@@ -107,16 +88,9 @@ def try_resolve_existing_context_access(
     operand: str,
     *,
     current_name: str | None,
-    required_permission: str = "READ",
-    registry: ProfileRegistry | None = None,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
 ) -> ResolvedContextAccess | None:
-    """Resolve an exact access name first, then an authorized Context UID.
-
-    Exact name lookup retains ``resolve_context_access`` diagnostics and Grant
-    semantics.  UID lookup is intentionally limited to readable Contexts; a
-    concealed QUERY-only route must not disclose its authority Context UID.
-    """
+    """Resolve an exact local Context name first, then its durable UID within the frozen catalog."""
 
     canonical_name = resolve_context_locator(operand, current=current_name)
     try:
@@ -124,15 +98,13 @@ def try_resolve_existing_context_access(
             active_store,
             canonical_name,
             current_name=current_name,
-            required_permission=required_permission,
-            registry=registry,
         )
     except FileNotFoundError:
         pass
     else:
         return ResolvedExistingContextOperand(
             selector=operand,
-            uid=_access_uid(access, registry=registry),
+            uid=_access_uid(access),
             name=access.access_name,
             value=access,
         )
@@ -143,7 +115,6 @@ def try_resolve_existing_context_access(
         else freeze_profile_context_access_candidates(
             active_store,
             current_name=current_name,
-            registry=registry,
         )
     )
     resolved = try_resolve_existing_context_operand(
@@ -160,10 +131,8 @@ def try_resolve_existing_context_access(
         active_store,
         resolved.name,
         current_name=current_name,
-        required_permission=required_permission,
-        registry=registry,
     )
-    if _access_uid(access, registry=registry) != resolved.uid:
+    if _access_uid(access) != resolved.uid:
         raise ContextOperandNotFoundError(
             f"Context {resolved.name!r} changed identity during operand resolution."
         )
@@ -180,8 +149,6 @@ def resolve_existing_context_access(
     operand: str | None,
     *,
     current_name: str | None,
-    required_permission: str = "READ",
-    registry: ProfileRegistry | None = None,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
 ) -> ResolvedContextAccess:
     """Require one existing accessible Context selected by name or durable UID."""
@@ -194,8 +161,6 @@ def resolve_existing_context_access(
         active_store,
         operand,
         current_name=current_name,
-        required_permission=required_permission,
-        registry=registry,
         candidates=candidates,
     )
     if resolved is not None:
@@ -203,59 +168,10 @@ def resolve_existing_context_access(
     canonical_name = resolve_context_locator(operand, current=current_name)
     if is_unresolved_uid_selector(operand):
         raise ContextOperandNotFoundError(
-            f"Context UID {operand!r} is unavailable in this authorized view."
+            f"Context UID {operand!r} is unavailable in this Profile."
         )
     raise ContextOperandNotFoundError(
-        f"Context {canonical_name!r} does not exist in this authorized view."
-    )
-
-
-def resolve_context_access_or_inline_text(
-    active_store: MemoryStore,
-    operand: str,
-    *,
-    current_name: str | None,
-    registry: ProfileRegistry | None = None,
-    candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
-) -> ResolvedContextAccess | InlineTextOperand:
-    """Resolve readable Context identity before an explicitly supported text route."""
-
-    resolved = try_resolve_existing_context_access(
-        active_store,
-        operand,
-        current_name=current_name,
-        required_permission="READ",
-        registry=registry,
-        candidates=candidates,
-    )
-    if resolved is not None:
-        return resolved
-    if is_unresolved_uid_selector(operand):
-        return resolve_existing_context_access(
-            active_store,
-            operand,
-            current_name=current_name,
-            registry=registry,
-            candidates=candidates,
-        )
-    if is_relative_context_locator(operand):
-        return resolve_existing_context_access(
-            active_store,
-            operand,
-            current_name=current_name,
-            registry=registry,
-            candidates=candidates,
-        )
-    try:
-        validate_portable_context_name(operand)
-    except ValueError:
-        return InlineTextOperand(operand)
-    return resolve_existing_context_access(
-        active_store,
-        operand,
-        current_name=current_name,
-        registry=registry,
-        candidates=candidates,
+        f"Context {canonical_name!r} does not exist in this Profile."
     )
 
 
@@ -264,16 +180,9 @@ def try_resolve_context_access_or_local_memory(
     operand: str,
     *,
     current_name: str | None,
-    registry: ProfileRegistry | None = None,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
 ) -> ContextAccessOrLocalMemory | None:
-    """Resolve a readable Context or ordinary-local Memory in one UID frame.
-
-    Exact public Context names win. Bare UID-shaped values then compare every
-    readable Context identity with every ordinary-local directly owned Memory
-    identity. Grant contents are intentionally absent from the enumerable
-    Memory side; callers may still support them through explicit CONTEXT:UID.
-    """
+    """Resolve a local Context or directly owned Memory in one UID frame. Exact Context names take precedence; ambiguous identities require qualification."""
 
     if not isinstance(operand, str) or not operand:
         raise ValueError("A Context or Memory operand must be nonempty text.")
@@ -283,7 +192,6 @@ def try_resolve_context_access_or_local_memory(
         else freeze_profile_context_access_candidates(
             active_store,
             current_name=current_name,
-            registry=registry,
         )
     )
     canonical_name = resolve_context_locator(operand, current=current_name)
@@ -315,7 +223,9 @@ def try_resolve_context_access_or_local_memory(
 
     local_graph = active_store.load_direct_context_graph_strict()
     durable_candidates: tuple[
-        DurableUidCandidate[ContextOperandCandidate[ContextAccess] | DirectMemoryTarget],
+        DurableUidCandidate[
+            ContextOperandCandidate[ContextAccess] | tuple[Context, Memory]
+        ],
         ...,
     ] = tuple(
         DurableUidCandidate(
@@ -328,10 +238,10 @@ def try_resolve_context_access_or_local_memory(
         DurableUidCandidate(
             uid=item.uid,
             kind="memory",
-            value=DirectMemoryTarget(context.name, item.uid),
+            value=(context, item),
         )
         for context in local_graph
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory)
     )
     try:
@@ -340,36 +250,26 @@ def try_resolve_context_access_or_local_memory(
         raise ContextOperandAmbiguityError(str(error)) from error
     if identity is None:
         return None
-    coordinates: list[
-        ContextOperandCandidate[ContextAccess] | DirectMemoryTarget
-    ] = []
+    coordinates: list[ContextOperandCandidate[ContextAccess] | tuple[Context, Memory]] = []
     keys: set[tuple[str, ...]] = set()
     for value in identity.values:
         key = (
-            ("memory", value.context_name, value.memory_uid)
-            if isinstance(value, DirectMemoryTarget)
+            ("memory", value[0].name, value[1].uid)
+            if isinstance(value, tuple)
             else ("context", value.name, value.uid)
         )
         if key not in keys:
             keys.add(key)
             coordinates.append(value)
     if len(coordinates) != 1:
-        memory_by_coordinate = {
-            (context.name, item.uid): item
-            for context in local_graph
-            for item in context.iter_items()
-            if isinstance(item, Memory)
-        }
         rendered = "\n".join(
             (
-                f"  {value.context_name}:{value.memory_uid} "
+                f"  {value[0].name}:{value[1].uid} "
                 + json.dumps(
-                    memory_by_coordinate[
-                        (value.context_name, value.memory_uid)
-                    ].content,
+                    value[1].content,
                     ensure_ascii=False,
                 )
-                if isinstance(value, DirectMemoryTarget)
+                if isinstance(value, tuple)
                 else f"  Context {value.name} [{value.uid}]"
             )
             for value in coordinates
@@ -380,7 +280,7 @@ def try_resolve_context_access_or_local_memory(
             "shown above. An exact Context name also selects a Context row."
         )
     selected = coordinates[0]
-    if isinstance(selected, DirectMemoryTarget):
+    if isinstance(selected, tuple):
         return selected
     return ResolvedExistingContextOperand(
         selector=operand,
@@ -394,7 +294,6 @@ __all__ = [
     "ContextAccessOrLocalMemory",
     "ResolvedContextAccess",
     "freeze_profile_context_access_candidates",
-    "resolve_context_access_or_inline_text",
     "resolve_existing_context_access",
     "try_resolve_context_access_or_local_memory",
     "try_resolve_existing_context_access",

@@ -8,7 +8,7 @@ import hashlib
 import json
 from typing import Iterator, Literal, Protocol
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.operations.distill.model import DistillError, DistillProvider
 from memcommit.application.operations.distill.model import (
     ensure_distill_goal_fit_allows_add,
@@ -39,7 +39,6 @@ from memcommit.application.capabilities.semantic_result_memorization import (
 )
 from memcommit.persistence.store import (
     MemoryStore,
-    context_record_digest,
 )
 from memcommit.application.operations.summarize.model import (
     SummaryFrame,
@@ -66,9 +65,8 @@ class FrozenGroundDistill:
     ground_digest: str
     candidate_frame: SummaryFrame
     request: DistillRequest
-    root_digest: str
     target: FrozenMemorizationTarget
-    source_bindings: tuple[tuple[str, str, str], ...]
+    source_bindings: tuple[tuple[str, str], ...]
     source_kind: Literal["GROUND_WORKSPACE_INPUTS"] = "GROUND_WORKSPACE_INPUTS"
     example_frame: SummaryFrame | None = None
 
@@ -142,7 +140,6 @@ def freeze_ground_distill(
         root_context_uid=workspace.examples.uid,
         root_context_name=workspace.examples.name,
         include_descendants=False,
-        follow_embeds=False,
     )
     if not frame.sources:
         raise DistillError(
@@ -174,7 +171,7 @@ def freeze_ground_distill(
     ).hexdigest()
     source_contexts = (workspace.examples, *context_frame)
     source_bindings = tuple(
-        (context.name, context.uid, context_record_digest(context))
+        (context.name, context.uid)
         for context in source_contexts
     )
     if goal_focus is not None:
@@ -188,7 +185,6 @@ def freeze_ground_distill(
                     (
                         goal_focus.context_name,
                         goal_focus.context_uid,
-                        goal_focus.context_digest,
                     ),
                 )
             )
@@ -203,7 +199,6 @@ def freeze_ground_distill(
             context_locator=workspace.examples.name,
             goal_focus=goal_focus,
         ),
-        root_digest=context_record_digest(workspace.root),
         target=freeze_memorization_target(store, workspace.rules.name),
         source_bindings=source_bindings,
         example_frame=frame,
@@ -221,13 +216,12 @@ def _revalidate_ground(
         current.ground_uid != frozen.ground_uid
         or current.ground_digest != frozen.ground_digest
         or current.request != frozen.request
-        or current.candidate_frame != frozen.candidate_frame
-        or current.source_bindings != frozen.source_bindings
+        or (current.candidate_frame != frozen.candidate_frame)
+        or (current.source_bindings != frozen.source_bindings)
         or (
             adoption
             and (
                 current.ground_revision != frozen.ground_revision
-                or current.root_digest != frozen.root_digest
                 or current.target != frozen.target
             )
         )
@@ -254,7 +248,6 @@ def execute_ground_distill(
             if (
                 request.context_locator != frozen.request.context_locator
                 or request.include_descendants
-                or request.follow_embeds
             ):
                 raise DistillError(
                     "Ground workspace Distill changed its frozen inputs."
@@ -311,8 +304,6 @@ def apply_ground_distill_result(
             contents=contents,
             expected_workspace_uid=frozen.ground_uid,
             expected_revision=frozen.ground_revision,
-            expected_root_digest=frozen.root_digest,
-            expected_lane_digest=frozen.target.context_digest,
             source_operation="distill",
             analysis_digest=result.distill.analysis.digest,
             source_bindings=frozen.source_bindings,

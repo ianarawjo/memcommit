@@ -16,7 +16,7 @@ from memcommit.application.operations.resolve.review_round.in_round_change_revie
     find_conflicting_changes,
 )
 from memcommit.application.operations.resolve.model import ResolveAnalysis
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .screen import run_in_round_change_review
 

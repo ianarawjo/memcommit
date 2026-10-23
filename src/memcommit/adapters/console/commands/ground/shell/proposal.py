@@ -16,7 +16,7 @@ from memcommit.application.operations.ground.contracts import (
     validate_ground_contract_name,
     validate_ground_goal,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 
 
 _CONTEXT_SUGGESTION_ROLES = {
@@ -199,7 +199,7 @@ def _freeze_proposal(
     if expected_ground_name is None:
         ground_name = validate_ground_contract_name(proposed_ground_name)
     else:
-        ground_name = validate_portable_context_name(expected_ground_name)
+        ground_name = validate_context_name(expected_ground_name)
         if proposed_ground_name != ground_name:
             raise ValueError(
                 "Chat response changed the exact Ground Save Location."
@@ -284,7 +284,7 @@ def _freeze_new_context_suggestions(
     result: list[GroundShellNewContextSuggestion] = []
     for candidate in raw:
         try:
-            context_name = validate_portable_context_name(
+            context_name = validate_context_name(
                 _command_text(
                     _field(candidate, "context_name"),
                     "new Context suggestion name",

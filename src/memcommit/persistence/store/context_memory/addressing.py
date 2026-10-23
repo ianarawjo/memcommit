@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .records import _context_name_parts
+from memcommit.core.context_name_validation import validate_context_name
 
 
 class _ContextAddressingMixin:
@@ -26,7 +26,7 @@ class _ContextAddressingMixin:
 
     def _context_dir(self, name: str) -> Path:
         self._assert_context_storage_root()
-        parts = _context_name_parts(name)
+        parts = validate_context_name(name).split("/")
         path = self.contexts_dir.joinpath(*parts)
         candidate = self.contexts_dir
         for part in parts:

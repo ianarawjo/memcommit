@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 import uuid
-from memcommit.core.context import AutoCheckpoint, Checkpoint
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
 from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
@@ -83,7 +84,7 @@ class _SeverRestorationMixin:
                         None,
                     )
                     args = (
-                        source_checkpoint.get("args")
+                        source_checkpoint.get("command_details")
                         if isinstance(source_checkpoint, dict)
                         else None
                     )
@@ -120,14 +121,10 @@ class _SeverRestorationMixin:
                     reviewing_digest = sever_record_digest(reviewing)
                     checkpoint = self._save_locked(
                         current,
-                        AutoCheckpoint(
+                        AutoCheckpointRequest(
                             command="undo",
-                            args={"command_restore": restore_metadata},
-                            description=(
-                                f"Undo command 'mem sever' [{receipt_uid[:8]}]"
-                            ),
+                            command_details={"command_restore": restore_metadata},
                         ),
-                        expected_context_digest=context_record_digest(current),
                     )
                     if checkpoint is None:
                         raise RuntimeError(
@@ -243,15 +240,9 @@ class _SeverRestorationMixin:
                         moved = True
                         checkpoint = self._save_locked(
                             archived_context,
-                            AutoCheckpoint(
+                            AutoCheckpointRequest(
                                 command="redo",
-                                args={"command_restore": restore_metadata},
-                                description=(
-                                    f"Redo command 'mem sever' [{receipt_uid[:8]}]"
-                                ),
-                            ),
-                            expected_context_digest=context_record_digest(
-                                archived_context
+                                command_details={"command_restore": restore_metadata},
                             ),
                         )
                         if checkpoint is None:

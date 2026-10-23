@@ -5,10 +5,10 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Literal
 
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryRow,
-    ContextMemorySelection,
     ContextPickerActionReceipt,
     choose_context,
 )
@@ -16,8 +16,6 @@ from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
-    SourceReach,
-    SourceState,
 )
 
 
@@ -28,40 +26,14 @@ def delete_picker_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
     """Project direct items into the shared Context/Memory navigation flow."""
 
     rows: list[ContextMemoryRow] = []
-    for item in context.iter_items():
+    for item in context.iter_memories():
         style: Literal["memory-object", "report-neutral"]
         if isinstance(item, Memory):
             label = item.uid[:8]
             content = item.content
             style = "memory-object"
             source = SourceDisplayFacts(form=SourceForm.MEMORY)
-        elif isinstance(item, MemoryRef):
-            label = item.uid[:8]
-            content = (
-                item.target.content
-                if item.target is not None
-                else item.target_context_name
-            )
-            style = "memory-object"
-            source = SourceDisplayFacts(
-                form=SourceForm.MEMORY_REF,
-                states=(
-                    (SourceState.READ_ONLY,)
-                    if item.is_resolved
-                    else (SourceState.DANGLING,)
-                ),
-            )
-        elif isinstance(item, QueryContextRef):
-            label = item.uid[:8]
-            content = item.name
-            style = "report-neutral"
-            source = SourceDisplayFacts(form=SourceForm.QUERY_VIEW)
-        elif isinstance(item, Context):
-            label = item.uid[:8]
-            content = item.name
-            style = "report-neutral"
-            source = SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
-        else:  # pragma: no cover - Information is a closed union.
+        else:
             continue
         rows.append(
             ContextMemoryRow(
@@ -79,19 +51,26 @@ def choose_delete_target(
     store: MemoryStore,
     *,
     current_name: str | None,
-    initial_target: str | ContextMemorySelection | None = None,
+    initial_target: str | tuple[str, str] | None = None,
     item_handler: Callable[[str, str], ContextPickerActionReceipt] | None = None,
     chooser: DeletePickerChooser = choose_context,
-) -> str | ContextMemorySelection | None:
+) -> str | tuple[str, str] | None:
     """Run the shared picker without owning Delete mutation semantics."""
 
-    names = tuple(store.list_context_names())
-    if not names:
-        raise ValueError("No Contexts or direct items are available to delete.")
+    if current_name is None:
+        raise ValueError("No current Context. Run 'mem switch' or 'mem init' first.")
+    names = (current_name,)
+
+    def reject_context(_name: str) -> ContextPickerActionReceipt:
+        return ContextPickerActionReceipt(
+            label="SELECT A MEMORY",
+            detail="Use 'mem delete --context' to delete the current Context itself.",
+        )
+
     selected = chooser(
         names,
         current=current_name,
-        title="Delete or Remove · SELECT A CONTEXT OR DIRECT ITEM",
+        title="Delete · SELECT A MEMORY IN THE CURRENT CONTEXT",
         accept_label="delete",
         exit_label="close",
         memory_loader=lambda name: delete_picker_rows(store.load_direct(name)),
@@ -100,8 +79,9 @@ def choose_delete_target(
         selectable_memories=True,
         initial_target=initial_target,
         nested_accept_handler=item_handler,
+        context_accept_handler=reject_context,
     )
-    if selected is None or isinstance(selected, (str, ContextMemorySelection)):
+    if selected is None or isinstance(selected, (str, tuple)):
         return selected
     raise TypeError("Delete picker returned an unsupported target receipt.")
 

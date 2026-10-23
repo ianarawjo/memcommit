@@ -3,22 +3,53 @@
 from __future__ import annotations
 
 import re
+from dataclasses import replace
+
 from markdown_it import MarkdownIt
 
-from ..model import Document, DocumentBlock
+from memcommit.models.corresponding_document_metadata import (
+    CorrespondingDocumentMetadata,
+)
+
+from ..model import Document, DocumentBlock, DocumentSourceRange
 from ..spacing import SpacingPolicy, separator_between
-from memcommit.core.document import DocumentState
 
 
 def parse_markdown(text: str, *, path="document.md", state=None) -> Document:
+    lines = text.splitlines(keepends=True)
+    line_byte_offsets = [0]
+    for line in lines:
+        line_byte_offsets.append(line_byte_offsets[-1] + len(line.encode("utf-8")))
+
+    def block_from_lines(kind, lines, start, end):
+        return DocumentBlock(
+            kind,
+            "".join(lines[start:end]),
+            start_byte=line_byte_offsets[start],
+            end_byte=line_byte_offsets[end],
+        )
+
+    def retained_gap(lines, start, end):
+        while start < end and not lines[start].strip():
+            start += 1
+        while end > start and not lines[end - 1].strip():
+            end -= 1
+        return block_from_lines("raw", lines, start, end)
+
     if state is not None and state.path_scope == "PROFILE":
         # Project imports retain separators as ordinary Memory text so initial
         # Sync can adopt identical files without normalizing somebody's rules.
         tokens = MarkdownIt("commonmark").enable(["table", "strikethrough"]).parse(text)
         lines = text.splitlines(keepends=True)
-        starts = sorted({t.map[0] for t in tokens if t.level == 0 and t.map is not None})
+        starts = sorted(
+            {t.map[0] for t in tokens if t.level == 0 and t.map is not None}
+        )
         boundaries = sorted({0, *starts, len(lines)})
-        blocks = tuple(DocumentBlock("raw", "".join(lines[a:z])) for a, z in zip(boundaries, boundaries[1:]) if a != z)
+        blocks = tuple(
+            block_from_lines("raw", lines, a, z)
+            for a, z in zip(boundaries, boundaries[1:])
+            if a != z
+        )
         return Document(state, blocks)
     lines = text.splitlines(keepends=True)
     # Frontmatter is a protected syntax block even outside a Skill package.
@@ -33,10 +64,18 @@ def parse_markdown(text: str, *, path="document.md", state=None) -> Document:
         )
         if end is not None:
             body = parse_markdown("".join(lines[end + 1 :]), path=path, state=state)
+            body_offset = len("".join(lines[: end + 1]).encode("utf-8"))
             return Document(
                 body.state,
-                (DocumentBlock("frontmatter", "".join(lines[: end + 1])),)
-                + body.blocks,
+                (block_from_lines("frontmatter", lines, 0, end + 1),)
+                + tuple(
+                    replace(
+                        block,
+                        start_byte=block.start_byte + body_offset,
+                        end_byte=block.end_byte + body_offset,
+                    )
+                    for block in body.blocks
+                ),
             )
     tokens = MarkdownIt("commonmark").enable(["table", "strikethrough"]).parse(text)
     ranges = [
@@ -51,9 +90,9 @@ def parse_markdown(text: str, *, path="document.md", state=None) -> Document:
     for start, end, kind in ranges:
         if start < cursor:
             continue
-        gap = _raw_gap(lines[cursor:start])
-        if gap.strip():
-            blocks.append(DocumentBlock("raw", gap))
+        gap = retained_gap(lines, cursor, start)
+        if gap.text.strip():
+            blocks.append(gap)
         chunk = "".join(lines[start:end])
         # A parser range may include trailing separator lines after a list.
         # Protected blocks retain even trailing blank lines as content.
@@ -62,12 +101,16 @@ def parse_markdown(text: str, *, path="document.md", state=None) -> Document:
             while chunk_lines and not chunk_lines[-1].strip():
                 chunk_lines.pop()
             chunk = "".join(chunk_lines)
-        blocks.append(DocumentBlock(kind, chunk))
+        blocks.append(
+            block_from_lines(
+                kind, lines, start, start + len(chunk.splitlines(keepends=True))
+            )
+        )
         cursor = end
-    tail = _raw_gap(lines[cursor:])
-    if tail.strip():
-        blocks.append(DocumentBlock("raw", tail))
-    return Document(state or DocumentState(path, "md"), tuple(blocks))
+    tail = retained_gap(lines, cursor, len(lines))
+    if tail.text.strip():
+        blocks.append(tail)
+    return Document(state or CorrespondingDocumentMetadata(path, "md"), tuple(blocks))
 
 
 def _raw_gap(lines):
@@ -79,22 +122,27 @@ def _raw_gap(lines):
     return "".join(lines)
 
 
-def render_markdown(document: Document, policy=SpacingPolicy()) -> str:
-    if document.state.path_scope == "PROFILE":
-        return "".join(block.text for block in document.blocks)
+def render_markdown(
+    document: Document, policy=SpacingPolicy(), *, source_ranges=None
+) -> str:
     result = ""
     previous = None
     for block in document.blocks:
         if not block.text:
             continue
-        if previous is not None:
+        if previous is not None and document.state.path_scope != "PROFILE":
             separator = separator_between(previous, block, policy=policy)
             # Add only missing separator newlines. Existing code/HTML content
             # must not be shortened to satisfy a cosmetic spacing preference.
             ending = re.search(r"(?:\r?\n)+$", result)
             trailing = ending.group().count("\n") if ending else 0
             result += separator[min(trailing, len(separator)) :]
+        start = len(result.encode("utf-8"))
         result += block.text
+        if source_ranges is not None and block.source is not None:
+            source_ranges.append(
+                DocumentSourceRange(start, len(result.encode("utf-8")), block.source)
+            )
         previous = block
     return result
 

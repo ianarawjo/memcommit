@@ -204,3 +204,20 @@ def translation_catalog_record_digest(
         sort_keys=True,
     ).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def rewrite_translation_context_binding(record, *, context_names, before_digests, after_digests):
+    """Follow identity-preserving Context migration without refreshing stale text."""
+    from copy import deepcopy
+
+    post = deepcopy(record)
+    uid = post.get("context_uid")
+    if uid in context_names:
+        post["context_name"] = context_names[uid]
+    if uid in before_digests and uid in after_digests:
+        for entry in post["entries"]:
+            provider = entry.get("provider")
+            if isinstance(provider, dict) and provider.get("context_digest") == before_digests[uid]:
+                provider["context_digest"] = after_digests[uid]
+    decode_translation_catalog_record(post)
+    return post

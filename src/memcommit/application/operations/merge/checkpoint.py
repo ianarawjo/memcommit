@@ -2,18 +2,14 @@
 
 from dataclasses import asdict
 
-from memcommit.application.context_access.access import (
-    freeze_granted_context_binding,
-    grant_checkpoint_args,
-)
 from memcommit.application.operations.merge.analysis.candidate import digest
-from memcommit.core.context import AutoCheckpoint
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 
 from .lineage import project_merge_lineage
 from .receipt import merge_receipt_summary
 from .records import LiteralMergeRound
 
-MERGE_CHECKPOINT_VERSION = 2
+MERGE_CHECKPOINT_VERSION = 4
 
 
 def item_effects(before, after):
@@ -37,15 +33,11 @@ def item_effects(before, after):
 def merge_checkpoint(prepared, result, post_target):
     inputs = prepared.inputs
 
-    def endpoint(context, access, original_digest):
+    def endpoint(context, access):
         return dict(
             context_uid=context.uid,
             context_name=access.context_name,
             access_name=access.access_name,
-            context_digest=original_digest,
-            grant=freeze_granted_context_binding(access).to_dict()
-            if access.is_granted
-            else None,
         )
 
     rounds = [
@@ -63,9 +55,8 @@ def merge_checkpoint(prepared, result, post_target):
         method=prepared.request.method,
         review_digest=digest({"prepared": prepared.digest, "result": result.digest}),
         inputs=dict(
-            source=endpoint(source, inputs.source_access, inputs.source_digest),
-            target=endpoint(target, inputs.target_access, inputs.target_digest),
-            cross_profile_memory_only=inputs.cross_profile_memory_only,
+            source=endpoint(source, inputs.source_access),
+            target=endpoint(target, inputs.target_access),
         ),
         effects=item_effects(target.to_dict(), post_target.to_dict()),
         review_rounds=rounds,
@@ -73,21 +64,13 @@ def merge_checkpoint(prepared, result, post_target):
         unresolved_audit_keys=list(result.forced_audit_keys),
         summary=asdict(merge_receipt_summary(prepared, result)),
     )
-    # External/Grant input evidence is retained, but never opens a local History
-    # edge into another authority's namespace. Both methods obey this boundary.
-    local = not inputs.cross_profile_memory_only and not any(
-        access.is_granted for access in (inputs.source_access, inputs.target_access)
-    )
     record["lineage"] = dict(
-        local=local,
-        edges=project_merge_lineage(result.rounds, source.uid, target.uid)
-        if local
-        else [],
+        local=True,
+        edges=project_merge_lineage(result.rounds, source.uid, target.uid),
     )
-    return AutoCheckpoint(
+    return AutoCheckpointRequest(
         command="merge",
-        args={"merge": record, **grant_checkpoint_args(inputs.target_access)},
-        description=f"Merged '{prepared.request.source}' into '{prepared.request.target}' ({record['summary']['method']})",
+        command_details={"merge": record},
     )
 
 

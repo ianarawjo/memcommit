@@ -5,17 +5,12 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from memcommit.adapters.console.terminal.components.history.model import HistoryPickerEntry
+from memcommit.adapters.console.terminal.components.history.model import (
+    HistoryPickerEntry,
+)
 from memcommit.application.capabilities.history.query.semantic_history_query import (
     HistorySearchResult,
 )
-from memcommit.source_projection.model import SourceForm
-from memcommit.source_projection.presentation import source_object_label
-
-
-_MEMORY_REF_LABEL = source_object_label(SourceForm.MEMORY_REF)
-_QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW)
-_EMBEDDED_CONTEXT_LABEL = "embedded " + source_object_label(SourceForm.CONTEXT)
 
 
 def history_result_recovery_label(result: HistorySearchResult) -> str:
@@ -82,19 +77,7 @@ def _snapshot_items(snapshot: object) -> tuple[dict[str, dict[str, Any]], list[s
 
 def _kind_counts(snapshot: object) -> dict[str, int]:
     items, _ = _snapshot_items(snapshot)
-    counts = {
-        "memory": 0,
-        "memory_ref": 0,
-        "query_context_ref": 0,
-        "context_ref": 0,
-    }
-    for item in items.values():
-        kind = item.get("type")
-        if kind in {"memory_snapshot_ref", "granted_memory_ref"}:
-            kind = "memory_ref"
-        if kind in counts:
-            counts[kind] += 1
-    return counts
+    return {"memory": sum(item.get("type") == "memory" for item in items.values())}
 
 
 def _transition_detail(before: object, after: object) -> str:
@@ -150,22 +133,14 @@ def checkpoint_picker_entries(
         if not isinstance(command, str) or not command:
             command = "checkpoint"
         description = (
-            checkpoint.get("description")
-            or checkpoint.get("message")
-            or "(no description)"
+            checkpoint.get("checkpoint_message") or command
         )
         if not isinstance(description, str):
-            description = "(invalid description)"
+            description = command
 
         counts = _kind_counts(checkpoint.get("snapshot"))
         total = sum(counts.values())
-        snapshot_line = (
-            f"Snapshot: {total} direct items · "
-            f"{counts['memory']} Memories · "
-            f"{counts['memory_ref']} {_MEMORY_REF_LABEL}s · "
-            f"{counts['query_context_ref']} {_QUERY_VIEW_LABEL}s · "
-            f"{counts['context_ref']} {_EMBEDDED_CONTEXT_LABEL}s"
-        )
+        snapshot_line = f"Snapshot: {total} Memories"
         before = previous_snapshot_by_uid.get(uid)
         transition_line = (
             "Transition: baseline · no preceding recoverable checkpoint"
@@ -235,7 +210,8 @@ def history_result_picker_entries(
             )
             boundary_line = (
                 f"Operation receipt: {checkpoint}"
-                if transition is not None and transition.command in {"undo", "redo", "revert"}
+                if transition is not None
+                and transition.command in {"undo", "redo", "revert"}
                 else f"Checkpoint boundary: {checkpoint}"
             )
             detail = "\n".join(

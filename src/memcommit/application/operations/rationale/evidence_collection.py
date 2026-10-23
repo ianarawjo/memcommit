@@ -26,7 +26,8 @@ from memcommit.application.operations.review.model import (
     atomize_review_matches_analysis,
     review_matches_context,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 
@@ -200,7 +201,7 @@ def _context_candidates(
     memories = [
         (context.name, item)
         for context in contexts
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory)
     ]
     current_position = next(

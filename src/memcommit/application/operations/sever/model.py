@@ -8,10 +8,8 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.application.operations.update.model import GrantedUpdateTarget
 
-
-SEVER_SCHEMA_VERSION = 4
+SEVER_SCHEMA_VERSION = 5
 SeverDecision = Literal[
     "KEEP_AS_WRITTEN",
     "KEEP_REDACTED",
@@ -109,11 +107,9 @@ class SeverContextBinding:
     root_uid: str
     root_name: str
     frame_digest: str
-    contexts: tuple[tuple[str, str, str], ...]
+    contexts: tuple[tuple[str, str], ...]
     memories: tuple[SeverMemory, ...]
-    granted: dict[str, object] | None = None
     include_descendants: bool = True
-    excluded_query_context_names: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         _uuid(self.root_uid, "Context uid")
@@ -121,37 +117,19 @@ class SeverContextBinding:
         _digest(self.frame_digest, "Context frame digest")
         if not self.contexts or any(
             not isinstance(item, tuple)
-            or len(item) != 3
+            or len(item) != 2
             or not isinstance(item[0], str)
             or not isinstance(item[1], str)
-            or not isinstance(item[2], str)
             for item in self.contexts
         ):
             raise SeverError("Invalid Sever Context bindings.")
-        for name, uid, digest in self.contexts:
+        for name, uid in self.contexts:
             _text(name, "bound Context name")
             _uuid(uid, "bound Context uid")
-            _digest(digest, "bound Context digest")
         if len({memory.uid for memory in self.memories}) != len(self.memories):
             raise SeverError("Duplicate Sever Memory uid.")
         if type(self.include_descendants) is not bool:
             raise SeverError("Invalid Sever descendant scope.")
-        if any(
-            not isinstance(name, str) or not name.strip()
-            for name in self.excluded_query_context_names
-        ) or len(set(self.excluded_query_context_names)) != len(
-            self.excluded_query_context_names
-        ):
-            raise SeverError("Invalid excluded query-only Context names.")
-        if self.granted is not None:
-            if not isinstance(self.granted, dict):
-                raise SeverError("Invalid Sever granted binding.")
-            try:
-                normalized = GrantedUpdateTarget.from_dict(self.granted).to_dict()
-            except ValueError as error:
-                raise SeverError("Invalid Sever granted binding.") from error
-            if normalized != self.granted:
-                raise SeverError("Invalid Sever granted binding.")
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -159,59 +137,48 @@ class SeverContextBinding:
             "root_name": self.root_name,
             "frame_digest": self.frame_digest,
             "contexts": [
-                {"name": name, "uid": uid, "digest": digest}
-                for name, uid, digest in self.contexts
+                {"name": name, "uid": uid}
+                for name, uid in self.contexts
             ],
             "memories": [memory.to_dict() for memory in self.memories],
-            "granted": self.granted,
             "include_descendants": self.include_descendants,
-            "excluded_query_context_names": list(self.excluded_query_context_names),
         }
 
     @classmethod
     def from_dict(cls, value: object) -> "SeverContextBinding":
-        if not isinstance(value, dict):
-            raise SeverError("Invalid Sever Context binding.")
-        legacy_keys = {
-            "root_uid",
-            "root_name",
-            "frame_digest",
-            "contexts",
-            "memories",
-            "granted",
-        }
-        if frozenset(value) not in {
-            frozenset(legacy_keys),
-            frozenset(legacy_keys | {"include_descendants"}),
-            frozenset(
-                legacy_keys | {"include_descendants", "excluded_query_context_names"}
-            ),
-        }:
-            raise SeverError("Invalid Sever Context binding.")
-        data = value
-        raw_contexts = data["contexts"]
-        raw_memories = data["memories"]
+        data = _exact(
+            value,
+            {
+                "root_uid",
+                "root_name",
+                "frame_digest",
+                "contexts",
+                "memories",
+                "include_descendants",
+            },
+            "Context binding",
+        )
+        raw_contexts, raw_memories = data["contexts"], data["memories"]
         if not isinstance(raw_contexts, list) or not isinstance(raw_memories, list):
             raise SeverError("Invalid Sever Context binding.")
-        excluded_query_context_names = data.get(
-            "excluded_query_context_names",
-            [],
-        )
-        if not isinstance(excluded_query_context_names, list):
-            raise SeverError("Invalid excluded query-only Context names.")
-        contexts: list[tuple[str, str, str]] = []
+        contexts = []
         for item in raw_contexts:
-            record = _exact(item, {"name", "uid", "digest"}, "bound Context")
-            contexts.append((record["name"], record["uid"], record["digest"]))  # type: ignore[arg-type]
+            record = _exact(
+                item,
+                {"name", "uid"}
+                | (
+                    {"digest"} if isinstance(item, dict) and "digest" in item else set()
+                ),
+                "bound Context",
+            )
+            contexts.append((record["name"], record["uid"]))
         return cls(
-            root_uid=data["root_uid"],  # type: ignore[arg-type]
-            root_name=data["root_name"],  # type: ignore[arg-type]
-            frame_digest=data["frame_digest"],  # type: ignore[arg-type]
+            root_uid=data["root_uid"],
+            root_name=data["root_name"],
+            frame_digest=data["frame_digest"],
             contexts=tuple(contexts),
             memories=tuple(SeverMemory.from_dict(item) for item in raw_memories),
-            granted=data["granted"],  # type: ignore[arg-type]
-            include_descendants=data.get("include_descendants", True),  # type: ignore[arg-type]
-            excluded_query_context_names=tuple(excluded_query_context_names),
+            include_descendants=data["include_descendants"],
         )
 
 
@@ -633,7 +600,7 @@ class SeverSession:
         }:
             raise SeverError("Invalid Sever session.")
         data = value
-        if data["schema_version"] not in {1, 2, 3, SEVER_SCHEMA_VERSION}:
+        if data["schema_version"] != SEVER_SCHEMA_VERSION:
             raise SeverError("Unsupported Sever schema version.")
         candidates = data["candidates"]
         if not isinstance(candidates, list):
@@ -676,7 +643,7 @@ def sever_frame_digest(
     *,
     root_uid: str,
     root_name: str,
-    contexts: tuple[tuple[str, str, str], ...],
+    contexts: tuple[tuple[str, str], ...],
     memories: tuple[SeverMemory, ...],
     include_descendants: bool = True,
 ) -> str:

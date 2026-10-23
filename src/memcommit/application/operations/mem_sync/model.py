@@ -1,16 +1,17 @@
 """Sync requests, document bindings, successful baselines and committed receipts."""
 
-from dataclasses import dataclass
+from __future__ import annotations
+
 from contextlib import AbstractContextManager
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
 from memcommit.application.capabilities.import_export.model import (
+    DocumentSourceRange,
     ExportFileEffect,
     ExportPlan,
-)
-from memcommit.application.capabilities.import_export.export_documents import (
-    ExportPublicationPort,
+    ProjectDocumentSnapshot,
 )
 
 
@@ -19,12 +20,8 @@ class SyncRequest:
     source: str | None = None
     recursive: bool = False
     all_contexts: bool = False
-    toggle_always: bool = False
-    # Application-only exact automatic selection; argv never supplies this.
-    selected_names: tuple[str, ...] | None = None
-    automatic: bool = False
-    causing_command: str | None = None
     destination: Path | None = None
+    discover_documents: bool = False
 
 
 @dataclass(frozen=True)
@@ -48,8 +45,56 @@ class SyncConnection:
 
 @dataclass(frozen=True)
 class SyncBaseline:
+    """Process-local document comparison value reconstructed from checkpoints."""
+
     source_digest: str
     files: tuple[tuple[str, bytes], ...]
+    members: tuple[dict, ...] = ()
+    source_ranges: tuple[tuple[str, tuple[DocumentSourceRange, ...]], ...] = ()
+
+
+@dataclass(frozen=True)
+class SyncMemoryEffect:
+    context_name: str
+    memory_uid: str | None
+    action: str
+
+
+@dataclass(frozen=True)
+class InboundContextChange:
+    before: dict
+    after: dict
+    paths: tuple[str, ...]
+    effects: tuple[SyncMemoryEffect, ...]
+
+
+@dataclass(frozen=True)
+class SyncIssue:
+    code: str
+    path: str
+    message: str
+    memory_uids: tuple[str, ...] = ()
+    byte_ranges: tuple[tuple[int, int], ...] = ()
+
+
+class SyncConflictError(ValueError):
+    def __init__(self, issue: SyncIssue):
+        self.issue = issue
+        super().__init__(f"{issue.path}: {issue.message}")
+
+
+@dataclass(frozen=True)
+class SyncVersionConflict:
+    context_uids: tuple[str, ...]
+    paths: tuple[str, ...]
+
+
+class SyncConflictChoiceRequired(ValueError):
+    """A whole-version choice is needed before any Sync mutation."""
+
+
+class SyncCancelled(Exception):
+    """The person cancelled a read-only Sync choice."""
 
 
 @dataclass(frozen=True)
@@ -58,24 +103,42 @@ class SyncPlan:
     exports: tuple[ExportPlan, ...]
     connections: tuple[SyncConnection, ...]
     baselines: tuple[tuple[str, SyncBaseline], ...]
+    inbound_changes: tuple[InboundContextChange, ...] = ()
+    profile_changes: ProfileDocumentChanges | None = None
+    conflicts: tuple[SyncVersionConflict, ...] = ()
+    conflict_choice: str | None = None
 
 
 @dataclass(frozen=True)
-class AutomaticSyncChange:
-    enabled: bool
-    context_names: tuple[str, ...]
-    newly_enabled: int = 0
-    already_enabled: int = 0
+class SyncContextChange:
+    before: dict | None
+    after: dict | None
+    action: str
+    paths: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class ProfileDocumentChanges:
+    snapshot: ProjectDocumentSnapshot
+    before_records: tuple[dict, ...]
+    changes: tuple[SyncContextChange, ...]
+    memory_effects: tuple[SyncMemoryEffect, ...]
+    renamed_files: tuple[tuple[str, str, int], ...]
+    excluded_names: tuple[str, ...]
 
 
 @dataclass(frozen=True)
 class SyncResult:
     context_names: tuple[str, ...]
     effects: tuple[ExportFileEffect, ...] = ()
-    automatic_change: AutomaticSyncChange | None = None
     run_uid: str | None = None
-    automatic: bool = False
-    error: str | None = None
+    checkpoint_uids: tuple[tuple[str, str], ...] = ()
+    memory_effects: tuple[SyncMemoryEffect, ...] = ()
+    direction: str = "outbound"
+    inbound_paths: tuple[str, ...] = ()
+    context_effects: tuple[tuple[str, str, str | None], ...] = ()
+    conflict_choice: str | None = None
+    revert_checkpoint_uids: tuple[tuple[str, str], ...] = ()
 
 
 class SyncSettingsPort(Protocol):
@@ -89,10 +152,4 @@ class SyncPort(Protocol):
     def execution_boundary(self) -> AbstractContextManager: ...
     def freeze_selection(self, request: SyncRequest) -> SyncSelection: ...
     def prepare_plan(self, request, selection, settings) -> SyncPlan: ...
-    def agreement_changed(self, plan: SyncPlan) -> bool: ...
-    def publisher_for(self, export: ExportPlan) -> ExportPublicationPort: ...
-    def begin_publication(self, plan: SyncPlan, run_uid: str) -> None: ...
-    def finish_publication(
-        self, plan, settings, policies, result, causing_command
-    ) -> None: ...
-    def record_failure(self, selection, settings, error: str) -> None: ...
+    def publish_profile_changes(self, plan, request, settings) -> SyncResult: ...

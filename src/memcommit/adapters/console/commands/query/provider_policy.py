@@ -3,10 +3,7 @@
 from __future__ import annotations
 
 from memcommit.providers.policy import QUERY_PROVIDER_POLICY
-from memcommit.providers.connection import (
-    connect_ordinary_query_provider,
-    connect_query_route_provider,
-)
+from memcommit.providers.connection import connect_ordinary_query_provider
 
 
 ORDINARY_QUERY_MODEL = QUERY_PROVIDER_POLICY.model
@@ -16,5 +13,4 @@ __all__ = [
     "ORDINARY_QUERY_MODEL",
     "ORDINARY_QUERY_REASONING_EFFORT",
     "connect_ordinary_query_provider",
-    "connect_query_route_provider",
 ]

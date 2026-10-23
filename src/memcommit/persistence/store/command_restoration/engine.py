@@ -4,7 +4,8 @@ from __future__ import annotations
 import json
 import uuid
 from pathlib import Path
-from memcommit.core.context import AutoCheckpoint, Checkpoint
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
 from ..context_memory.models import ConcurrentContextUpdateError
 from ..context_memory.records import (
     context_record_digest,
@@ -21,8 +22,6 @@ class _CommandRestorationEngineMixin:
     def restore_recent_context_command(
         self,
         direction: str,
-        *,
-        expected_unit_uid: str | None = None,
     ):
         """Undo or redo one globally ordered checkpoint-producing command.
 
@@ -50,14 +49,12 @@ class _CommandRestorationEngineMixin:
                     f"There is no recorded Context command to {direction}."
                 )
             unit = candidates[-1]
-            if expected_unit_uid is not None and unit.uid != expected_unit_uid:
-                # Granted recovery names one exact authority command from the
-                # participant-side receipt. Never substitute a newer, unrelated
-                # authority mutation merely because it is currently on top.
-                raise CommandHistoryError(
-                    "The recorded granted update is not the next Context "
-                    f"command to {direction}."
-                )
+            if unit.command == "sync" and any(
+                "sync_profile_uid" in args for args in unit.checkpoint_command_details
+            ):
+                from .handlers.sync import restore_sync_command
+
+                return restore_sync_command(self, unit, direction)
             if any(
                 change.before is None or change.after is None for change in unit.changes
             ):
@@ -111,29 +108,19 @@ class _CommandRestorationEngineMixin:
                             target_record = (
                                 change.before if direction == "undo" else change.after
                             )
-                            expected_digest = context_record_digest(
-                                original_records[change.context_name]
-                            )
                             restored = self._context_for_restoration(
                                 target_record,
                                 context_uid=change.context_uid,
                                 context_name=change.context_name,
-                                expected_context_digest=expected_digest,
                             )
                             checkpoint = self._save_locked(
                                 restored,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command=direction,
-                                    args={
+                                    command_details={
                                         "command_restore": restore_metadata,
                                     },
-                                    description=(
-                                        f"{direction.title()} command "
-                                        f"'mem {unit.command}' "
-                                        f"[{receipt_uid[:8]}]"
-                                    ),
                                 ),
-                                expected_context_digest=expected_digest,
                             )
                             if checkpoint is None:
                                 raise RuntimeError(

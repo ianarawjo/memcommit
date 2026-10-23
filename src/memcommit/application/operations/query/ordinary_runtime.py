@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from memcommit.core.context import Context
+from memcommit.application.context_access.access import ContextAccess
+from memcommit.models.context import Context
 from memcommit.application.capabilities.retrieval_corpus.loading import (
     collect_readable_corpus_candidates,
     load_readable_corpus_roots,
@@ -21,11 +22,6 @@ from memcommit.application.operations.query.ordinary_application import (
 from memcommit.persistence.store import MemoryStore
 
 
-class OrdinaryQueryReadableAccess(Protocol):
-    @property
-    def is_granted(self) -> bool: ...
-
-
 class OrdinaryQueryReadableCatalog(Protocol):
     """Narrow frozen readable namespace required by the Store adapter."""
 
@@ -37,9 +33,7 @@ class OrdinaryQueryReadableCatalog(Protocol):
 
     def load(self, name: str) -> Context: ...
 
-    def load_without_attached_reads(self, name: str) -> Context: ...
-
-    def access_for(self, name: str) -> OrdinaryQueryReadableAccess: ...
+    def access_for(self, name: str) -> ContextAccess: ...
 
 
 class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
@@ -58,22 +52,11 @@ class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
             self._catalog,
             request.target_names,
             include_descendants=request.include_descendants,
-            follow_embeds=request.follow_embeds,
-            include_attached_reads=False,
-        )
-        # Profile-local artifacts never cross a READ Grant. Granted Contexts
-        # contribute only the Memories and public routes exposed by the catalog.
-        local_roots = tuple(
-            root
-            for root in roots
-            if self._catalog.context_exists(root.name)
-            and not self._catalog.access_for(root.name).is_granted
         )
         candidates = collect_readable_corpus_candidates(
             self._store,
             roots,
-            follow_embeds=request.follow_embeds,
-            artifact_roots=local_roots,
+            artifact_roots=roots,
             operation="Query",
         )
         label = (
@@ -104,7 +87,7 @@ def execute_ordinary_query(
 
 __all__ = [
     "MemoryStoreOrdinaryQuerySourcePort",
-    "OrdinaryQueryReadableAccess",
+    "ContextAccess",
     "OrdinaryQueryReadableCatalog",
     "execute_ordinary_query",
 ]

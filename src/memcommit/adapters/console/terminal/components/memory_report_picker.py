@@ -16,14 +16,10 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryBadge,
     ContextMemoryRow,
-    ContextMemorySelection,
     ContextPickerActionReceipt,
     choose_context,
 )
-from memcommit.core.context_targeting.model import (
-    ContextTarget,
-    DirectMemoryTarget,
-)
+
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
@@ -67,7 +63,7 @@ class MemoryReportTargetSelection:
     include_descendants: bool
 
 
-HistoryReportTargetSelection: TypeAlias = ContextTarget | DirectMemoryTarget
+HistoryReportTargetSelection: TypeAlias = str | tuple[str, str]
 
 
 def _reject_context_target(_context_name: str) -> ContextPickerActionReceipt:
@@ -143,7 +139,7 @@ def _choose_memory_selection(
     require_tty: bool = True,
     initial_include_descendants: bool | None = None,
     allow_context_targets: bool = False,
-) -> tuple[str | ContextMemorySelection, bool] | None:
+) -> tuple[str | tuple[str, str], bool] | None:
     """Select one report target through the shared Context/Memory tree picker."""
     options = tuple(items)
     if operation not in {"trace", "rationale"}:
@@ -271,7 +267,7 @@ def _choose_memory_selection(
         return None
     if allow_context_targets and isinstance(selected, str):
         return selected, False
-    if not isinstance(selected, ContextMemorySelection):
+    if not isinstance(selected, tuple):
         raise ValueError("History selection did not return a Context or exact Memory.")
     return selected, (
         reach_state.include_descendants if reach_state is not None else False
@@ -304,8 +300,8 @@ def choose_history_report_target(
         return None
     target, _include_descendants = selected
     if isinstance(target, str):
-        return ContextTarget(target)
-    if isinstance(target, DirectMemoryTarget):
+        return target
+    if isinstance(target, tuple):
         return target
     raise ValueError("History selection returned an unsupported target.")
 
@@ -340,8 +336,8 @@ def choose_memory_report_target(
     memory, include_descendants = selected
     return MemoryReportTargetSelection(
         root_context_name=context_name,
-        owner_context_name=memory.context_name,
-        memory_uid=memory.selector,
+        owner_context_name=memory[0],
+        memory_uid=memory[1],
         include_descendants=include_descendants,
     )
 
@@ -367,4 +363,4 @@ def choose_memory(
         app_output=app_output,
         require_tty=require_tty,
     )
-    return selected[0].selector if selected is not None else None
+    return selected[0][1] if selected is not None else None

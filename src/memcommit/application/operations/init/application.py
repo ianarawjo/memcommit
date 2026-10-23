@@ -33,7 +33,7 @@ class ContextInitRequest:
 
 @dataclass(frozen=True)
 class ContextInitEntry:
-    """One planned Context and its operation-owned checkpoint description."""
+    """One planned Context and its structured initialization evidence."""
 
     name: str
     requested_name: str
@@ -41,7 +41,7 @@ class ContextInitEntry:
     is_leaf: bool
 
     @property
-    def checkpoint_args(self) -> dict[str, object]:
+    def checkpoint_command_details(self) -> dict[str, object]:
         if not self.create_parents:
             return {"name": self.name}
         return {
@@ -50,14 +50,6 @@ class ContextInitEntry:
             "requested_name": self.requested_name,
         }
 
-    @property
-    def checkpoint_description(self) -> str:
-        if self.is_leaf:
-            return f"Initialized context '{self.name}'"
-        return (
-            f"Initialized namespace parent '{self.name}' "
-            f"for '{self.requested_name}'"
-        )
 
 
 @dataclass(frozen=True)

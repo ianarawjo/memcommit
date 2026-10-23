@@ -28,6 +28,7 @@ class MemCommandGroup(CanonicalCommandGroup):
     about Click or relying on each command to remember a local catch block.
     """
 
+
     def main(self, args: Any = None, prog_name: Any = None, **kwargs: Any) -> Any:
         # main also covers bare mem and eager --help, which bypass invoke.
         # Session entry precedes the ledger; its replayed command is recorded
@@ -36,14 +37,19 @@ class MemCommandGroup(CanonicalCommandGroup):
             IsolatedStudyShellError,
             ensure_isolated_study_shell,
         )
-
         from memcommit.configuration.workspace import WorkspaceError
 
         arguments = list(sys.argv[1:] if args is None else args)
         if not arguments and sys.stdin.isatty() and sys.stdout.isatty():
-            from memcommit.application.initial_setup.configuration import initial_setup_needed
-            from memcommit.adapters.console.initial_setup.runtime import run_initial_setup
-            from memcommit.application.operations.profile.config import ProfileConfigError
+            from memcommit.adapters.console.initial_setup.runtime import (
+                run_initial_setup,
+            )
+            from memcommit.application.initial_setup.configuration import (
+                initial_setup_needed,
+            )
+            from memcommit.application.operations.profile.config import (
+                ProfileConfigError,
+            )
             from memcommit.providers.profile_routes import ProfileProviderRoutesError
 
             try:
@@ -54,12 +60,18 @@ class MemCommandGroup(CanonicalCommandGroup):
                     if kwargs.get("standalone_mode", True):
                         raise SystemExit(exit_code)
                     return exit_code
-            except (WorkspaceError, ProfileConfigError, ProfileProviderRoutesError) as error:
+            except (
+                WorkspaceError,
+                ProfileConfigError,
+                ProfileProviderRoutesError,
+            ) as error:
                 render_cli_error(error)
                 raise SystemExit(1) from error
         # Configuration locates the Store, so it must also work before migration
         # and must not enter a Study shell belonging to the old workspace.
-        if arguments and (arguments[0] == "config" or arguments[:2] == ["profile", "config"]):
+        if arguments and (
+            arguments[0] == "config" or arguments[:2] == ["profile", "config"]
+        ):
             return super().main(args=arguments, prog_name=prog_name, **kwargs)
 
         def ensure(command_argv: Any = None) -> int | None:
@@ -120,30 +132,10 @@ class MemCommandGroup(CanonicalCommandGroup):
             raise click.exceptions.Exit(1) from error
 
     def _invoke_in_workspace(self, ctx: Any) -> Any:
-        from memcommit.application.operations.mem_sync.automatic.run_after_commit import automatic_sync_completion
-        from memcommit.adapters.console.commands.mem_sync.receipt import render_sync_receipt
-
-        protected = tuple(getattr(ctx, "_protected_args", ())) or tuple(getattr(ctx, "protected_args", ()))
-        entered = (*protected, *tuple(getattr(ctx, "args", ())))
-        operation = self.canonical_command_name(ctx, entered[0]) if entered else None
-        if operation in {"sync", "profile", "init-study"}:
-            # Explicit Sync already applies/toggles its complete selected set.
-            # In particular, disabling must not trigger one more external write.
-            return self._invoke_with_ledger(ctx)
-        completion = None
-        try:
-            with automatic_sync_completion(causing_command=operation) as completion:
-                return self._invoke_with_ledger(ctx)
-        finally:
-            if completion is not None:
-                for result in completion.results:
-                    render_sync_receipt(result)
+        # Synchronization is an explicit user command in the study prototype.
+        return self._invoke_with_ledger(ctx)
 
     def _invoke_with_ledger(self, ctx: Any) -> Any:
-        # A long interactive command may make several semantic turns. Freeze
-        # one provider/model instance for that root invocation, while separate
-        # CliRunner or embedded invocations still observe explicit config
-        # changes made between commands.
         from memcommit.providers.connection import reset_semantic_provider_cache
 
         reset_semantic_provider_cache()

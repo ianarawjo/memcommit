@@ -13,7 +13,7 @@ class CheckpointRequest:
 
     context_locator: str | None
     current_context_name: str | None
-    message: str = ""
+    checkpoint_message: str = ""
     recursive: bool = False
 
     def __post_init__(self) -> None:
@@ -26,7 +26,7 @@ class CheckpointRequest:
             or not self.current_context_name
         ):
             raise ValueError("Checkpoint current Context must be nonblank text.")
-        if not isinstance(self.message, str):
+        if not isinstance(self.checkpoint_message, str):
             raise TypeError("Checkpoint message must be text.")
         if not isinstance(self.recursive, bool):
             raise TypeError("Checkpoint recursive scope must be boolean.")
@@ -38,7 +38,6 @@ class CheckpointMemberPlan:
 
     context_name: str
     context_uid: str
-    context_digest: str
     checkpoint_uid: str | None
 
 
@@ -83,7 +82,7 @@ class CheckpointResult:
     root_context_name: str
     root_checkpoint_uid: str
     timestamp: datetime
-    message: str
+    checkpoint_message: str
     recursive: bool
     member_count: int
 
@@ -133,7 +132,7 @@ def apply_checkpoint(
         raise TypeError("Checkpoint port returned an invalid result.")
     if (
         result.root_context_name != plan.root_context_name
-        or result.message != plan.request.message
+        or result.checkpoint_message != plan.request.checkpoint_message
         or result.recursive is not plan.request.recursive
         or result.member_count != len(plan.members)
     ):

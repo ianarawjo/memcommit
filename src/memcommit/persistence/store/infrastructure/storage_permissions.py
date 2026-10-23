@@ -1,10 +1,4 @@
-"""Owner-only POSIX permissions for private MemCommit storage.
-
-This module deliberately changes only filesystem mode bits.  It neither
-deletes retained artifacts nor treats possession of a cache file as current
-application authority; operation runtimes must still revalidate Grants and
-frozen revisions before use.
-"""
+"""Filesystem permission helpers for private local storage."""
 
 from __future__ import annotations
 

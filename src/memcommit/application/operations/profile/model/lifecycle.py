@@ -12,12 +12,12 @@ import uuid
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     ProfileConfigError,
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
@@ -28,29 +28,28 @@ from ._storage import (
     StoreInspection as StoreInspection,
     _copy_store as _copy_store,
     _fsync_directory as _fsync_directory,
-    _inspection_with_grants as _inspection_with_grants,
     _prepare_profile_deletion_batch as _prepare_profile_deletion_batch,
     _publish_permanent_removal as _publish_permanent_removal,
-    _read_granted_access_names as _read_granted_access_names,
     _registry_lock as _registry_lock,
     _source_store as _source_store,
     _write_registry as _write_registry,
     inspect_store as inspect_store,
 )
 
-from memcommit.application.operations.profile.study.topology import group_study_run_profiles
+from memcommit.application.operations.profile.study.topology import (
+    group_study_run_profiles,
+)
 
 
 @dataclass(frozen=True)
 class ProfileCreationResult:
     """One published folder Profile, its setup, and explicit selection receipt."""
 
-    profile: ProfileEntry
+    profile: Profile
     inspection: StoreInspection
     active_profile_name: str
     imported_file_count: int = 0
     skipped_paths: tuple[str, ...] = ()
-    automatic_sync: bool = False
     selected: bool = False
 
 
@@ -59,7 +58,7 @@ class ProfileRenameResult:
     """One stable Profile identity published under a new display name."""
 
     previous_name: str
-    profile: ProfileEntry
+    profile: Profile
     active_profile_name: str
     was_active: bool
     changed: bool
@@ -69,11 +68,10 @@ class ProfileRenameResult:
 class ProfileRemovalResult:
     """One unregistered Profile whose Store was permanently deleted."""
 
-    profile: ProfileEntry
+    profile: Profile
     study_name: str | None
     active_profile_name: str
     remaining_study_profile_count: int
-    removed_grant_count: int
     deleted_store: Path
 
 
@@ -83,26 +81,10 @@ def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
     base = tuple(
         inspect_store(
             profile_store_dir(item),
-            allowed_virtual_currents=_read_granted_access_names(
-                registry,
-                item.uid,
-            ),
         )
         for item in visible
     )
-    cache = {
-        profile.uid: inspection
-        for profile, inspection in zip(visible, base, strict=True)
-    }
-    return registry, tuple(
-        _inspection_with_grants(
-            registry,
-            profile,
-            inspection,
-            cache=cache,
-        )
-        for profile, inspection in zip(visible, base, strict=True)
-    )
+    return registry, base
 
 
 def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
@@ -112,16 +94,8 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         target = registry.by_name(canonical)
         if target is None:
             raise ProfileError(f"Profile {canonical!r} does not exist.")
-        inspection = _inspection_with_grants(
-            registry,
-            target,
-            inspect_store(
-                profile_store_dir(target),
-                allowed_virtual_currents=_read_granted_access_names(
-                    registry,
-                    target.uid,
-                ),
-            ),
+        inspection = inspect_store(
+            profile_store_dir(target),
         )
         if target.uid == registry.active_uid:
             return registry, inspection, False
@@ -129,8 +103,6 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
             generation=max(1, registry.generation + 1),
             active_uid=target.uid,
             profiles=registry.profiles,
-            grants=registry.grants,
-            grant_placements=registry.grant_placements,
         )
         _write_registry(updated)
         return updated, inspection, True
@@ -172,13 +144,15 @@ def create_profile(
     expected_generation: int | None = None,
     root_dir: Path | str | None = None,
     import_project_files: bool = False,
-    automatic_sync: bool = False,
     expected_import_digest: str | None = None,
     select_created: bool = False,
 ) -> ProfileCreationResult:
     """Publish project setup and optional selection in one registry generation."""
 
-    if any(type(value) is not bool for value in (import_project_files, automatic_sync, select_created)):
+    if any(
+        type(value) is not bool
+        for value in (import_project_files, select_created)
+    ):
         raise TypeError("Profile setup options must be boolean.")
 
     try:
@@ -207,7 +181,7 @@ def create_profile(
         )
         if collision is not None:
             raise ProfileError(f"Profile {collision.name!r} already exists.")
-        profile = ProfileEntry(
+        profile = Profile(
             uid=str(uuid.uuid4()),
             name=canonical,
             kind="MANAGED",
@@ -216,33 +190,41 @@ def create_profile(
                 "created_at": datetime.now(timezone.utc).isoformat(),
             },
         )
-        from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
-        profile = prepare_profile_root(profile=profile, requested_root=root_dir, registry=registry)
+        from memcommit.application.operations.profile.project_root import (
+            prepare_profile_root,
+            write_profile_marker,
+        )
+
+        profile = prepare_profile_root(
+            profile=profile, requested_root=root_dir, registry=registry
+        )
         from memcommit.application.operations.profile.project_documents import (
             import_project_documents,
             prepare_project_import,
             verify_project_import_source,
         )
-        prepared = prepare_project_import(profile.root_dir) if import_project_files else None
+
+        prepared = (
+            prepare_project_import(profile.root_dir) if import_project_files else None
+        )
         if expected_import_digest is not None and (
             prepared is None or prepared.digest != expected_import_digest
         ):
-            raise ProfileError("Project files changed after create review; review creation again.")
+            raise ProfileError(
+                "Project files changed after create review; review creation again."
+            )
         destination = profile_store_dir(profile)
         staging = destination.parent / f".mem-staging-{uuid.uuid4().hex}"
         published = False
         try:
             inspection = _write_empty_profile_store(staging)
             write_profile_marker(store_root=staging, uid=profile.uid)
-            if import_project_files or automatic_sync:
+            if import_project_files:
                 from memcommit.persistence.store import MemoryStore
 
                 store = MemoryStore(root=staging, create=False)
                 if prepared is not None:
                     import_project_documents(store=store, prepared=prepared)
-                if automatic_sync:
-                    from memcommit.application.operations.mem_sync.documents.connect_imported_documents import connect_imported_documents
-                    connect_imported_documents(store)
                 if prepared is not None:
                     verify_project_import_source(prepared)
                 inspection = inspect_store(staging)
@@ -259,11 +241,16 @@ def create_profile(
                 raise
             retained_profiles = registry.profiles
             if select_created and registry.generation == 0:
-                from memcommit.application.operations.profile.config import default_store_dir
+                from memcommit.application.operations.profile.config import (
+                    default_store_dir,
+                )
 
                 # A new install needs only its folder Profile. A physical legacy
                 # authoring store is never discarded, even without a registry.
-                if not default_store_dir().exists() and not default_store_dir().is_symlink():
+                if (
+                    not default_store_dir().exists()
+                    and not default_store_dir().is_symlink()
+                ):
                     retained_profiles = ()
             updated = replace(
                 registry,
@@ -301,7 +288,6 @@ def create_profile(
                 active_profile_name=updated.active.name,
                 imported_file_count=len(prepared.files) if prepared else 0,
                 skipped_paths=prepared.skipped_paths if prepared else (),
-                automatic_sync=automatic_sync,
                 selected=select_created,
             )
         finally:
@@ -387,8 +373,6 @@ def rename_profile(
                 renamed if profile.uid == target.uid else profile
                 for profile in registry.profiles
             ),
-            grants=registry.grants,
-            grant_placements=registry.grant_placements,
         )
         try:
             _write_registry(updated)
@@ -424,8 +408,8 @@ def rename_profile(
 
 def _profile_study_target(
     registry: ProfileRegistry,
-    profile: ProfileEntry,
-) -> tuple[str, str, tuple[ProfileEntry, ...]] | None:
+    profile: Profile,
+) -> tuple[str, str, tuple[Profile, ...]] | None:
     """Return the registered Study members containing a Profile, if any."""
 
     for group in group_study_run_profiles(registry.profiles):
@@ -469,29 +453,13 @@ def remove_profile(
         # or accepting an already-corrupt Profile as the reviewed target.
         inspect_store(
             store,
-            allowed_virtual_currents=_read_granted_access_names(
-                registry=registry,
-                profile_uid=target.uid,
-            ),
         )
         study = _profile_study_target(registry=registry, profile=target)
-        retained_grants = tuple(
-            grant
-            for grant in registry.grants
-            if target.uid
-            not in {grant.authority_profile_uid, grant.grantee_profile_uid}
-        )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
             profiles=tuple(
                 profile for profile in registry.profiles if profile.uid != target.uid
-            ),
-            grants=retained_grants,
-            grant_placements=tuple(
-                placement
-                for placement in registry.grant_placements
-                if placement.grant_uid in {grant.uid for grant in retained_grants}
             ),
         )
         batch = _prepare_profile_deletion_batch((target,))
@@ -508,7 +476,6 @@ def remove_profile(
             study_name=study[1] if study is not None else None,
             active_profile_name=registry.active.name,
             remaining_study_profile_count=max(0, len(members) - 1),
-            removed_grant_count=len(registry.grants) - len(retained_grants),
             deleted_store=store,
         )
 
@@ -519,7 +486,7 @@ def import_profile(
     *,
     provenance: dict[str, object] | None = None,
     root_dir: Path | str | None = None,
-) -> tuple[ProfileEntry, StoreInspection]:
+) -> tuple[Profile, StoreInspection]:
     canonical = validate_profile_name(name)
     if canonical == AUTHORING_PROFILE_NAME:
         raise ProfileError("The fixed authoring profile cannot be imported.")
@@ -529,13 +496,17 @@ def import_profile(
         registry = load_profile_registry()
         if registry.by_name(canonical) is not None:
             raise ProfileError(f"Profile {canonical!r} already exists.")
-        profile = ProfileEntry(
+        profile = Profile(
             uid=str(uuid.uuid4()),
             name=canonical,
             kind="MANAGED",
             source=provenance,
         )
-        from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
+        from memcommit.application.operations.profile.project_root import (
+            prepare_profile_root,
+            write_profile_marker,
+        )
+
         profile = prepare_profile_root(profile, root_dir, registry)
         staging = profile_store_dir(profile).parent / f".mem-staging-{uuid.uuid4().hex}"
         published = False

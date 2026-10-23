@@ -27,7 +27,7 @@ from memcommit.study_scenarios.legacy.fixtures import (
 )
 
 
-SHEET_SPEC_SCHEMA_VERSION = 1
+SHEET_SPEC_SCHEMA_VERSION = 2
 _LANGUAGE_ORDER = ("ko", "en")
 _AUDIENCE_ORDER = (
     AudienceRole.ALL,
@@ -61,7 +61,6 @@ class StudySheet:
     title: str
     language: str
     dataset: str
-    query_only: bool
     columns: tuple[SheetColumn, ...]
     rows: tuple[tuple[object, ...], ...]
 
@@ -74,7 +73,6 @@ class StudyWorkbookSpec:
     canonical_language: str
     translation_language: str
     ordinary_count: int
-    query_only_count: int
     total_count: int
     sheets: tuple[StudySheet, ...]
 
@@ -120,7 +118,6 @@ def _labels(language: str) -> dict[str, str]:
             "section": "분류",
             "storage": "저장 경계",
             "source": "원본 파일",
-            "query_only": "질의 전용",
             "ordinary": "일반 Context",
         }
     return {
@@ -145,7 +142,6 @@ def _labels(language: str) -> dict[str, str]:
         "section": "Section",
         "storage": "Storage boundary",
         "source": "Source file",
-        "query_only": "Query-only",
         "ordinary": "Ordinary Context",
     }
 
@@ -277,9 +273,7 @@ def _task1_rows(
             rows.append(
                 prefix
                 + (
-                    label["query_only"]
-                    if dataset.spec.query_only
-                    else label["ordinary"],
+                    label["ordinary"],
                     _source_file(record),
                 )
             )
@@ -356,7 +350,7 @@ def _task2_rows(
                 record.content,
                 relation[0],
                 relation[1],
-                label["query_only"] if dataset.spec.query_only else label["ordinary"],
+                label["ordinary"],
                 _source_file(record),
             )
         )
@@ -400,7 +394,7 @@ def _task3_rows(
             record.purpose,
             record.canonical_locator,
             record.content,
-            label["query_only"] if dataset.spec.query_only else label["ordinary"],
+            label["ordinary"],
             _source_file(record),
         )
         for record in dataset.records
@@ -482,27 +476,18 @@ def build_study_workbook_spec(
                     ),
                     language=language,
                     dataset=dataset_name,
-                    query_only=dataset.spec.query_only,
                     columns=columns,
                     rows=rows,
                 )
             )
 
-    ordinary_count = sum(
-        spec.expected_count
-        for spec in STUDY_FIXTURE_SPECS.values()
-        if not spec.query_only
-    )
-    query_count = sum(
-        spec.expected_count for spec in STUDY_FIXTURE_SPECS.values() if spec.query_only
-    )
+    ordinary_count = sum(spec.expected_count for spec in STUDY_FIXTURE_SPECS.values())
     return StudyWorkbookSpec(
         schema_version=SHEET_SPEC_SCHEMA_VERSION,
         canonical_language="en",
         translation_language="ko",
         ordinary_count=ordinary_count,
-        query_only_count=query_count,
-        total_count=ordinary_count + query_count,
+        total_count=ordinary_count,
         sheets=tuple(sheets),
     )
 

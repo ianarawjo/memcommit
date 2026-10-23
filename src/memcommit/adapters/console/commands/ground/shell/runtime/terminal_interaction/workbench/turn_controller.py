@@ -30,7 +30,7 @@ from memcommit.application.operations.ground.contracts import (
     GroundError,
     validate_ground_goal,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 
 
 class BlankGroundTurnController:
@@ -537,7 +537,7 @@ class BlankGroundTurnController:
         # Location selection and a proposed new Context have different
         # adapter contracts. Keep the former on the canonical portable-name
         # validator even when a caller injects the latter's focused validator.
-        exact_name = validate_portable_context_name(result)
+        exact_name = validate_context_name(result)
         state.planned_ground_name = exact_name
         state.location_source = "SELECTED"
         if state.drafting.pending is not None:

@@ -5,10 +5,6 @@ from __future__ import annotations
 import typer
 from prompt_toolkit.formatted_text import StyleAndTextTuples
 
-from memcommit.application.capabilities.reviewing.memory_diff import (
-    MemoryChange,
-    word_diff_spans,
-)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
@@ -16,6 +12,10 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
+)
+from memcommit.application.capabilities.reviewing.memory_diff import (
+    MemoryChange,
+    word_diff_spans,
 )
 
 
@@ -58,13 +58,15 @@ def render_inline_memory_change(
     color: bool = True,
 ) -> StyleAndTextTuples:
     """Render actual before/after bytes with the caller's frozen location mapping."""
+    # A declared same-text edit remains an edit, even when there are no changed
+    # spans. Equality alone must not present a revision-producing effect as KEEP.
     marker = (
         "+"
         if change.before is None
         else "-"
         if change.after is None
         else " "
-        if change.before == change.after
+        if change.before == change.after and change.treatment not in {"EDIT", "TRANSFORM"}
         else "~"
     )
     kind = {"+": "add", "-": "remove", "~": "add", " ": "equal"}[marker]

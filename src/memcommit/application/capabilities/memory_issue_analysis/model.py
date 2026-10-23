@@ -5,10 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
-    ExactDuplicateGroup,
-)
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 
 QUALITY_RULESET_VERSIONS = {
@@ -85,33 +82,28 @@ class ConflictFinding:
 class DuplicateReport:
     memory_count: int
     findings: tuple[DuplicateFinding, ...]
-    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
 
     @property
     def exact_findings(self) -> tuple[DuplicateFinding, ...]:
         """Return deterministic DUP evidence inside the complete DUN report."""
-
         return tuple(
-            finding for finding in self.findings if finding.relation == "EXACT"
+            (finding for finding in self.findings if finding.relation == "EXACT")
         )
 
     @property
     def semantic_findings(self) -> tuple[DuplicateFinding, ...]:
         """Return differently stored semantic-DUN evidence."""
-
         return tuple(
-            finding for finding in self.findings if finding.relation != "EXACT"
+            (finding for finding in self.findings if finding.relation != "EXACT")
         )
 
     @property
     def group_count(self) -> int:
-        return _duplicate_group_count(self.findings) + len(self.exact_item_groups)
+        return _duplicate_group_count(self.findings)
 
     @property
     def exact_group_count(self) -> int:
-        return _duplicate_group_count(self.exact_findings) + len(
-            self.exact_item_groups
-        )
+        return _duplicate_group_count(self.exact_findings)
 
     @property
     def semantic_group_count(self) -> int:
@@ -119,9 +111,7 @@ class DuplicateReport:
 
     @property
     def exact_duplicate_count(self) -> int:
-        return len(self.exact_findings) + sum(
-            group.duplicate_count for group in self.exact_item_groups
-        )
+        return len(self.exact_findings)
 
     @property
     def semantic_redundancy_count(self) -> int:
@@ -129,11 +119,7 @@ class DuplicateReport:
 
     @property
     def redundancy_count(self) -> int:
-        # The analyzer emits a forest: each evidence edge adds exactly one
-        # redundant member to its connected DUN group.
-        return len(self.findings) + sum(
-            group.duplicate_count for group in self.exact_item_groups
-        )
+        return len(self.findings)
 
 
 @dataclass(frozen=True)

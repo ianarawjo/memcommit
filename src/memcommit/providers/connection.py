@@ -16,7 +16,6 @@ from memcommit.providers.types import (
     OLLAMA_PROVIDER,
     OPENROUTER_PROVIDER,
     SemanticProvider,
-    QueryProvider,
 )
 from memcommit.providers.clients.codex import CodexChatGPTProvider
 from memcommit.providers.clients.ollama import OllamaProvider
@@ -261,18 +260,6 @@ def connect_codex_subscription_provider() -> CodexChatGPTProvider:
     return provider
 
 
-def connect_query_provider(provider: str) -> QueryProvider:
-    """Connect an allowlisted provider without treating metadata as executable."""
-    if provider == CODEX_CHATGPT_PROVIDER:
-        return connect_codex_subscription_provider()
-    # A persisted query route remains authoritative and is never replaced by
-    # active-Profile semantic selection. Additional allowlisted adapters still
-    # perform their own authentication/service probe before source load.
-    if provider in {OLLAMA_PROVIDER, OPENROUTER_PROVIDER}:
-        return connect_provider(provider)  # type: ignore[return-value]
-    raise QueryProviderError(f"Unsupported query provider '{provider}'.")
-
-
 def _connect_active_operation(operation: str) -> SemanticProvider:
     provider, _policy = connect_operation_provider(operation)
     return provider
@@ -394,27 +381,6 @@ def connect_help_provider(
         ),
         timeout_seconds=timeout_seconds,
     )
-
-
-def connect_query_route_provider(
-    provider_id: str,
-    *,
-    model: str | None = None,
-    reasoning_effort: str | None = None,
-    timeout_seconds: float | None = None,
-) -> SemanticProvider:
-    """Honor one authorized query-only provider route."""
-
-    if provider_id == CODEX_CHATGPT_PROVIDER:
-        return _connect_pinned_codex_provider(
-            _configured_policy(
-                QUERY_PROVIDER_POLICY,
-                model=model,
-                reasoning_effort=reasoning_effort,
-            ),
-            timeout_seconds=timeout_seconds,
-        )
-    return connect_query_provider(provider_id)  # type: ignore[return-value]
 
 
 def connect_jev(

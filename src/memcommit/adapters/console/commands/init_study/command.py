@@ -1,4 +1,4 @@
-"""Initialize one Study as an isolated participant/authority Profile pair."""
+"""Initialize one isolated local Study Profile with all task Contexts."""
 
 from __future__ import annotations
 
@@ -35,7 +35,6 @@ from memcommit.application.operations.profile.model import ProfileError
 from memcommit.study_scenarios import COFFEE_SCENARIO_ID, LEGACY_SCENARIO_ID
 from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
-    record_study_action,
     record_study_action_for_profile,
 )
 
@@ -103,35 +102,22 @@ def cmd(
     if attempt_uid is not None:
         try:
             participant_identity = study_run_identity(result.profile)
-            authority_identity = study_run_identity(result.authority_profile)
             assert participant_identity is not None
-            assert authority_identity is not None
-            record_study_action(
-                "PROFILE_LEFT",
+            record_study_action_for_profile(
+                previous_profile,
+                attempt_uid=attempt_uid,
+                event_kind="PROFILE_LEFT",
                 other_profile_uid=result.profile.uid,
                 other_profile_name=result.profile.name,
             )
-            for profile, identity, paired_profile in (
-                (
-                    result.profile,
-                    participant_identity,
-                    result.authority_profile,
-                ),
-                (
-                    result.authority_profile,
-                    authority_identity,
-                    result.profile,
-                ),
-            ):
-                record_study_action_for_profile(
-                    profile,
-                    attempt_uid=attempt_uid,
-                    event_kind="STUDY_CREATED",
-                    role=identity.role,
-                    paired_profile_uid=paired_profile.uid,
-                    baseline_profile_uid=identity.baseline_profile_uid,
-                    baseline_profile_name=identity.baseline_profile_name,
-                )
+            record_study_action_for_profile(
+                result.profile,
+                attempt_uid=attempt_uid,
+                event_kind="STUDY_CREATED",
+                role=participant_identity.role,
+                baseline_profile_uid=participant_identity.baseline_profile_uid,
+                baseline_profile_name=participant_identity.baseline_profile_name,
+            )
             record_study_action_for_profile(
                 result.profile,
                 attempt_uid=attempt_uid,
@@ -141,7 +127,7 @@ def cmd(
             )
         except (OSError, ProfileConfigError, StudyActionError, ValueError) as error:
             typer.secho(
-                "Error: Study Profiles were created, but their initial action "
+                "Error: Study Profile was created, but its initial action "
                 "ledger could not be written: " + display_escape_text(str(error)),
                 fg=typer.colors.RED,
                 err=True,

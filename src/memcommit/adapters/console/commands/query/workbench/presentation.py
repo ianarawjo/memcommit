@@ -9,19 +9,16 @@ from memcommit.application.operations.query.reference_document import (
     render_numbered_ordinary_query_reference,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import focused_control_style
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    focused_control_style,
+)
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryResponse,
 )
-from memcommit.source_projection.model import SourceForm
-from memcommit.source_projection.presentation import source_object_label
 from memcommit.adapters.console.commands.query.workbench.model import (
     QueryAnswerClipboardProjection,
     QueryWorkbenchResponse,
 )
-
-
-QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW).upper()
 
 
 def render_query_answer(response: QueryWorkbenchResponse | None) -> str:

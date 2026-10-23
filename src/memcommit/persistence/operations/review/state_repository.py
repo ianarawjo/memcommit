@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import uuid
 from pathlib import Path
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 from ...store.infrastructure.atomic_io import (

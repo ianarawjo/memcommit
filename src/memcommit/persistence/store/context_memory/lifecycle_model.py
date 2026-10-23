@@ -77,7 +77,6 @@ class ContextLifecycleEvent:
     kind: str
     context_uid: str
     last_context_name: str
-    last_context_digest: str
     previous_checkpoint_status: str
     previous_checkpoint_uid: str | None
     previous_checkpoint_digest: str | None
@@ -89,7 +88,6 @@ class ContextLifecycleEvent:
         *,
         context_uid: str,
         last_context_name: str,
-        last_context_digest: str,
         previous_checkpoint_status: str,
         previous_checkpoint_uid: str | None,
         previous_checkpoint_digest: str | None,
@@ -102,7 +100,6 @@ class ContextLifecycleEvent:
             kind=CONTEXT_DELETED,
             context_uid=context_uid,
             last_context_name=last_context_name,
-            last_context_digest=last_context_digest,
             previous_checkpoint_status=previous_checkpoint_status,
             previous_checkpoint_uid=previous_checkpoint_uid,
             previous_checkpoint_digest=previous_checkpoint_digest,
@@ -121,10 +118,6 @@ class ContextLifecycleEvent:
         _nonempty_text(
             self.last_context_name,
             field="Context lifecycle last Context name",
-        )
-        _digest(
-            self.last_context_digest,
-            field="Context lifecycle last Context digest",
         )
         if self.previous_checkpoint_status not in _PREVIOUS_CHECKPOINT_STATUSES:
             raise ValueError(
@@ -171,7 +164,6 @@ class ContextLifecycleEvent:
             "kind": self.kind,
             "context_uid": self.context_uid,
             "last_context_name": self.last_context_name,
-            "last_context_digest": self.last_context_digest,
             "previous_checkpoint_status": self.previous_checkpoint_status,
             "previous_checkpoint_uid": self.previous_checkpoint_uid,
             "previous_checkpoint_digest": self.previous_checkpoint_digest,
@@ -190,13 +182,12 @@ class ContextLifecycleEvent:
             "kind",
             "context_uid",
             "last_context_name",
-            "last_context_digest",
             "previous_checkpoint_status",
             "previous_checkpoint_uid",
             "previous_checkpoint_digest",
             "descendants_preserved",
         }
-        if set(data) != expected_fields:
+        if set(data) - {"last_context_digest"} != expected_fields:
             raise ValueError("Context lifecycle event fields are invalid.")
         if data.get("schema_version") != CONTEXT_LIFECYCLE_SCHEMA_VERSION:
             raise ValueError("Context lifecycle schema version is unsupported.")
@@ -211,7 +202,7 @@ class ContextLifecycleEvent:
             kind=data.get("kind"),  # type: ignore[arg-type]
             context_uid=data.get("context_uid"),  # type: ignore[arg-type]
             last_context_name=data.get("last_context_name"),  # type: ignore[arg-type]
-            last_context_digest=data.get("last_context_digest"),  # type: ignore[arg-type]
+            # type: ignore[arg-type]
             previous_checkpoint_status=data.get("previous_checkpoint_status"),  # type: ignore[arg-type]
             previous_checkpoint_uid=data.get("previous_checkpoint_uid"),  # type: ignore[arg-type]
             previous_checkpoint_digest=data.get("previous_checkpoint_digest"),  # type: ignore[arg-type]

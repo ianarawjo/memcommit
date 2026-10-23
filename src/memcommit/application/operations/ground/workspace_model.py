@@ -14,7 +14,8 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
 GROUND_WORKSPACE_SCHEMA_VERSION = 1
@@ -166,7 +167,7 @@ class GroundWorkspace:
             )
         manifest_count = sum(
             is_ground_workspace_manifest_memory(candidate)
-            for candidate in self.root.iter_items()
+            for candidate in self.root.iter_memories()
         )
         if manifest_count != 1:
             raise GroundWorkspaceError(
@@ -279,7 +280,7 @@ def create_ground_workspace_records(
         for lane in GROUND_WORKSPACE_LANES
     }
     if goal:
-        lane_by_name["goals"].add(goal)
+        lane_by_name["goals"].add(Memory.create(goal))
     return GroundWorkspace(
         root=root,
         manifest_memory_uid=manifest_memory.uid,
@@ -305,7 +306,7 @@ def load_ground_workspace_records(
 
     manifests = tuple(
         item
-        for item in root.iter_items()
+        for item in root.iter_memories()
         if is_ground_workspace_manifest_memory(item)
     )
     if len(manifests) != 1:

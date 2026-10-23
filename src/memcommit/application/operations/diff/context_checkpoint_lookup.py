@@ -18,8 +18,8 @@ from memcommit.application.capabilities.operand_resolution import (
     ContextOperandCandidate,
 )
 from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
-from memcommit.core.context import Context
-from memcommit.core.context_targeting.model import CheckpointTarget, ContextTarget
+from memcommit.models.context import Context
+from memcommit.core.context_targeting.model import CheckpointTarget
 from memcommit.core.context_targeting.uid_locator import (
     is_memory_uid_selector,
     resolve_exact_or_unique_uid,
@@ -82,7 +82,7 @@ def resolve_local_context_checkpoint_target(
     *,
     current: str | None,
     context_candidates: Sequence[ContextOperandCandidate[object]] | None = None,
-) -> ContextTarget | CheckpointTarget:
+) -> str | CheckpointTarget:
     """Resolve one Context-or-local-checkpoint operand without guessing.
 
     Relative syntax is always a Context locator. Bare UUID-shaped values may
@@ -100,7 +100,7 @@ def resolve_local_context_checkpoint_target(
             ContextOperandCandidate(
                 uid=store.load_direct(name).uid,
                 name=name,
-                value=ContextTarget(name),
+                value=name,
             )
             for name in local_names
         )
@@ -111,12 +111,9 @@ def resolve_local_context_checkpoint_target(
     relative = operand in {".", ".."} or operand.startswith(("./", "../"))
     if relative:
         if context_exists:
-            return ContextTarget(context_name)
+            return context_name
         raise ValueError(f"Context '{context_name}' is unavailable.")
 
-    # Retained checkpoint History remains ordinary-local even when the Context
-    # arm admits readable Grant identities.  Grant checkpoint policy is
-    # evaluated only after the operand has selected the Context arm.
     targets = freeze_local_checkpoint_targets(store, context_names=local_names)
     uid_shaped = is_memory_uid_selector(operand)
     checkpoint_matches = tuple(
@@ -130,13 +127,15 @@ def resolve_local_context_checkpoint_target(
             "a checkpoint; disambiguate with --context or --checkpoint."
         )
     if context_exists:
-        return ContextTarget(context_name)
+        return context_name
     if uid_shaped:
-        candidates: tuple[DurableUidCandidate[ContextTarget | CheckpointTarget], ...] = tuple(
+        candidates: tuple[
+            DurableUidCandidate[str | CheckpointTarget], ...
+        ] = tuple(
             DurableUidCandidate(
                 uid=candidate.uid,
                 kind="context",
-                value=ContextTarget(candidate.name),
+                value=candidate.name,
             )
             for candidate in frozen_contexts
         ) + tuple(

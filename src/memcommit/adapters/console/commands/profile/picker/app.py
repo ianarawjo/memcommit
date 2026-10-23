@@ -116,8 +116,7 @@ def choose_profile(
     controller = SurfaceFocusController(surfaces=lambda: (
         (FocusSurface(uid="name", control=view.active_name_field().input),
          FocusSurface(uid="folder", control=view.folder_field.input),
-         FocusSurface(uid="import", control=view.import_control),
-         FocusSurface(uid="sync", control=view.sync_control))
+         FocusSurface(uid="import", control=view.import_control))
         if state.edit is not None and state.edit.kind == "CREATE_PROFILE"
         else (FocusSurface(uid="name", control=view.active_name_field().input),)
         if state.edit is not None

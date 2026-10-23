@@ -19,16 +19,10 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
     load_comparison_analysis,
 )
 from memcommit.application.context_access.access import ContextAccess
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
-    granted_artifact_contexts,
-    iter_granted_comparison_artifacts,
-)
 from memcommit.persistence.store import MemoryStore
 
 
-_FINAL_ANALYSIS_NAME = re.compile(
-    r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$"
-)
+_FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$")
 _ATOMIC_TEMP_NAME = re.compile(
     r"^\.([0-9a-f-]{36})--([0-9a-f-]{36})"
     r"\.json\.write-([0-9a-f]{32})$"
@@ -80,7 +74,7 @@ def _version(value: str) -> str:
 def iter_saved_comparisons(
     store: MemoryStore,
 ) -> tuple[tuple[ComparisonAnalysis, Path], ...]:
-    """Strictly load ordinary and visible granted latest-pair analyses."""
+    """Strictly load local retained latest-pair analyses."""
 
     if not isinstance(store, MemoryStore):
         raise TypeError("Compare session discovery requires a MemoryStore.")
@@ -112,10 +106,6 @@ def iter_saved_comparisons(
             )
             if analysis is not None:
                 records.append((analysis, path))
-    records.extend(
-        (artifact.analysis, path)
-        for artifact, path in iter_granted_comparison_artifacts(store)
-    )
     return tuple(sorted(records, key=lambda record: record[0].uid))
 
 
@@ -149,43 +139,28 @@ def revalidate_saved_comparison(
 ) -> None:
     """Fail closed unless the exact saved sources and ruleset remain current."""
 
-    granted = next(
-        (
-            artifact
-            for artifact, _path in iter_granted_comparison_artifacts(store)
-            if artifact.analysis.uid == analysis.uid
-        ),
-        None,
-    )
-    if granted is not None:
-        try:
-            reference, compared = granted_artifact_contexts(store, granted)
-        except (FileNotFoundError, OSError, ValueError) as error:
-            raise ComparisonSessionConflictError(str(error)) from error
-    else:
-        contexts = []
-        try:
-            for frame, include_descendants in zip(
-                analysis.frames,
-                analysis.include_descendants,
-                strict=True,
-            ):
-                contexts.append(
-                    load_comparison_context(
-                        ContextAccess(
-                            store=store,
-                            context_name=frame.context_name,
-                            access_name=frame.context_name,
-                            permission="READ",
-                        ),
-                        include_descendants=include_descendants,
-                    )
+    contexts = []
+    try:
+        for frame, include_descendants in zip(
+            analysis.frames,
+            analysis.include_descendants,
+            strict=True,
+        ):
+            contexts.append(
+                load_comparison_context(
+                    ContextAccess(
+                        store=store,
+                        context_name=frame.context_name,
+                        access_name=frame.context_name,
+                    ),
+                    include_descendants=include_descendants,
                 )
-        except FileNotFoundError as error:
-            raise ComparisonSessionConflictError(
-                "A source Context for this saved comparison no longer exists."
-            ) from error
-        reference, compared = contexts
+            )
+    except FileNotFoundError as error:
+        raise ComparisonSessionConflictError(
+            "A source Context for this saved comparison no longer exists."
+        ) from error
+    reference, compared = contexts
     if not analysis.matches(reference, compared):
         raise ComparisonSessionConflictError(
             "A source Context changed after this comparison was saved. Run "

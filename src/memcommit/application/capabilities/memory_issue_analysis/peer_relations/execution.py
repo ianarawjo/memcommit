@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     AnalysisRetention,
@@ -19,33 +19,19 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
     load_memory_relation_analysis,
     save_memory_relation_analysis,
 )
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
-    freeze_granted_context_binding,
-    resolve_context_access,
-    revalidate_granted_context_binding,
-)
-from memcommit.core.context import Context
+from memcommit.application.context_access.access import ContextAccess
+from memcommit.models.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     project_memory_relation_context as _project_memory_relation_context,
 )
-from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
-    load_granted_memory_relation_artifact,
-    save_granted_memory_relation_artifact,
-)
-from memcommit.application.operations.profile.model import (
-    authority_grant_snapshot_lock,
+from memcommit.application.capabilities.context_scope_loading import (
+    load_context_and_descendants,
 )
 from memcommit.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
 from memcommit.providers.clients.codex import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
-
-if TYPE_CHECKING:
-    from memcommit.application.operations.profile.config import ProfileRegistry
 
 
 MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS = int(
@@ -76,31 +62,26 @@ def connect_memory_relation_provider(provider_factory):
     return provider
 
 
-def project_memory_relation_context(root: Context) -> Context:
-    """Project one readable Context through the capability-owned evidence model."""
+def project_memory_relation_context(contexts: tuple[Context, ...]) -> Context:
+    """Project loaded Contexts through the capability-owned evidence model."""
 
-    return _project_memory_relation_context(root)
+    return _project_memory_relation_context(contexts)
 
 
 def load_memory_relation_context(
     access: ContextAccess,
     *,
     include_descendants: bool = False,
-    registry: ProfileRegistry | None = None,
 ) -> Context:
-    """Load one local or granted source using the exact relation projection."""
+    """Load local Memories with exact owner provenance for relation analysis."""
 
-    reader = (
-        GrantedReadStore(access, registry=registry)
-        if access.is_granted
-        else access.store
+    reader = access.store
+    contexts = (
+        load_context_and_descendants(reader, access.context_name)
+        if include_descendants
+        else (reader.load(access.context_name),)
     )
-    context = load_context_scope(
-        reader,
-        access.access_name if access.is_granted else access.context_name,
-        include_descendants=include_descendants,
-    )
-    return project_memory_relation_context(context)
+    return project_memory_relation_context(contexts)
 
 
 def ensure_memory_relation_analysis(
@@ -118,22 +99,8 @@ def ensure_memory_relation_analysis(
     require_durable: bool = False,
     analyze: Callable[[MemoryRelationInput], MemoryRelationAnalysis],
 ) -> MemoryRelationExecutionResult:
-    """Reuse or create the exact ordered basis without changing current state.
+    """Reuse or publish the exact ordered basis with source freshness and artifact CAS."""
 
-    The caller freezes the public endpoint meaning once, then supplies the
-    Context projections it intends to analyze. This function owns artifact
-    lookup, provider-result publication, grant revalidation, and CAS. A
-    symmetric Meld may require durable retention because its target-bound
-    session must be reproducible; ordinary Compare may still render an
-    explicitly unsaved granted result.
-    """
-
-    accesses = (reference_access, compared_access)
-    granted = any(access.is_granted for access in accesses)
-    bindings = tuple(
-        freeze_granted_context_binding(access) if access.is_granted else None
-        for access in accesses
-    )
     comparison_input = MemoryRelationInput.from_contexts(
         reference,
         compared,
@@ -142,19 +109,11 @@ def ensure_memory_relation_analysis(
         reference_memory_selector=memory_selectors[0],
         compared_memory_selector=memory_selectors[1],
     )
-    granted_artifact = (
-        load_granted_memory_relation_artifact(store, reference.uid, compared.uid)
-        if granted
-        else None
+    existing = load_memory_relation_analysis(
+        reference.uid,
+        compared.uid,
+        store=store,
     )
-    if granted:
-        existing = granted_artifact.analysis if granted_artifact is not None else None
-    else:
-        existing = load_memory_relation_analysis(
-            reference.uid,
-            compared.uid,
-            store=store,
-        )
     if expected_version is not None:
         if (
             not isinstance(expected_version, str)
@@ -193,9 +152,7 @@ def ensure_memory_relation_analysis(
             analysis=existing,
             reused=True,
             durable=True,
-            retention=(
-                granted_artifact.retention if granted_artifact is not None else None
-            ),
+            retention=None,
             origin="SAVED_REUSE",
         )
 
@@ -203,54 +160,6 @@ def ensure_memory_relation_analysis(
     if not memory_relation_analysis_matches_input(analysis, comparison_input):
         raise MemoryRelationError(
             "Compare analysis does not match the requested Memory scope."
-        )
-    if granted:
-        with authority_grant_snapshot_lock() as registry:
-            current_accesses: list[ContextAccess] = []
-            for access, binding in zip(accesses, bindings, strict=True):
-                current_accesses.append(
-                    revalidate_granted_context_binding(
-                        binding,
-                        registry=registry,
-                        active_store=store,
-                    )
-                    if binding is not None
-                    else resolve_context_access(
-                        store,
-                        access.context_name,
-                        current_name=current_name,
-                        required_permission="READ",
-                        registry=registry,
-                    )
-                )
-            current_reference = load_memory_relation_context(
-                current_accesses[0],
-                include_descendants=include_descendants[0],
-            )
-            current_compared = load_memory_relation_context(
-                current_accesses[1],
-                include_descendants=include_descendants[1],
-            )
-            if not analysis.matches(current_reference, current_compared):
-                raise ConcurrentMemoryRelationUpdateError(
-                    "A granted comparison source changed while Compare was "
-                    "analyzing it; no result was published."
-                )
-            current_retention: AnalysisRetention = "RETAINED"
-            save_granted_memory_relation_artifact(
-                store,
-                analysis,
-                current_accesses,
-                retention=current_retention,
-                expected_analysis_uid=(existing.uid if existing is not None else None),
-                expected_analysis_version=existing_version,
-            )
-        return MemoryRelationExecutionResult(
-            analysis=analysis,
-            reused=False,
-            durable=current_retention is not None,
-            retention=current_retention,
-            origin="LIVE",
         )
 
     save_memory_relation_analysis(

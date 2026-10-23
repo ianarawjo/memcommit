@@ -25,7 +25,6 @@ from memcommit.application.capabilities.checkpoint_catalog import (
 from memcommit.persistence.store import (
     MemoryStore,
     checkpoint_history_digest,
-    context_record_digest,
 )
 
 
@@ -35,7 +34,6 @@ class ReviewedCheckpointSelection:
 
     context_name: str
     context_uid: str
-    context_digest: str
     history_digest: str
     checkpoint_uid: str
     keep_history: bool
@@ -51,8 +49,6 @@ def review_context_checkpoints(
 ) -> ReviewedCheckpointSelection | None:
     """Review the command's canonical Context without opening a namespace picker."""
 
-    # Retain the former browser's ordinary-local target boundary. An active
-    # public name or readable Grant is not itself a restorable local Context.
     local_names = tuple(store.list_context_names())
     if not local_names:
         raise ValueError(f"No Context locations are available for {title}.")
@@ -99,7 +95,6 @@ def review_context_checkpoints(
     return ReviewedCheckpointSelection(
         context_name=context_name,
         context_uid=context.uid,
-        context_digest=context_record_digest(context),
         history_digest=checkpoint_history_digest(checkpoints),
         checkpoint_uid=result.checkpoint_uid,
         keep_history=result.keep_history,

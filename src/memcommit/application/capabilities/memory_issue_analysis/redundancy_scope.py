@@ -5,16 +5,12 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
+from memcommit.application.context_access.access import ContextAccess
+
+from memcommit.application.context_access.readable_contexts import (
+    ReadableContextCatalog,
 )
-from memcommit.core.context_targeting.model import ContextScope
-from memcommit.application.context_access.readable_contexts import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
-    ExactDuplicateGroup,
-)
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsProvider,
@@ -25,7 +21,6 @@ from memcommit.application.capabilities.memory_issue_analysis.relation_analysis 
 from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     create_quality_find_workbench,
 )
@@ -61,19 +56,12 @@ class RedundancyScopeAnalysis:
     def memory_count(self) -> int:
         return sum(frame.report.memory_count for frame in self.contexts)
 
-    @property
-    def exact_item_groups(self) -> tuple[ExactDuplicateGroup, ...]:
-        return tuple(
-            group for frame in self.contexts for group in frame.report.exact_item_groups
-        )
-
 
 def freeze_redundancy_scope(
     active_store: MemoryStore,
     access: ContextAccess,
     *,
     include_descendants: bool,
-    registry: ProfileRegistry | None = None,
 ) -> QualityFindSourceFrame:
     """Freeze one root or readable lexical subtree as independent frames."""
 
@@ -84,11 +72,7 @@ def freeze_redundancy_scope(
     ):
         raise TypeError("Find Redundancies requires Context access and boolean reach.")
     if not include_descendants:
-        context = (
-            GrantedReadStore(access, registry=registry).load_direct(access.access_name)
-            if access.is_granted
-            else access.store.load_direct(access.context_name)
-        )
+        context = access.store.load_direct(access.context_name)
         return QualityFindSourceFrame.create(
             (context,),
             context_names=(access.access_name,),
@@ -100,12 +84,9 @@ def freeze_redundancy_scope(
     catalog = ReadableContextCatalog(
         active_store,
         access,
-        registry=registry,
-        include_query_routes=False,
     )
     names = expand_lexical_context_names(
-        ContextScope.create((access.access_name,), include_descendants=True),
-        catalog.list_context_names(),
+        (access.access_name,), catalog.list_context_names(), include_descendants=True
     )
     return QualityFindSourceFrame.create(
         tuple(catalog.load_direct(name) for name in names),

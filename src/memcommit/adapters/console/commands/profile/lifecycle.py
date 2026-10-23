@@ -72,7 +72,9 @@ def _use_profile(name: str) -> None:
             )
             raise typer.Exit(1)
     profile_label = (
-        "Study profile" if study_run_identity(registry.active) is not None else "profile"
+        "Study profile"
+        if study_run_identity(registry.active) is not None
+        else "profile"
     )
     typer.echo(
         f"Changed to {profile_label} '{display_escape_text(registry.active.name)}'."
@@ -83,12 +85,6 @@ def _use_profile(name: str) -> None:
         else "(none)"
     )
     typer.echo(f"Current Context: {current_label}")
-    if inspection.query_source_count:
-        typer.echo(
-            "Query-only: "
-            f"{', '.join(display_escape_text(name) for name in inspection.query_source_names)} "
-            "(visible by name; hidden from 'mem switch')."
-        )
 
 
 def create_cmd(
@@ -96,23 +92,30 @@ def create_cmd(
         str,
         typer.Argument(help="Unique name for the new managed Profile"),
     ],
-    root: Annotated[Optional[Path], typer.Option("--root", help="Project folder; omitted uses the application default")] = None,
+    root: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--root", help="Project folder; omitted uses the application default"
+        ),
+    ] = None,
     import_files: Annotated[
         bool,
-        typer.Option("--import-files", help="Import all supported project documents recursively"),
+        typer.Option(
+            "--import-files", help="Import all supported project documents recursively"
+        ),
     ] = False,
-    auto_sync: Annotated[
+    use: Annotated[
         bool,
-        typer.Option("--auto-sync", help="Enable automatic outbound Sync for this Profile, including future Contexts"),
+        typer.Option("--use", help="Select the new Profile atomically with creation"),
     ] = False,
-    use: Annotated[bool, typer.Option("--use", help="Select the new Profile atomically with creation")] = False,
 ) -> None:
-    """Create a managed Profile with optional project Import and automatic Sync."""
+    """Create a managed Profile with optional project document Import."""
 
     try:
         result = create_profile(
-            name, root_dir=root,
-            import_project_files=import_files, automatic_sync=auto_sync,
+            name,
+            root_dir=root,
+            import_project_files=import_files,
             select_created=use,
         )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
@@ -137,7 +140,7 @@ def remove_cmd(
             "WARNING: This permanently deletes only Profile '"
             + display_escape_text(name)
             + "', its complete store, every Memory, session, and checkpoint, "
-            "plus connected Grants. This cannot be undone or recovered by mem."
+            "This cannot be undone or recovered by mem."
         )
         if not typer.confirm("Continue?", default=False):
             typer.echo("Profile removal cancelled.")
@@ -190,7 +193,13 @@ def import_cmd(
         Path,
         typer.Option("--from", help="Complete .mem store or package directory"),
     ],
-    root: Annotated[Optional[Path], typer.Option("--root", help="Destination project folder; omitted uses the application default")] = None,
+    root: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--root",
+            help="Destination project folder; omitted uses the application default",
+        ),
+    ] = None,
 ) -> None:
     """Copy one complete store into a new editable managed profile."""
 

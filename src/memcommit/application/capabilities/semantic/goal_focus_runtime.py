@@ -4,14 +4,10 @@ from __future__ import annotations
 
 import hashlib
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_context_memory_or_inline_text_target,
-)
-from memcommit.core.context_targeting.model import (
-    ContextTarget,
-    DirectMemoryTarget,
-    InlineTextOperand,
 )
 from memcommit.application.capabilities.semantic.goal_focus import (
     FrozenGoalFocus,
@@ -42,15 +38,13 @@ def _items(context: Context, memories: tuple[Memory, ...]) -> tuple[GoalFocusIte
 
 
 def _resolved_memory_focus(
-    store: MemoryStore,
-    target: DirectMemoryTarget,
+    target: tuple[Context, Memory],
     *,
     kind: GoalFocusKind = "MEMORY",
 ) -> FrozenGoalFocus:
     """Freeze one already resolved owner coordinate without reinterpreting it."""
 
-    context = store.load_direct(target.context_name)
-    memory = context.memories.get(target.memory_uid)
+    context, memory = target
     if not isinstance(memory, Memory):  # pragma: no cover - resolver invariant
         raise GoalFocusError("The selected Goal item is not an ordinary Memory.")
     return FrozenGoalFocus(
@@ -71,7 +65,7 @@ def freeze_goal_focus_context(
 ) -> FrozenGoalFocus:
     """Freeze the directly owned ordinary Memories of one already-loaded Context."""
 
-    direct_items = tuple(context.iter_items())
+    direct_items = tuple(context.iter_memories())
     if any(not isinstance(item, Memory) for item in direct_items):
         raise GoalFocusError(
             "A Goal Context must contain only directly owned ordinary Memories."
@@ -120,18 +114,16 @@ def freeze_goal_focus_operand(
         )
     except (FileNotFoundError, ValueError) as error:
         raise GoalFocusError(str(error)) from error
-    if isinstance(target, ContextTarget):
+    if isinstance(target, Context):
         return freeze_goal_focus_context(
-            store.load_direct(target.context_name),
+            target,
             require_single=require_single,
         )
-    if isinstance(target, DirectMemoryTarget):
+    if isinstance(target, tuple):
         return _resolved_memory_focus(
-            store,
             target,
         )
-    assert isinstance(target, InlineTextOperand)
-    return inline_goal_focus(target.text)
+    return inline_goal_focus(target)
 
 
 def revalidate_goal_focus(store: MemoryStore, focus: FrozenGoalFocus) -> None:

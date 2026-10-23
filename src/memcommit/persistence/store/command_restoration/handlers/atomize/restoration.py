@@ -8,11 +8,12 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Iterator
 import uuid
 
-from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
 from memcommit.core.context_navigation import record_current_context_transition
 
 from ....context_memory.models import ConcurrentContextUpdateError
-from ....context_memory.records import context_record_digest
 from ....infrastructure.atomic_io import _write_json_atomic
 from ...compensation import CompensationStack
 from .preparation import load_undo_context, prepare_redo, prepare_undo
@@ -51,16 +52,15 @@ class _AtomizeRestorationMixin:
                 "Only an exact Atomize Save As creation can use lifecycle restoration."
             )
         receipt_uid = str(uuid.uuid4())
-        auto_checkpoint = AutoCheckpoint(
+        auto_checkpoint = AutoCheckpointRequest(
             command=direction,
-            args={
+            command_details={
                 "command_restore": command_restore_metadata(
                     receipt_uid=receipt_uid,
                     direction=direction,
                     unit=unit,
                 )
             },
-            description=f"{direction.title()} command 'mem atomize' [{receipt_uid[:8]}]",
         )
         restore = _undo_locked if direction == "undo" else _redo_locked
         with self._context_graph_lock(exclusive=False):
@@ -85,7 +85,7 @@ def _session_locks(
 
 
 def _undo_locked(
-    store: MemoryStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpoint
+    store: MemoryStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpointRequest
 ) -> Checkpoint:
     change = unit.changes[0]
     current = load_undo_context(store, change)
@@ -138,7 +138,7 @@ def _undo_locked(
 
 
 def _redo_locked(
-    store: MemoryStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpoint
+    store: MemoryStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpointRequest
 ) -> Checkpoint:
     change = unit.changes[0]
     if store.context_exists(change.context_name):
@@ -197,13 +197,12 @@ def _redo_locked(
 def _save_checkpoint(
     store: MemoryStore,
     context: Context,
-    auto_checkpoint: AutoCheckpoint,
+    auto_checkpoint: AutoCheckpointRequest,
     compensation: CompensationStack,
 ) -> Checkpoint:
     checkpoint = store._save_locked(
         context,
         auto_checkpoint,
-        expected_context_digest=context_record_digest(context),
     )
     if checkpoint is None:
         raise RuntimeError(

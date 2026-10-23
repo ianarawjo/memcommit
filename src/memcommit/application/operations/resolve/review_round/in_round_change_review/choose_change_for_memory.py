@@ -8,7 +8,7 @@ from typing import Mapping
 from memcommit.application.operations.merge.analysis.candidate import digest
 from memcommit.application.operations.update.model import UpdatePlan
 from memcommit.application.operations.update.model.changes import UpdateOperation
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from ..finalize_review_decisions import ResolveDecision
 from ...model import ResolveError

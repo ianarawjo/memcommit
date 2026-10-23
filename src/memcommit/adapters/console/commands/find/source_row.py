@@ -15,7 +15,7 @@ def find_reference_row(
     *,
     number: int,
 ) -> SourceReferenceRow:
-    """Retain owner and optional MemoryRef Source identities in one compact row."""
+    """Retain the exact owner and Memory identity in one compact row."""
 
     if not isinstance(match, FindMatch):
         raise TypeError("Find projection requires a FindMatch.")
@@ -26,8 +26,6 @@ def find_reference_row(
         uid=source.item_uid,
         context_name=source.context_name,
         alias=f"m{source.source_position}",
-        source_uid=source.source_memory_uid,
-        source_context_name=source.source_context_name,
     )
 
 

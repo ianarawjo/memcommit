@@ -26,7 +26,7 @@ from memcommit.application.capabilities.semantic.redundancy_evidence import (
 from memcommit.application.capabilities.semantic_execution.relations import (
     connected_relation_components,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 
 _RELATION_COLORS = {
@@ -70,7 +70,7 @@ def render_find_redundancies_receipt(
             _count(report.redundancy_count, "proposed absorption"),
         ),
     )
-    if not report.findings and not report.exact_item_groups:
+    if not report.findings:
         return
     _render_redundancy_groups(report)
 
@@ -138,33 +138,6 @@ def _render_redundancy_groups(
             )
             typer.echo(" · " + display_escape_text(finding.reason))
 
-    for exact_index, group in enumerate(report.exact_item_groups, start=1):
-        group_index = len(groups) + exact_index
-        member_uids = (group.survivor_uid, *group.absorbed_uids)
-        uid_prefixes = collision_safe_uid_prefixes(member_uids)
-        typer.echo()
-        typer.secho(
-            f"  DUN GROUP  {group_index}/{report.group_count} · "
-            f"{_count(len(member_uids), 'direct item')} · DUP / EXACT · "
-            f"{group.item_kind}",
-            bold=True,
-        )
-        typer.echo("    CLEANUP MAP · READY FOR REVIEW")
-        render_cleanup_member(
-            "SURVIVOR",
-            uid_prefixes[group.survivor_uid],
-            content=group.summary,
-        )
-        for uid in group.absorbed_uids:
-            render_cleanup_member(
-                "ABSORB",
-                uid_prefixes[uid],
-                content=group.summary,
-            )
-        typer.echo("    EVIDENCE 1 · ", nl=False)
-        typer.secho("EXACT", fg=typer.colors.GREEN, bold=True, nl=False)
-        typer.echo(" · Same role-specific identity.")
-
 
 def _render_redundancy_scope(analysis: RedundancyScopeAnalysis) -> None:
     source = analysis.source
@@ -196,7 +169,7 @@ def _render_redundancy_scope(analysis: RedundancyScopeAnalysis) -> None:
             + " · "
             + _count(frame.report.redundancy_count, "proposed absorption")
         )
-        if frame.report.findings or frame.report.exact_item_groups:
+        if frame.report.findings:
             _render_redundancy_groups(frame.report)
         else:
             typer.echo("  No redundancies.")

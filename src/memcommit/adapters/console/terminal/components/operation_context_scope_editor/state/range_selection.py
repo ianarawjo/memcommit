@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence, Set
 from dataclasses import dataclass, field
 
-from memcommit.core.context_targeting.model import ContextScope
+
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
@@ -59,8 +59,7 @@ def project_checked_context_names(
     if not roots:
         return ()
     expanded = expand_lexical_context_names(
-        ContextScope.create(roots, include_descendants=include_descendants),
-        catalog,
+        roots, catalog, include_descendants=include_descendants
     )
     return tuple(name for name in expanded if name in selectable)
 

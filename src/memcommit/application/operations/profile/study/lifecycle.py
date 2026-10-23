@@ -6,17 +6,16 @@ from dataclasses import replace
 
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.errors import ProfileError
 from memcommit.application.operations.profile.model._storage import (
     _prepare_profile_deletion_batch,
     _publish_permanent_removal,
-    _read_granted_access_names,
     _registry_lock,
     _write_registry,
     inspect_store,
@@ -54,7 +53,9 @@ def rename_study(
                 "Profile registry changed after Study rename selection; review "
                 "the current Profile list and try again."
             )
-        study_uid, study_name, members = _study_target(registry=registry, name=canonical_old)
+        study_uid, study_name, members = _study_target(
+            registry=registry, name=canonical_old
+        )
         if expected_uid is not None and study_uid != expected_uid:
             raise ProfileError(
                 f"Study {study_name!r} identity changed after rename selection; "
@@ -83,7 +84,7 @@ def rename_study(
         if collision is not None:
             raise ProfileError(f"Study {collision.name!r} already exists.")
 
-        renamed_by_uid: dict[str, ProfileEntry] = {}
+        renamed_by_uid: dict[str, Profile] = {}
         for profile in members:
             source = profile.source
             if not isinstance(source, dict):
@@ -102,8 +103,6 @@ def rename_study(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
             profiles=updated_profiles,
-            grants=registry.grants,
-            grant_placements=registry.grant_placements,
         )
         try:
             _write_registry(updated)
@@ -167,29 +166,14 @@ def remove_study(
         for profile in stores_to_delete:
             inspect_store(
                 profile_store_dir(profile),
-                allowed_virtual_currents=_read_granted_access_names(
-                    registry=registry,
-                    profile_uid=profile.uid,
-                ),
             )
-        retained_grants = tuple(
-            grant
-            for grant in registry.grants
-            if not member_uids.intersection(
-                {grant.authority_profile_uid, grant.grantee_profile_uid}
-            )
-        )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
             profiles=tuple(
-                profile for profile in registry.profiles if profile.uid not in member_uids
-            ),
-            grants=retained_grants,
-            grant_placements=tuple(
-                placement
-                for placement in registry.grant_placements
-                if placement.grant_uid in {grant.uid for grant in retained_grants}
+                profile
+                for profile in registry.profiles
+                if profile.uid not in member_uids
             ),
         )
         batch = _prepare_profile_deletion_batch(stores_to_delete)
@@ -205,7 +189,6 @@ def remove_study(
             name=study_name,
             profiles=profiles,
             newly_removed_count=len(stores_to_delete),
-            removed_grant_count=len(registry.grants) - len(retained_grants),
             deleted_stores=tuple(
                 profile_store_dir(profile) for profile in stores_to_delete
             ),

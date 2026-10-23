@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from memcommit.application.authorization.context_operation import (
-    authorized_context_operation,
-)
 from memcommit.application.operations.check_conformance.inputs import (
     ConformanceInputError,
     ConformanceInputs,
@@ -27,7 +24,8 @@ from memcommit.application.operations.check_conformance.model import (
     ConformanceSubject,
     check_context_conformance,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
 )
@@ -37,10 +35,6 @@ from memcommit.application.capabilities.durable_uid_resolution import (
 from memcommit.application.capabilities.local_target_lookup import (
     DirectMemoryNotFoundError,
     resolve_local_context_memory_target,
-)
-from memcommit.core.context_targeting.model import (
-    ContextTarget,
-    DirectMemoryTarget,
 )
 from memcommit.persistence.store import (
     MemoryStore,
@@ -79,7 +73,7 @@ class FrozenConformanceRulesOperand:
 
 
 def _direct_memories(ctx: Context) -> tuple[Memory, ...]:
-    return tuple(item for item in ctx.iter_items() if isinstance(item, Memory))
+    return tuple(item for item in ctx.iter_memories() if isinstance(item, Memory))
 
 
 def _rules_from_memories(
@@ -170,7 +164,6 @@ def freeze_conformance_rules_operand(
                 store,
                 text,
                 current_name=current_name,
-                required_permission="READ",
             )
         except FileNotFoundError:
             if is_relative_context_locator(text):
@@ -183,11 +176,10 @@ def freeze_conformance_rules_operand(
             return FrozenConformanceRulesOperand(
                 kind="TEXT", label=f"TEXT {rule.content}", rules=(rule,)
             )
-        target = ContextTarget(access.access_name)
+        target = access.store.load_direct(access.context_name)
 
-    if isinstance(target, DirectMemoryTarget):
-        context = store.load_direct(target.context_name)
-        memory = context.memories.get(target.memory_uid)
+    if isinstance(target, tuple):
+        context, memory = target
         if not isinstance(memory, Memory):
             raise ConformanceError(
                 "The selected Conformance Rule is not a direct ordinary Memory."
@@ -207,8 +199,8 @@ def freeze_conformance_rules_operand(
                 (capture_conformance_dependency(store, context, memory=memory),),
             ),
         )
-    assert isinstance(target, ContextTarget)
-    prepared = prepare_conformance_inputs(store, target.context_name)
+    assert isinstance(target, Context)
+    prepared = prepare_conformance_inputs(store, target.name, loaded_context=target)
     context = prepared.root
     memories = prepared.memories
     if not memories:
@@ -262,7 +254,6 @@ def execute_context_conformance(
         store,
         rules_name,
         current_name=None,
-        required_permission="READ",
     )
     return execute_context_conformance_with_rules_operand(
         store=store,
@@ -316,13 +307,13 @@ def execute_context_conformance_with_rules_operand(
         )
         # Recheck after both endpoints are frozen and before disclosing them.
         # The same versions must still hold after the bounded provider turn.
-        checks = tuple(
+        tuple(
             (item.access, ("READ",)) for item in dependencies if item.access is not None
         )
-        with authorized_context_operation(checks) as registry:
-            revalidate_conformance_inputs(
-                dependencies, active_store=store, registry=registry
-            )
+        revalidate_conformance_inputs(
+            dependencies,
+            active_store=store,
+        )
         report = check_context_conformance(
             source_label=target.name,
             rules_label=frozen_rules.label,
@@ -331,10 +322,10 @@ def execute_context_conformance_with_rules_operand(
             provider=provider_factory(),
         )
         try:
-            with authorized_context_operation(checks) as registry:
-                revalidate_conformance_inputs(
-                    dependencies, active_store=store, registry=registry
-                )
+            revalidate_conformance_inputs(
+                dependencies,
+                active_store=store,
+            )
         except ConformanceInputError as error:
             raise ConformanceError(
                 "The Target or Rules source changed during Conformance; no report was published."

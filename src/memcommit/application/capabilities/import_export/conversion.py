@@ -2,29 +2,36 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
-from pathlib import PurePosixPath
 import hashlib
 import posixpath
+from dataclasses import replace
+from pathlib import PurePosixPath
 from urllib.parse import unquote, urlsplit
 
 from markdown_it import MarkdownIt
 
-from memcommit.core.context import Context, Memory
-from memcommit.core.document import AttachedFile, DocumentState, relative_document_path
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
+from memcommit.models.asset_metadata import AssetMetadata
+from memcommit.models.corresponding_document_metadata import (
+    CorrespondingDocumentMetadata,
+)
+from memcommit.core.document_path import relative_document_path
+
+from .formats import markdown, mem, plain_text, skill, yaml
 from .model import (
     ConversionIssue,
     Document,
+    DocumentBlock,
     DocumentPackage,
     MemContent,
+    MemorySourceRange,
     OutputFile,
     PackageFormat,
     fail,
 )
 from .spacing import SpacingPolicy
-from .formats import markdown, plain_text, yaml, skill, mem
-
 
 _EXTENSIONS = {".md": "md", ".txt": "txt", ".yaml": "yaml", ".yml": "yaml"}
 _ALIASES = {"markdown": "md", "text": "txt", "yml": "yaml", "auto": None}
@@ -48,7 +55,7 @@ def detect_format(files, format_hint=None):
 
 def _segment(name):
     try:
-        validate_portable_context_name(name)
+        validate_context_name(name)
         return name
     except ValueError:
         return "file-" + name.encode("utf-8").hex()
@@ -79,6 +86,22 @@ def convert_for_import(files, format, placement, *, single_file=False):
         relative_document_path(file.path)
         if format == "skill" and file.path == "SKILL.md":
             continue
+        if (
+            format == "documents"
+            and placement is None
+            and PurePosixPath(file.path).name == "SKILL.md"
+        ):
+            package = skill.parse_skill(
+                (replace(file, path="SKILL.md"),), path_scope="PROFILE"
+            )
+            documents.extend(
+                replace(
+                    document,
+                    state=replace(document.state, path=file.path, path_scope="PROFILE"),
+                )
+                for document in package.documents
+            )
+            continue
         extension = PurePosixPath(file.path).suffix.lower()
         file_format = _EXTENSIONS.get(extension)
         if file_format is None:
@@ -100,17 +123,30 @@ def convert_for_import(files, format, placement, *, single_file=False):
             text = file.data.decode("utf-8")
         except UnicodeError as error:
             fail("encoding", file.path, f"Expected UTF-8 text: {error}")
-        documents.append(_parse(text, file_format, file.path, state=DocumentState(file.path, file_format, path_scope="PROFILE") if placement is None else None))
+        documents.append(
+            _parse(
+                text,
+                file_format,
+                file.path,
+                state=CorrespondingDocumentMetadata(
+                    file.path, file_format, path_scope="PROFILE"
+                )
+                if placement is None
+                else None,
+            )
+        )
     if not documents:
         fail("empty-input", "input", "No supported documents were selected.")
     if placement is not None:
-        validate_portable_context_name(placement)
+        validate_context_name(placement)
     package_kind = "skill" if format == "skill" else "documents"
     root = Context.create(placement) if placement is not None else None
     contexts = [root] if root is not None else []
     single = single_file and len(documents) == 1 and root is not None
     if root is not None and not single:
-        root.document = DocumentState("package", "md", "package", package_kind)
+        root.corresponding_document_metadata = CorrespondingDocumentMetadata(
+            "package", "md", "package", package_kind
+        )
     by_name = {root.name: root} if root is not None else {}
     for document in documents:
         if single:
@@ -122,12 +158,21 @@ def convert_for_import(files, format, placement, *, single_file=False):
             if document.state.role == "skill_metadata":
                 segments.append("metadata")
             for depth in range(1, len(segments)):
-                parent_name = (placement + "/" if placement else "") + "/".join(segments[:depth])
+                parent_name = (placement + "/" if placement else "") + "/".join(
+                    segments[:depth]
+                )
                 if parent_name not in by_name:
                     parent = Context.create(parent_name)
-                    parent.document = DocumentState(
-                        "/".join(PurePosixPath(document.state.path).parts[:depth]) if placement is None else "/".join(segments[:depth]), "md", "package", package_kind,
-                        path_scope="PROFILE" if placement is None else "PACKAGE"
+                    parent.corresponding_document_metadata = (
+                        CorrespondingDocumentMetadata(
+                            "/".join(PurePosixPath(document.state.path).parts[:depth])
+                            if placement is None
+                            else "/".join(segments[:depth]),
+                            "md",
+                            "package",
+                            package_kind,
+                            path_scope="PROFILE" if placement is None else "PACKAGE",
+                        )
                     )
                     contexts.append(parent)
                     by_name[parent_name] = parent
@@ -141,32 +186,26 @@ def convert_for_import(files, format, placement, *, single_file=False):
             context = Context.create(name)
             contexts.append(context)
             by_name[name] = context
-        context.document = replace(document.state, package=package_kind)
+        context.corresponding_document_metadata = replace(
+            document.state, package=package_kind
+        )
         for block in document.blocks:
-            context.add(block.text)
-    # Explicit Context membership makes the package navigable without inventing
-    # additional original-file mapping records. Lexical recursion remains opt-in.
-    for context in contexts:
-        if context is root:
-            continue
-        parent_name = context.name.rsplit("/", 1)[0] if "/" in context.name else None
-        parent = by_name.get(parent_name) if parent_name else root
-        if parent is not None:
-            parent.add(context)
+            context.add(Memory.create(block.text))
+    # Lexical names define package membership; Context items remain Memories.
     attached_data = {}
     for file in attachments:
         digest = hashlib.sha256(file.data).hexdigest()
-        root.attached_files.append(AttachedFile(file.path, digest))
+        root.asset_metadata.append(AssetMetadata(file.path, digest))
         attached_data[digest] = file.data
     return MemContent(tuple(contexts), attached_data), tuple(issues)
 
 
 def _document_from_context(context, state):
-    texts = []
-    for item in context.iter_items():
+    memories = []
+    for item in context.iter_memories():
         if isinstance(item, Memory):
-            texts.append(item.content)
-        elif not isinstance(item, Context):
+            memories.append(item)
+        else:
             fail(
                 "unsupported-entry",
                 context.name,
@@ -174,14 +213,48 @@ def _document_from_context(context, state):
             )
     if state.format == "yaml":
         text = ""
-        for part in texts:
+        blocks = []
+        for memory in memories:
+            part = memory.content
             if text and part and not text.endswith(("\n", "\r")):
                 text += "\n"
+                blocks.append(DocumentBlock("yaml", "\n"))
             text += part
-        return yaml.parse_yaml(text, state=state)
+            if part:
+                blocks.append(
+                    DocumentBlock(
+                        "yaml",
+                        part,
+                        source=MemorySourceRange(
+                            context.uid,
+                            context.name,
+                            memory.uid,
+                            0,
+                            len(part.encode("utf-8")),
+                        ),
+                    )
+                )
+        # Validate the complete syntax, retaining original Memory boundaries
+        # rather than assigning re-parsed keys to guessed owners.
+        yaml.parse_yaml(text, state=state)
+        return Document(state, tuple(blocks))
     blocks = []
-    for text in texts:
-        blocks.extend(_parse(text, state.format, state.path, state=state).blocks)
+    for memory in memories:
+        for block in _parse(
+            memory.content, state.format, state.path, state=state
+        ).blocks:
+            blocks.append(
+                replace(
+                    block,
+                    source=MemorySourceRange(
+                        context.uid,
+                        context.name,
+                        memory.uid,
+                        block.start_byte,
+                        block.end_byte,
+                    ),
+                )
+            )
     return Document(state, tuple(blocks))
 
 
@@ -206,21 +279,10 @@ def convert_for_export(
     documents = []
     files = []
     issues = []
-    selected_uids = {c.uid for c in contexts}
     for context in contexts:
-        for item in context.iter_items():
-            if isinstance(item, Context) and item.uid not in selected_uids:
-                issues.append(
-                    ConversionIssue(
-                        "excluded-context",
-                        item.name,
-                        "Context is outside the selected scope; use -r to include lexical descendants.",
-                        False,
-                    )
-                )
-        state = context.document
+        state = context.corresponding_document_metadata
         if state is not None and state.role == "package":
-            if any(isinstance(item, Memory) for item in context.iter_items()):
+            if any(isinstance(item, Memory) for item in context.iter_memories()):
                 fail(
                     "unplaced-memory",
                     context.name,
@@ -234,11 +296,17 @@ def convert_for_export(
                     else root.name.rsplit("/", 1)[-1]
                 )
                 selected_format = format if format in {"md", "txt", "yaml"} else "md"
-                state = DocumentState(relative + "." + selected_format, selected_format)
+                state = CorrespondingDocumentMetadata(
+                    relative + "." + selected_format, selected_format
+                )
                 if format == "skill" and context is root:
-                    state = DocumentState("SKILL.md", "md", "skill_body", "skill")
+                    state = CorrespondingDocumentMetadata(
+                        "SKILL.md", "md", "skill_body", "skill"
+                    )
                 elif format == "skill" and context.name == root.name + "/metadata":
-                    state = DocumentState("SKILL.md", "yaml", "skill_metadata", "skill")
+                    state = CorrespondingDocumentMetadata(
+                        "SKILL.md", "yaml", "skill_metadata", "skill"
+                    )
             elif format in {"md", "txt", "yaml"} and state.role == "document":
                 state = replace(
                     state,
@@ -246,7 +314,7 @@ def convert_for_export(
                     path=str(PurePosixPath(state.path).with_suffix("." + format)),
                 )
             documents.append(_document_from_context(context, state))
-        for file in context.attached_files:
+        for file in context.asset_metadata:
             data = content.attached_data.get(file.sha256)
             if data is None or hashlib.sha256(data).hexdigest() != file.sha256:
                 fail(
@@ -308,13 +376,20 @@ def convert_for_export(
             documents.append(
                 yaml.parse_yaml(
                     header,
-                    state=DocumentState("SKILL.md", "yaml", "skill_metadata", "skill"),
+                    state=CorrespondingDocumentMetadata(
+                        "SKILL.md", "yaml", "skill_metadata", "skill"
+                    ),
                 )
             )
         package = DocumentPackage(tuple(documents), format=PackageFormat.SKILL)
+        source_ranges = []
         files.append(
             OutputFile(
-                "SKILL.md", skill.render_skill(package, spacing_policy).encode("utf-8")
+                "SKILL.md",
+                skill.render_skill(
+                    package, spacing_policy, source_ranges=source_ranges
+                ).encode("utf-8"),
+                source_ranges=tuple(source_ranges),
             )
         )
     for document in documents:
@@ -325,13 +400,27 @@ def convert_for_export(
             "txt": plain_text.render_text,
             "yaml": yaml.render_yaml,
         }[document.state.format]
+        source_ranges = []
         text = (
-            renderer(document)
+            renderer(document, source_ranges=source_ranges)
             if document.state.format == "yaml"
-            else renderer(document, spacing_policy)
+            else renderer(document, spacing_policy, source_ranges=source_ranges)
         )
-        files.append(OutputFile(document.state.path, text.encode("utf-8")))
-    if not files and not (allow_empty_package and all(context.document and context.document.role == "package" for context in contexts)):
+        files.append(
+            OutputFile(
+                document.state.path,
+                text.encode("utf-8"),
+                source_ranges=tuple(source_ranges),
+            )
+        )
+    if not files and not (
+        allow_empty_package
+        and all(
+            context.corresponding_document_metadata
+            and context.corresponding_document_metadata.role == "package"
+            for context in contexts
+        )
+    ):
         fail(
             "empty-export",
             root.name,

@@ -23,7 +23,7 @@ from memcommit.application.operations.audit.model import (
 from memcommit.application.operations.duplicates.find_duplicates.application import (
     ExactDuplicateReport,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 
 def audit_check_label(kind: str) -> str:
@@ -49,23 +49,23 @@ def audit_check_report_view(
     kind = check.kind
     if isinstance(report, ExactDuplicateReport):
         memories = {
-            item.uid: item for item in context.iter_items() if isinstance(item, Memory)
+            item.uid: item
+            for item in context.iter_memories()
+            if isinstance(item, Memory)
         }
         report = DuplicateReport(
             memory_count=report.memory_count,
             findings=tuple(
-                DuplicateFinding(
-                    memories[group.survivor_uid],
-                    memories[uid],
-                    "EXACT",
-                    "Stored content is identical.",
+                (
+                    DuplicateFinding(
+                        memories[group.survivor_uid],
+                        memories[uid],
+                        "EXACT",
+                        "Stored content is identical.",
+                    )
+                    for group in report.groups
+                    for uid in group.absorbed_uids
                 )
-                for group in report.groups
-                if group.item_kind == "MEMORY"
-                for uid in group.absorbed_uids
-            ),
-            exact_item_groups=tuple(
-                group for group in report.groups if group.item_kind != "MEMORY"
             ),
         )
     if kind in {"dup", "dun"}:
@@ -78,7 +78,6 @@ def audit_check_report_view(
         context,
         operation_label=f"AUDIT · {audit_check_label(check.kind)}",
     )
-
     if check.kind in {"dup", "dun"} and len(session.source.items) != len(
         session.source.memories
     ):

@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.core.context_targeting.naming import (
+from memcommit.core.context_name_validation import (
     RESERVED_CONTEXT_SEGMENTS,
-    validate_portable_context_name,
+    validate_context_name,
 )
 
 
@@ -42,7 +42,7 @@ class _ContextCreationAvailabilityMixin:
 
     def assert_context_creatable(self, name: str) -> None:
         """Fail before expensive work when a new Context cannot use this name."""
-        validate_portable_context_name(name)
+        validate_context_name(name)
         if self.context_exists(name):
             raise FileExistsError(f"Context '{name}' already exists.")
         self._assert_context_storage_available(name)

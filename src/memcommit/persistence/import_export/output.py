@@ -7,7 +7,7 @@ import shutil
 import stat
 import tempfile
 
-from memcommit.core.document import relative_document_path
+from memcommit.core.document_path import relative_document_path
 from .source import read_output_files, require_regular_output_path
 
 

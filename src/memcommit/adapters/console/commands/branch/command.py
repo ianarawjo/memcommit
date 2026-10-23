@@ -2,6 +2,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.branch.endpoint_setup import (
     choose_branch_creation,
 )
@@ -106,6 +107,7 @@ def cmd(
             )
             raise typer.Exit(1)
         if receipt is None:
+            annotate_command_outcome("CANCELLED")
             typer.echo("Branch cancelled — no Context was changed.")
             return
         if receipt.source_name not in local_names:

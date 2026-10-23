@@ -36,7 +36,7 @@ def audit_issue_signatures(audit):
                 "rule": item.detail.get("rule"),
             }
         )
-        for item in collect_resolution_issues(None, audit)
+        for item in collect_resolution_issues(audit)
     }
 
 
@@ -91,7 +91,7 @@ def remaining_review_issues(
     forced = dict(forced_review_issues(audit, rounds))
     return tuple(
         issue
-        for issue in collect_resolution_issues(frame, audit)
+        for issue in collect_resolution_issues(audit)
         if issue.audit_key not in forced
         and not any(
             ISSUE_PRIORITY[issue.kind] >= priority

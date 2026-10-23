@@ -29,7 +29,6 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.values import
 )
 from memcommit.application.context_access.access import (
     ContextAccess,
-    context_access_display_facts,
 )
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
@@ -197,20 +196,14 @@ def choose_compare_setup(
             store=store,
             context_name=root_name,
             access_name=root_name,
-            permission="READ",
         ),
-        include_query_routes=False,
     )
     names = tuple(catalog.list_context_names())
     if len(names) < 2:
         raise ValueError("Starting Compare requires two readable Contexts.")
     reference_name = current_name if current_name in names else names[0]
     peer_name = next(name for name in names if name != reference_name)
-    annotations = tuple(
-        (name, context_access_display_facts(catalog.access_for(name)))
-        for name in names
-        if catalog.access_for(name).is_granted
-    )
+    annotations = tuple()
 
     def load_memories(role_uid: str, context_name: str):
         if role_uid not in {"A", "B"}:

@@ -9,7 +9,7 @@ import re
 import uuid
 
 import memcommit.persistence.store as store_module
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TranslationCatalogError,
@@ -127,7 +127,6 @@ def save_translation_catalog(
     catalog: MemoryTranslationCatalog,
     *,
     expected_record_digest: str | None,
-    expected_context_digest: str | None = None,
     required_source_digests: dict[str, str] | None = None,
 ) -> None:
     """Publish one complete catalog under its source and catalog CAS locks.
@@ -144,7 +143,6 @@ def save_translation_catalog(
     if decode_translation_catalog_record(record) != catalog:
         raise ValueError("Translation catalog changed during save validation.")
     expected = _validate_expected_digest(expected_record_digest)
-    expected_context = _validate_expected_digest(expected_context_digest)
     source_bindings = required_source_digests or {}
     if not isinstance(source_bindings, dict):
         raise ValueError("Invalid required translation source bindings.")
@@ -178,13 +176,6 @@ def save_translation_catalog(
         ):
             raise ConcurrentTranslationCatalogUpdateError(
                 "The translation catalog source Context was replaced."
-            )
-        if expected_context is not None and (
-            store_module.context_record_digest(current_context) != expected_context
-        ):
-            raise ConcurrentTranslationCatalogUpdateError(
-                "The translation catalog source Context changed before the "
-                "provider result could be saved."
             )
         for source_uid, source_digest in checked_bindings.items():
             source = current_context.memories.get(source_uid)

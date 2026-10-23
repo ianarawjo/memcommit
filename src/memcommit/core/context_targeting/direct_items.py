@@ -2,23 +2,20 @@
 
 from __future__ import annotations
 
-from memcommit.core.context import Context, Information, Memory, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
-def resolve_direct_item(ctx: Context, selector: str) -> Information:
+def resolve_direct_item(ctx: Context, selector: str) -> Memory:
     """
-    Resolve one direct child of *ctx* by UID prefix or embedded-context name.
+    Resolve one directly owned Memory by its unique UID prefix.
 
-    Atomic memories currently have no name, so they can only be selected by
-    UID (or an unambiguous UID prefix). Embedded contexts can additionally be
-    selected by their exact name. Raises KeyError if nothing matches and
+    Memories are selected by UID or an unambiguous UID prefix.
+    Raises KeyError if nothing matches and
     ValueError if the selector is ambiguous.
     """
     matches = [
-        info
-        for uid, info in ctx.iter_entries()
-        if uid.startswith(selector)
-        or (isinstance(info, (Context, QueryContextRef)) and info.name == selector)
+        memory for memory in ctx.iter_memories() if memory.uid.startswith(selector)
     ]
     if not matches:
         raise KeyError(f"No direct item matching '{selector}' in context '{ctx.name}'.")
@@ -33,8 +30,6 @@ def resolve_direct_item(ctx: Context, selector: str) -> Information:
 def resolve_direct_memory(ctx: Context, selector: str) -> Memory:
     """Resolve one ordinary directly owned Memory with Edit's prefix grammar."""
 
-    # Resolve the complete direct UID namespace before checking its type;
-    # filtering out references first could hide an ambiguous selector.
     matches = [uid for uid in ctx.memories if uid.startswith(selector)]
     if not matches:
         raise KeyError(f"No item with uid starting with '{selector}'.")

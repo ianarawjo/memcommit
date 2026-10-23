@@ -1,14 +1,9 @@
-"""Safe ordinary-Memory projection for physical Ground workspaces.
-
-Physical ``/contexts`` lanes may durably contain references, embeds, or
-grant-backed links.  Semantic operations must not silently discard those
-typed items.  Until an operation supplies an authority-aware resolver, its
-ordinary-Memory projection therefore fails closed before provider connection.
-"""
+"""Direct Memory projection for physical Ground workspaces."""
 
 from __future__ import annotations
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
 class GroundWorkspaceProjectionError(ValueError):
@@ -20,14 +15,9 @@ def project_ordinary_memories(
     *,
     operation: str,
 ) -> tuple[Memory, ...]:
-    """Return every direct Memory or reject an unhandled typed item.
+    """Return the complete directly owned Memory frame for this Ground Context."""
 
-    Persisting a typed item is valid Ground workspace state.  Treating it as
-    absent during inference is not: doing so would make the visible workspace
-    and the provider input disagree without an explicit authority decision.
-    """
-
-    items = tuple(context.iter_items())
+    items = tuple(context.iter_memories())
     unsupported = tuple(
         type(item).__name__ for item in items if not isinstance(item, Memory)
     )
@@ -35,7 +25,7 @@ def project_ordinary_memories(
         kinds = ", ".join(sorted(set(unsupported)))
         raise GroundWorkspaceProjectionError(
             f"{operation} cannot yet project typed item(s) {kinds} from "
-            f"Ground Context '{context.name}'. An authority-aware Ground "
+            f"Ground Context '{context.name}'. A complete Memory "
             "projection is required; no provider was connected."
         )
     return tuple(item for item in items if isinstance(item, Memory))

@@ -12,6 +12,7 @@ from memcommit.operation_catalog import (
     OperationFamilySection,
 )
 from memcommit.operation_catalog.model import OperationHelpDetail
+from memcommit.operation_catalog.catalog import RETIRED_OPERATION_NAMES
 
 
 class HelpApplicationInputError(ValueError):
@@ -45,7 +46,11 @@ def list_operation_help() -> tuple[OperationDescriptor, ...]:
 
     return tuple(
         sorted(
-            OPERATION_BY_NAME.values(),
+            (
+                operation
+                for operation in OPERATION_BY_NAME.values()
+                if operation.name not in RETIRED_OPERATION_NAMES
+            ),
             key=lambda operation: (operation.name.casefold(), operation.name),
         )
     )
@@ -60,6 +65,7 @@ def list_operation_help_groups() -> tuple[OperationHelpFamilyGroup, ...]:
             operations=tuple(
                 OPERATION_BY_NAME[operation_name]
                 for operation_name in family.operation_names
+                if operation_name not in RETIRED_OPERATION_NAMES
             ),
             sections=tuple(
                 OperationHelpSectionGroup(
@@ -67,6 +73,7 @@ def list_operation_help_groups() -> tuple[OperationHelpFamilyGroup, ...]:
                     operations=tuple(
                         OPERATION_BY_NAME[operation_name]
                         for operation_name in section.operation_names
+                        if operation_name not in RETIRED_OPERATION_NAMES
                     ),
                 )
                 for section in family.sections
@@ -116,6 +123,10 @@ def _operation(operation_name: str) -> OperationDescriptor:
     if operation_name != operation_name.strip():
         raise HelpApplicationInputError(
             "Help operation_name must not contain surrounding whitespace."
+        )
+    if operation_name in RETIRED_OPERATION_NAMES:
+        raise HelpApplicationInputError(
+            f"Operation {operation_name!r} is unavailable in this version."
         )
     try:
         return OPERATION_BY_NAME[operation_name]

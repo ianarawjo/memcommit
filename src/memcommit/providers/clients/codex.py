@@ -19,7 +19,6 @@ from memcommit.providers.types import (
     CompletionRun,
     ProviderIdentity,
 )
-from memcommit.providers.clients.completion import build_query_prompt
 from memcommit.persistence.command_ledger.study_actions import (
     record_study_provider_turn,
 )
@@ -33,9 +32,7 @@ _CODEX_MODEL_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:/+-]{0,255}\Z")
 def _default_codex_candidates() -> list[Path]:
     """Return likely Codex executables without trusting a shell."""
     on_path = shutil.which("codex")
-    candidates = (
-        [Path(on_path)] if on_path else []
-    ) + [
+    candidates = ([Path(on_path)] if on_path else []) + [
         # Prefer the terminal's installed CLI after validating --version; the
         # bundled CLI remains a fallback for a stale or broken PATH shim.
         Path("/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex"),
@@ -303,9 +300,3 @@ class CodexChatGPTProvider:
             upstream_provider="openai-codex",
         )
         return answer
-
-    def query(self, source_name: str, source_content: str, question: str) -> str:
-        if not question.strip():
-            raise QueryProviderError("Question must be non-empty.")
-        prompt = build_query_prompt(source_name, source_content, question)
-        return self.complete(prompt, operation="query")

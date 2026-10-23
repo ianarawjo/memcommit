@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import TYPE_CHECKING, Literal
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .analysis.candidate import MergeCandidate, combine_contexts, digest
 from .target_policy import MergeTargetPolicy
@@ -48,13 +48,10 @@ class MergeContextInputs:
     operation_uid: str
     source_json: str
     target_json: str
-    source_digest: str
-    target_digest: str
     source_access: ContextAccess = field(repr=False, compare=False)
     target_access: ContextAccess = field(repr=False, compare=False)
     policy: MergeTargetPolicy
     lineage_targets: tuple[tuple[str, str], ...] = ()
-    cross_profile_memory_only: bool = False
 
     def source(self) -> Context:
         return Context.from_dict(json.loads(self.source_json))
@@ -64,19 +61,11 @@ class MergeContextInputs:
 
     @property
     def digest(self):
-        from memcommit.application.context_access.access import (
-            freeze_granted_context_binding,
-        )
-
         def authority(access):
             return {
                 "store": str(access.store.store_dir),
                 "physical_name": access.context_name,
                 "public_name": access.access_name,
-                "permission": access.permission,
-                "grant": freeze_granted_context_binding(access).to_dict()
-                if access.is_granted
-                else None,
             }
 
         return digest(
@@ -84,15 +73,11 @@ class MergeContextInputs:
                 "operation": self.operation_uid,
                 "source": self.source_json,
                 "target": self.target_json,
-                "source_authority": authority(self.source_access),
                 "target_authority": authority(self.target_access),
-                "source_digest": self.source_digest,
-                "target_digest": self.target_digest,
                 "effects": self.policy.allowed_effects,
                 "mutable": self.policy.context_mutable,
                 "protected": sorted(self.policy.protected_uids),
                 "lineage": self.lineage_targets,
-                "cross_profile": self.cross_profile_memory_only,
             }
         )
 

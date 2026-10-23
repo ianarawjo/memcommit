@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 import fcntl
 import hashlib
 import json
@@ -13,10 +13,10 @@ import shutil
 import stat
 import uuid
 from typing import Iterator
-from memcommit.core.context import Context, Memory, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_control_dir,
@@ -24,8 +24,8 @@ from memcommit.application.operations.profile.config import (
     profile_registry_lock_file,
     profile_store_dir,
     profile_stores_dir,
-    validate_grant_resource_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
@@ -56,12 +56,8 @@ class StoreInspection:
     current_context: str | None
     context_names: tuple[str, ...]
     ordinary_memory_count: int
-    query_source_count: int
-    query_source_names: tuple[str, ...]
     translation_catalog_count: int
     context_inventory: tuple[ContextInventory, ...]
-    granted_context_count: int = 0
-    granted_memory_count: int = 0
 
 
 def _reject_duplicate_keys(
@@ -106,12 +102,11 @@ def _assert_plain_tree(root: Path, *, label: str) -> None:
 
 def _context_records(
     root: Path,
-) -> tuple[dict[str, Context], dict[str, QueryContextRef]]:
+) -> dict[str, Context]:
     contexts_dir = root / "contexts"
     if contexts_dir.is_symlink() or not contexts_dir.is_dir():
         raise ProfileError("MemoryStore contexts directory is missing or unsafe.")
     contexts: dict[str, Context] = {}
-    query_refs: dict[str, QueryContextRef] = {}
     for path in sorted(contexts_dir.rglob("context.json")):
         name = path.parent.relative_to(contexts_dir).as_posix()
         data = _read_json(path, label=f"Context {name!r}")
@@ -126,21 +121,15 @@ def _context_records(
         if name in contexts:
             raise ProfileError(f"Context {name!r} is duplicated.")
         contexts[name] = context
-        for item in context.iter_items():
-            if isinstance(item, QueryContextRef):
-                previous = query_refs.get(item.target_source_uid)
-                if previous is not None and previous.name != item.name:
-                    raise ProfileError(
-                        "One query source uid is referenced under multiple names."
-                    )
-                query_refs[item.target_source_uid] = item
-    return contexts, query_refs
+    return contexts
 
 
 def _context_record_at(root: Path, name: str) -> Context | None:
     """Load only one exact Context without inspecting sibling authority data."""
 
-    canonical_name = validate_grant_resource_name(name)
+    from memcommit.core.context_name_validation import validate_context_name
+
+    canonical_name = validate_context_name(name)
     contexts_dir = root / "contexts"
     if contexts_dir.is_symlink() or not contexts_dir.is_dir():
         raise ProfileError("MemoryStore contexts directory is missing or unsafe.")
@@ -166,43 +155,6 @@ def _context_record_at(root: Path, name: str) -> Context | None:
             f"Context path {canonical_name!r} does not match record {context.name!r}."
         )
     return context
-
-
-def _query_sources(root: Path) -> dict[str, str]:
-    sources_dir = root / "query-sources"
-    if not sources_dir.exists():
-        return {}
-    if sources_dir.is_symlink() or not sources_dir.is_dir():
-        raise ProfileError("Query-source storage is unsafe.")
-    sources: dict[str, str] = {}
-    for path in sorted(sources_dir.glob("*/source.json")):
-        data = _read_json(path, label="Query source")
-        uid = data.get("uid")
-        name = data.get("name")
-        if not isinstance(uid, str) or not isinstance(name, str) or not name:
-            raise ProfileError("Query source identity is invalid.")
-        try:
-            canonical_uid = str(uuid.UUID(uid))
-        except (AttributeError, TypeError, ValueError) as error:
-            raise ProfileError("Query source uid is invalid.") from error
-        if canonical_uid != uid or path.parent.name != uid:
-            raise ProfileError("Query source path does not match its uid.")
-        if data.get("schema_version") not in {1, 2}:
-            raise ProfileError("Query source schema version is unsupported.")
-        entries = data.get("entries")
-        if data.get("schema_version") == 2 and (
-            not isinstance(entries, list) or not entries
-        ):
-            raise ProfileError("Query source entries are invalid.")
-        sources[uid] = name
-    unexpected = [
-        path
-        for path in sources_dir.rglob("source.json")
-        if path.parent.parent != sources_dir
-    ]
-    if unexpected:
-        raise ProfileError("Query-source storage contains an invalid path.")
-    return sources
 
 
 def _translation_catalogs(
@@ -238,34 +190,25 @@ def _translation_catalogs(
 
 def inspect_store(
     root: Path,
-    *,
-    allowed_virtual_currents: frozenset[str] = frozenset(),
 ) -> StoreInspection:
     """Validate one complete store without creating or resolving content."""
 
     root = Path(root).absolute()
     _assert_plain_tree(root, label="MemoryStore")
-    contexts, query_refs = _context_records(root)
+    contexts = _context_records(root)
     state = _read_json(root / "state.json", label="MemoryStore state")
     current = state.get("current")
     if current is not None and (
-        not isinstance(current, str)
-        or (current not in contexts and current not in allowed_virtual_currents)
+        not isinstance(current, str) or current not in contexts
     ):
         raise ProfileError("MemoryStore current Context is invalid.")
-    sources = _query_sources(root)
-    for source_uid, reference in query_refs.items():
-        if sources.get(source_uid) != reference.name:
-            raise ProfileError(
-                f"Query-only Context {reference.name!r} has no matching source."
-            )
     catalog_count = _translation_catalogs(root, contexts)
     context_inventory = tuple(
         ContextInventory(
             uid=context.uid,
             name=name,
             direct_memory_count=sum(
-                isinstance(item, Memory) for item in context.iter_items()
+                isinstance(item, Memory) for item in context.iter_memories()
             ),
         )
         for name, context in sorted(contexts.items())
@@ -277,105 +220,8 @@ def inspect_store(
         ordinary_memory_count=sum(
             item.direct_memory_count for item in context_inventory
         ),
-        query_source_count=len(sources),
-        # Only an ordinary QueryContextRef makes a source name public routing
-        # metadata.  Do not surface names from orphaned concealed records.
-        query_source_names=tuple(
-            sorted(reference.name for reference in query_refs.values())
-        ),
         translation_catalog_count=catalog_count,
         context_inventory=context_inventory,
-    )
-
-
-def _inspection_with_grants(
-    registry: ProfileRegistry,
-    profile: ProfileEntry,
-    inspection: StoreInspection,
-    *,
-    cache: dict[str, StoreInspection] | None = None,
-) -> StoreInspection:
-    """Add distinct READ-granted resources without counting public aliases twice."""
-
-    inspections = cache if cache is not None else {profile.uid: inspection}
-    inspections.setdefault(profile.uid, inspection)
-    profile_by_uid = {item.uid: item for item in registry.profiles}
-    seen_contexts: set[tuple[str, str]] = set()
-    exact_authority: dict[tuple[str, str], ContextInventory] = {}
-    granted_memory_count = 0
-
-    grants_by_uid = {grant.uid: grant for grant in registry.grants}
-    placed = tuple(
-        (placement, grants_by_uid[placement.grant_uid])
-        for placement in registry.grant_placements
-        if placement.grantee_profile_uid == profile.uid
-        and placement.grant_uid in grants_by_uid
-    )
-    for placement, grant in placed:
-        if grant.grantee_profile_uid != profile.uid or "READ" not in grant.permissions:
-            continue
-        authority = profile_by_uid[grant.authority_profile_uid]
-        authority_inspection = inspections.get(authority.uid)
-        authority_by_name = (
-            {item.name: item for item in authority_inspection.context_inventory}
-            if authority_inspection is not None
-            else {}
-        )
-        for binding in grant.contexts:
-            access_name = (
-                placement.access_name
-                + binding.name[len(grant.resource_name) :]
-            )
-            candidates = [
-                (candidate_placement, candidate)
-                for candidate_placement, candidate in placed
-                if (
-                    access_name == candidate_placement.access_name
-                    or access_name.startswith(candidate_placement.access_name + "/")
-                )
-            ]
-            _effective_placement, effective = max(
-                candidates,
-                key=lambda item: len(item[0].access_name.split("/")),
-            )
-            if "READ" not in effective.permissions:
-                continue
-            granted = authority_by_name.get(binding.name)
-            if granted is None and authority_inspection is None:
-                cache_key = (authority.uid, binding.name)
-                granted = exact_authority.get(cache_key)
-                if granted is None:
-                    # Selecting a task Profile needs counts only for effective
-                    # READ bindings. Do not scan a sibling QUERY-only authority
-                    # tree merely to render the task's inventory summary.
-                    context = _context_record_at(
-                        profile_store_dir(authority),
-                        binding.name,
-                    )
-                    if context is not None:
-                        granted = ContextInventory(
-                            uid=context.uid,
-                            name=context.name,
-                            direct_memory_count=sum(
-                                isinstance(item, Memory)
-                                for item in context.iter_items()
-                            ),
-                        )
-                        exact_authority[cache_key] = granted
-            if granted is None or granted.uid != binding.uid:
-                raise ProfileError("Grant authority Context identity changed.")
-            identity = (authority.uid, granted.uid)
-            if identity in seen_contexts:
-                continue
-            # Public aliases describe views, not additional knowledge. Count
-            # each stable authority Context once even when two grants expose it.
-            seen_contexts.add(identity)
-            granted_memory_count += granted.direct_memory_count
-
-    return replace(
-        inspection,
-        granted_context_count=len(seen_contexts),
-        granted_memory_count=granted_memory_count,
     )
 
 
@@ -419,9 +265,8 @@ def _registry_lock() -> Iterator[None]:
 
 
 @contextmanager
-def authority_grant_snapshot_lock() -> Iterator[ProfileRegistry]:
-    """Freeze Profile selection and grant revisions for one authorized publish."""
-
+def locked_profile_registry() -> Iterator[ProfileRegistry]:
+    """Freeze Profile selection and registry identity during cross-Profile work."""
     with _registry_lock():
         yield load_profile_registry()
 
@@ -461,46 +306,12 @@ def _fsync_directory(path: Path) -> None:
         os.close(descriptor)
 
 
-def _read_granted_access_names(
-    registry: ProfileRegistry,
-    profile_uid: str,
-) -> frozenset[str]:
-    """Return access names whose effective frozen Grant includes READ."""
-
-    result: set[str] = set()
-    grants_by_uid = {grant.uid: grant for grant in registry.grants}
-    placed = tuple(
-        (placement, grants_by_uid[placement.grant_uid])
-        for placement in registry.grant_placements
-        if placement.grantee_profile_uid == profile_uid
-        and placement.grant_uid in grants_by_uid
-    )
-    for placement, grant in placed:
-        for binding in grant.contexts:
-            access_name = (
-                placement.access_name
-                + binding.name[len(grant.resource_name) :]
-            )
-            candidates = tuple(
-                (candidate_placement, candidate)
-                for candidate_placement, candidate in placed
-                if (
-                    access_name == candidate_placement.access_name
-                    or access_name.startswith(candidate_placement.access_name + "/")
-                )
-            )
-            _effective_placement, effective = max(
-                candidates,
-                key=lambda item: len(item[0].access_name.split("/")),
-            )
-            if "READ" in effective.permissions:
-                result.add(access_name)
-    return frozenset(result)
-
-
-def _prepare_profile_deletion_batch(profiles: tuple[ProfileEntry, ...]) -> Path:
+def _prepare_profile_deletion_batch(profiles: tuple[Profile, ...]) -> Path:
     """Prepare reversible sibling moves, including projects on other devices."""
-    from memcommit.application.operations.profile.project_root import validate_profile_marker
+    from memcommit.application.operations.profile.project_root import (
+        validate_profile_marker,
+    )
+
     batch = profile_stores_dir() / f".permanent-profile-removal-{uuid.uuid4().hex}"
     batch.mkdir(mode=0o700)
     entries = []
@@ -511,7 +322,9 @@ def _prepare_profile_deletion_batch(profiles: tuple[ProfileEntry, ...]) -> Path:
                 raise ProfileError(f"Profile {profile.name!r} store cannot be deleted.")
             validate_profile_marker(profile)
             staged = source.parent / f".mem-removal-{uuid.uuid4().hex}"
-            entries.append({"uid": profile.uid, "source": str(source), "staged": str(staged)})
+            entries.append(
+                {"uid": profile.uid, "source": str(source), "staged": str(staged)}
+            )
         _write_json_file(batch / "moves.json", entries)
         for entry in entries:
             os.replace(entry["source"], entry["staged"])
@@ -537,7 +350,9 @@ def _deletion_moves(batch: Path):
     return json.loads(path.read_text()) if path.exists() else []
 
 
-def _rollback_profile_deletion_batch(batch: Path, profiles: tuple[ProfileEntry, ...]) -> None:
+def _rollback_profile_deletion_batch(
+    batch: Path, profiles: tuple[Profile, ...]
+) -> None:
     expected = {p.uid: profile_store_dir(p) for p in profiles}
     for entry in reversed(_deletion_moves(batch)):
         source, staged = Path(entry["source"]), Path(entry["staged"])
@@ -556,7 +371,12 @@ def _destroy_profile_deletion_batch(batch: Path) -> None:
     try:
         for entry in _deletion_moves(batch):
             source, staged = Path(entry["source"]), Path(entry["staged"])
-            if source.name != ".mem" or staged.parent != source.parent or not staged.name.startswith(".mem-removal-") or staged.is_symlink():
+            if (
+                source.name != ".mem"
+                or staged.parent != source.parent
+                or not staged.name.startswith(".mem-removal-")
+                or staged.is_symlink()
+            ):
                 raise ProfileError("Unsafe deletion cleanup boundary.")
             if staged.exists():
                 shutil.rmtree(staged)
@@ -565,7 +385,9 @@ def _destroy_profile_deletion_batch(batch: Path) -> None:
         batch.rmdir()
         _fsync_directory(batch.parent)
     except Exception as error:
-        raise ProfileError("Profile was removed, but private Store cleanup did not finish.") from error
+        raise ProfileError(
+            "Profile was removed, but private Store cleanup did not finish."
+        ) from error
 
 
 def _publish_permanent_removal(
@@ -573,7 +395,7 @@ def _publish_permanent_removal(
     updated: ProfileRegistry,
     *,
     batch: Path,
-    profiles: tuple[ProfileEntry, ...],
+    profiles: tuple[Profile, ...],
     label: str,
 ) -> None:
     """Unregister deleted Profiles; roll back only before registry publication."""

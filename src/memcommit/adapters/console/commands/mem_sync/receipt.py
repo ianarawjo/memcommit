@@ -1,6 +1,7 @@
 """Render actual Sync file effects and committed automatic settings."""
 
 import typer
+
 from memcommit.adapters.console.terminal.core.text import display_escape_text as escape
 from memcommit.adapters.console.terminal.core.theme import (
     semantic_action_role,
@@ -9,24 +10,56 @@ from memcommit.adapters.console.terminal.core.theme import (
 
 
 def render_sync_receipt(result):
-    if result.error:
+    if result.conflict_choice:
         typer.echo(
-            "Automatic Sync failed after the command committed: "
-            + escape(result.error)
-            + " Retry 'mem sync' alone.",
-            err=True,
+            "Used "
+            + ("mem" if result.conflict_choice == "mem" else "external files")
+            + " for all conflicts; both versions are retained as checkpoints."
         )
-        return
-    if result.run_uid:
-        prefix = "Automatically synced" if result.automatic else "Synced"
+        for name, uid in result.revert_checkpoint_uids:
+            typer.echo(f"  REVERT · {escape(name)} [CHECKPOINT {uid[:8]}]")
+    if result.context_effects:
+        typer.echo(f"Synced project documents. [sync {result.run_uid[:8]}]")
+        for action, name, target in result.context_effects:
+            role = semantic_action_role(action)
+            label = (
+                typer.style(action, fg=semantic_color_rgb(role), bold=True)
+                if role
+                else action
+            )
+            typer.echo(
+                f"  {label} CONTEXT · {escape(name)}"
+                + (f" → {escape(target)}" if target else "")
+            )
+    if result.checkpoint_uids and not result.context_effects:
+        for (name, checkpoint_uid), path in zip(
+            result.checkpoint_uids, result.inbound_paths
+        ):
+            typer.echo(
+                f"External file changes: {escape(path)} [CHECKPOINT {checkpoint_uid[:8]}]"
+            )
+            counts = {
+                action: sum(
+                    effect.context_name == name and effect.action == action
+                    for effect in result.memory_effects
+                )
+                for action in ("EDIT", "ADD", "REMOVE", "REORDER")
+            }
+            typer.echo(
+                f"  {counts['EDIT']} edited · {counts['ADD']} added · {counts['REMOVE']} removed"
+                + (" · order changed" if counts["REORDER"] else "")
+            )
+    if result.run_uid and not result.checkpoint_uids:
         typer.echo(
-            f"{prefix} {len(result.context_names)} Context(s). [sync {result.run_uid[:8]}]"
+            f"Synced {len(result.context_names)} Context(s). [sync {result.run_uid[:8]}]"
         )
-    elif not result.automatic_change:
+    elif not result.run_uid:
         typer.echo(
             f"Sync checked {len(result.context_names)} Context(s); files already match."
         )
     for effect in result.effects:
+        if result.checkpoint_uids and effect.action == "UNCHANGED":
+            continue
         role = semantic_action_role(effect.action)
         label = (
             typer.style(effect.action, fg=semantic_color_rgb(role), bold=True)
@@ -34,23 +67,6 @@ def render_sync_receipt(result):
             else effect.action
         )
         typer.echo("  " + label + " · " + escape(effect.path))
-    change = result.automatic_change
-    if change:
-        action = "enabled" if change.enabled else "disabled"
-        if not change.context_names:
-            typer.echo(f"Automatic Sync {action} for this Profile, including future Contexts.")
-            return
-        suffix = (
-            f" ({change.newly_enabled} newly enabled, {change.already_enabled} already enabled)"
-            if change.enabled and change.already_enabled
-            else ""
-        )
-        names = (
-            "'" + escape(change.context_names[0]) + "'"
-            if len(change.context_names) == 1
-            else f"{len(change.context_names)} Contexts"
-        )
-        typer.echo(f"Automatic Sync {action} for {names}{suffix}.")
 
 
 def render_sync_error(error):

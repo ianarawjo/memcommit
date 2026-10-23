@@ -12,8 +12,7 @@ from memcommit.configuration.workspace import workspace_lock
 from memcommit.persistence.import_export.source import read_output_files
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.operations.mem_sync.settings_repository import SyncSettingsRepository
-from memcommit.persistence.operations.mem_sync.baseline_repository import SyncBaselineRepository
-from memcommit.persistence.operations.mem_sync.run_repository import SyncRunRepository
+from memcommit.persistence.operations.mem_sync.checkpoint_agreement import SyncCheckpointAgreementRepository
 from .config import load_profile_registry, profile_root_dir, profile_store_dir
 from .model._storage import _registry_lock, _write_registry, _copy_store, _fsync_directory, _assert_plain_tree
 from .project_root import prepare_profile_root, validate_profile_marker
@@ -37,11 +36,9 @@ def relocate_profile_root(requested_root):
         source = profile_store_dir(profile)
         target = profile_store_dir(moved)
         store = MemoryStore(root=source, create=False)
-        if SyncRunRepository(store).pending():
-            raise ValueError("Finish interrupted Sync before moving this Profile.")
         repository = SyncSettingsRepository(store)
         settings = repository.load()
-        baselines = SyncBaselineRepository(store).load()
+        baselines = SyncCheckpointAgreementRepository(store).load()
         managed = dict(pair for baseline in baselines.values() for pair in baseline.files)
         current = read_output_files(old_root, managed)
         if current != managed:

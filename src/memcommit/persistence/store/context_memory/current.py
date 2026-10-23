@@ -14,10 +14,6 @@ from memcommit.core.context_navigation import (
 from .models import (
     ConcurrentContextUpdateError,
 )
-from .records import (
-    _context_name_parts,
-    context_record_digest,
-)
 from ..infrastructure.atomic_io import (
     _write_json_atomic,
 )
@@ -44,7 +40,7 @@ class _CurrentContextStoreMixin:
         expected_current: str | None,
         direction: ContextNavigationDirection,
     ) -> str:
-        """Freeze one exact back/forward destination for later CAS publication."""
+        """Freeze one exact back/forward destination for conditional selection."""
 
         state = self._read_state()
         if state.get("current") != expected_current:
@@ -69,19 +65,9 @@ class _CurrentContextStoreMixin:
         name: str,
         *,
         expected_context_uid: str,
-        expected_context_digest: str,
         navigation_direction: ContextNavigationDirection | None = None,
     ) -> None:
-        """CAS-switch to one exact Context while blocking save/delete/recreate."""
-        if (
-            not isinstance(expected_context_digest, str)
-            or len(expected_context_digest) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in expected_context_digest
-            )
-        ):
-            raise ValueError("Expected Context digest is invalid.")
+        """Select the reviewed Context identity if the current pointer still matches."""
         with self._context_graph_lock(exclusive=False):
             with self._context_write_lock(name):
                 if not self.context_exists(name):
@@ -91,7 +77,6 @@ class _CurrentContextStoreMixin:
                 target = self.load_direct(name)
                 if (
                     target.uid != expected_context_uid
-                    or context_record_digest(target) != expected_context_digest
                 ):
                     raise ConcurrentContextUpdateError(
                         f"Context '{name}' changed before it could be selected."
@@ -111,40 +96,3 @@ class _CurrentContextStoreMixin:
                             target_name=name,
                         )
                     self._write_state(state)
-
-    def set_current_virtual_context_if(
-        self,
-        expected_current: str | None,
-        name: str,
-        *,
-        navigation_direction: ContextNavigationDirection | None = None,
-    ) -> None:
-        """CAS-select one externally validated granted Context name.
-
-        A granted view is a navigation pointer, not a locally materialized
-        Context. Authorization and authority identity are therefore resolved
-        again by each command that consumes the pointer. Only ``mem switch``
-        may call this after validating a READ grant; query-only routes remain
-        non-selectable.
-        """
-
-        _context_name_parts(name)
-        if self.context_exists(name):
-            raise ValueError(
-                f"Context '{name}' is local and must use the ordinary switch path."
-            )
-        with self._state_write_lock():
-            state = self._read_state()
-            if state.get("current") != expected_current:
-                raise ConcurrentContextUpdateError(
-                    "The current Context changed before it could be switched."
-                )
-            if navigation_direction is None:
-                record_current_context_transition(state, name)
-            else:
-                apply_context_navigation(
-                    state,
-                    direction=navigation_direction,
-                    target_name=name,
-                )
-            self._write_state(state)

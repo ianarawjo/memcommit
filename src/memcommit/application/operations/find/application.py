@@ -14,7 +14,7 @@ from memcommit.application.capabilities.durable_uid_resolution import (
 
 
 FindMode = Literal["LITERAL", "REGEX"]
-FindItemKind = Literal["memory", "memory_ref"]
+FindItemKind = Literal[("memory",)]
 _PATTERN_LIMIT = 2_000
 
 
@@ -33,7 +33,6 @@ class FindRequest:
     pattern: str
     target_names: tuple[str, ...]
     include_descendants: bool = False
-    follow_embeds: bool = False
     mode: FindMode = "LITERAL"
     ignore_case: bool = False
 
@@ -55,10 +54,7 @@ class FindRequest:
             raise FindInputError(
                 "Find requires at least one distinct readable Context."
             )
-        if (
-            type(self.include_descendants) is not bool
-            or type(self.follow_embeds) is not bool
-        ):
+        if type(self.include_descendants) is not bool:
             raise FindInputError("Find reach choices must be booleans.")
         if self.mode not in {"LITERAL", "REGEX"}:
             raise FindInputError("Find mode must be LITERAL or REGEX.")
@@ -76,9 +72,6 @@ class FindSourceItem:
     item_uid: str
     source_position: int
     content: str
-    source_context_name: str | None = None
-    source_context_uid: str | None = None
-    source_memory_uid: str | None = None
 
     def __post_init__(self) -> None:
         text_values = (
@@ -88,7 +81,7 @@ class FindSourceItem:
         )
         if any(not isinstance(value, str) or not value for value in text_values):
             raise FindError("Find source identities must be nonblank text.")
-        if self.kind not in {"memory", "memory_ref"}:
+        if self.kind not in {"memory"}:
             raise FindError("Find received an unsupported source item.")
         if (
             not isinstance(self.source_position, int)
@@ -98,18 +91,6 @@ class FindSourceItem:
             raise FindError("Find source position must be a positive integer.")
         if not isinstance(self.content, str):
             raise FindError("Find source content must be text.")
-        reference = (
-            self.source_context_name,
-            self.source_context_uid,
-            self.source_memory_uid,
-        )
-        if self.kind == "memory_ref":
-            if not all(isinstance(value, str) and value for value in reference):
-                raise FindError("Find Memory reference provenance must be complete.")
-        elif any(value is not None for value in reference):
-            raise FindError(
-                "Direct Find Memory sources cannot carry reference provenance."
-            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,13 +222,6 @@ def run_find(
         identity_candidates: list[DurableUidCandidate[FindSourceItem]] = []
         for item in frozen.items:
             identity_uids = [item.item_uid]
-            if (
-                item.source_memory_uid is not None
-                and item.source_memory_uid != item.item_uid
-            ):
-                # Reference rows expose both the relationship and Source
-                # Memory identities; either printed UID must round-trip.
-                identity_uids.append(item.source_memory_uid)
             identity_candidates.extend(
                 DurableUidCandidate(uid=uid, kind=item.kind, value=item)
                 for uid in identity_uids

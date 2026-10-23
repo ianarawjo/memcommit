@@ -2,6 +2,8 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.core.context_name_validation import validate_context_name
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.application.operations.init.application import (
     ContextInitError,
     ContextInitRequest,
@@ -16,7 +18,7 @@ from memcommit.adapters.console.commands.init.choose_name import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
-from memcommit.persistence.store import MemoryStore, validate_context_name
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(
@@ -61,6 +63,7 @@ def cmd(
                 chooser=choose_context_name,
             )
             if request is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Initialization cancelled — no Context was created.")
                 return
         else:

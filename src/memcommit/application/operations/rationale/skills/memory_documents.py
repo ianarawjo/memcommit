@@ -9,7 +9,7 @@ except ImportError:
     from importlib.abc import Traversable
 
 from memcommit.application.operations.rationale.model import RationaleRulesError
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.persistence.operation_contexts.repository import (
     load_operation_context,
     read_operation_json,
@@ -30,11 +30,7 @@ _PROSE_FIELDS = frozenset(
 
 
 def read_memory_document(resource: Traversable, *, memory_uids: set[str]) -> object:
-    """Reconstruct the unchanged execution contract from exact authored text.
-
-    Bindings carry control metadata and prose slots, not another copy of the
-    prose. These slots are operation-local bindings, not durable MemoryRefs.
-    """
+    """Reconstruct the execution contract from authored text. Bindings hold control metadata and prose slots without duplicating the prose."""
     try:
         context = load_operation_context(resource.joinpath("context.json"))
         binding = read_operation_json(resource.joinpath("bindings.json"))

@@ -52,10 +52,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help=(
-                "Include readable lexical descendants and embedded Contexts "
-                "in inventory totals"
-            ),
+            help=("Include local lexical descendants in inventory totals"),
         ),
     ] = False,
 ) -> None:
@@ -73,7 +70,6 @@ def cmd(
         result = execute_status(
             StatusRequest(
                 include_descendants=include_recursive,
-                follow_embeds=include_recursive,
             ),
             store=MemoryStore(),
         )

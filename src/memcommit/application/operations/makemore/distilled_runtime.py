@@ -46,8 +46,7 @@ from memcommit.application.operations.makemore.model import (
     MakemoreProvider,
 )
 from memcommit.application.operations.makemore.target_context import (
-    GRANTED_MAKEMORE_ADD_PERMISSIONS,
-    authorized_frozen_makemore_target,
+    revalidated_makemore_target,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -96,13 +95,13 @@ def _assert_source_unchanged(
         )
 
 
-def _goal_bindings(focus: FrozenGoalFocus | None) -> tuple[tuple[str, str, str], ...]:
+def _goal_bindings(focus: FrozenGoalFocus | None) -> tuple[tuple[str, str], ...]:
     if focus is None or focus.kind == "INLINE":
         return ()
     assert focus.context_name is not None
     assert focus.context_uid is not None
     assert focus.context_digest is not None
-    return ((focus.context_name, focus.context_uid, focus.context_digest),)
+    return ((focus.context_name, focus.context_uid),)
 
 
 def _distillation_checkpoint_payload(result: DistillResult) -> dict[str, object]:
@@ -226,7 +225,7 @@ def apply_prepared_distilled_makemore_add(
         prepared.distill.frozen_source
     )
     ambient_bindings = tuple(
-        (item.context_name, item.context_uid, item.context_digest)
+        (item.context_name, item.context_uid)
         for item in prepared.makemore.target_context.local_contexts
     )
     bindings = tuple(
@@ -235,11 +234,10 @@ def apply_prepared_distilled_makemore_add(
         )
     )
     contents = makemore_result_contents(prepared.result)
-    with authorized_frozen_makemore_target(
+    with revalidated_makemore_target(
         store,
         prepared.makemore.target_context,
         revalidate_after=False,
-        required_granted_permissions=GRANTED_MAKEMORE_ADD_PERMISSIONS,
     ):
         _assert_source_unchanged(prepared)
         return memorize_semantic_result(
@@ -255,11 +253,6 @@ def apply_prepared_distilled_makemore_add(
                 "distillation": _distillation_checkpoint_payload(prepared.distill),
                 **makemore_checkpoint_payload(prepared.result),
             },
-            description=(
-                f"Added {len(contents)} Makemore Cases from "
-                f"{len(prepared.distill.analysis.rules)} transient distilled Rules "
-                f"to '{prepared.target_name}'"
-            ),
         )
 
 

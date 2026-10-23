@@ -192,7 +192,7 @@ def analyze_sever(
         "when nothing changed. Do not use bullets or headings inside either paragraph. "
         "Do not use tools, filesystem, "
         "network, MCP, apps, "
-        "query-only sources, or outside knowledge. Return only JSON matching the schema.\n\n"
+        "outside knowledge. Return only JSON matching the schema.\n\n"
         + SEVER_PAYLOAD_MARKER
         + json.dumps(payload, ensure_ascii=False)
     )

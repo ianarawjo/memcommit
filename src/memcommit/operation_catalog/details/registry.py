@@ -21,6 +21,7 @@ from memcommit.operation_catalog.details.revert import REVERT_DETAILS
 from memcommit.operation_catalog.details.semantic_session_commands import (
     SEMANTIC_SESSION_COMMAND_DETAILS,
 )
+from memcommit.operation_catalog.details.sync import SYNC_DETAILS
 from memcommit.operation_catalog.details.translate import TRANSLATE_DETAILS
 from memcommit.operation_catalog.details.update_meld import UPDATE_MELD_DETAILS
 from memcommit.operation_catalog.model import OperationHelpDetail
@@ -44,6 +45,7 @@ _DETAIL_GROUPS = (
     QUERY_DETAILS,
     REVERT_DETAILS,
     SEMANTIC_SESSION_COMMAND_DETAILS,
+    SYNC_DETAILS,
     TRANSLATE_DETAILS,
     UPDATE_MELD_DETAILS,
 )

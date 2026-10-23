@@ -81,8 +81,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "UID/prefix or CONTEXT:UID of the directly owned Memory; "
-                "a bare UID must be unique across all local Contexts; "
+                "UID/prefix of a Memory in the current Context; "
+                "the prefix must be unique within this Context; "
                 "omit both positional operands in a terminal to choose it interactively"
             ),
         ),
@@ -105,15 +105,6 @@ def cmd(
             ),
         ),
     ] = None,
-    context_name: Annotated[
-        Optional[str],
-        typer.Option(
-            "--context",
-            "-c",
-            metavar="CONTEXT",
-            help="Local Context or granted view containing the Memory",
-        ),
-    ] = None,
 ) -> None:
     interactive_plan: FrozenEditPlan | None = None
     if input_source is None:
@@ -123,7 +114,6 @@ def cmd(
             try:
                 interactive_plan = choose_edit_setup(
                     edit_port,
-                    requested_context=context_name,
                 )
             except (
                 FileNotFoundError,
@@ -195,11 +185,10 @@ def cmd(
         if input_source is None:
             assert memory_selector is not None
             assert content is not None
-            request = EditRequest(memory_selector, content, context_name)
+            request = EditRequest(memory_selector, content)
         else:
             request = EditBatchRequest(
                 edits=tuple(parse_input_records(read_batch_input_text(input_source))),
-                context_locator=context_name,
                 input_source=input_source,
             )
         result = run_edit(request, port=port)

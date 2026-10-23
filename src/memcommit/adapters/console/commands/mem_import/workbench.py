@@ -10,14 +10,15 @@ from prompt_toolkit.output import Output
 
 from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryRow,
-    ContextMemorySelection,
     choose_context,
     context_memory_rows,
 )
 from memcommit.adapters.console.terminal.components.context_reach_dialog import (
     choose_context_reach,
 )
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 from memcommit.adapters.console.terminal.components.command_editor.approval import (
     approve_exact_command,
 )
@@ -28,19 +29,19 @@ from memcommit.adapters.console.terminal.components.flat_selection_dialog import
     choose_flat_option,
 )
 from memcommit.adapters.console.terminal.components.primitives import ExactNameFieldView
-from memcommit.core.context import Memory, MemoryRef
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextNameView,
     choose_context_name,
 )
 from memcommit.application.operations.profile.config import (
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.mem_import.context import plan_context_import
 from memcommit.application.operations.mem_import.contracts import (
@@ -113,7 +114,7 @@ def freeze_import_source_catalog(
 def _frozen_source_profile(
     catalog: ImportSourceCatalog,
     source: ImportSourceProfile,
-) -> ProfileEntry:
+) -> Profile:
     registry = load_profile_registry()
     if registry.active_uid != catalog.active_profile_uid:
         raise ProfileError("Active Profile changed during import setup; reopen it.")
@@ -160,7 +161,7 @@ def _import_memory_rows(
     context = store.load(context_name)
     projected = context_memory_rows(context)
     display_items = tuple(
-        item for item in context.iter_items() if isinstance(item, (Memory, MemoryRef))
+        item for item in context.iter_memories() if isinstance(item, Memory)
     )
     if len(projected) != len(display_items):
         raise ProfileError("Source Memory preview changed during import setup.")
@@ -235,7 +236,7 @@ def _fresh_context_root(
     ):
         suffix += 1
         candidate = f"{stem}-import" if suffix == 2 else f"{stem}-import-{suffix}"
-    return validate_portable_context_name(candidate)
+    return validate_context_name(candidate)
 
 
 def _context_target_validator(
@@ -247,7 +248,7 @@ def _context_target_validator(
     occupied = set(destination_names)
 
     def validate(value: str) -> None:
-        target_root = validate_portable_context_name(value)
+        target_root = validate_context_name(value)
         collisions = tuple(
             name
             for name in _mapped_context_names(
@@ -265,9 +266,7 @@ def _context_target_validator(
     return validate
 
 
-def _profile_review(
-    source: ImportSourceProfile, target_name: str
-) -> CommandReview:
+def _profile_review(source: ImportSourceProfile, target_name: str) -> CommandReview:
     return CommandReview(
         argv=(
             "mem",
@@ -530,7 +529,7 @@ def choose_import_setup(
         app_output=app_output,
         require_tty=require_tty,
     )
-    if not isinstance(selected_memory, ContextMemorySelection):
+    if not isinstance(selected_memory, tuple):
         return None
     destination = MemoryStore()
     destination_names = tuple(destination.list_context_names())

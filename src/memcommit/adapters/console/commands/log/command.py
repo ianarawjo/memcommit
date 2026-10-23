@@ -466,7 +466,6 @@ def cmd(
                 store,
                 context_name,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             ).name
             if context_name is not None
             else context_snapshot.current_name

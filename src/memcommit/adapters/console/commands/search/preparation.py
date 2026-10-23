@@ -1,4 +1,4 @@
-"""Resolve Search operands into one frozen, grant-aware execution environment."""
+"""Resolve Find operands into one frozen local execution environment."""
 
 from __future__ import annotations
 
@@ -38,7 +38,6 @@ def prepare_search(
     context_names: Sequence[str] | str | None = None,
     all_contexts: bool = False,
     interactive: bool = False,
-    follow_embeds: bool = False,
 ) -> PreparedSearch:
     snapshot = ContextOperandSnapshot.capture(store)
     if all_contexts and context_names:
@@ -59,17 +58,14 @@ def prepare_search(
             store,
             operand,
             current_name=snapshot.current_name,
-            required_permission="READ",
             candidates=candidates,
         ).value
         for operand in operands
     )
     target_names = tuple(access.access_name for access in accesses)
     if len(set(target_names)) != len(target_names):
-        raise ValueError("Search Context roots must be distinct.")
+        raise ValueError("Find Context roots must be distinct.")
     initial_access = accesses[0]
-    # TUI Browse exposes PROFILE and can toggle Embeds later. A static exact
-    # request retains its selected-Context catalog instead of gaining breadth.
     freeze_catalog = (
         freeze_profile_readable_context_catalog
         if interactive or all_contexts or len(target_names) > 1
@@ -78,7 +74,6 @@ def prepare_search(
     catalog = freeze_catalog(
         store,
         initial_access,
-        include_query_routes=interactive or follow_embeds,
     )
     if all_contexts:
         # Expand PROFILE from the same catalog passed to execution and the TUI;

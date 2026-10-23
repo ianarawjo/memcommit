@@ -10,10 +10,9 @@ def new_context_names(store: MemoryStore, prefixes: tuple[str, ...]) -> tuple[st
     """Give every requested role one shared, unoccupied three-hex run code."""
     if not prefixes or len(set(prefixes)) != len(prefixes):
         raise ValueError("Scenario Context prefixes must be nonempty and distinct.")
-    existing = {entry.name for entry in load_contexts_catalog(store).entries}
+    context_names, _ = load_contexts_catalog(store)
+    existing = set(context_names)
     start = int(uuid4().hex[:3], 16)
-    # Probe the finite namespace once: random retry alone can loop forever near
-    # exhaustion. Check every role, including readable Grant names, as one set.
     for offset in range(16**3):
         code = f"{(start + offset) % (16**3):03x}"
         names = tuple(f"{prefix}-{code}" for prefix in prefixes)

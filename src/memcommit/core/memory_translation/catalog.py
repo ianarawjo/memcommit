@@ -9,7 +9,8 @@ from typing import Iterable
 import unicodedata
 import uuid
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
 TRANSLATION_CATALOG_CONTRACT_VERSION = "translate-v2"
@@ -182,7 +183,9 @@ def direct_source_memories(
     if not isinstance(context, Context):
         return None
     if selected_memory_uid is None:
-        return tuple(item for item in context.iter_items() if isinstance(item, Memory))
+        return tuple(
+            item for item in context.iter_memories() if isinstance(item, Memory)
+        )
     source = context.memories.get(selected_memory_uid)
     if not isinstance(source, Memory):
         return None
@@ -380,7 +383,7 @@ def order_catalog_entries(
 ) -> tuple[TranslationCatalogEntry, ...]:
     ordered: list[TranslationCatalogEntry] = []
     seen: set[str] = set()
-    for item in context.iter_items():
+    for item in context.iter_memories():
         if isinstance(item, Memory) and item.uid in by_uid:
             ordered.append(by_uid[item.uid])
             seen.add(item.uid)

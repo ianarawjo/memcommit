@@ -105,15 +105,11 @@ def duplicate_relations(
     *, before: _Frame, after: _Frame, entry: dict
 ) -> list[MemoryHistoryRelation]:
     """Validate exact/semantic duplicate selections against their retained states."""
-    args = entry.get("args") or {}
+    args = entry.get("command_details") or {}
     command = entry.get("command")
     if command not in {"dedup", "dedun"}:
         return []
-    groups = (
-        args.get("groups", [])
-        if command == "dedup"
-        else args.get("exact_item_groups", [])
-    )
+    groups = args.get("groups", []) if command == "dedup" else []
     pairs: list[tuple[str, str, str]] = []
     for group in groups:
         if group.get("item_kind") != "MEMORY":
@@ -155,7 +151,7 @@ def duplicate_relations(
                 command=command,
                 checkpoint_uid=entry["uid"],
                 timestamp=entry["timestamp"],
-                description=entry.get("description") or "",
+                description=entry.get("checkpoint_message") or command,
                 before=(before.memories[uid],),
                 after=(after.memories[survivor],),
                 reason=reason or None,

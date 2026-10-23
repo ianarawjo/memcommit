@@ -35,7 +35,6 @@ class ReplaceRequest:
     replacement: str
     target_names: tuple[str, ...]
     include_descendants: bool = False
-    follow_embeds: bool = False
     mode: ReplaceMode = "LITERAL"
     ignore_case: bool = False
 
@@ -45,7 +44,6 @@ class ReplaceRequest:
                 pattern=self.pattern,
                 target_names=self.target_names,
                 include_descendants=self.include_descendants,
-                follow_embeds=self.follow_embeds,
                 mode=self.mode,
                 ignore_case=self.ignore_case,
             )
@@ -71,13 +69,12 @@ class ReplaceSourceMemory:
 class FrozenReplaceContext:
     name: str
     uid: str
-    digest: str
     memories: tuple[ReplaceSourceMemory, ...]
 
     def __post_init__(self) -> None:
         if any(
             not isinstance(value, str) or not value
-            for value in (self.name, self.uid, self.digest)
+            for value in (self.name, self.uid)
         ):
             raise ReplaceError("Replace frozen Context identity is incomplete.")
         if len({memory.uid for memory in self.memories}) != len(self.memories):
@@ -138,14 +135,13 @@ class ReplaceMemoryChange:
 class ReplaceContextPlan:
     context_name: str
     context_uid: str
-    context_digest: str
     scanned_memory_count: int
     matches: tuple[ReplaceMemoryChange, ...]
 
     def __post_init__(self) -> None:
         if any(
             not isinstance(value, str) or not value
-            for value in (self.context_name, self.context_uid, self.context_digest)
+            for value in (self.context_name, self.context_uid)
         ):
             raise ReplaceError("Replace Context plan identity is incomplete.")
         if (
@@ -261,7 +257,6 @@ def _plan_payload(
             "replacement": request.replacement,
             "target_names": list(request.target_names),
             "include_descendants": request.include_descendants,
-            "follow_embeds": request.follow_embeds,
             "mode": request.mode,
             "ignore_case": request.ignore_case,
         },
@@ -269,7 +264,6 @@ def _plan_payload(
             {
                 "name": context.context_name,
                 "uid": context.context_uid,
-                "digest": context.context_digest,
                 "scanned_memory_count": context.scanned_memory_count,
                 "matches": [
                     {
@@ -312,7 +306,6 @@ def plan_replace(request: ReplaceRequest, *, port: ReplacePort) -> FrozenReplace
             pattern=request.pattern,
             target_names=request.target_names,
             include_descendants=request.include_descendants,
-            follow_embeds=request.follow_embeds,
             mode=request.mode,
             ignore_case=request.ignore_case,
         )
@@ -346,7 +339,6 @@ def plan_replace(request: ReplaceRequest, *, port: ReplacePort) -> FrozenReplace
             ReplaceContextPlan(
                 context_name=context.name,
                 context_uid=context.uid,
-                context_digest=context.digest,
                 scanned_memory_count=len(context.memories),
                 matches=tuple(changes),
             )

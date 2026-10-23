@@ -8,24 +8,19 @@ from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
 
-DeletedItemKind = Literal[
-    "MEMORY",
-    "MEMORY_REF",
-    "QUERY_CONTEXT_REF",
-    "CONTEXT",
-]
+DeletedItemKind = Literal["MEMORY",]
 ContextDeletionStatus = Literal["APPLIED", "APPLIED_WITH_CLEANUP_WARNING"]
 
 
-class DeleteError(RuntimeError):
+class MemDeleteError(RuntimeError):
     """Base failure for one unified Delete operation request."""
 
 
-class DeleteInputError(DeleteError, ValueError):
+class DeleteInputError(MemDeleteError, ValueError):
     """A Delete selector or reviewed plan is invalid."""
 
 
-class DeleteStalePlanError(DeleteError):
+class DeleteStalePlanError(MemDeleteError):
     """The exact deletion target changed after it was reviewed."""
 
 
@@ -39,6 +34,8 @@ class DirectItemDeleteRequest:
     def __post_init__(self) -> None:
         if not isinstance(self.selector, str) or not self.selector:
             raise DeleteInputError("Delete item selector must be nonblank text.")
+        if ":" in self.selector:
+            raise DeleteInputError("Delete accepts only a Memory UID in the current Context.")
         if self.context_locator is not None and (
             not isinstance(self.context_locator, str) or not self.context_locator
         ):
@@ -47,38 +44,19 @@ class DirectItemDeleteRequest:
 
 @dataclass(frozen=True, slots=True)
 class DeletedDirectItem:
-    """Stable projection of the direct item removed from its owner."""
+    """Stable projection of one directly owned Memory removed by Delete."""
 
     kind: DeletedItemKind
     uid: str
-    content: str | None = None
-    name: str | None = None
-    target_context_name: str | None = None
-    target_memory_uid: str | None = None
+    content: str
 
     def __post_init__(self) -> None:
-        if self.kind not in {
-            "MEMORY",
-            "MEMORY_REF",
-            "QUERY_CONTEXT_REF",
-            "CONTEXT",
-        }:
-            raise DeleteError("Deleted direct-item kind is invalid.")
+        if self.kind != "MEMORY":
+            raise MemDeleteError("Deleted direct-item kind is invalid.")
         if not isinstance(self.uid, str) or not self.uid:
-            raise DeleteError("Deleted direct-item UID must be nonblank text.")
-        if self.kind == "MEMORY" and not isinstance(self.content, str):
-            raise DeleteError("Deleted Memory content must be text.")
-        if self.kind in {"QUERY_CONTEXT_REF", "CONTEXT"} and (
-            not isinstance(self.name, str) or not self.name
-        ):
-            raise DeleteError("Deleted Context-like item name is incomplete.")
-        if self.kind == "MEMORY_REF" and (
-            not isinstance(self.target_context_name, str)
-            or not self.target_context_name
-            or not isinstance(self.target_memory_uid, str)
-            or not self.target_memory_uid
-        ):
-            raise DeleteError("Deleted Memory Reference target is incomplete.")
+            raise MemDeleteError("Deleted Memory UID must be nonblank text.")
+        if not isinstance(self.content, str):
+            raise MemDeleteError("Deleted Memory content must be text.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,11 +70,11 @@ class FrozenDirectItemDeleteTarget:
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name:
-            raise DeleteError("Delete item target Context name is incomplete.")
+            raise MemDeleteError("Delete item target Context name is incomplete.")
         if not isinstance(self.context_uid, str) or not self.context_uid:
-            raise DeleteError("Delete item target Context UID is incomplete.")
+            raise MemDeleteError("Delete item target Context UID is incomplete.")
         if not isinstance(self.item, DeletedDirectItem):
-            raise DeleteError("Delete item target is invalid.")
+            raise MemDeleteError("Delete item target is invalid.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,9 +91,9 @@ class DirectItemDeleteResult:
             not isinstance(value, str) or not value
             for value in (self.context_name, self.context_uid, self.checkpoint_uid)
         ):
-            raise DeleteError("Delete item receipt identity is incomplete.")
+            raise MemDeleteError("Delete item receipt identity is incomplete.")
         if not isinstance(self.item, DeletedDirectItem):
-            raise DeleteError("Delete item receipt has an invalid item.")
+            raise MemDeleteError("Delete item receipt has an invalid item.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -135,7 +113,6 @@ class FrozenContextDeletePlan:
 
     context_name: str
     context_uid: str
-    context_digest: str
     plan_digest: str
     token: object = field(repr=False, compare=False)
 
@@ -144,9 +121,8 @@ class FrozenContextDeletePlan:
             not isinstance(value, str) or not value
             for value in (self.context_name, self.context_uid)
         ):
-            raise DeleteError("Delete Context plan identity is incomplete.")
+            raise MemDeleteError("Delete Context plan identity is incomplete.")
         for value, label in (
-            (self.context_digest, "Context"),
             (self.plan_digest, "plan"),
         ):
             if (
@@ -154,7 +130,7 @@ class FrozenContextDeletePlan:
                 or len(value) != 64
                 or any(character not in "0123456789abcdef" for character in value)
             ):
-                raise DeleteError(f"Delete {label} digest is invalid.")
+                raise MemDeleteError(f"Delete {label} digest is invalid.")
 
     @property
     def descendants_preserved(self) -> bool:
@@ -180,7 +156,6 @@ class ContextDeleteResult:
     status: ContextDeletionStatus
     context_name: str
     context_uid: str
-    context_digest: str
     plan_digest: str
     event_uid: str
     operation_id: str
@@ -190,7 +165,7 @@ class ContextDeleteResult:
 
     def __post_init__(self) -> None:
         if self.status not in {"APPLIED", "APPLIED_WITH_CLEANUP_WARNING"}:
-            raise DeleteError("Delete Context result status is invalid.")
+            raise MemDeleteError("Delete Context result status is invalid.")
         if any(
             not isinstance(value, str) or not value
             for value in (
@@ -201,15 +176,15 @@ class ContextDeleteResult:
                 self.previous_checkpoint_status,
             )
         ):
-            raise DeleteError("Delete Context receipt identity is incomplete.")
+            raise MemDeleteError("Delete Context receipt identity is incomplete.")
         if self.descendants_preserved is not True:
-            raise DeleteError("Delete Context must preserve lexical descendants.")
+            raise MemDeleteError("Delete Context must preserve lexical descendants.")
         if self.status == "APPLIED" and self.cleanup_warning is not None:
-            raise DeleteError("Successful Delete receipt cannot contain a warning.")
+            raise MemDeleteError("Successful Delete receipt cannot contain a warning.")
         if self.status == "APPLIED_WITH_CLEANUP_WARNING" and (
             not isinstance(self.cleanup_warning, str) or not self.cleanup_warning
         ):
-            raise DeleteError("Incomplete cleanup requires a bounded warning.")
+            raise MemDeleteError("Incomplete cleanup requires a bounded warning.")
 
 
 class DeletePort(Protocol):
@@ -238,16 +213,14 @@ def context_delete_plan_digest(
     *,
     context_name: str,
     context_uid: str,
-    context_digest: str,
 ) -> str:
-    """Bind approval to one identity, record revision, and effect contract."""
+    """Bind approval to one Context identity and its deletion effects."""
 
     payload = {
         "version": 1,
         "operation": "delete-context",
         "context_name": context_name,
         "context_uid": context_uid,
-        "context_digest": context_digest,
         "checkpoint_history_deleted": True,
         "descendants_preserved": True,
         "lifecycle_metadata_retained": True,
@@ -274,16 +247,16 @@ def run_direct_item_delete(
         raise DeleteInputError("Delete item requires a DirectItemDeleteRequest.")
     target = frozen_target or port.freeze_item(request)
     if not isinstance(target, FrozenDirectItemDeleteTarget):
-        raise DeleteError("Delete port returned an invalid item target.")
+        raise MemDeleteError("Delete port returned an invalid item target.")
     result = port.remove_item(target)
     if not isinstance(result, DirectItemDeleteResult):
-        raise DeleteError("Delete port returned an invalid item receipt.")
+        raise MemDeleteError("Delete port returned an invalid item receipt.")
     if (
         result.context_name != target.context_name
         or result.context_uid != target.context_uid
         or result.item != target.item
     ):
-        raise DeleteError("Delete item receipt does not match its frozen target.")
+        raise MemDeleteError("Delete item receipt does not match its frozen target.")
     return result
 
 
@@ -298,14 +271,13 @@ def prepare_context_delete(
         raise DeleteInputError("Delete Context requires a ContextDeleteRequest.")
     plan = port.freeze_context(request)
     if not isinstance(plan, FrozenContextDeletePlan):
-        raise DeleteError("Delete port returned an invalid Context plan.")
+        raise MemDeleteError("Delete port returned an invalid Context plan.")
     expected = context_delete_plan_digest(
         context_name=plan.context_name,
         context_uid=plan.context_uid,
-        context_digest=plan.context_digest,
     )
     if plan.plan_digest != expected:
-        raise DeleteError("Delete Context plan does not match its exact target.")
+        raise MemDeleteError("Delete Context plan does not match its exact target.")
     return plan
 
 
@@ -321,20 +293,18 @@ def apply_context_delete(
     expected = context_delete_plan_digest(
         context_name=plan.context_name,
         context_uid=plan.context_uid,
-        context_digest=plan.context_digest,
     )
     if plan.plan_digest != expected:
         raise DeleteInputError("Delete Context plan digest was modified after review.")
     result = port.delete_context(plan)
     if not isinstance(result, ContextDeleteResult):
-        raise DeleteError("Delete port returned an invalid Context receipt.")
+        raise MemDeleteError("Delete port returned an invalid Context receipt.")
     if (
         result.context_name != plan.context_name
         or result.context_uid != plan.context_uid
-        or result.context_digest != plan.context_digest
         or result.plan_digest != plan.plan_digest
     ):
-        raise DeleteError("Delete Context receipt does not match its reviewed plan.")
+        raise MemDeleteError("Delete Context receipt does not match its reviewed plan.")
     return result
 
 
@@ -342,7 +312,7 @@ __all__ = [
     "ContextDeleteRequest",
     "ContextDeleteResult",
     "ContextDeletionStatus",
-    "DeleteError",
+    "MemDeleteError",
     "DeleteInputError",
     "DeletePort",
     "DeleteStalePlanError",

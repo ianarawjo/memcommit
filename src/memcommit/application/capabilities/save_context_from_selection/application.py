@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
 
-SaveContextMode = Literal["COPY", "REFERENCE", "EMBED"]
+SaveContextMode = Literal["COPY"]
 
 
 class SaveContextFromSelectionError(RuntimeError):
@@ -70,7 +70,9 @@ class SelectedMemory:
             self.source_memory_uid,
             self.content,
         )
-        if any(not isinstance(value, str) or not value.strip() for value in required_text):
+        if any(
+            not isinstance(value, str) or not value.strip() for value in required_text
+        ):
             raise SaveContextFromSelectionError(
                 "A selected Memory has incomplete Source identity or content."
             )
@@ -98,9 +100,9 @@ class SaveContextFromSelectionRequest:
             raise SaveContextFromSelectionError(
                 "Saving a Context requires typed selected Memories."
             )
-        if self.mode not in {"COPY", "REFERENCE", "EMBED"}:
+        if self.mode not in {"COPY"}:
             raise SaveContextFromSelectionError(
-                "Choose COPY, REFERENCE, or EMBED."
+                "Saving selected Memories requires COPY."
             )
         if (
             not isinstance(self.destination_name, str)
@@ -119,14 +121,11 @@ class SaveContextFromSelectionRequest:
                 "A Source result position was selected more than once."
             )
         identities = [
-            (item.source_context_uid, item.source_memory_uid)
-            for item in self.selection
+            (item.source_context_uid, item.source_memory_uid) for item in self.selection
         ]
         if len(set(identities)) != len(identities):
             duplicate = next(
-                identity
-                for identity in identities
-                if identities.count(identity) > 1
+                identity for identity in identities if identities.count(identity) > 1
             )
             raise SaveContextFromSelectionError(
                 f"Source Memory [{duplicate[1][:8]}] was selected more than once."
@@ -143,7 +142,7 @@ class FrozenContextSelectionSave:
     token: object = field(repr=False, compare=False)
 
     def __post_init__(self) -> None:
-        if self.mode not in {"COPY", "REFERENCE", "EMBED"}:
+        if self.mode not in {"COPY"}:
             raise SaveContextFromSelectionError(
                 "A frozen selected-Context save has an invalid mode."
             )
@@ -164,7 +163,7 @@ class SaveContextFromSelectionResult:
     item_uids: tuple[str, ...]
 
     def __post_init__(self) -> None:
-        if self.mode not in {"COPY", "REFERENCE", "EMBED"}:
+        if self.mode not in {"COPY"}:
             raise SaveContextFromSelectionError(
                 "A selected-Context save receipt has an invalid mode."
             )

@@ -3,8 +3,9 @@
 from __future__ import annotations
 import json
 import hashlib
-from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from ..model import MemContent, OutputFile, fail
 
 
@@ -28,7 +29,7 @@ def decode_context(record: object) -> Context:
     if set(record) - {"uid", "name", "memories", "order", "document", "attached_files"}:
         raise ValueError("Native Context contains unsupported fields.")
     _identity(record["uid"])
-    validate_portable_context_name(record["name"])
+    validate_context_name(record["name"])
     items = record["memories"]
     if not isinstance(items, dict):
         raise ValueError("Native Context memories must be an object keyed by UID.")
@@ -46,26 +47,7 @@ def decode_context(record: object) -> Context:
         _identity(uid)
         if not isinstance(item, dict) or item.get("uid") != uid:
             raise ValueError("Native Context item UID must match its dictionary key.")
-        kind = item.get("type")
-        if kind == "memory":
-            decode_memory(item)
-        elif kind == "context_ref":
-            if set(item) != {"type", "uid", "name"}:
-                raise ValueError(
-                    "Native Context reference contains unsupported fields."
-                )
-            validate_portable_context_name(item["name"])
-        elif kind in {"memory_ref", "memory_snapshot_ref"}:
-            reference = MemoryRef.from_dict(item)
-            validate_portable_context_name(reference.target_context_name)
-            if reference.to_dict() != item:
-                raise ValueError(
-                    "Native Memory reference is not losslessly importable."
-                )
-        else:
-            # A file supplies data, never a live authority binding. Unknown
-            # kinds must fail before Context.from_dict can silently omit them.
-            raise ValueError(f"Unsupported native Context item type: {kind!r}.")
+        decode_memory(item)
     return Context.from_dict(record)
 
 
@@ -105,30 +87,7 @@ def validate_mem(content):
     if len(names) != len(contexts) or len({c.uid for c in contexts}) != len(contexts):
         fail("duplicate-context", "mem", "Context names and identities must be unique.")
     for context in contexts:
-        for item in context.iter_items():
-            if isinstance(item, Context):
-                other = names.get(item.name)
-                if other is None or other.uid != item.uid:
-                    fail(
-                        "open-reference",
-                        context.name,
-                        "Context reference is outside the export/import set; include its lexical subtree with -r.",
-                    )
-            elif isinstance(item, MemoryRef) and not item.is_snapshot:
-                other = names.get(item.target_context_name)
-                if (
-                    other is None
-                    or other.uid != item.target_context_uid
-                    or not isinstance(
-                        other.memories.get(item.target_memory_uid), Memory
-                    )
-                ):
-                    fail(
-                        "open-reference",
-                        context.name,
-                        "Memory reference is outside the export/import set.",
-                    )
-        for file in context.attached_files:
+        for file in context.asset_metadata:
             data = content.attached_data.get(file.sha256)
             if data is None or hashlib.sha256(data).hexdigest() != file.sha256:
                 fail(

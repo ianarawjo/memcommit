@@ -12,7 +12,7 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
@@ -59,7 +59,6 @@ def run_edit_tui(
     setup: EditTuiSetup,
     *,
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]],
-    content_loader: Callable[[DirectMemoryTarget], str],
     prepare: Callable[[EditRequest], FrozenEditPlan],
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -68,10 +67,7 @@ def run_edit_tui(
     if require_tty:
         require_interactive_terminal(
             "Interactive Edit",
-            snapshot_hint=(
-                "Pass MEMORY_SELECTOR CONTENT and optionally --context "
-                "CONTEXT outside a terminal."
-            ),
+            snapshot_hint=("Pass MEMORY_UID CONTENT outside a terminal."),
         )
     if not isinstance(setup, EditTuiSetup):
         raise TypeError("Edit TUI requires an EditTuiSetup.")
@@ -80,7 +76,7 @@ def run_edit_tui(
         DirectMemorySelectorView(
             names=setup.names,
             selected_context=setup.selected_context,
-            label="MEMORY · DIRECTLY OWNED · EDITABLE · * CURRENT",
+            label="MEMORY · CURRENT CONTEXT · * CURRENT",
             current_context=setup.current_context,
             selectable_names=setup.selectable_names,
             annotations=setup.annotations,
@@ -100,17 +96,19 @@ def run_edit_tui(
         target = source.selected
         if target is None:
             raise ValueError("Select one directly owned Memory first.")
+        context, memory = target
         return EditRequest(
-            memory_selector=target.memory_uid,
+            memory_selector=memory.uid,
             content=editor.text_area.text,
-            context_locator=target.context_name,
+            context_locator=context.name,
         )
 
     def describe_apply() -> str:
         target = source.selected
         if target is None:
             return "Select one directly owned Memory."
-        return f"Save the replacement for Memory [{target.memory_uid[:8]}] in {target.context_name}."
+        context, memory = target
+        return f"Save the replacement for Memory [{memory.uid[:8]}] in {context.name}."
 
     action_control = build_action_control("Apply", describe=describe_apply)
     action_line = Window(
@@ -170,9 +168,8 @@ def run_edit_tui(
             changed = source.choose_cursor()
             target = source.selected
             if target is not None and changed:
-                content = content_loader(target)
-                if not isinstance(content, str):
-                    raise TypeError("Edit content loader returned a non-text value.")
+                _context, memory = target
+                content = memory.content
                 editor.text_area.text = content
                 editor.text_area.buffer.cursor_position = len(content)
         except (

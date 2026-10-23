@@ -69,13 +69,6 @@ def cmd(
             help="Include lexical descendants of each selected root",
         ),
     ] = None,
-    follow_embeds: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--follow-embeds/--exclude-embeds",
-            help="Follow embedded local Context owners independently",
-        ),
-    ] = None,
     direct: Annotated[
         bool,
         typer.Option("-d", "--direct", help="Use only selected Context roots"),
@@ -85,7 +78,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Include lexical descendants and embedded Context owners",
+            help="Include lexical descendants",
         ),
     ] = False,
     regex: Annotated[
@@ -136,7 +129,6 @@ def cmd(
                 default=ContextScopePreset.DIRECT,
             ),
             include_descendants=include_descendants,
-            follow_embeds=follow_embeds,
         )
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
@@ -169,7 +161,6 @@ def cmd(
                 replacement="" if delete_match or replacement is None else replacement,
                 target_names=canonical_targets,
                 include_descendants=traversal.include_descendants,
-                follow_embeds=traversal.follow_embeds,
                 mode="REGEX" if regex else "LITERAL",
                 ignore_case=ignore_case,
             )

@@ -5,7 +5,7 @@
 import sys
 from types import ModuleType
 
-from memcommit.core.context import AutoCheckpoint
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 
 from . import context_memory as _context_memory_module
 from . import record_restore_checkpoint as _checkpoint_module
@@ -19,13 +19,10 @@ from .context_memory.models import (
     ContextRenamePlan,
     ContextRenameResult,
 )
-from .context_memory.query_source import QuerySource, QuerySourceEntry
 from .context_memory.records import (
-    _rewrite_checkpoint_record,
     canonical_context_record,
     checkpoint_history_digest,
     context_record_digest,
-    validate_context_name,
 )
 from .infrastructure import atomic_io as _atomic_io_module
 from .infrastructure import locking as _locking_module
@@ -45,7 +42,6 @@ from .infrastructure.paths import (
     ATOMIZE_WORKBENCHES_DIR,
     CONTEXTS_DIR,
     IMPACT_PLAN_FILE,
-    QUERY_SOURCES_DIR,
     REVIEW_SESSION_FILE,
     REVIEW_SESSION_HISTORY_DIR,
     REVIEW_SESSION_SOURCES_DIR,
@@ -108,7 +104,6 @@ _FORWARDED_COMPATIBILITY_NAMES = frozenset(
         "STORE_DIR",
         "CONTEXTS_DIR",
         "STATE_FILE",
-        "QUERY_SOURCES_DIR",
         "IMPACT_PLAN_FILE",
         "STAGED_UPDATE_FILE",
         "REVIEW_SESSION_FILE",

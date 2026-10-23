@@ -8,6 +8,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
@@ -138,6 +139,7 @@ def _run_interactive_import() -> None:
 
     setup = choose_import_setup()
     if setup is None:
+        annotate_command_outcome("CANCELLED")
         typer.echo("Import cancelled.")
         return
     if setup.kind == "PROFILE":
@@ -195,7 +197,8 @@ def cmd(
     source: Annotated[
         Optional[Path],
         typer.Option(
-            "--from", help="Document, Skill directory, .mem package, or native Context/Memory JSON"
+            "--from",
+            help="Document, Skill directory, .mem package, or native Context/Memory JSON",
         ),
     ] = None,
     source_profile: Annotated[
@@ -216,7 +219,9 @@ def cmd(
     ] = None,
     target_context: Annotated[
         Optional[str],
-        typer.Option("--into", help="Existing Context: parent for documents, target for a Memory"),
+        typer.Option(
+            "--into", help="Existing Context: parent for documents, target for a Memory"
+        ),
     ] = None,
     recursive: Annotated[
         bool,
@@ -245,7 +250,14 @@ def cmd(
     """Import documents or resources without copying source operational history."""
 
     document_kind = (kind_or_name or "").casefold()
-    if root is not None and document_kind in {"document", "documents", "skill", "mem", "context", "memory"}:
+    if root is not None and document_kind in {
+        "document",
+        "documents",
+        "skill",
+        "mem",
+        "context",
+        "memory",
+    }:
         _fail("--root applies only to a new Profile.")
     path_operand = (
         source is None
@@ -253,7 +265,7 @@ def cmd(
         and (
             Path(kind_or_name).suffix.lower() in {".md", ".txt", ".yaml", ".yml"}
             or kind_or_name in {".", ".."}
-            or kind_or_name.startswith(("./", "../", "/", "~/"))
+            or (kind_or_name or "").startswith(("./", "../", "/", "~/"))
         )
     )
     if path_operand and root is not None:
@@ -271,7 +283,10 @@ def cmd(
         from .receipt import render_import_receipt, render_import_error
 
         try:
-            if any(value is not None for value in (resource_name, source_profile, source_context)):
+            if any(
+                value is not None
+                for value in (resource_name, source_profile, source_context)
+            ):
                 raise ValueError(
                     "Document import accepts --from PATH, --into PARENT, --as NEW_ROOT, --format and -r."
                 )
@@ -281,7 +296,9 @@ def cmd(
                 raise ValueError("Document import requires --from PATH.")
             if recursive and direct:
                 raise ValueError("Use either --direct or --recursive.")
-            hint = format or (document_kind if document_kind in {"skill", "mem"} else None)
+            hint = format or (
+                document_kind if document_kind in {"skill", "mem"} else None
+            )
             result = run_import(
                 ImportRequest(source, target_context, target_name, hint, recursive),
                 ImportRuntime(),
@@ -292,7 +309,9 @@ def cmd(
         render_import_receipt(result)
         return
     if format is not None:
-        _fail("--format applies to document import; use 'mem import document --from PATH'.")
+        _fail(
+            "--format applies to document import; use 'mem import document --from PATH'."
+        )
     if kind_or_name is None:
         if not _interactive_terminal():
             _fail(

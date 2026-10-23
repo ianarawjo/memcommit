@@ -16,7 +16,8 @@ import hashlib
 from typing import Any, Iterable
 import uuid
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 
 @dataclass(frozen=True)
@@ -209,7 +210,7 @@ def checkpoint_memory_lineage_edges(
         except HistoryError as error:
             raise ValueError("Memory lineage checkpoint history is invalid.") from error
         for entry in entries:
-            args = entry.get("args")
+            args = entry.get("command_details")
             if isinstance(args, dict) and "merge" in args:
                 from ..verification.validators.merge_record import (
                     validated_merge_record,
@@ -272,11 +273,6 @@ def checkpoint_memory_lineage_edges(
                     edge.target_context_uid not in declared_targets for edge in edges
                 ):
                     raise ValueError("Branch Memory lineage membership is invalid.")
-                # The complete receipt is repeated on every subtree target
-                # while the Store holds all Source/Target locks. This lets a
-                # root Revert retarget an internal MemoryRef without opening a
-                # sibling Context; the local target edges below remain bound
-                # to this checkpoint's exact post-image.
                 accepted_from_entry = edges
             for edge in anchored:
                 item = serialized.get(edge.target_memory_uid)
@@ -310,10 +306,12 @@ def resolve_lineage_target_uids(
         adjacency[edge.source_node].add(edge.target_node)
         adjacency[edge.target_node].add(edge.source_node)
 
-    target_uids = {item.uid for item in target.iter_items() if isinstance(item, Memory)}
+    target_uids = {
+        item.uid for item in target.iter_memories() if isinstance(item, Memory)
+    }
     result: dict[str, str] = {}
     claimed_targets: dict[str, str] = {}
-    for source_item in source.iter_items():
+    for source_item in source.iter_memories():
         if not isinstance(source_item, Memory):
             continue
         start = (source.uid, source_item.uid)
@@ -415,7 +413,7 @@ def remap_restoration_snapshot(
         adjacency[edge.target_node].add(edge.source_node)
         all_nodes.update((edge.source_node, edge.target_node))
     current_target_uids = {
-        item.uid for item in target.iter_items() if isinstance(item, Memory)
+        item.uid for item in target.iter_memories() if isinstance(item, Memory)
     }
     item_uid_mapping: dict[str, str] = {}
     next_memories: dict[str, object] = {}
@@ -438,24 +436,6 @@ def remap_restoration_snapshot(
                 mapped = item_uid  # Legacy same-UID Branch compatibility.
             next_uid = mapped
             item["uid"] = mapped
-        elif item.get("type") == "memory_ref":
-            target_context = item.get("target_context")
-            target_memory_uid = item.get("target_memory_uid")
-            if (
-                isinstance(target_context, dict)
-                and isinstance(target_context.get("uid"), str)
-                and isinstance(target_memory_uid, str)
-            ):
-                starts = tuple(
-                    node for node in all_nodes if node[1] == target_memory_uid
-                )
-                mapped = _connected_memory_uid(
-                    starts,
-                    target_context_uid=target_context["uid"],
-                    adjacency=adjacency,
-                )
-                if mapped is not None:
-                    item["target_memory_uid"] = mapped
         if next_uid in next_memories:
             raise ValueError("Restoration Memory identity mapping collides.")
         next_memories[next_uid] = item

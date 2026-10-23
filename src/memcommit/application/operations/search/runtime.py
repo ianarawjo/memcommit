@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from memcommit.core.context import Context
+from memcommit.application.context_access.access import ContextAccess
+from memcommit.models.context import Context
 from memcommit.application.capabilities.retrieval_corpus.loading import (
     collect_readable_corpus_candidates,
     load_readable_corpus_roots,
@@ -21,11 +22,6 @@ from memcommit.application.operations.search.application import (
 from memcommit.persistence.store import MemoryStore
 
 
-class SearchReadableAccess(Protocol):
-    @property
-    def is_granted(self) -> bool: ...
-
-
 class SearchReadableCatalog(Protocol):
     """Narrow frozen readable namespace required by the Store adapter."""
 
@@ -37,9 +33,7 @@ class SearchReadableCatalog(Protocol):
 
     def load(self, name: str) -> Context: ...
 
-    def load_without_attached_reads(self, name: str) -> Context: ...
-
-    def access_for(self, name: str) -> SearchReadableAccess: ...
+    def access_for(self, name: str) -> ContextAccess: ...
 
 
 class MemoryStoreSearchSourcePort(SearchSourcePort):
@@ -54,29 +48,14 @@ class MemoryStoreSearchSourcePort(SearchSourcePort):
             self._catalog,
             request.target_names,
             include_descendants=request.include_descendants,
-            follow_embeds=request.follow_embeds,
-            include_attached_reads=False,
         )
 
     def freeze_current(self, request: SearchRequest) -> FrozenSearchCurrentSource:
         roots = self._roots(request)
-        # Profile-local artifacts never cross a READ Grant. Granted Contexts
-        # can contribute their authorized Memories and public query routes only.
-        local_roots: list[Context] = []
-        for root in roots:
-            try:
-                access = self._catalog.access_for(root.name)
-            except FileNotFoundError:
-                # An embedded Context can be readable through its parent graph
-                # without being an independently addressable public catalog row.
-                continue
-            if not access.is_granted:
-                local_roots.append(root)
         candidates = collect_readable_corpus_candidates(
             self._store,
             roots,
-            follow_embeds=request.follow_embeds,
-            artifact_roots=tuple(local_roots),
+            artifact_roots=roots,
             operation="Search",
         )
         coverage_root_name = (
@@ -109,7 +88,7 @@ def execute_search(
 
 
 __all__ = [
-    "SearchReadableAccess",
+    "ContextAccess",
     "SearchReadableCatalog",
     "MemoryStoreSearchSourcePort",
     "execute_search",

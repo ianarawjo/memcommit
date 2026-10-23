@@ -293,11 +293,18 @@ def checkpoint_revision_detail_renderer(
                 semantic_action_style(action, fallback="class:report-label"),
                 display_escape_text(action) + "\n",
             ),
-            ("class:report-label", " DESCRIPTION "),
-            (
-                "class:report-neutral",
-                display_escape_text(entry.description or "(none)") + "\n\n",
+            *(
+                [
+                    ("class:report-label", " MESSAGE     "),
+                    (
+                        "class:report-neutral",
+                        display_escape_text(checkpoint["checkpoint_message"]) + "\n",
+                    ),
+                ]
+                if checkpoint.get("checkpoint_message")
+                else []
             ),
+            ("class:report-neutral", "\n"),
             ("class:report-label", " REVISION DIFF"),
             (
                 "class:report-neutral",
@@ -438,7 +445,7 @@ def render_checkpoint_revision_cli(
         f"CHECKPOINT  {entry.uid}",
         f"CONTEXT     {context_name}",
         f"ACTION      {action}",
-        f"DESCRIPTION {entry.description or '(none)'}",
+        *([f"MESSAGE     {checkpoint['checkpoint_message']}"] if checkpoint.get("checkpoint_message") else []),
         f"RESULT      {_direct_item_count(result_count)}",
         (
             "SUMMARY     "

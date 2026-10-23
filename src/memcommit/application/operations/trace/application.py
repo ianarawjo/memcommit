@@ -11,27 +11,11 @@ from memcommit.application.capabilities.history.query.context_history_slicing im
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
 )
-from memcommit.application.operations.trace.granted_view import (
-    GrantedMemoryTraceReport,
-)
-from memcommit.application.operations.trace.reference_lineage import (
-    MemoryReferenceTraceReport,
-)
 
 
-TraceSubjectKind = Literal[
-    "CONTEXT",
-    "MEMORY",
-    "MEMORY_REFERENCE",
-    "GRANTED_MEMORY",
-]
+TraceSubjectKind = Literal[("CONTEXT", "MEMORY")]
 TraceCandidateStatus = Literal["CURRENT", "HISTORICAL"]
-TraceReport: TypeAlias = (
-    ContextHistorySlice
-    | MemoryHistory
-    | MemoryReferenceTraceReport
-    | GrantedMemoryTraceReport
-)
+TraceReport: TypeAlias = ContextHistorySlice | MemoryHistory
 
 
 class TraceError(RuntimeError):
@@ -59,7 +43,7 @@ class TraceContextTarget:
 
 @dataclass(frozen=True, slots=True)
 class TraceMemoryTarget:
-    """One current or historical Memory/MemoryRef selector and optional owner."""
+    """One current or historical Memory selector and optional owner."""
 
     selector: str
     context_locator: str | None = None
@@ -144,10 +128,7 @@ class TraceTargetCatalog:
     candidates: tuple[TraceTargetCandidate, ...]
 
     def __post_init__(self) -> None:
-        if (
-            not isinstance(self.root_context_name, str)
-            or not self.root_context_name
-        ):
+        if not isinstance(self.root_context_name, str) or not self.root_context_name:
             raise TraceInputError("Trace catalog root Context is invalid.")
         if (
             not isinstance(self.context_names, tuple)
@@ -183,12 +164,7 @@ class FrozenTraceSubject:
     token: object = field(repr=False, compare=False)
 
     def __post_init__(self) -> None:
-        if self.kind not in {
-            "CONTEXT",
-            "MEMORY",
-            "MEMORY_REFERENCE",
-            "GRANTED_MEMORY",
-        }:
+        if self.kind not in {"CONTEXT", "MEMORY"}:
             raise TraceInputError("Frozen Trace subject kind is invalid.")
         if not isinstance(self.context_uid, str) or not self.context_uid:
             raise TraceInputError("Frozen Trace Context UID is invalid.")
@@ -250,8 +226,6 @@ def _validate_report(
     expected_type = {
         "CONTEXT": ContextHistorySlice,
         "MEMORY": MemoryHistory,
-        "MEMORY_REFERENCE": MemoryReferenceTraceReport,
-        "GRANTED_MEMORY": GrantedMemoryTraceReport,
     }[subject.kind]
     if not isinstance(report, expected_type):
         raise TraceError(

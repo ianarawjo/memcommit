@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.copy.receipt import render_copy_receipt
 from memcommit.adapters.console.commands.copy.setup import choose_copy_setup
 from memcommit.adapters.console.coordination.copy_and_move.arguments import (
@@ -95,11 +96,8 @@ def cmd(
 
     try:
         store = MemoryStore()
-        # Explicit public Source owners may resolve through the active
-        # Profile's Grants. Bare UID lookup and every Target stay local.
         port = MemoryStoreCopyPort.capture(
             store,
-            allow_granted_sources=True,
         )
         frozen_plan = None
         bare = not any(
@@ -121,6 +119,7 @@ def cmd(
                 )
             frozen_plan = choose_copy_setup(port)
             if frozen_plan is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Copy cancelled — no Context was changed.")
                 return
             request = frozen_plan.request

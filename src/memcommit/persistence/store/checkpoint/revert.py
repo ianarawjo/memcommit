@@ -1,11 +1,14 @@
 """Revert one Context or checkpoint unit to a selected snapshot."""
 
 from __future__ import annotations
+
+from ..infrastructure.checkpoint_records import normalize_checkpoint_record
 import copy
 import json
 import uuid
 from datetime import datetime
-from memcommit.core.context import Checkpoint, Context
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
 from memcommit.application.capabilities.history.reconstruction.memory_lineage_relations import (
     checkpoint_memory_lineage_edges,
     remap_restoration_snapshot,
@@ -13,7 +16,6 @@ from memcommit.application.capabilities.history.reconstruction.memory_lineage_re
 from ..context_memory.models import ConcurrentContextUpdateError
 from ..context_memory.records import (
     checkpoint_history_digest,
-    context_record_digest,
 )
 from ..infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
@@ -31,15 +33,13 @@ class _CheckpointRevertMixin:
         *,
         context_uid: str,
         context_name: str,
-        expected_context_digest: str,
     ) -> Context:
         """Build one exact direct restore target under its current owner.
 
         Revert may select an inherited checkpoint whose serialized owner is a
         branch source, while Undo/Redo carries already-normalized command
-        images. Both paths must preserve the live Context identity and attach
-        the same compare-and-set digest before publishing through
-        ``_save_locked``.
+        images. Both paths preserve the live Context identity before publishing
+        through ``_save_locked``.
         """
 
         restored = Context.from_dict(
@@ -49,7 +49,6 @@ class _CheckpointRevertMixin:
                 "name": context_name,
             }
         )
-        restored._store_digest = expected_context_digest
         return restored
 
     def revert(
@@ -59,7 +58,6 @@ class _CheckpointRevertMixin:
         keep_history: bool = True,
         *,
         expected_context_uid: str | None = None,
-        expected_context_digest: str | None = None,
         expected_history_digest: str | None = None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert one Context while holding its cooperative write lock."""
@@ -71,7 +69,6 @@ class _CheckpointRevertMixin:
                     uid_prefix,
                     keep_history=keep_history,
                     expected_context_uid=expected_context_uid,
-                    expected_context_digest=expected_context_digest,
                     expected_history_digest=expected_history_digest,
                     revert_unit=None,
                 )
@@ -130,8 +127,6 @@ class _CheckpointRevertMixin:
                         entries = self.list_checkpoints(member.context_name)
                         if (
                             current.uid != member.context_uid
-                            or context_record_digest(current)
-                            != member.expected_context_digest
                             or checkpoint_history_digest(entries)
                             != member.expected_history_digest
                         ):
@@ -175,9 +170,6 @@ class _CheckpointRevertMixin:
                                 member.checkpoint_uid,
                                 keep_history=keep_history,
                                 expected_context_uid=member.context_uid,
-                                expected_context_digest=(
-                                    member.expected_context_digest
-                                ),
                                 expected_history_digest=(
                                     member.expected_history_digest
                                 ),
@@ -229,6 +221,53 @@ class _CheckpointRevertMixin:
             members=tuple(published),
         )
 
+    def _prepare_revert_checkpoint_record(
+        self,
+        ctx,
+        target_data,
+        entries,
+        restored_snapshot,
+        *,
+        keep_history=True,
+        revert_unit=None,
+    ):
+        """Prepare the same Revert preimage/target contract for one transaction."""
+        # Strip nested log snapshots so the recovery frame remains bounded.
+        thin_entries: list[dict] = []
+        for entry in entries:
+            args = entry.get("command_details") or {}
+            if "log_snapshot" in args:
+                entry = {
+                    **entry,
+                    "command_details": {
+                        key: value
+                        for key, value in args.items()
+                        if key != "log_snapshot"
+                    },
+                }
+            thin_entries.append(entry)
+
+        pre_args: dict[str, object] = {
+            "target_uid": target_data["uid"],
+            "keep_history": keep_history,
+            "log_snapshot": thin_entries,
+        }
+        if revert_unit is not None:
+            pre_args["revert_unit"] = copy.deepcopy(revert_unit)
+            contexts = revert_unit.get("contexts")
+            if not isinstance(contexts, list):
+                raise ValueError("Recursive Revert membership is invalid.")
+            pre_args["command_contexts"] = copy.deepcopy(contexts)
+        pre_cp, pre_record = self._prepare_checkpoint_record(
+            ctx,
+            command="revert",
+            command_details=pre_args,
+            auto=True,
+        )
+        if restored_snapshot != target_data["snapshot"]:
+            pre_record["restored_snapshot"] = restored_snapshot
+        return pre_cp, pre_record
+
     def _revert_locked(
         self,
         ctx_name: str,
@@ -236,7 +275,6 @@ class _CheckpointRevertMixin:
         *,
         keep_history: bool,
         expected_context_uid: str | None,
-        expected_context_digest: str | None,
         expected_history_digest: str | None,
         revert_unit: dict[str, object] | None,
     ) -> tuple[Checkpoint, Checkpoint]:
@@ -249,20 +287,10 @@ class _CheckpointRevertMixin:
         the full original log from that snapshot instead of just truncating.
         """
         entries = self.list_checkpoints(ctx_name)  # captured before any mutations
-        # Preconditions and the recovery snapshot concern the directly owned
-        # Context record. Do not resolve MemoryRef targets or embedded
-        # Contexts merely to decide whether a reviewed frame is still fresh.
         ctx = self.load_direct(ctx_name)
         if expected_context_uid is not None and ctx.uid != expected_context_uid:
             raise ConcurrentContextUpdateError(
                 "Context identity changed before the reviewed revert."
-            )
-        if (
-            expected_context_digest is not None
-            and context_record_digest(ctx) != expected_context_digest
-        ):
-            raise ConcurrentContextUpdateError(
-                "Context content changed before the reviewed revert."
             )
         if (
             expected_history_digest is not None
@@ -302,7 +330,7 @@ class _CheckpointRevertMixin:
                 ) from error
             if not isinstance(record, dict):
                 raise ValueError(f"Checkpoint history for '{ctx_name}' is invalid.")
-            physical_records[path.name] = record
+            physical_records[path.name] = normalize_checkpoint_record(record)
 
         restoration_snapshot = target_data["snapshot"]
         if restoration_snapshot.get("uid") != ctx.uid:
@@ -316,74 +344,28 @@ class _CheckpointRevertMixin:
             restoration_snapshot,
             context_uid=ctx.uid,
             context_name=ctx.name,
-            expected_context_digest=context_record_digest(ctx),
         )
         restored_snapshot = restored.to_dict()
 
-        # Strip nested log snapshots so the recovery frame remains bounded.
-        thin_entries: list[dict] = []
-        for entry in entries:
-            args = entry.get("args") or {}
-            if "log_snapshot" in args:
-                entry = {
-                    **entry,
-                    "args": {
-                        key: value
-                        for key, value in args.items()
-                        if key != "log_snapshot"
-                    },
-                }
-            thin_entries.append(entry)
-
-        message = f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo"
-        pre_args: dict[str, object] = {
-            "target_uid": target_data["uid"],
-            "keep_history": keep_history,
-            "log_snapshot": thin_entries,
-        }
-        if revert_unit is not None:
-            pre_args["revert_unit"] = copy.deepcopy(revert_unit)
-            contexts = revert_unit.get("contexts")
-            if not isinstance(contexts, list):
-                raise ValueError("Recursive Revert membership is invalid.")
-            pre_args["command_contexts"] = copy.deepcopy(contexts)
-        pre_cp = Checkpoint(
-            uid=str(uuid.uuid4()),
-            message=message,
-            timestamp=datetime.now(),
-            snapshot=ctx.to_dict(),
-            command="revert",
-            args=pre_args,
-            description=message,
-            auto=True,
+        pre_cp, pre_record = self._prepare_revert_checkpoint_record(
+            ctx,
+            target_data,
+            entries,
+            restored_snapshot,
+            keep_history=keep_history,
+            revert_unit=revert_unit,
         )
-        pre_slug = message[:24].replace(" ", "-").replace("/", "-")
         pre_name = (
-            f"{pre_cp.timestamp.strftime('%Y%m%dT%H%M%S')}-"
-            f"{pre_slug}-{pre_cp.uid[:8]}.json"
+            f"{pre_cp.timestamp.strftime('%Y%m%dT%H%M%S')}-revert-{pre_cp.uid[:8]}.json"
         )
-        pre_record: dict[str, object] = {
-            "uid": pre_cp.uid,
-            "message": pre_cp.message,
-            "timestamp": pre_cp.timestamp.isoformat(),
-            "snapshot": pre_cp.snapshot,
-            "command": pre_cp.command,
-            "args": pre_cp.args,
-            "description": pre_cp.description,
-            "auto": pre_cp.auto,
-        }
-        if restored_snapshot != target_data["snapshot"]:
-            # The selected inherited checkpoint remains authentic Source
-            # evidence. Retain the exact Branch-namespace post-image beside
-            # the Revert receipt so History, Trace, Undo, Rename, and a later
-            # Revert all reconstruct the state that was actually published.
-            pre_record["restored_snapshot"] = restored_snapshot
 
         desired_records: dict[str, dict[str, object]]
         if keep_history:
             desired_records = dict(physical_records)
         else:
-            log_snapshot = (target_data.get("args") or {}).get("log_snapshot")
+            log_snapshot = (target_data.get("command_details") or {}).get(
+                "log_snapshot"
+            )
             if log_snapshot is not None:
                 if not isinstance(log_snapshot, list):
                     raise ValueError("Checkpoint log snapshot is invalid.")
@@ -436,7 +418,6 @@ class _CheckpointRevertMixin:
             self._save_locked(
                 restored,
                 None,
-                expected_context_digest=ctx._store_digest,
             )
         except Exception as error:
             rollback_error: Exception | None = None
@@ -464,16 +445,14 @@ class _CheckpointRevertMixin:
                     "be fully restored."
                 ) from rollback_error
             raise error
-        restored._store_digest = context_record_digest(restored)
 
         target_cp = Checkpoint(
             uid=target_data["uid"],
-            message=target_data.get("message", ""),
+            checkpoint_message=target_data.get("checkpoint_message"),
             timestamp=datetime.fromisoformat(target_data["timestamp"]),
             snapshot=restored_snapshot,
             command=target_data.get("command"),
-            args=target_data.get("args"),
-            description=target_data.get("description"),
+            command_details=target_data.get("command_details"),
             auto=target_data.get("auto", False),
         )
         return pre_cp, target_cp

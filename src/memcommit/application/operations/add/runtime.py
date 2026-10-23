@@ -1,31 +1,20 @@
-"""MemoryStore and Grant infrastructure adapter for Add."""
+"""MemoryStore infrastructure adapter for Add."""
 
 from __future__ import annotations
 
 
-from memcommit.application.authorization import ContextPermission, check_context_permissions
+from memcommit.models.memory import Memory
 from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
     AddResult,
     AddTargetPort,
     FrozenAddTarget,
-    run_add,
-)
-from memcommit.application.authorization.context_operation import (
-    authorized_context_mutation,
-)
-from memcommit.application.context_access.access import (
-    grant_checkpoint_args,
-    resolve_context_access,
 )
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.application.capabilities.operand_resolution import (
-    resolve_existing_local_context_operand,
-)
-from memcommit.core.context import AutoCheckpoint
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
@@ -35,25 +24,19 @@ class _StoreAddTargetToken:
         self.access = access
 
 
-def _checkpoint_args(
+def _checkpoint_command_details(
     request: AddRequest,
     *,
     memory_uids: list[str],
-    access,
 ) -> dict[str, object]:
     contents = list(request.contents)
     return {
         "count": len(contents),
         "contents": contents,
         "memory_uids": memory_uids,
-        **grant_checkpoint_args(access),
     }
 
 
-def _checkpoint_description(request: AddRequest) -> str:
-    count = len(request.contents)
-    noun = "Memory" if count == 1 else "Memories"
-    return f"Added {count} {noun}"
 
 
 class MemoryStoreAddTargetPort(AddTargetPort):
@@ -64,13 +47,11 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         store: MemoryStore,
         *,
         current_context_name: str | None,
-        local_only: bool = False,
     ):
         self._store = store
         # Relative target meaning must not drift if another process switches
         # the global current Context while this request is being composed.
         self._current_context_name = current_context_name
-        self._local_only = local_only
 
     @classmethod
     def capture(cls, store: MemoryStore) -> "MemoryStoreAddTargetPort":
@@ -80,26 +61,11 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         )
 
     def freeze(self, context_locator: str | None) -> FrozenAddTarget:
-        if self._local_only:
-            canonical = resolve_existing_local_context_operand(
-                self._store,
-                context_locator,
-                current=self._current_context_name,
-            ).name
-            access = resolve_context_access(
-                self._store,
-                canonical,
-                current_name=self._current_context_name,
-                required_permission="CREATE",
-            )
-        else:
-            access = resolve_existing_context_access(
-                self._store,
-                context_locator,
-                current_name=self._current_context_name,
-                required_permission="CREATE",
-            ).value
-        check_context_permissions(access, ContextPermission.CREATE)
+        access = resolve_existing_context_access(
+            self._store,
+            context_locator,
+            current_name=self._current_context_name,
+        ).value
         context = access.store.load_direct(access.context_name)
         return FrozenAddTarget(
             context_name=access.access_name,
@@ -116,7 +82,6 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         if not isinstance(token, _StoreAddTargetToken):
             raise ValueError("The frozen Add target binding is invalid.")
         access = token.access
-        check_context_permissions(access, ContextPermission.CREATE)
         store = access.store
         context = store.load_direct(access.context_name)
         if context.uid != target.context_uid:
@@ -125,20 +90,17 @@ class MemoryStoreAddTargetPort(AddTargetPort):
                 "Add was open; "
                 "no changes were made."
             )
-        memories = [context.add(content) for content in request.contents]
-        with authorized_context_mutation(access):
-            checkpoint = store.save(
-                context,
-                AutoCheckpoint(
-                    command="add",
-                    args=_checkpoint_args(
-                        request,
-                        memory_uids=[memory.uid for memory in memories],
-                        access=access,
-                    ),
-                    description=_checkpoint_description(request),
+        memories = [context.add(Memory.create(content)) for content in request.contents]
+        checkpoint = store.save(
+            context,
+            AutoCheckpointRequest(
+                command="add",
+                command_details=_checkpoint_command_details(
+                    request,
+                    memory_uids=[memory.uid for memory in memories],
                 ),
-            )
+            ),
+        )
         if checkpoint is None:
             raise RuntimeError("Add saved no checkpoint.")
         return AddResult(
@@ -150,12 +112,3 @@ class MemoryStoreAddTargetPort(AddTargetPort):
             ),
             checkpoint_uid=checkpoint.uid,
         )
-
-
-def execute_add(request: AddRequest, *, store: MemoryStore) -> AddResult:
-    """Execute Add against a real Store with no terminal or provider output."""
-
-    return run_add(
-        request,
-        target_port=MemoryStoreAddTargetPort.capture(store),
-    )

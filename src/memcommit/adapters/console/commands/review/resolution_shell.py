@@ -10,7 +10,8 @@ from prompt_toolkit.output import Output
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     run_resolution_workbench_shell,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,
     ResolutionIssueEvidence,
@@ -30,7 +31,7 @@ from memcommit.application.capabilities.reviewing.session_navigation import Sess
 
 
 def _direct_memories(ctx: Context) -> tuple[Memory, ...]:
-    return tuple(item for item in ctx.iter_items() if isinstance(item, Memory))
+    return tuple(item for item in ctx.iter_memories() if isinstance(item, Memory))
 
 
 def review_resolution_view(

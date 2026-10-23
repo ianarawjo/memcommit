@@ -52,7 +52,6 @@ class ProfilePickerState:
     create_name_was_edited: bool = False
     select_created: bool = False
     import_selection: SingleSelectionState = field(default_factory=_enabled_setup_selection)
-    sync_selection: SingleSelectionState = field(default_factory=_enabled_setup_selection)
 
     @classmethod
     def create(
@@ -144,7 +143,6 @@ class ProfilePickerState:
             root = Path.cwd().resolve()
             self.create_name_was_edited = False
             self.import_selection = _enabled_setup_selection()
-            self.sync_selection = _enabled_setup_selection()
             self.stage = NameEdit(
                 kind="CREATE_PROFILE",
                 value=root.name,
@@ -185,7 +183,6 @@ class ProfilePickerState:
                 row_index=edit.row_index,
                 root_dir=str(project_root),
                 import_project_files=self.import_selection.selected_value == "on",
-                automatic_sync=self.sync_selection.selected_value == "on",
                 imported_file_count=len(prepared.files) if prepared else 0,
                 skipped_file_count=len(prepared.skipped_paths) if prepared else 0,
                 import_digest=prepared.digest if prepared else None,

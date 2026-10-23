@@ -6,14 +6,12 @@ from dataclasses import replace
 
 import typer
 
-from memcommit.application.authorization import ContextPermission
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     render_resolution_workbench_snapshot,
 )
 from memcommit.application.operations.update.model import (
     UpdateContextInputs,
     UpdatePlan,
-    required_update_context_uses,
 )
 from memcommit.adapters.console.commands.update.presentation import (
     UpdateResolutionWorkbenchAdapter,
@@ -62,28 +60,6 @@ def render_plan(inputs: UpdateContextInputs, plan: UpdatePlan) -> None:
             f"{'S' if len(inputs.goal_focus.items) != 1 else ''} · "
             "RELEVANCE ONLY"
         )
-    if inputs.granted_target is not None:
-        required_uses = required_update_context_uses(plan.operations)
-        required = tuple(
-            use.value
-            for use in (
-                ContextPermission.READ,
-                ContextPermission.CREATE,
-                ContextPermission.EDIT,
-                ContextPermission.DELETE,
-            )
-            if use in required_uses
-        )
-        granted = set(inputs.granted_target.permissions)
-        ready = set(required).issubset(granted)
-        typer.echo(
-            "GRANTED TARGET · "
-            f"{inputs.granted_target.access_name} · "
-            f"grant {inputs.granted_target.grant_uid[:8]} "
-            f"revision {inputs.granted_target.grant_revision}"
-        )
-        typer.echo("REQUIRED TO APPLY · " + " + ".join(required))
-        typer.echo("GRANT PERMISSIONS · " + ("READY" if ready else "BLOCKED"))
     if not plan.operations:
         typer.echo("\n(no changes needed)")
     if view.items:

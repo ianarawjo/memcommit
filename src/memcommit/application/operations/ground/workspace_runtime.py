@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import uuid
 
-from memcommit.core.context import AutoCheckpoint, Context
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.application.operations.ground.workspace_model import (
     GROUND_WORKSPACE_LANES,
     GroundWorkspace,
@@ -33,7 +34,7 @@ from memcommit.application.operations.ground.workspace_application import (
     replace_ground_workspace_memory,
 )
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
-from memcommit.persistence.store import MemoryStore, context_record_digest, validate_context_name
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
@@ -49,7 +50,7 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
         goal_focus: FrozenGoalFocus | None = None,
     ) -> GroundWorkspace:
         for context in workspace.all_contexts:
-            validate_portable_context_name(context.name)
+            validate_context_name(context.name)
         context_membership = [
             {"uid": context.uid, "name": context.name}
             for context in workspace.all_contexts
@@ -57,9 +58,9 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
         entries = tuple(
             (
                 context,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="ground-init",
-                    args={
+                    command_details={
                         "ground_workspace": {
                             "version": 1,
                             "workspace_uid": workspace.uid,
@@ -75,11 +76,6 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
                             None if goal_focus is None else goal_focus.receipt_record()
                         ),
                     },
-                    description=(
-                        f"Initialized Ground workspace '{workspace.name}'"
-                        if context.name == workspace.name
-                        else f"Initialized Ground workspace lane '{context.name}'"
-                    ),
                 ),
             )
             for context in workspace.all_contexts
@@ -121,10 +117,7 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
         lane_context = workspace.lane(lane)
         changed = (workspace.root, lane_context)
         command_uid = str(uuid.uuid4())
-        membership = [
-            {"uid": context.uid, "name": context.name}
-            for context in changed
-        ]
+        membership = [{"uid": context.uid, "name": context.name} for context in changed]
         ground_command = {
             "version": 1,
             "kind": "edit",
@@ -135,33 +128,20 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
             "lane": lane,
             "memory_uid": memory_uid,
             "revision": workspace.manifest.revision,
-            "goal_focus": (
-                None if goal_focus is None else goal_focus.receipt_record()
-            ),
+            "goal_focus": (None if goal_focus is None else goal_focus.receipt_record()),
         }
         entries = []
         for context in changed:
-            expected_digest = getattr(context, "_store_digest", None)
-            if not isinstance(expected_digest, str):
-                raise GroundWorkspaceError(
-                    "Ground workspace edit is missing its Context CAS base."
-                )
             entries.append(
                 (
                     context,
-                    AutoCheckpoint(
+                    AutoCheckpointRequest(
                         command="ground",
-                        args={
+                        command_details={
                             "ground_workspace_command": ground_command,
                             "command_contexts": membership,
                         },
-                        description=(
-                            f"{action.replace('-', ' ').title()} "
-                            f"[{memory_uid[:8]}] in Ground lane "
-                            f"'{lane_context.name}'."
-                        ),
                     ),
-                    expected_digest,
                 )
             )
         self._store.save_context_command_batch(entries)
@@ -190,10 +170,7 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
         lane_context = workspace.lane(request.lane)
         changed = (workspace.root, lane_context)
         command_uid = str(uuid.uuid4())
-        membership = [
-            {"uid": context.uid, "name": context.name}
-            for context in changed
-        ]
+        membership = [{"uid": context.uid, "name": context.name} for context in changed]
         ground_command = {
             "version": 1,
             "kind": "edit",
@@ -211,26 +188,16 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
         }
         entries = []
         for context in changed:
-            expected_digest = getattr(context, "_store_digest", None)
-            if not isinstance(expected_digest, str):
-                raise GroundWorkspaceError(
-                    "Ground semantic adoption is missing its Context CAS base."
-                )
             entries.append(
                 (
                     context,
-                    AutoCheckpoint(
+                    AutoCheckpointRequest(
                         command="ground",
-                        args={
+                        command_details={
                             "ground_workspace_command": ground_command,
                             "command_contexts": membership,
                         },
-                        description=(
-                            f"Adopted {len(memory_uids)} {request.source_operation.title()} "
-                            f"proposal Memories in Ground lane '{lane_context.name}'."
-                        ),
                     ),
-                    expected_digest,
                 )
             )
         changed_names = {context.name for context in changed}
@@ -289,10 +256,13 @@ def list_ground_workspace_names(store: MemoryStore) -> tuple[str, ...]:
             context = store.load_direct(name)
         except (FileNotFoundError, OSError, RuntimeError, ValueError):
             continue
-        if sum(
-            is_ground_workspace_manifest_memory(item)
-            for item in context.iter_items()
-        ) != 1:
+        if (
+            sum(
+                is_ground_workspace_manifest_memory(item)
+                for item in context.iter_memories()
+            )
+            != 1
+        ):
             continue
         try:
             load_ground_workspace(store, name)
@@ -306,18 +276,11 @@ def load_ground_workspace_navigation_contexts(
     store: MemoryStore,
     workspace: GroundWorkspace,
 ) -> tuple[Context, ...]:
-    """Load fixed lanes plus real local descendants under ``/contexts``.
-
-    Lexical descendants are navigation rows, not hidden aggregate members.
-    Embedded and granted pointers remain typed direct items in their owner
-    Context and therefore do not become fabricated namespace rows.
-    """
+    """Load fixed lanes and separate local Contexts beneath the /contexts namespace."""
 
     prefix = workspace.contexts.name + "/"
     descendant_names = tuple(
-        name
-        for name in store.list_context_names()
-        if name.startswith(prefix)
+        name for name in store.list_context_names() if name.startswith(prefix)
     )
     return (
         *workspace.all_contexts,

@@ -34,7 +34,7 @@ from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
 
 from . import open as open_workflow
@@ -141,7 +141,7 @@ def _run_named_ground_workspace(
         revalidate_goal_focus(store, set_goal_focus)
         goal_content = set_goal_focus.text
         goals = tuple(
-            item for item in workspace.goals.iter_items() if isinstance(item, Memory)
+            item for item in workspace.goals.iter_memories() if isinstance(item, Memory)
         )
         if len(goals) > 1:
             raise GroundWorkspaceError(

@@ -19,7 +19,7 @@ from memcommit.application.capabilities.retrieval_corpus.candidates import (
 from memcommit.application.operations.compare.sessions import (
     iter_saved_comparisons,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore
 
 
@@ -65,17 +65,11 @@ def _checkpoint_artifacts(
                 continue
             command = checkpoint.get("command")
             command_text = command if isinstance(command, str) and command else "manual"
-            description = checkpoint.get("description")
-            message = checkpoint.get("message")
+            message = checkpoint.get("checkpoint_message")
             timestamp = checkpoint.get("timestamp")
             parts = [
                 f"Command: {command_text}",
                 f"Timestamp: {timestamp}" if isinstance(timestamp, str) else "",
-                (
-                    f"Description: {description}"
-                    if isinstance(description, str) and description.strip()
-                    else ""
-                ),
                 (
                     f"Message: {message}"
                     if isinstance(message, str) and message.strip()
@@ -92,8 +86,8 @@ def _checkpoint_artifacts(
                         title=f"{command_text} checkpoint",
                         content="\n".join(part for part in parts if part),
                         summary=(
-                            description.strip()
-                            if isinstance(description, str) and description.strip()
+                            message.strip()
+                            if isinstance(message, str) and message.strip()
                             else command_text
                         ),
                     ),

@@ -13,41 +13,19 @@ from memcommit.application.operations.delete.application import (
 
 
 def removed_item_description(item: DeletedDirectItem) -> str:
-    """Return the established compact TUI receipt for one removed row."""
+    """Return the compact TUI receipt for one removed Memory."""
 
-    if item.kind == "MEMORY":
-        assert item.content is not None
-        return f'memory [{item.uid[:8]}]: "{item.content[:80]}"'
-    if item.kind == "MEMORY_REF":
-        assert item.target_context_name is not None
-        assert item.target_memory_uid is not None
-        return (
-            f"Memory Reference [{item.uid[:8]}] to "
-            f"'{item.target_context_name}' [{item.target_memory_uid[:8]}]"
-        )
-    if item.kind == "QUERY_CONTEXT_REF":
-        assert item.name is not None
-        return f"Query View '{item.name}' [{item.uid[:8]}]"
-    assert item.name is not None
-    return f"Context '{item.name}' [{item.uid[:8]}] · VIA EMBED"
+    return f'memory [{item.uid[:8]}]: "{item.content[:80]}"'
 
 
 def render_removed_item(result: DirectItemDeleteResult) -> None:
-    """Write one successful direct-item receipt using existing color semantics."""
+    """Write one successful Memory removal receipt."""
 
     item = result.item
-    if item.kind == "MEMORY":
-        assert item.content is not None
-        # Green confirms success; red belongs only to the content that left
-        # the Context, matching the CLI diff removal cue.
-        typer.echo(
-            typer.style(f"Removed [{item.uid[:8]}] ", fg=typer.colors.GREEN)
-            + typer.style(item.content, fg=typer.colors.RED)
-        )
-        return
-    typer.secho(
-        f"Removed {removed_item_description(item)}.",
-        fg=typer.colors.GREEN,
+    # Success is green; the removed Memory content keeps the red diff cue.
+    typer.echo(
+        typer.style(f"Removed [{item.uid[:8]}] ", fg=typer.colors.GREEN)
+        + typer.style(item.content, fg=typer.colors.RED)
     )
 
 

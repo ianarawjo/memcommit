@@ -11,8 +11,9 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
-from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
-from memcommit.application.operations.ground.workspace_model import GroundWorkspaceError
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
 from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
@@ -160,7 +161,7 @@ def _parts_for_context(
         command = entry.get("command")
         if command not in {"ground", "ground-undo"}:
             continue
-        args = entry.get("args")
+        args = entry.get("command_details")
         metadata = args.get(_GROUND_COMMAND_KEY) if isinstance(args, dict) else None
         if not isinstance(metadata, dict) or metadata.get("version") != 1:
             raise GroundWorkspaceHistoryError(
@@ -294,7 +295,7 @@ def build_ground_workspace_command_stack(
     grouped_undos: dict[str, list[_UndoPart]] = {}
     for part in undo_parts:
         grouped_undos.setdefault(part.receipt_uid, []).append(part)
-    undo_events: list[tuple[str, str, str]] = []
+    undo_events: list[tuple[str, str]] = []
     for receipt_uid, members in grouped_undos.items():
         expected_sets = {member.expected_contexts for member in members}
         actual = {(member.context_uid, member.context_name) for member in members}
@@ -382,7 +383,6 @@ def undo_ground_workspace_command(
                 "command selected for Undo."
             )
         restored = Context.from_dict(change.before)
-        restored._store_digest = context_record_digest(current)
         targets.append(restored)
 
     # Revision is causal history, not a content checksum.  Undo restores lane
@@ -407,26 +407,16 @@ def undo_ground_workspace_command(
     }
     entries = []
     for context in targets:
-        expected_digest = getattr(context, "_store_digest", None)
-        if not isinstance(expected_digest, str):
-            raise GroundWorkspaceError(
-                "Ground Undo is missing its Context CAS base."
-            )
         entries.append(
             (
                 context,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="ground-undo",
-                    args={
+                    command_details={
                         _GROUND_COMMAND_KEY: metadata,
                         "command_contexts": membership,
                     },
-                    description=(
-                        f"Undid Ground command '{source.action}' "
-                        f"[{source.uid[:8]}] in '{workspace.name}'."
-                    ),
                 ),
-                expected_digest,
             )
         )
     checkpoints = store.save_context_command_batch(entries)

@@ -183,7 +183,6 @@ def run_initial_setup(
     name: str | None = None,
     root: Path | None = None,
     import_files: bool = True,
-    auto_sync: bool = True,
     approve_profile_creation: bool = False,
     install: bool = False,
     login: bool = False,
@@ -199,7 +198,6 @@ def run_initial_setup(
             name,
             root,
             import_files,
-            auto_sync,
             approve_profile_creation,
             install,
             login,
@@ -230,7 +228,6 @@ def _run_initial_setup(
     name,
     root,
     import_files,
-    auto_sync,
     approve_profile_creation,
     install,
     login,
@@ -301,7 +298,7 @@ def _run_initial_setup(
         if not approve_profile_creation:
             action = run_setup_selection_screen(
                 "FIRST PROFILE",
-                f"Create {name} in {profile_root}. Import {len(prepared.files) if prepared else 0} documents. Auto Sync {'ON' if auto_sync else 'OFF'}.",
+                f"Create {name} in {profile_root}. Import {len(prepared.files) if prepared else 0} documents.",
                 (
                     SelectionOption(
                         value="create",
@@ -335,17 +332,12 @@ def _run_initial_setup(
         if action is None:
             raise _InitialSetupCancelled
         name, profile_root = action.name, Path(action.root_dir)
-        import_files, auto_sync, digest = (
-            action.import_project_files,
-            action.automatic_sync,
-            action.import_digest,
-        )
+        import_files, digest = action.import_project_files, action.import_digest
     result = create_profile(
         name,
         root_dir=profile_root,
         expected_generation=registry.generation,
         import_project_files=import_files,
-        automatic_sync=auto_sync,
         expected_import_digest=digest,
         select_created=True,
     )

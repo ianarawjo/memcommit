@@ -7,11 +7,11 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_context_memory_target,
 )
-from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.application.operations.translate.curate_translations import (
     load_translation_catalog_seed,
     save_curated_translation_catalog,
@@ -168,7 +168,6 @@ def _open_or_create_catalog(
                 store,
                 existing,
                 expected_record_digest=seed.expected_record_digest,
-                expected_context_digest=context_record_digest(context),
             )
         return existing, True
 
@@ -188,7 +187,6 @@ def _open_or_create_catalog(
                 store,
                 existing,
                 expected_record_digest=seed.expected_record_digest,
-                expected_context_digest=context_record_digest(context),
             )
         return existing, existing is not None
     catalog = update_catalog_from_translation_plan(
@@ -200,7 +198,6 @@ def _open_or_create_catalog(
         store,
         catalog,
         expected_record_digest=seed.expected_record_digest,
-        expected_context_digest=plan.context_digest,
     )
     return catalog, False
 
@@ -360,18 +357,20 @@ def prepare_translation(
         else None
     )
     selected_operand: str | None = None
-    if isinstance(auto_target, DirectMemoryTarget):
-        source_name = auto_target.context_name
-        selected_operand = auto_target.memory_uid
-    elif isinstance(auto_target, ContextTarget):
-        source_name = auto_target.context_name
+    if isinstance(auto_target, tuple):
+        source_name = auto_target[0].name
+        selected_operand = auto_target[1].uid
+    elif isinstance(auto_target, Context):
+        source_name = auto_target.name
     else:
         source_name = current_name
     if source_name is None:
         raise TranslateError(
             "No current context. Pass a Context or run 'mem init <name>' first."
         )
-    context = store.load_direct(source_name)
+    context = (auto_target[0] if isinstance(auto_target, tuple) else auto_target)
+    if context is None:
+        context = store.load_direct(source_name)
     target_language = validate_translation_target(request.target_language)
     selected_memory_uid = resolve_translation_selector(context, selected_operand)
     applying_to_context = request.save_as is not None or request.in_place

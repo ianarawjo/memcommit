@@ -2,18 +2,11 @@
 
 from __future__ import annotations
 
+
 from dataclasses import dataclass
 
-from memcommit.application.context_access.access import (
-    GrantedReadStore,
-    resolve_context_access,
-)
-from memcommit.application.context_access.granted_context_navigation import (
-    GrantedContextNavigation,
-    freeze_granted_context_navigation,
-)
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.core.context_navigation import ContextNavigationDirection
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.switch.application import (
     SwitchContextError,
@@ -30,7 +23,6 @@ class SwitchSetupSnapshot:
 
     expected_current: str | None
     local_context_names: tuple[str, ...]
-    granted_navigation: GrantedContextNavigation
 
 
 def prepare_switch(
@@ -43,7 +35,6 @@ def prepare_switch(
     return SwitchSetupSnapshot(
         expected_current=expected_current,
         local_context_names=tuple(store.list_context_names()),
-        granted_navigation=freeze_granted_context_navigation(store),
     )
 
 
@@ -97,59 +88,28 @@ class MemoryStoreSwitchContextPort:
         context_name: str,
         navigation_direction: ContextNavigationDirection | None,
     ) -> SwitchContextTarget:
-        access = resolve_context_access(
+        resolve_context_access(
             self._store,
             context_name,
             current_name=expected_current,
-            required_permission="READ",
         )
-        target = (
-            GrantedReadStore(access).load_direct(access.access_name)
-            if access.is_granted
-            else self._store.load(context_name)
-        )
+        target = self._store.load(context_name)
 
-        # A granted current pointer is reauthorized under the registry lock;
-        # a local pointer binds both the target record and command-start state.
-        if access.is_granted:
-            with authority_grant_snapshot_lock() as registry:
-                resolve_context_access(
-                    self._store,
-                    context_name,
-                    current_name=expected_current,
-                    required_permission="READ",
-                    registry=registry,
-                )
-                if navigation_direction is None:
-                    self._store.set_current_virtual_context_if(
-                        expected_current,
-                        context_name,
-                    )
-                else:
-                    self._store.set_current_virtual_context_if(
-                        expected_current,
-                        context_name,
-                        navigation_direction=navigation_direction,
-                    )
+        if navigation_direction is None:
+            self._store.set_current_context_if(
+                expected_current,
+                context_name,
+                expected_context_uid=target.uid,
+            )
         else:
-            if navigation_direction is None:
-                self._store.set_current_context_if(
-                    expected_current,
-                    context_name,
-                    expected_context_uid=target.uid,
-                    expected_context_digest=target._store_digest or "",
-                )
-            else:
-                self._store.set_current_context_if(
-                    expected_current,
-                    context_name,
-                    expected_context_uid=target.uid,
-                    expected_context_digest=target._store_digest or "",
-                    navigation_direction=navigation_direction,
-                )
+            self._store.set_current_context_if(
+                expected_current,
+                context_name,
+                expected_context_uid=target.uid,
+                navigation_direction=navigation_direction,
+            )
         return SwitchContextTarget(
             context_name=context_name,
-            granted=access.is_granted,
         )
 
 

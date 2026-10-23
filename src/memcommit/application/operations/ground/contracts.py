@@ -6,7 +6,7 @@ import hashlib
 import json
 import re
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 GROUND_TEXT_LIMIT = 20_000

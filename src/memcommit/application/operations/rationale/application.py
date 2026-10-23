@@ -27,7 +27,7 @@ from memcommit.application.operations.rationale.runtime import run_context_infer
 from memcommit.application.operations.rationale.skills.context_inference import (
     _inference_character_budget,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore
 
 

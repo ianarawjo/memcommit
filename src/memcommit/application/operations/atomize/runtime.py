@@ -47,7 +47,9 @@ from memcommit.application.operations.atomize.records import (
     AtomizeReviewRecord,
     atomize_review_record_digest,
 )
-from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import (
     MemoryStore,
@@ -180,7 +182,7 @@ class MemoryStoreAtomizeOutputPort:
     provider_factory: Callable[[], AtomizeProvider]
 
     @staticmethod
-    def _checkpoint_args(
+    def _checkpoint_command_details(
         analysis: AtomizeAnalysisSession,
         result: AtomizeApplyResult,
         audit: AtomizeApplicationAudit,
@@ -207,30 +209,13 @@ class MemoryStoreAtomizeOutputPort:
             "trace": result.trace_metadata(),
         }
 
-    @staticmethod
-    def _checkpoint_description(
-        analysis: AtomizeAnalysisSession,
-        result: AtomizeApplyResult,
-        audit: AtomizeApplicationAudit,
-    ) -> str:
-        base = (
-            f"Applied atomize [{analysis.uid[:8]}]: "
-            f"{result.split_count} splits -> {result.child_count} children; "
-            f"{result.preserved_count} preserved; "
-        )
-        if result.normal_form is not None:
-            base += (
-                f"{result.normal_form.dedun_group_count} Dedun groups; "
-                f"{result.normal_form.absorbed_count} absorbed; "
-            )
-        return base + f"{audit.unresolved_at_apply_count} unresolved at apply"
 
     @staticmethod
     def _result_from_checkpoint(
         analysis: AtomizeAnalysisSession,
         checkpoint: dict[str, object],
     ) -> AtomizeApplyResult:
-        args = checkpoint.get("args")
+        args = checkpoint.get("command_details")
         snapshot = checkpoint.get("snapshot")
         if not isinstance(args, dict) or not isinstance(snapshot, dict):
             raise AtomizeApplicationError(
@@ -258,7 +243,9 @@ class MemoryStoreAtomizeOutputPort:
                 "The recorded Atomize checkpoint targets a different Context."
             )
         output_memories = {
-            item.uid: item for item in output.iter_items() if isinstance(item, Memory)
+            item.uid: item
+            for item in output.iter_memories()
+            if isinstance(item, Memory)
         }
         normal_form: AtomizeNormalFormAudit | None = None
         absorbed_to_survivor: dict[str, str] = {}
@@ -428,8 +415,8 @@ class MemoryStoreAtomizeOutputPort:
             checkpoint
             for checkpoint in self.store.list_checkpoints(analysis.context_name)
             if checkpoint.get("command") == "atomize"
-            and isinstance(checkpoint.get("args"), dict)
-            and checkpoint["args"].get("analysis_uid") == analysis.uid
+            and isinstance(checkpoint.get("command_details"), dict)
+            and checkpoint["command_details"].get("analysis_uid") == analysis.uid
         ]
         if not matches:
             return None
@@ -444,9 +431,7 @@ class MemoryStoreAtomizeOutputPort:
                 "The recorded Atomize checkpoint identity is invalid."
             )
         result = self._result_from_checkpoint(analysis, checkpoint)
-        if checkpoint.get("args") != self._checkpoint_args(
-            analysis, result, audit
-        ) or checkpoint.get("description") != self._checkpoint_description(
+        if checkpoint.get("command_details") != self._checkpoint_command_details(
             analysis, result, audit
         ):
             raise AtomizeApplicationError(
@@ -467,24 +452,6 @@ class MemoryStoreAtomizeOutputPort:
     ) -> AtomizeMaterialization | None:
         return self._matching_checkpoint(snapshot, audit)
 
-    def _inbound_removed_references(
-        self,
-        analysis: AtomizeAnalysisSession,
-        removed_uids: set[str],
-    ) -> list[tuple[str, MemoryRef]]:
-        if not removed_uids:
-            return []
-        inbound: list[tuple[str, MemoryRef]] = []
-        for context in self.store.load_direct_context_graph_strict():
-            for item in context.iter_items():
-                if (
-                    isinstance(item, MemoryRef)
-                    and item.target_context_uid == analysis.context_uid
-                    and item.target_memory_uid in removed_uids
-                ):
-                    inbound.append((context.name, item))
-        return inbound
-
     def materialize(
         self,
         snapshot: AtomizeExecutionSnapshot,
@@ -500,15 +467,8 @@ class MemoryStoreAtomizeOutputPort:
         )
         projected = normal_form.context
         result = normal_form.result
-        removed_uids = {
-            item.memory_uid
-            for item in analysis.items
-            if item.classification == "COMPOSITE"
-        } | set(normal_form.absorbed_uids)
-
-        # Provider work completes on an unpublished projection. The command
-        # lock then makes the strict inbound-reference scan, Source CAS, and
-        # sole checkpoint one ordered Context command.
+        # Provider work stays on an unpublished projection. The command lock
+        # orders Source CAS and the sole checkpoint as one Context command.
         with self.store._command_write_lock():  # noqa: SLF001
             recovered = self._matching_checkpoint(snapshot, audit)
             if recovered is not None:
@@ -519,29 +479,11 @@ class MemoryStoreAtomizeOutputPort:
                     "The Atomize Source changed during normal-form planning; "
                     "no Context change was published."
                 )
-            inbound = self._inbound_removed_references(
-                analysis,
-                removed_uids,
-            )
-            if inbound:
-                locations = ", ".join(
-                    f"{owner}#{reference.uid[:8]}" for owner, reference in inbound
-                )
-                raise AtomizeImpactError(
-                    "Cannot replace or absorb a Memory with inbound memory "
-                    "references in "
-                    f"version 1: {locations}."
-                )
             checkpoint = self.store._save_command_locked(  # noqa: SLF001
                 projected,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="atomize",
-                    args=self._checkpoint_args(analysis, result, audit),
-                    description=self._checkpoint_description(
-                        analysis,
-                        result,
-                        audit,
-                    ),
+                    command_details=self._checkpoint_command_details(analysis, result, audit),
                 ),
             )
             if checkpoint is None:
@@ -672,7 +614,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
                 }
                 for position, item in enumerate(
                     candidate
-                    for candidate in source.iter_items()
+                    for candidate in source.iter_memories()
                     if isinstance(candidate, Memory)
                 )
             ],
@@ -691,7 +633,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         }
 
     @classmethod
-    def _checkpoint_args(
+    def _checkpoint_command_details(
         cls,
         snapshot: AtomizeExecutionSnapshot,
         output_analysis: AtomizeAnalysisSession,
@@ -703,7 +645,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         expected_current: str | None,
     ) -> dict[str, object]:
         return {
-            **MemoryStoreAtomizeOutputPort._checkpoint_args(
+            **MemoryStoreAtomizeOutputPort._checkpoint_command_details(
                 output_analysis,
                 result,
                 audit,
@@ -716,17 +658,6 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             ),
         }
 
-    @staticmethod
-    def _checkpoint_description(
-        output_analysis: AtomizeAnalysisSession,
-        result: AtomizeApplyResult,
-        audit: AtomizeApplicationAudit,
-    ) -> str:
-        return MemoryStoreAtomizeOutputPort._checkpoint_description(
-            output_analysis,
-            result,
-            audit,
-        )
 
     @staticmethod
     def _workbench_matches_record(
@@ -785,8 +716,8 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             checkpoint
             for checkpoint in self.store.list_checkpoints(destination_name)
             if checkpoint.get("command") == "atomize"
-            and isinstance(checkpoint.get("args"), dict)
-            and checkpoint["args"].get("analysis_uid") == output_analysis.uid
+            and isinstance(checkpoint.get("command_details"), dict)
+            and checkpoint["command_details"].get("analysis_uid") == output_analysis.uid
         ]
         if len(matches) != 1:
             raise AtomizeApplicationError(
@@ -794,7 +725,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             )
         checkpoint = matches[0]
         checkpoint_uid = checkpoint.get("uid")
-        args = checkpoint.get("args")
+        args = checkpoint.get("command_details")
         snapshot_record = checkpoint.get("snapshot")
         if (
             not isinstance(checkpoint_uid, str)
@@ -891,7 +822,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             output_analysis,
             checkpoint,
         )
-        expected_common = MemoryStoreAtomizeOutputPort._checkpoint_args(
+        expected_common = MemoryStoreAtomizeOutputPort._checkpoint_command_details(
             output_analysis,
             result,
             audit,
@@ -932,7 +863,6 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         expected_current: str | None,
     ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization]:
         source = self.store.load_for_update(snapshot.analysis.context_name)
-        source_digest = context_record_digest(source)
         analysis_evidence_digest = getattr(
             snapshot.analysis,
             "evidence_digest",
@@ -948,7 +878,9 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         # process-local projection before assigning its result identities.
         # This is not the durable Branch command: its final Save As receipt
         # owns the independently materialized output and provenance.
-        output = atomize_structural_apply.project_atomize_source(source, destination_name)
+        output = atomize_structural_apply.project_atomize_source(
+            source, destination_name
+        )
         output_fields: dict[str, object] = {
             "context_uid": output.uid,
             "context_name": output.name,
@@ -975,7 +907,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         )
         output = normal_form.context
         result = normal_form.result
-        checkpoint_args = self._checkpoint_args(
+        checkpoint_command_details = self._checkpoint_command_details(
             snapshot,
             output_analysis,
             output,
@@ -988,16 +920,11 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         try:
             checkpoint = self.store.create_context_with_sources(
                 output,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="atomize",
-                    args=checkpoint_args,
-                    description=self._checkpoint_description(
-                        output_analysis,
-                        result,
-                        audit,
-                    ),
+                    command_details=checkpoint_command_details,
                 ),
-                source_bindings=((source.name, source.uid, source_digest),),
+                source_bindings=((source.name, source.uid),),
             )
         except Exception as error:
             self.store.delete_atomize_analysis(output.uid)
@@ -1032,7 +959,6 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             expected_current,
             output.name,
             expected_context_uid=output.uid,
-            expected_context_digest=context_record_digest(output),
         )
 
 
@@ -1058,7 +984,7 @@ def atomize_application_checkpoint_uid(
     """Return the exact in-place checkpoint belonging to one Atomize analysis."""
 
     for checkpoint in store.list_checkpoints(context.name):
-        args = checkpoint.get("args")
+        args = checkpoint.get("command_details")
         trace = args.get("trace") if isinstance(args, dict) else None
         if not (
             checkpoint.get("command") == "atomize"

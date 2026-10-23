@@ -8,6 +8,7 @@ from typing import Literal
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.ground.shell import (
     GroundShellMemoryDraft,
     GroundShellProposal,
@@ -54,7 +55,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace,
     load_ground_workspace_navigation_contexts,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -89,7 +90,7 @@ def _validate_ground_workspace_save_location(
 ) -> str:
     """Validate one exact require-new root without creating Store records."""
 
-    canonical = validate_portable_context_name(name)
+    canonical = validate_context_name(name)
     if len(canonical) > GROUND_DIALOGUE_NAME_LIMIT:
         raise ValueError("Ground Save Location is too long for one dialogue turn.")
     for context_name in ground_workspace_context_names(canonical):
@@ -467,5 +468,6 @@ def _run_new_ground_shell(
     if result.proposal is not None:
         typer.echo("Ground chat closed. Draft saved; nothing was created.")
     else:
+        annotate_command_outcome("CANCELLED")
         typer.echo("Ground chat cancelled. Nothing was created.")
     return "CLOSED"

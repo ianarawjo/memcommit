@@ -2,27 +2,20 @@
 
 from __future__ import annotations
 
+
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Iterator, Protocol
 
-# Transitional dependency: these operation-neutral Grant mechanics predate the
-# application boundary and still live under commands. Keep the dependency in
-# this infrastructure adapter so the application and domain remain terminal-
-# independent; move it only after another vertical slice proves the same owner.
-from memcommit.application.context_access.access import (
-    freeze_granted_context_binding,
-    resolve_context_access,
-    revalidate_granted_context_binding,
-)
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.application.context_access.readable_contexts import ReadableContextCatalog
-from memcommit.core.context import Context
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.application.context_access.readable_contexts import (
+    ReadableContextCatalog,
+)
+from memcommit.models.context import Context
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
@@ -38,7 +31,6 @@ from memcommit.application.operations.summarize.application import (
     SummarySourcePort,
     run_summarize,
 )
-from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 
 class SummaryProviderFactory(Protocol):
@@ -53,7 +45,6 @@ class _StoreSummarySourceToken:
     """Opaque source binding retained between freeze and revalidation."""
 
     context_identities: tuple[tuple[str, str], ...]
-    granted_bindings: tuple[GrantedUpdateTarget, ...]
 
 
 @dataclass(frozen=True)
@@ -62,7 +53,6 @@ class _LoadedSummaryScope:
 
     frame: SummaryFrame
     context_identities: tuple[tuple[str, str], ...]
-    granted_bindings: tuple[GrantedUpdateTarget, ...]
 
 
 def _load_frame(
@@ -70,31 +60,18 @@ def _load_frame(
     access,
     *,
     include_descendants: bool,
-    follow_embeds: bool,
-    registry=None,
 ) -> _LoadedSummaryScope:
-    # A recursive public namespace can mix ordinary local Contexts and
-    # READ-granted Contexts.  Freeze one catalog so lexical expansion, loading,
-    # and later Grant revalidation all use the same public-name bindings.
     store = ReadableContextCatalog(
         active_store,
         access,
-        registry=registry,
-        include_query_routes=False,
     )
     root_name = access.access_name
     names = expand_lexical_context_names(
-        ContextScope.create(
-            (root_name,),
-            include_descendants=include_descendants,
-        ),
-        sorted(store.list_context_names(), key=str.casefold),
+        (root_name,),
+        store.list_context_names(sort_order="alphabetical"),
+        include_descendants=include_descendants,
     )
-    # A local catalog row may project attached READ grants as marker-free child
-    # Contexts for browsing. Summary cannot carry those contributors into its
-    # authority token, so provider-facing recursive loads omit that implicit
-    # edge; an explicitly selected granted public name remains loadable here.
-    load = store.load_without_attached_reads if follow_embeds else store.load_direct
+    load = store.load_direct
     contexts = tuple(load(name) for name in names)
     context_identities: list[tuple[str, str]] = []
     visited_contexts: set[str] = set()
@@ -104,34 +81,23 @@ def _load_frame(
             return
         visited_contexts.add(context.uid)
         context_identities.append((context.name, context.uid))
-        if follow_embeds:
-            for item in context.iter_items():
-                if isinstance(item, Context):
-                    visit(item)
 
     for context in contexts:
         visit(context)
 
-    granted_bindings = tuple(
-        freeze_granted_context_binding(selected_access)
-        for name in names
-        if (selected_access := store.access_for(name)).is_granted
-    )
     return _LoadedSummaryScope(
         frame=collect_summary_scope(
             contexts,
             root_context_uid=contexts[0].uid,
             root_context_name=root_name,
             include_descendants=include_descendants,
-            follow_embeds=follow_embeds,
         ),
         context_identities=tuple(context_identities),
-        granted_bindings=granted_bindings,
     )
 
 
 class MemoryStoreSummarySourcePort(SummarySourcePort):
-    """Freeze and revalidate one real local or granted MemoryStore source."""
+    """Freeze and revalidate one local MemoryStore source scope."""
 
     def __init__(self, store: MemoryStore, *, current_name: str | None):
         self._store = store
@@ -146,26 +112,20 @@ class MemoryStoreSummarySourcePort(SummarySourcePort):
         return cls(store, current_name=store.current_context_name())
 
     def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
-        with authority_grant_snapshot_lock() as registry:
-            access = resolve_existing_context_access(
-                self._store,
-                request.context_locator,
-                current_name=self._current_name,
-                required_permission="READ",
-                registry=registry,
-            ).value
-            loaded = _load_frame(
-                self._store,
-                access,
-                include_descendants=request.include_descendants,
-                follow_embeds=request.follow_embeds,
-                registry=registry,
-            )
+        access = resolve_existing_context_access(
+            self._store,
+            request.context_locator,
+            current_name=self._current_name,
+        ).value
+        loaded = _load_frame(
+            self._store,
+            access,
+            include_descendants=request.include_descendants,
+        )
         return FrozenSummarySource(
             frame=loaded.frame,
             token=_StoreSummarySourceToken(
                 context_identities=loaded.context_identities,
-                granted_bindings=loaded.granted_bindings,
             ),
         )
 
@@ -173,31 +133,17 @@ class MemoryStoreSummarySourcePort(SummarySourcePort):
         token = source.token
         if not isinstance(token, _StoreSummarySourceToken):
             raise SummarizeError("The frozen summary source binding is invalid.")
-        with authority_grant_snapshot_lock() as registry:
-            for binding in token.granted_bindings:
-                revalidate_granted_context_binding(
-                    binding,
-                    registry=registry,
-                    active_store=self._store,
-                )
-            access = resolve_context_access(
-                self._store,
-                source.frame.context_name,
-                current_name=self._current_name,
-                required_permission="READ",
-                registry=registry,
-            )
-            loaded = _load_frame(
-                self._store,
-                access,
-                include_descendants=source.frame.include_descendants,
-                follow_embeds=source.frame.follow_embeds,
-                registry=registry,
-            )
-        if (
-            loaded.context_identities != token.context_identities
-            or loaded.granted_bindings != token.granted_bindings
-        ):
+        access = resolve_context_access(
+            self._store,
+            source.frame.context_name,
+            current_name=self._current_name,
+        )
+        loaded = _load_frame(
+            self._store,
+            access,
+            include_descendants=source.frame.include_descendants,
+        )
+        if loaded.context_identities != token.context_identities:
             raise SummarizeError(
                 "The selected readable Context scope changed while "
                 "summarization was running; no summary was published."

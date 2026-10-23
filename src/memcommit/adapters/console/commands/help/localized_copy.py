@@ -23,7 +23,6 @@ _CORE_CONCEPT_DESCRIPTIONS = {
         "CONTEXT": "Un espace de travail nommé et hiérarchique qui contient des Memories et organise des Contexts enfants. Le séparateur / exprime la hiérarchie dans des noms comme task-1/participant ; les operations avec une portée descendante peuvent traiter un Context et ses Contexts descendants comme un seul sous-arbre. Sans Context indiqué, les commands utilisent le Context courant.",
         "PROFILE": "Une frontière isolée de propriété et de stockage contenant des Contexts ; plusieurs Profiles peuvent contenir le même nom de Context.",
         "OPERATION": "Une action réutilisable qui lit, analyse ou modifie des Memories ou Contexts sélectionnés selon des entrées et un comportement définis.",
-        "GRANT": "Une relation d’autorisation reçue ou accordée qui permet sélectivement de lire ou interroger un Context et ses Memories, ou d’y exécuter des opérations permises, tant que le Grant reste valide.",
         "SESSION": "Enregistre un workflow d’analyse ou de révision afin de pouvoir le rouvrir et le poursuivre. Les résultats d’Apply et l’historique des checkpoints indiquent séparément si des changements de Context ont été effectués.",
         "CHECKPOINT": "Une frontière d’historique récupérable créée pour chaque opération appliquée et enregistrée par Context affecté.",
     },
@@ -32,16 +31,14 @@ _CORE_CONCEPT_DESCRIPTIONS = {
         "CONTEXT": "包含 Memory 并组织子 Context 的命名层级工作区。分隔符 / 在 task-1/participant 这样的名称中表示层级；支持 descendant 范围的 operation 可将一个 Context 及其下级 Context 作为一个 subtree 一并处理。未指定 Context 时，command 使用当前 Context。",
         "PROFILE": "包含 Context 的独立所有权与存储边界；不同 Profile 可以包含相同的 Context name。",
         "OPERATION": "一种可复用的操作，按照已定义的输入与行为读取、分析或修改选定的 Memory 或 Context。",
-        "GRANT": "一种可授予或接收的权限关系；在 Grant 有效期间，它可选择性允许非直接所有者读取或查询 Context 及其 Memory，或运行获准 operation。",
         "SESSION": "保存分析或审查 workflow，以便重新打开并继续。Apply 结果和 checkpoint history 会另行显示是否发生了 Context 修改。",
         "CHECKPOINT": "每个已应用 operation 创建并按受影响 Context 记录的可恢复历史边界。",
     },
     "KO": {
         "MEMORY": "Context 안에 저장되며, Memory를 다루는 operation에서 독립적으로 선택·검토·변경하는 기본 기록 단위입니다.",
-        "CONTEXT": "Memory를 담고 하위 Context를 계층적으로 정리하는 이름 있는 작업 공간입니다. task-1/participant처럼 이름의 /로 계층을 나타내며, descendant 범위를 지원하는 operation에서는 한 Context와 그 하위 Context들을 하나의 subtree로 함께 다룰 수 있습니다. Context를 명시하지 않은 command는 current Context를 사용합니다.",
+        "CONTEXT": "Memory만 담는 이름 있는 작업 공간이며, 하위 Context는 별도로 저장됩니다. task-1/participant처럼 이름의 /로 계층을 나타내며, descendant 범위를 지원하는 operation에서는 한 Context와 그 하위 Context들을 하나의 subtree로 함께 다룰 수 있습니다. Context를 명시하지 않은 command는 current Context를 사용합니다.",
         "PROFILE": "Context들을 담는 격리된 소유권 및 저장 경계이며, 서로 다른 Profile에 같은 Context name이 존재할 수 있습니다.",
         "OPERATION": "정해진 입력과 동작에 따라 선택한 Memory 또는 Context를 읽고 분석하거나 변경하는 재사용 가능한 작업입니다.",
-        "GRANT": "주고받을 수 있는 권한 관계로, Grant가 유효한 동안 직접 소유하지 않은 사람이 Context와 Memory를 읽거나 query하고 허가된 operation을 실행할 수 있게 합니다.",
         "SESSION": "분석 또는 검토 workflow를 다시 열고 이어가기 위한 저장 기록입니다. Context 변경 여부는 별도의 Apply 결과와 checkpoint history에서 확인합니다.",
         "CHECKPOINT": "적용된 operation마다 생성되어 영향을 받은 Context별로 기록되는 복구 가능한 history 경계입니다.",
     },
@@ -50,7 +47,6 @@ _CORE_CONCEPT_DESCRIPTIONS = {
         "CONTEXT": "Memory-г агуулж, дэд Context-уудыг шатлан зохион байгуулдаг нэртэй ажлын орчин. task-1/participant зэрэг нэрийн / тусгаарлагч нь шатлалыг илэрхийлнэ; descendant scope-г дэмждэг operation нь тухайн Context болон түүний дэд Context-уудыг нэг subtree болгон хамтад нь авч үзэж болно. Context заагаагүй command нь одоогийн Context-г ашиглана.",
         "PROFILE": "Context-уудыг агуулдаг тусгаарлагдсан эзэмшил ба хадгалалтын хил; өөр Profile-ууд ижил Context name-тай байж болно.",
         "OPERATION": "Тодорхойлсон оролт ба зан төлөвийн дагуу сонгосон Memory эсвэл Context-г унших, шинжлэх, өөрчлөх дахин ашиглах боломжтой үйлдэл.",
-        "GRANT": "Grant хүчинтэй байх хугацаанд шууд эзэмшдэггүй хүнд Context болон Memory-г унших, query хийх эсвэл зөвшөөрөгдсөн operation ажиллуулахыг сонголтоор зөвшөөрдөг эрхийн харилцаа.",
         "SESSION": "Analysis эсвэл review workflow-г дахин нээж үргэлжлүүлэхийн тулд хадгална. Context өөрчлөгдсөн эсэхийг Apply result болон checkpoint history тусдаа харуулна.",
         "CHECKPOINT": "Хэрэглэсэн operation бүрд үүсэж, нөлөөлсөн Context тус бүрээр бүртгэгддэг сэргээх боломжтой history хил.",
     },
@@ -187,7 +183,10 @@ def common_locator_description(
 def validate_help_translation_coverage(operation_names: set[str]) -> None:
     """Validate both catalog translations and Help-only interface copy."""
 
-    validate_operation_translation_coverage(operation_names)
+    from memcommit.operation_catalog.catalog import RETIRED_OPERATION_NAMES
+
+    # The authored catalog keeps retired landmarks for evidence and history.
+    validate_operation_translation_coverage(operation_names | RETIRED_OPERATION_NAMES)
     validate_family_translation_coverage()
     concept_names = set(_CORE_CONCEPT_DESCRIPTIONS["FR"])
     key_names = set(_COMMON_KEY_DESCRIPTIONS["FR"])

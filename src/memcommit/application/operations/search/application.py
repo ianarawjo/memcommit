@@ -22,14 +22,12 @@ from memcommit.application.operations.search.ranking import (
     SearchMatch,
     rank_candidates,
 )
-from memcommit.core.context import Memory, MemoryRef, QueryContextRef
+from memcommit.models.memory import Memory
 
 
 SearchMode = Literal["CURRENT"]
 SearchResultKind = Literal[
     "memory",
-    "ref",
-    "query",
     "artifact",
 ]
 SearchRelevance = Literal["primary", "related"]
@@ -48,7 +46,6 @@ class SearchRequest:
     query: str
     target_names: tuple[str, ...]
     include_descendants: bool = True
-    follow_embeds: bool = True
     limit: int = 5
 
     def __post_init__(self) -> None:
@@ -60,9 +57,7 @@ class SearchRequest:
             or len(set(self.target_names)) != len(self.target_names)
         ):
             raise ValueError("Select at least one distinct readable Context.")
-        if not isinstance(self.include_descendants, bool) or not isinstance(
-            self.follow_embeds, bool
-        ):
+        if not isinstance(self.include_descendants, bool):
             raise ValueError("Search scope choices must be explicit booleans.")
         if isinstance(self.limit, bool) or not 1 <= self.limit <= 20:
             raise ValueError("Search limit must be between 1 and 20.")
@@ -87,8 +82,6 @@ class SearchResult:
             raise ValueError("Search results require a Context name.")
         if self.kind not in {
             "memory",
-            "ref",
-            "query",
             "artifact",
         }:
             raise ValueError("Search returned an unsupported result kind.")
@@ -277,20 +270,6 @@ def _current_result(match: SearchMatch) -> SearchResult:
         kind: SearchResultKind = "memory"
         content = item.content
         source_identity = (candidate.context_name, candidate.context_uid, item.uid)
-    elif isinstance(item, MemoryRef):
-        kind = "ref"
-        content = (
-            item.target.content if item.target is not None else "(DANGLING memory ref)"
-        )
-        source_identity = (
-            item.target_context_name,
-            item.target_context_uid,
-            item.target_memory_uid,
-        )
-    elif isinstance(item, QueryContextRef):
-        kind = "query"
-        content = f"{item.name} · query view"
-        source_identity = (None, None, None)
     elif isinstance(item, RetrievalArtifact):
         kind = "artifact"
         content = f"{item.title}\n{item.content}"

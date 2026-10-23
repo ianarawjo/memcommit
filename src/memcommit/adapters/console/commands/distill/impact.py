@@ -65,7 +65,7 @@ def distill_impact_presentation(
     existing_target = target_name is not None
     scope = (
         "CONTEXT + DESCENDANTS/EMBEDS"
-        if analysis.source.include_descendants or analysis.source.follow_embeds
+        if (analysis.source.include_descendants)
         else "THIS CONTEXT ONLY"
     )
     items = tuple(
@@ -208,7 +208,7 @@ def distill_cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Include readable lexical descendants and embedded Contexts",
+            help="Include local lexical descendants",
         ),
     ] = False,
     save_as: Annotated[
@@ -253,7 +253,6 @@ def distill_cmd(
                         context_locator=context_name,
                         goal_focus=goal_focus,
                         include_descendants=traversal.include_descendants,
-                        follow_embeds=traversal.follow_embeds,
                     ),
                     store=store,
                     provider_factory=lambda: (
@@ -276,7 +275,6 @@ def distill_cmd(
                         context_locator=endpoints.source_name,
                         goal_focus=goal_focus,
                         include_descendants=traversal.include_descendants,
-                        follow_embeds=traversal.follow_embeds,
                     ),
                     store=store,
                     target_name=endpoints.target_name,

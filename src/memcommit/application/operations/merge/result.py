@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field, replace
 
 from memcommit.application.operations.resolve.resolve_finalization.proposal import ResolveProposal
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 from .analysis.candidate import digest
 from .analysis.choices import (

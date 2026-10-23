@@ -6,7 +6,8 @@ from dataclasses import dataclass
 import hashlib
 import json
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TRANSLATION_REVIEW_UNREVIEWED,
@@ -173,7 +174,7 @@ def build_translation_export(
     )
     memories = tuple(
         item
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory) and (selector is None or item.uid == selector)
     )
     return {

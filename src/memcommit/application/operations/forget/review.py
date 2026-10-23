@@ -6,7 +6,8 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.semantic.selective_curation import CurationAnalysis, CurationDecision, CurationItem
 from memcommit.application.capabilities.semantic.changes import EditChange, ProposedChange, RemoveChange
 
@@ -56,8 +57,8 @@ class ForgetReview:
     ) -> "ForgetReview":
         review_uid = str(uuid.uuid4())
         sources = {
-            uid: CurationItem(uid, item.content, context.name)
-            for uid, item in context.iter_entries()
+            item.uid: CurationItem(item.uid, item.content, context.name)
+            for item in context.iter_memories()
             if isinstance(item, Memory)
         }
         if {decision.source_uid for decision in analysis.decisions} != set(sources):

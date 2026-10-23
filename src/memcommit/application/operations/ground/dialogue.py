@@ -19,7 +19,7 @@ from memcommit.application.operations.ground.contracts import (
     validate_ground_goal,
     validate_ground_contract_name,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.providers.errors import QueryProviderError
 
 
@@ -650,7 +650,7 @@ def _parse_new_context_suggestions(
                 "suggestions."
             )
         try:
-            context_name = validate_portable_context_name(
+            context_name = validate_context_name(
                 candidate["context_name"]
             )
         except ValueError as error:
@@ -990,7 +990,7 @@ def interpret_ground_dialogue(
 
     if ground_name is not None:
         try:
-            ground_name = validate_portable_context_name(ground_name)
+            ground_name = validate_context_name(ground_name)
         except ValueError as error:
             raise GroundDialogueError(
                 "Ground Save Location is not a valid Context name."

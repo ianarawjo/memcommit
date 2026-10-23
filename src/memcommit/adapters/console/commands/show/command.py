@@ -28,7 +28,7 @@ def cmd(
         typer.Argument(
             help=(
                 "Auto-typed existing Context, direct-item UID/prefix, or "
-                "CONTEXT:UID; current embedded/query names remain accepted"
+                "CONTEXT:UID; each Memory belongs to one local Context"
             )
         ),
     ] = None,
@@ -53,7 +53,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help=("Include readable lexical descendants and embedded Contexts"),
+            help=("Include local lexical descendants"),
         ),
     ] = False,
 ) -> None:
@@ -76,9 +76,7 @@ def cmd(
             selector,
             context_name=context_name,
             include_descendants=include_recursive,
-            follow_embeds=include_recursive,
             store=MemoryStore(),
-            allow_grants=True,
         )
     except ShowDirectItemScopeError as error:
         typer.secho(

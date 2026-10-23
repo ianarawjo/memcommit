@@ -8,8 +8,8 @@ from memcommit.application.operations.sever.application import (
     SeverApplicationError,
 )
 from memcommit.application.operations.sever.apply.checkpoints import (
-    build_checkpoint_args,
-    checkpoint_args_match,
+    build_checkpoint_command_details,
+    checkpoint_command_details_match,
 )
 from memcommit.application.operations.sever.apply.projection import (
     self_save_contexts,
@@ -20,11 +20,8 @@ from memcommit.application.operations.sever.model import (
     SeverCheckpointReceipt,
     SeverSession,
 )
-from memcommit.core.context import (
-    AutoCheckpoint,
-    Context,
-)
-from memcommit.core.context_targeting.model import ContextScope
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.store import (
     MemoryStore,
@@ -40,10 +37,10 @@ def recover_self_save(store: MemoryStore, session: SeverSession) -> SeverSession
     checkpoints: list[dict[str, object]] = []
     originals: list[Context] = []
     snapshots: list[Context] = []
-    for name, _uid, _digest in source_receipts:
+    for name, _uid in source_receipts:
         matches = []
         for checkpoint in store.list_checkpoints(name):
-            args = checkpoint.get("args")
+            args = checkpoint.get("command_details")
             sever = args.get("sever") if isinstance(args, dict) else None
             if (
                 checkpoint.get("command") == "sever"
@@ -71,11 +68,11 @@ def recover_self_save(store: MemoryStore, session: SeverSession) -> SeverSession
         )
     except (SeverApplicationError, TypeError, ValueError):
         return None
-    expected_args = build_checkpoint_args(session, expected[0], sources)
-    current = tuple(store.load_direct(name) for name, _uid, _digest in source_receipts)
+    expected_args = build_checkpoint_command_details(session, expected[0], sources)
+    current = tuple(store.load_direct(name) for name, _uid in source_receipts)
     if any(
-        not checkpoint_args_match(
-            checkpoint.get("args"), expected_args, save_mode=session.save_mode
+        not checkpoint_command_details_match(
+            checkpoint.get("command_details"), expected_args, save_mode=session.save_mode
         )
         or snapshot.uid != output.uid
         or context_record_digest(snapshot) != context_record_digest(output)
@@ -107,19 +104,20 @@ def recover_self_save(store: MemoryStore, session: SeverSession) -> SeverSession
     )
 
 
-def materialize_self_save(store: MemoryStore, session: SeverSession) -> SeverSession:
+def materialize_self_save(
+    store: MemoryStore,
+    session: SeverSession,
+    *,
+    expected_context_catalog: tuple[str, ...],
+) -> SeverSession:
     """Apply the reviewed projection to every Source owner in place."""
 
     source_receipts = self_save_source_receipts(session)
-    source_names = {name for name, _uid, _digest in source_receipts}
+    source_names = {name for name, _uid in source_receipts}
     catalog = tuple(store.list_context_names())
     if session.source.include_descendants:
         live_lexical_names = expand_lexical_context_names(
-            ContextScope.create(
-                (session.source.root_name,),
-                include_descendants=True,
-            ),
-            catalog,
+            (session.source.root_name,), catalog, include_descendants=True
         )
         if not set(live_lexical_names) <= source_names:
             raise SeverApplicationError(
@@ -129,50 +127,35 @@ def materialize_self_save(store: MemoryStore, session: SeverSession) -> SeverSes
         (
             session.source.root_name,
             session.source.root_uid,
-            session.source.contexts[0][2],
         ),
     ):
         raise SeverApplicationError(
             "A direct in-place Sever must bind exactly its Source root."
         )
 
-    originals = tuple(
-        store.load_direct(name) for name, _uid, _digest in source_receipts
-    )
+    originals = tuple(store.load_direct(name) for name, _uid in source_receipts)
     outputs, result_uids, sources = self_save_contexts(
         session,
         originals,
     )
-    command_args = build_checkpoint_args(session, outputs[0], sources)
-    description = (
-        f"Severed Source scope '{session.source.root_name}' in place under "
-        f"'{session.criteria.root_name}': {len(source_receipts)} Contexts, "
-        f"{len(result_uids)} kept, "
-        f"{len(session.candidates) - len(result_uids)} forgotten"
-    )
-    criteria_bindings = (
-        session.criteria.contexts if session.criteria.granted is None else ()
-    )
+    command_args = build_checkpoint_command_details(session, outputs[0], sources)
+    criteria_bindings = session.criteria.contexts
     checkpoints = store.save_context_command_batch(
         tuple(
             (
                 output,
-                AutoCheckpoint(
+                AutoCheckpointRequest(
                     command="sever",
-                    args=command_args,
-                    description=description,
+                    command_details=command_args,
                 ),
-                expected_digest,
             )
-            for output, (_name, _uid, expected_digest) in zip(
+            for output, (_name, _uid) in zip(
                 outputs,
                 source_receipts,
             )
         ),
         source_bindings=criteria_bindings,
-        expected_context_catalog=(
-            catalog if session.source.include_descendants else None
-        ),
+        expected_context_catalog=expected_context_catalog,
     )
     receipts = tuple(
         SeverCheckpointReceipt(
@@ -213,14 +196,12 @@ def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
         receipt_by_name = {
             receipt.context_name: receipt for receipt in application.checkpoints
         }
-        if tuple(receipt_by_name) != tuple(
-            name for name, _uid, _digest in source_receipts
-        ):
+        if tuple(receipt_by_name) != tuple(name for name, _uid in source_receipts):
             raise SeverApplicationError(
                 "The in-place Sever receipt does not cover its Source owners."
             )
     elif len(source_receipts) == 1:
-        name, uid, _digest = source_receipts[0]
+        name, uid = source_receipts[0]
         receipt_by_name = {
             name: SeverCheckpointReceipt(
                 context_uid=uid,
@@ -233,18 +214,16 @@ def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
             "Recursive in-place Sever requires owner checkpoint receipts."
         )
 
-    names = tuple(name for name, _uid, _digest in source_receipts)
+    names = tuple(name for name, _uid in source_receipts)
     with store._command_write_lock():  # noqa: SLF001
         with store._context_graph_lock(  # noqa: SLF001
             exclusive=reviewed.source.include_descendants
         ):
             if reviewed.source.include_descendants:
                 live_lexical_names = expand_lexical_context_names(
-                    ContextScope.create(
-                        (reviewed.source.root_name,),
-                        include_descendants=True,
-                    ),
+                    (reviewed.source.root_name,),
                     store.list_context_names(),
+                    include_descendants=True,
                 )
                 if not set(live_lexical_names) <= set(names):
                     raise SeverApplicationError(
@@ -293,7 +272,7 @@ def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
                         reviewed,
                         tuple(originals),
                     )
-                    expected_args = build_checkpoint_args(
+                    expected_args = build_checkpoint_command_details(
                         reviewed,
                         expected[0],
                         sources,
@@ -304,8 +283,8 @@ def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
                         or context_record_digest(live) != context_record_digest(output)
                         or context_record_digest(snapshot)
                         != context_record_digest(output)
-                        or not checkpoint_args_match(
-                            checkpoint.get("args"),
+                        or not checkpoint_command_details_match(
+                            checkpoint.get("command_details"),
                             expected_args,
                             save_mode=reviewed.save_mode,
                         )

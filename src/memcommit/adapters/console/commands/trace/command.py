@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
     try_resolve_existing_context_access,
@@ -36,9 +37,8 @@ from memcommit.adapters.console.commands.trace.projection import (
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
-    safe_terminal_text,
 )
-from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
+
 from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
@@ -54,12 +54,6 @@ from memcommit.application.operations.trace.application import (
     TraceReport,
     TraceRequest,
     TraceTargetCatalogRequest,
-)
-from memcommit.application.operations.trace.granted_view import (
-    GrantedMemoryTraceReport,
-)
-from memcommit.application.operations.trace.reference_lineage import (
-    MemoryReferenceTraceReport,
 )
 from memcommit.application.operations.trace.runtime import (
     execute_trace,
@@ -147,100 +141,6 @@ def _shown_uid(value: str, *, verbose: bool) -> str:
     return value if verbose else value[:8]
 
 
-def render_reference_trace(
-    report: MemoryReferenceTraceReport,
-    *,
-    verbose: bool = False,
-    limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
-) -> None:
-    """Render a pointer occurrence without collapsing it into target lineage."""
-
-    reference = report.reference
-    events = tuple(reversed(report.events))
-    if limit is not None:
-        events = events[:limit]
-    typer.echo(f"TRACE · {display_escape_text(report.context_name)}")
-    typer.echo(
-        f"[REFERENCE {_shown_uid(report.selected_uid, verbose=verbose)}] · "
-        f"{reference.mode} · {len(report.events)} OCCURRENCE "
-        f"{'OPERATION' if len(report.events) == 1 else 'OPERATIONS'} · LATEST FIRST"
-    )
-    typer.echo(
-        "TARGET · "
-        f"{display_escape_text(reference.target_context_name)}"
-        f":[{_shown_uid(reference.target_memory_uid, verbose=verbose)}]"
-    )
-    typer.echo("\nREFERENCE OCCURRENCE")
-    for event in events:
-        checkpoint = (
-            _shown_uid(event.checkpoint_uid, verbose=verbose)
-            if event.checkpoint_uid is not None
-            else "unrecorded"
-        )
-        timestamp = event.timestamp or "(current)"
-        detail = event.description.strip()
-        suffix = f" · {safe_terminal_text(detail)}" if detail else ""
-        typer.echo(
-            f"[{display_escape_text(event.command)}] "
-            f"[CHECKPOINT {checkpoint}] "
-            f"[{event.kind} · {event.evidence}]  "
-            f"{display_escape_text(timestamp)}{suffix}"
-        )
-    if not events:
-        typer.echo("  no retained occurrence changes")
-
-    typer.echo("\nTARGET MEMORY")
-    if report.target_trace is not None:
-        typer.echo(
-            format_compact_trace_report(
-                report.target_trace,
-                verbose=verbose,
-                limit=limit,
-            )
-        )
-    elif reference.mode == "SNAPSHOT":
-        typer.echo("  SNAPSHOT · source changes do not rewrite this retained value")
-        for line in safe_terminal_text(
-            reference.snapshot_content or ""
-        ).splitlines() or [""]:
-            typer.echo(f"  {line}")
-    else:
-        typer.echo("  HISTORY UNAVAILABLE")
-    if report.warnings:
-        typer.echo("\nATTENTION")
-        for warning in report.warnings:
-            typer.echo(f"  {display_escape_text(warning)}")
-
-
-def render_granted_trace(
-    report: GrantedMemoryTraceReport,
-    *,
-    verbose: bool = False,
-) -> None:
-    typer.echo(f"TRACE · {display_escape_text(report.context_name)}")
-    typer.echo(
-        f"[MEMORY {_shown_uid(report.selected_uid, verbose=verbose)}] · "
-        "CURRENT GRANTED VIEW"
-    )
-    typer.echo("\nMEMORY")
-    for line in safe_terminal_text(report.current.content).splitlines() or [""]:
-        typer.echo(f"  {line}")
-    typer.echo("\nACCESS ROUTE")
-    typer.echo(
-        f"  GRANT {_shown_uid(report.grant_uid, verbose=verbose)} · "
-        f"REVISION {report.grant_revision} · " + " + ".join(report.permissions)
-    )
-    if verbose:
-        typer.echo(f"  AUTHORITY PROFILE · {report.authority_profile_uid}")
-        typer.echo(f"  GRANTEE PROFILE · {report.grantee_profile_uid}")
-        typer.echo(
-            f"  RESOURCE · {display_escape_text(report.resource_name)} "
-            f"[{report.resource_uid}]"
-        )
-    typer.echo("\nHISTORY — hidden by Grant")
-    typer.echo(f"  {display_escape_text(report.warning)}")
-
-
 def cmd(
     selector: Annotated[
         Optional[str],
@@ -248,7 +148,7 @@ def cmd(
             help=(
                 "browse the current local subtree for one exact Context or "
                 "Memory when omitted; otherwise accepts CONTEXT, "
-                "Memory/MemoryRef UID/prefix, or CONTEXT:UID"
+                "Memory UID/prefix, or CONTEXT:UID"
             )
         ),
     ] = None,
@@ -317,7 +217,6 @@ def cmd(
                 store,
                 context_name,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             ).name
             _execute_context_trace(
                 store,
@@ -333,10 +232,9 @@ def cmd(
                 store,
                 selector,
                 current_name=context_snapshot.current_name,
-                required_permission="READ",
             )
             explicit_target = (
-                ContextTarget(context_identity.name)
+                context_identity.name
                 if context_identity is not None
                 else resolve_explicit_context_history_target(
                     selector,
@@ -344,10 +242,10 @@ def cmd(
                     available_context_names=store.list_context_names(),
                 )
             )
-            if isinstance(explicit_target, ContextTarget):
+            if isinstance(explicit_target, str):
                 _execute_context_trace(
                     store,
-                    context_name=explicit_target.context_name,
+                    context_name=explicit_target,
                     current_context_name=context_snapshot.current_name,
                     as_json=as_json,
                     verbose=verbose,
@@ -390,24 +288,25 @@ def cmd(
                 catalog_context_names=catalog_names,
             )
             if selected is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Trace cancelled.")
                 return
-            if isinstance(selected, ContextTarget):
+            if isinstance(selected, str):
                 _execute_context_trace(
                     store=store,
-                    context_name=selected.context_name,
+                    context_name=selected,
                     current_context_name=context_snapshot.current_name,
                     as_json=False,
                     verbose=verbose,
                     limit=operation_limit,
                 )
                 return
-            if not isinstance(selected, DirectMemoryTarget):
+            if not isinstance(selected, tuple):
                 raise MemoryHistoryReconstructionError(
                     "Trace browser returned an invalid target."
                 )
-            selector = selected.memory_uid
-            context_name = selected.context_name
+            selector = selected[1]
+            context_name = selected[0]
             # The pickers are read-only, but another process may have changed
             # the Context while they were open. Re-read before resolving the
             # exact UID so the report never mixes old live state with new history.
@@ -449,19 +348,10 @@ def cmd(
             )
         )
         return
-    if isinstance(report, MemoryReferenceTraceReport):
-        render_reference_trace(
-            report,
-            verbose=verbose,
-            limit=operation_limit,
-        )
-    elif isinstance(report, GrantedMemoryTraceReport):
-        render_granted_trace(report, verbose=verbose)
+    if interactive_report_terminal():
+        # Keep stdout available to pipes and `mem log --memory`, while the
+        # direct human Trace route contains the same document in one
+        # scrollable read-only viewport.
+        open_trace_viewer(report, verbose=verbose, limit=operation_limit)
     else:
-        if interactive_report_terminal():
-            # Keep stdout available to pipes and `mem log --memory`, while the
-            # direct human Trace route contains the same document in one
-            # scrollable read-only viewport.
-            open_trace_viewer(report, verbose=verbose, limit=operation_limit)
-        else:
-            render_trace(report, verbose=verbose, limit=operation_limit)
+        render_trace(report, verbose=verbose, limit=operation_limit)

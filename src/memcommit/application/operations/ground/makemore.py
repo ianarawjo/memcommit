@@ -18,8 +18,7 @@ from memcommit.application.operations.makemore.application import (
 from memcommit.application.operations.makemore.runtime import execute_makemore
 from memcommit.application.operations.makemore.target_context import (
     FrozenMakemoreTargetContext,
-    GRANTED_MAKEMORE_ADD_PERMISSIONS,
-    authorized_frozen_makemore_target,
+    revalidated_makemore_target,
     freeze_makemore_target_context,
 )
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
@@ -43,7 +42,6 @@ from memcommit.application.capabilities.semantic_result_memorization import (
 )
 from memcommit.persistence.store import (
     MemoryStore,
-    context_record_digest,
 )
 
 
@@ -66,8 +64,7 @@ class FrozenGroundMakemore:
     direction: GroundMakemoreDirection
     request: MakemoreRequest
     target_context: FrozenMakemoreTargetContext | None = None
-    root_digest: str | None = None
-    source_bindings: tuple[tuple[str, str, str], ...] = ()
+    source_bindings: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -110,10 +107,9 @@ def freeze_ground_makemore(
         (
             source_lane.name,
             source_lane.uid,
-            context_record_digest(source_lane),
         ),
         *(
-            (item.context_name, item.context_uid, item.context_digest)
+            (item.context_name, item.context_uid)
             for item in target_context.local_contexts
         ),
     ]
@@ -123,7 +119,7 @@ def freeze_ground_makemore(
         assert focus.context_uid is not None
         assert focus.context_digest is not None
         source_bindings.append(
-            (focus.context_name, focus.context_uid, focus.context_digest)
+            (focus.context_name, focus.context_uid)
         )
     return FrozenGroundMakemore(
         ground_name=workspace.name,
@@ -133,7 +129,6 @@ def freeze_ground_makemore(
         direction=direction,
         request=request,
         target_context=target_context,
-        root_digest=context_record_digest(workspace.root),
         source_bindings=tuple(dict.fromkeys(source_bindings)),
     )
 
@@ -245,7 +240,7 @@ def execute_ground_makemore(
     target_context = frozen.target_context
     if not isinstance(target_context, FrozenMakemoreTargetContext):
         raise MakemoreError("Ground workspace Makemore Target is invalid.")
-    with authorized_frozen_makemore_target(store, target_context):
+    with revalidated_makemore_target(store, target_context):
         result = execute_makemore(
             frozen.request,
             provider_factory=provider_factory,
@@ -307,12 +302,10 @@ def apply_ground_makemore_result(
     lane: Literal["rules", "examples"] = (
         "rules" if frozen.direction == "GOAL_TO_RULES" else "examples"
     )
-    assert frozen.root_digest is not None
-    with authorized_frozen_makemore_target(
+    with revalidated_makemore_target(
         store,
         target_context,
         revalidate_after=False,
-        required_granted_permissions=GRANTED_MAKEMORE_ADD_PERMISSIONS,
     ):
         return execute_ground_workspace_memories_adoption(
             AdoptGroundWorkspaceMemoriesRequest(
@@ -321,8 +314,6 @@ def apply_ground_makemore_result(
                 contents=contents,
                 expected_workspace_uid=frozen.ground_uid,
                 expected_revision=frozen.ground_revision,
-                expected_root_digest=frozen.root_digest,
-                expected_lane_digest=target_context.target.context_digest,
                 source_operation="makemore",
                 analysis_digest=analysis.digest,
                 source_bindings=frozen.source_bindings,

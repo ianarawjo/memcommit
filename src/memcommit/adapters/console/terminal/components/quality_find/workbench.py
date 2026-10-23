@@ -23,7 +23,6 @@ from memcommit.adapters.console.terminal.components.operation_launcher.location 
     operation_launcher_orientation,
 )
 from memcommit.application.context_access.access import (
-    context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.application.context_access.readable_contexts import (
@@ -60,7 +59,7 @@ from memcommit.adapters.console.terminal.components.read_report import (
 from memcommit.adapters.console.terminal.components.findings import (
     run_quality_find_browser,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.range_selection import (
     ContextRangeSelectionState,
 )
@@ -89,7 +88,9 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )
-from memcommit.application.operations.duplicates.dedun.application import DEDUN_ELIGIBLE_RELATIONS
+from memcommit.application.operations.duplicates.dedun.application import (
+    DEDUN_ELIGIBLE_RELATIONS,
+)
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.capabilities.reviewing.read_report import (
@@ -657,7 +658,6 @@ def run_quality_find_resolution_workbench(
     )
 
 
-
 def run_interactive_quality_find(
     store: MemoryStore,
     *,
@@ -675,22 +675,16 @@ def run_interactive_quality_find(
         store,
         None,
         current_name=current_name,
-        required_permission="READ",
     )
     catalog = freeze_profile_readable_context_catalog(
         store,
         access,
-        include_query_routes=False,
     )
     names = tuple(catalog.list_context_names())
     initial = access.access_name
     if initial not in names:
         raise RuntimeError("The current Context is outside the readable catalog.")
-    annotations = {
-        name: context_access_display_facts(catalog.access_for(name))
-        for name in names
-        if catalog.access_for(name).is_granted
-    }
+    annotations = {}
     operation = _read_report_operation(kind, operation_name)
     recents = read_report_recents(store, operation=operation)
     launch = choose_read_report_recent(

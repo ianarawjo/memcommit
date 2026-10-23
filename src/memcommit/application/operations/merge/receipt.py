@@ -53,10 +53,10 @@ class MergeReceipt:
 
 
 def merge_receipt_summary(prepared, result) -> MergeReceiptSummary:
-    from memcommit.core.context import Memory
+    from memcommit.models.memory import Memory
 
     def count(context):
-        return sum(isinstance(item, Memory) for item in context.iter_items())
+        return sum(isinstance(item, Memory) for item in context.iter_memories())
 
     return MergeReceiptSummary(
         "LITERAL" if prepared.request.method == "LITERAL" else "SEMANTIC + LITERAL",

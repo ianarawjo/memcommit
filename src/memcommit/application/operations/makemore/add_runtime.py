@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 from memcommit.application.operations.makemore.model import (
     MakemoreError,
     MakemoreMode,
@@ -16,16 +16,16 @@ from memcommit.application.operations.makemore.application import (
     MakemoreResult,
 )
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
-from memcommit.application.capabilities.semantic.goal_focus_runtime import revalidate_goal_focus
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    revalidate_goal_focus,
+)
 from memcommit.application.operations.makemore.runtime import (
     MakemoreProviderFactory,
     execute_makemore,
 )
 from memcommit.application.operations.makemore.target_context import (
     FrozenMakemoreTargetContext,
-    GRANTED_MAKEMORE_ADD_PERMISSIONS,
-    GRANTED_MAKEMORE_AMBIENT_PERMISSIONS,
-    authorized_frozen_makemore_target,
+    revalidated_makemore_target,
     freeze_makemore_target_context,
 )
 from memcommit.application.capabilities.semantic_result_memorization import (
@@ -76,7 +76,7 @@ def freeze_makemore_context_source(
     if role not in {"goal", "rules"}:
         raise MakemoreError("Makemore --as must be 'goal' or 'rules'.")
     context = store.load_direct(context_name)
-    items = tuple(context.iter_items())
+    items = tuple(context.iter_memories())
     if any(not isinstance(item, Memory) for item in items):
         raise MakemoreError(
             "Context-backed Makemore requires only directly owned ordinary "
@@ -96,9 +96,7 @@ def freeze_makemore_context_source(
         )
     else:
         if not memories:
-            raise MakemoreError(
-                "Makemore requires at least one direct Source Memory."
-            )
+            raise MakemoreError("Makemore requires at least one direct Source Memory.")
         request = MakemoreRequest(
             rules=tuple(item.content for item in memories),
             goal_focus=goal_focus,
@@ -184,15 +182,10 @@ def prepare_makemore_add_to_frozen_target(
         store,
         target=target,
         excluded_root_memory_uids=exclusions,
-        required_granted_permissions=(
-            GRANTED_MAKEMORE_ADD_PERMISSIONS
-            if will_apply
-            else GRANTED_MAKEMORE_AMBIENT_PERMISSIONS
-        ),
     )
     if source is not None:
         _revalidate_source(store, source)
-    with authorized_frozen_makemore_target(store, target_context):
+    with revalidated_makemore_target(store, target_context):
         if source is not None:
             _revalidate_source(store, source)
         result = execute_makemore(
@@ -317,7 +310,7 @@ def apply_prepared_makemore_add(
     source_bindings = (
         ()
         if source is None
-        else ((source.context_name, source.context_uid, source.context_digest),)
+        else ((source.context_name, source.context_uid),)
     )
     goal_focus = analysis.goal_focus
     goal_bindings = (
@@ -327,22 +320,20 @@ def apply_prepared_makemore_add(
             (
                 goal_focus.context_name,
                 goal_focus.context_uid,
-                goal_focus.context_digest,
             ),
         )
     )
     ambient_bindings = tuple(
-        (item.context_name, item.context_uid, item.context_digest)
+        (item.context_name, item.context_uid)
         for item in prepared.target_context.local_contexts
     )
     all_source_bindings = tuple(
         dict.fromkeys((*source_bindings, *goal_bindings, *ambient_bindings))
     )
-    with authorized_frozen_makemore_target(
+    with revalidated_makemore_target(
         store,
         prepared.target_context,
         revalidate_after=False,
-        required_granted_permissions=GRANTED_MAKEMORE_ADD_PERMISSIONS,
     ):
         return memorize_semantic_result(
             store=store,
@@ -355,11 +346,6 @@ def apply_prepared_makemore_add(
                 "version": 5,
                 **makemore_checkpoint_payload(prepared.result),
             },
-            description=(
-                f"Added {len(contents)} Makemore "
-                f"{'Rules' if analysis.mode is MakemoreMode.GOAL_TO_RULES else 'Cases'} "
-                f"to '{prepared.target.context_name}'"
-            ),
         )
 
 

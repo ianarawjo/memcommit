@@ -16,20 +16,14 @@ from memcommit.adapters.console.commands import (
     add,
     branch,
     copy,
-    embed,
     init,
-    reference,
     mem_import,
     mem_export,
     mem_sync,
 )
 from memcommit.adapters.console.commands import ground
 from memcommit.adapters.console.commands import profile
-from memcommit.adapters.console.commands import (
-    lock,
-    share,
-    unlock,
-)
+from memcommit.adapters.console.commands import lock, unlock
 from memcommit.adapters.console.commands import (
     config,
     dev_eval,
@@ -69,7 +63,6 @@ from memcommit.adapters.console.commands import (
 from memcommit.adapters.console.commands.duplicates import (
     find_duplicates,
     find_redundancies,
-    dedun,
     dedup,
 )
 from memcommit.adapters.console.commands import (
@@ -79,7 +72,6 @@ from memcommit.adapters.console.commands import (
 from memcommit.adapters.console.commands import (
     find,
     query,
-    search,
 )
 from memcommit.adapters.console.commands import (
     compare,
@@ -132,6 +124,7 @@ app.command(
 app.command(
     "sync",
     help=operation_summary("sync"),
+    epilog=mem_sync.cmd.__doc__,
 )(mem_sync.cmd)
 app.command(
     "init-study",
@@ -238,14 +231,6 @@ app.command(
     ),
 )(merge.cmd)
 app.command(
-    "embed",
-    help=operation_summary("embed"),
-)(embed.cmd)
-app.command(
-    "reference",
-    help=operation_summary("reference"),
-)(reference.cmd)
-app.command(
     "query",
     help=operation_summary("query"),
 )(query.cmd)
@@ -306,14 +291,6 @@ app.command(
     help=operation_summary("dedup"),
 )(dedup.cmd)
 app.command(
-    "dedun",
-    help=operation_summary("dedun"),
-    epilog=(
-        "Positional form: 'mem dedun [CONTEXT]'. Omitting CONTEXT uses the "
-        "current Context; --context remains a compatibility alias."
-    ),
-)(dedun.cmd)
-app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),
 )(checkpoint.cmd)
@@ -351,10 +328,6 @@ app.command(
     "forget",
     help=operation_summary("forget"),
 )(forget.cmd)
-app.command(
-    "search",
-    help=operation_summary("search"),
-)(search.cmd)
 app.command(
     "find",
     help=operation_summary("find"),
@@ -413,10 +386,6 @@ app.command(
         "descendants are controlled independently."
     ),
 )(sever.cmd)
-app.command(
-    "share",
-    help=operation_summary("share"),
-)(share.cmd)
 app.command(
     "ground",
     help=operation_summary("ground"),

@@ -1,15 +1,4 @@
-"""Detailed action events for current ``init-study`` Profiles.
-
-Every Profile keeps the small command-attempt ledger.  This module adds a
-second, deliberately narrower surface only when immutable Profile provenance
-marks the active store as a current Study participant or granted-memory owner.
-It records command phases and non-text terminal interaction. A Study
-participant additionally retains the complete entered command argv and the
-typed request/ranking for focused Help. Granted-memory action logs and all
-other detailed Study events remain content-free; every Profile's separate
-command-attempt ledger retains its entered command. Provider prompts,
-responses, stdout, stderr, and interactive composer text remain excluded.
-"""
+"""Retain participant actions and provider telemetry in the active Study Profile."""
 
 from __future__ import annotations
 
@@ -41,10 +30,10 @@ from prompt_toolkit.keys import Keys
 
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
-    ProfileEntry,
     profile_store_dir,
     study_run_identity,
 )
+from memcommit.models.profile import Profile
 
 
 class StudyActionError(RuntimeError):
@@ -53,7 +42,7 @@ class StudyActionError(RuntimeError):
 
 _ACTION = re.compile(r"[A-Z][A-Z0-9_]{0,63}\Z")
 _SAFE_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:/+ -]{0,255}\Z")
-_ROLES = frozenset({"PARTICIPANT", "GRANTED_MEMORY"})
+_ROLES = frozenset({"PARTICIPANT"})
 _STATUSES = frozenset({"COMPLETED", "FAILED", "INTERRUPTED"})
 _ACTION_FIELDS: dict[str, tuple[frozenset[str], frozenset[str]]] = {
     "COMMAND_STARTED": (
@@ -135,7 +124,6 @@ _ACTION_FIELDS: dict[str, tuple[frozenset[str], frozenset[str]]] = {
         frozenset(
             {
                 "role",
-                "paired_profile_uid",
                 "baseline_profile_uid",
                 "baseline_profile_name",
             }
@@ -173,9 +161,7 @@ _FLOAT_FIELDS = frozenset({"elapsed_seconds"})
 _RETAINED_TEXT_FIELDS = frozenset({"command", "request"})
 _HELP_LOOKUP_REQUEST_LIMIT = 4_000
 _COMMAND_TEXT_LIMIT = 16 * 1024 * 1024
-_UUID_FIELDS = frozenset(
-    {"paired_profile_uid", "baseline_profile_uid", "other_profile_uid", "artifact_uid"}
-)
+_UUID_FIELDS = frozenset({"baseline_profile_uid", "other_profile_uid", "artifact_uid"})
 
 
 def _timestamp() -> str:
@@ -235,15 +221,9 @@ def _validate_data(action: str, data: object) -> dict[str, object]:
             _canonical_uuid(value, field=key)
         elif key in _RETAINED_TEXT_FIELDS:
             limit = (
-                _HELP_LOOKUP_REQUEST_LIMIT
-                if key == "request"
-                else _COMMAND_TEXT_LIMIT
+                _HELP_LOOKUP_REQUEST_LIMIT if key == "request" else _COMMAND_TEXT_LIMIT
             )
-            if (
-                not isinstance(value, str)
-                or not value.strip()
-                or len(value) > limit
-            ):
+            if not isinstance(value, str) or not value.strip() or len(value) > limit:
                 raise StudyActionError(f"Study action {key} is invalid.")
         else:
             _safe_token(value, field=key)
@@ -294,8 +274,7 @@ class StudyActionEvent:
         if _ACTION.fullmatch(self.action) is None:
             raise StudyActionError("Study action kind is invalid.")
         if (
-            self.action == "COMMAND_ENTERED"
-            or self.action.startswith("HELP_LOOKUP_")
+            self.action == "COMMAND_ENTERED" or self.action.startswith("HELP_LOOKUP_")
         ) and self.profile_role != "PARTICIPANT":
             # Raw command/Help wording is participant research material, not a
             # reason to retain researcher/authority-side text in the pair.
@@ -370,7 +349,7 @@ class StudyActionEvent:
 class StudyActionLedger:
     """Append-only event files under one validated Study Profile store."""
 
-    def __init__(self, profile: ProfileEntry, *, store_dir: Path | None = None):
+    def __init__(self, profile: Profile, *, store_dir: Path | None = None):
         try:
             identity = study_run_identity(profile)
         except ProfileConfigError as error:
@@ -557,7 +536,7 @@ _ACTIVE_STUDY_ACTIONS: ContextVar[ActiveStudyActionRecording | None] = ContextVa
 
 def begin_study_action_recording(
     *,
-    profile: ProfileEntry,
+    profile: Profile,
     store_dir: Path,
     attempt_uid: str,
     operation: str,
@@ -667,7 +646,7 @@ def record_study_help_lookup_completed(
 
 
 def record_study_action_for_profile(
-    profile: ProfileEntry,
+    profile: Profile,
     *,
     attempt_uid: str,
     event_kind: str,

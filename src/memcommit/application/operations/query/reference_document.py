@@ -1,11 +1,4 @@
-"""Typed evidence and host-owned citation rendering for ordinary Query.
-
-This module deliberately knows nothing about terminal presentation, providers,
-or storage.  In particular, it does not sanitize terminal controls: the
-controller or shell that ultimately displays the returned text owns that
-boundary.  Query evidence is already-public projection data supplied by the
-caller; this layer never dereferences a query-only source.
-"""
+"""Render grounded ordinary Query answers with numbered evidence citations."""
 
 from __future__ import annotations
 
@@ -23,7 +16,7 @@ ORDINARY_QUERY_METADATA_LIMIT = 2_000
 ORDINARY_QUERY_UID_PREFIX_LENGTH = 8
 _EVIDENCE_ALIAS_PATTERN = re.compile(r"[mcx][1-9][0-9]*\Z")
 
-OrdinaryQueryEvidenceKind = Literal["memory", "ref", "query", "artifact"]
+OrdinaryQueryEvidenceKind = Literal["memory", "artifact"]
 
 
 class OrdinaryQueryReferenceError(ValueError):
@@ -68,7 +61,7 @@ class OrdinaryQueryEvidence:
             raise OrdinaryQueryReferenceError(
                 "Evidence alias must look like m1, c1, or x1."
             )
-        if self.kind not in {"memory", "ref", "query", "artifact"}:
+        if self.kind not in {"memory", "artifact"}:
             raise OrdinaryQueryReferenceError("Invalid evidence kind.")
         object.__setattr__(self, "alias", alias)
         object.__setattr__(

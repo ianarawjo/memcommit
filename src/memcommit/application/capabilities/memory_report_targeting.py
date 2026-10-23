@@ -10,25 +10,25 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.application.context_access.access import ContextAccess, resolve_context_access
-from memcommit.core.context import Context, Memory
+from memcommit.application.context_access.access import (
+    ContextAccess,
+    resolve_context_access,
+)
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     collect_memory_history_candidates,
-)
-from memcommit.application.capabilities.history.reconstruction.reference_occurrence_derivation import (
-    collect_reference_candidates,
 )
 from memcommit.persistence.store import MemoryStore
 
 
-MemoryReportTargetKind = Literal["MEMORY", "MEMORY_REFERENCE"]
+MemoryReportTargetKind = Literal["MEMORY"]
 
 
 @dataclass(frozen=True)
@@ -85,16 +85,7 @@ def _context_targets(
         )
         for candidate in collect_memory_history_candidates(store, context)
     )
-    references = tuple(
-        ResolvedMemoryReportTarget(
-            context_name=context.name,
-            uid=candidate.state.uid,
-            kind="MEMORY_REFERENCE",
-            status=candidate.status,
-        )
-        for candidate in collect_reference_candidates(store, context)
-    )
-    return (*memories, *references)
+    return memories
 
 
 def resolve_local_memory_report_target(
@@ -104,7 +95,7 @@ def resolve_local_memory_report_target(
     current: str | None,
     context_locator: str | None,
 ) -> ResolvedMemoryReportTarget:
-    """Resolve one local current-or-retained Memory or MemoryRef coordinate."""
+    """Resolve one local current-or-retained Memory coordinate."""
 
     if context_locator is not None:
         context_name = resolve_context_locator(context_locator, current=current)
@@ -157,29 +148,17 @@ def freeze_memory_report_readable_catalog(
     store: MemoryStore,
     *,
     current: str | None,
-    registry: ProfileRegistry | None = None,
 ) -> ReadableContextCatalog | None:
-    """Freeze the Profile-wide current-Memory namespace for a bare UID.
-
-    An explicit bare UID used by a read-only report is independent of the
-    current row, but the current row remains the authorization anchor needed
-    to freeze the Profile catalog.  A Profile with readable Grants necessarily
-    has a local attachment; when no current row exists, the first ordinary
-    local Context supplies that neutral anchor.  An entirely empty store has
-    no current Memories and therefore returns ``None`` for the caller's
-    retained-history fallback.
-    """
+    """Freeze the local Context catalog used for Memory report targets."""
 
     if current is not None:
         selected_access = resolve_context_access(
             store,
             current,
             current_name=current,
-            required_permission="READ",
-            registry=registry,
         )
     else:
-        local_names = tuple(sorted(store.list_context_names(), key=str.casefold))
+        local_names = tuple(store.list_context_names(sort_order="alphabetical"))
         if not local_names:
             return None
         selected_name = local_names[0]
@@ -187,13 +166,10 @@ def freeze_memory_report_readable_catalog(
             store=store,
             context_name=selected_name,
             access_name=selected_name,
-            permission="READ",
         )
     return freeze_profile_readable_context_catalog(
         store,
         selected_access,
-        include_query_routes=False,
-        registry=registry,
     )
 
 
@@ -201,19 +177,12 @@ def resolve_readable_memory_target(
     catalog: ReadableContextCatalog,
     selector: str,
 ) -> ResolvedReadableMemoryTarget:
-    """Resolve one current Memory across local and READ-granted public owners.
-
-    Only direct ordinary Memories enter this namespace.  Retained history,
-    Memory references, embedded traversal, and QUERY-only sources remain
-    operation-specific fallbacks or concealed routes.  Local and granted
-    candidates have equal standing, so a collision always requires the
-    displayed ``CONTEXT:UID`` coordinate instead of current-Context priority.
-    """
+    """Resolve a current local Memory across direct owners. Collisions require the displayed CONTEXT:UID coordinate."""
 
     matches = tuple(
         (public_name, memory, catalog.access_for(public_name))
         for public_name in catalog.list_context_names()
-        for memory in catalog.load_direct(public_name).iter_items()
+        for memory in catalog.load_direct(public_name).iter_memories()
         if isinstance(memory, Memory) and memory.uid.startswith(selector)
     )
     exact = tuple(match for match in matches if match[1].uid == selector)
@@ -230,7 +199,7 @@ def resolve_readable_memory_target(
             "was found in this Profile."
         )
     if len(matches) != 1:
-        local_only = all(not access.is_granted for _name, _memory, access in matches)
+        local_only = all(True for _name, _memory, access in matches)
         choices = "; ".join(
             f"{public_name}:{memory.uid} (MEMORY)"
             for public_name, memory, _access in sorted(

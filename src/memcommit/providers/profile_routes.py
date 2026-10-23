@@ -24,12 +24,12 @@ from memcommit.providers.policy import (
     validate_provider_route,
 )
 from memcommit.application.operations.profile.config import (
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_control_dir,
     study_run_identity,
 )
+from memcommit.models.profile import Profile
 from memcommit.persistence.store.infrastructure.storage_permissions import ensure_private_directory
 
 
@@ -87,7 +87,7 @@ class GeneralProfileRoutes:
 class ActiveProviderScope:
     """Frozen provider configuration scope for one command process."""
 
-    profile: ProfileEntry
+    profile: Profile
     mode: str
     config: ProviderPolicyConfig
     routes: GeneralProfileRoutes | None = None
@@ -154,7 +154,7 @@ def profile_provider_routes_dir() -> Path:
     return profile_control_dir() / "provider-routes"
 
 
-def profile_provider_routes_file(profile: ProfileEntry) -> Path:
+def profile_provider_routes_file(profile: Profile) -> Path:
     return profile_provider_routes_dir() / f"{profile.uid}.json"
 
 
@@ -191,7 +191,7 @@ def _route_from_dict(value: object) -> ProviderRoute:
         raise ProfileProviderRoutesError(str(error)) from error
 
 
-def load_profile_routes(profile: ProfileEntry) -> GeneralProfileRoutes:
+def load_profile_routes(profile: Profile) -> GeneralProfileRoutes:
     path = profile_provider_routes_file(profile)
     if path.is_symlink():
         raise ProfileProviderRoutesError(
@@ -305,7 +305,7 @@ def resolve_active_provider_policy(
 
 
 @contextmanager
-def _routes_lock(profile: ProfileEntry) -> Iterator[None]:
+def _routes_lock(profile: Profile) -> Iterator[None]:
     directory = profile_provider_routes_dir()
     ensure_private_directory(directory, parents=True)
     lock_path = directory / f"{profile.uid}.lock"
@@ -326,7 +326,7 @@ def _routes_lock(profile: ProfileEntry) -> Iterator[None]:
             fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
 
-def _write_profile_routes(profile: ProfileEntry, routes: GeneralProfileRoutes) -> None:
+def _write_profile_routes(profile: Profile, routes: GeneralProfileRoutes) -> None:
     path = profile_provider_routes_file(profile)
     ensure_private_directory(path.parent, parents=True)
     descriptor, temporary_name = tempfile.mkstemp(
@@ -360,7 +360,7 @@ def set_active_profile_route(
     *,
     operation: str | None = None,
     registry: ProfileRegistry | None = None,
-) -> tuple[ProfileEntry, GeneralProfileRoutes]:
+) -> tuple[Profile, GeneralProfileRoutes]:
     route = validate_provider_route(route)
     if operation is not None:
         operation = _profile_provider_operation(operation)
@@ -392,7 +392,7 @@ def reset_active_profile_route(
     operation: str | None = None,
     *,
     registry: ProfileRegistry | None = None,
-) -> tuple[ProfileEntry, GeneralProfileRoutes]:
+) -> tuple[Profile, GeneralProfileRoutes]:
     if operation is not None:
         operation = _profile_provider_operation(operation)
     frozen_registry = registry or load_profile_registry()

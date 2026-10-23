@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
 
-RenameSubject = Literal["CONTEXT_NAMESPACE", "GRANT_PLACEMENT"]
+RenameSubject = Literal["CONTEXT_NAMESPACE"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -27,10 +27,9 @@ class RenameBinding:
     old_name: str
     new_name: str
     context_uid: str | None = None
-    grant_uid: str | None = None
 
     def __post_init__(self) -> None:
-        if (self.context_uid is None) == (self.grant_uid is None):
+        if self.context_uid is None:
             raise ValueError("Rename binding requires one stable identity.")
 
 
@@ -41,8 +40,6 @@ class RenamePlan:
     new_name: str
     bindings: tuple[RenameBinding, ...]
     changed_owner_count: int
-    reference_count: int
-    checkpoint_reference_count: int
     translation_artifact_count: int
     current_before: str | None
     current_after: str | None
@@ -60,10 +57,7 @@ class RenameResult:
     old_name: str
     new_name: str
     renamed_context_count: int
-    renamed_placement_count: int
     changed_owner_count: int
-    reference_count: int
-    checkpoint_reference_count: int
     translation_artifact_count: int
     current_context: str | None
 

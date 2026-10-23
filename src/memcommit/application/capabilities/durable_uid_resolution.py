@@ -1,10 +1,4 @@
-"""Resolve durable UID selectors inside one caller-authorized candidate frame.
-
-The resolver deliberately does not enumerate storage.  Each operation freezes
-the identities it is allowed to disclose, then supplies only that bounded
-catalog here.  This keeps exact and prefix behavior common without turning a
-UID into a way to probe another Profile, Grant, or operation's private state.
-"""
+"""Resolve durable UID selectors inside one caller-supplied candidate frame. Operations freeze their own catalogs; this resolver never enumerates storage or other Profiles."""
 
 from __future__ import annotations
 

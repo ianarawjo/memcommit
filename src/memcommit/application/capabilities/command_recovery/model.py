@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.core.context import Checkpoint
+from memcommit.models.checkpoint import Checkpoint
 
 
 RestoreDirection = Literal["undo", "redo"]
@@ -36,7 +36,7 @@ class ContextCommandUnit:
     started_at: str
     completed_at: str
     changes: tuple[CommandContextChange, ...]
-    checkpoint_args: tuple[dict[str, object], ...]
+    checkpoint_command_details: tuple[dict[str, object], ...]
 
 
 @dataclass(frozen=True)

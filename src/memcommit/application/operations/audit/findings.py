@@ -19,7 +19,7 @@ class AuditRedundancy:
 
     @property
     def key(self) -> str:
-        prefix = "REDUNDANCY" if self.item_kind == "MEMORY" else "DUP:" + self.item_kind
+        prefix = "REDUNDANCY"
         return prefix + ":" + ":".join(sorted(self.item_uids))
 
 
@@ -38,26 +38,14 @@ def audit_redundancies(audit: QualityAuditSession) -> tuple[AuditRedundancy, ...
                     finding.reason,
                 )
                 result.setdefault(item.key, item)
-            groups = report.exact_item_groups
+            groups = ()
         else:
             continue
         for group in groups:
-            # Exact Memory edges use the same first-occurrence forest as DUN;
-            # pointer groups retain their complete same-role membership.
-            members = (
-                ((group.survivor_uid, uid) for uid in group.absorbed_uids)
-                if group.item_kind == "MEMORY"
-                else ((group.survivor_uid, *group.absorbed_uids),)
-            )
+            members = ((group.survivor_uid, uid) for uid in group.absorbed_uids)
             for uids in members:
                 item = AuditRedundancy(
-                    group.item_kind,
-                    uids,
-                    "EXACT",
-                    "Stored content is identical."
-                    if group.item_kind == "MEMORY"
-                    else "These direct occurrences have the same role and target identity: "
-                    + group.summary,
+                    group.item_kind, uids, "EXACT", "Stored content is identical."
                 )
                 result.setdefault(item.key, item)
     return tuple(result.values())

@@ -12,7 +12,9 @@ from memcommit.application.operations.summarize.model import (
     SummaryFrame,
     summarize_frame,
 )
-from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
+from memcommit.application.capabilities.semantic.understanding import (
+    UnderstandingSummary,
+)
 
 
 @dataclass(frozen=True)
@@ -21,7 +23,6 @@ class SummarizeRequest:
 
     context_locator: str | None = None
     include_descendants: bool = False
-    follow_embeds: bool = False
 
 
 @dataclass(frozen=True)
@@ -38,7 +39,6 @@ class SummarizeResult:
 
     context_name: str
     include_descendants: bool
-    follow_embeds: bool
     source_digest: str
     source_count: int
     understanding: UnderstandingSummary
@@ -78,10 +78,7 @@ def run_summarize(
 
     source = source_port.freeze(request)
     frame = source.frame
-    if (
-        frame.include_descendants != request.include_descendants
-        or frame.follow_embeds != request.follow_embeds
-    ):
+    if frame.include_descendants != request.include_descendants:
         raise SummarizeError(
             "The frozen summary source does not match the requested reach."
         )
@@ -102,7 +99,6 @@ def run_summarize(
     return SummarizeResult(
         context_name=frame.context_name,
         include_descendants=frame.include_descendants,
-        follow_embeds=frame.follow_embeds,
         source_digest=frame.digest,
         source_count=len(frame.sources),
         understanding=understanding,

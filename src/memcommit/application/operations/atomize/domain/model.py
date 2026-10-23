@@ -10,7 +10,7 @@ from memcommit.application.capabilities.semantic.understanding import Understand
 from memcommit.application.capabilities.semantic_execution import (
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
 )
-from memcommit.core.context import Memory
+from memcommit.models.memory import Memory
 
 
 ATOMIZE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT

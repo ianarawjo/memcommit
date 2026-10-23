@@ -21,7 +21,6 @@ from memcommit.application.capabilities.reviewing.session_navigation import (
 from .formatting import _visual_wrap
 from .reporting import _impact_entry_fragments, _impact_entry_section_uid
 
-
 UNCHANGED_EFFECTS_UID = "REPORT:UNCHANGED_EFFECTS"
 
 
@@ -148,6 +147,7 @@ def effect_report_fragments(
                 compact=True,
                 source_location=source_location,
                 extra_details=presentation.details_for(entry.uid),
+                inline_memory_diff=presentation.inline_memory_diffs,
             )
         )
     if unchanged:
@@ -186,6 +186,7 @@ def effect_report_fragments(
                         compact=True,
                         source_location=source_location,
                         extra_details=presentation.details_for(entry.uid),
+                        inline_memory_diff=presentation.inline_memory_diffs,
                     )
                 )
     if not impact.entries:

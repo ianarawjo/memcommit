@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 import uuid
-from memcommit.core.context import AutoCheckpoint, Checkpoint, Context
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.checkpoint import Checkpoint
+from memcommit.models.context import Context
 from ...context_memory.models import ConcurrentContextUpdateError
 from ...context_memory.records import (
     context_record_digest,
@@ -88,23 +90,17 @@ class _MergeRestorationMixin:
                         for change in updated_changes:
                             assert change.before is not None
                             current = current_by_name[change.context_name]
-                            expected_digest = context_record_digest(current)
                             restored = self._context_for_restoration(
                                 change.before,
                                 context_uid=change.context_uid,
                                 context_name=change.context_name,
-                                expected_context_digest=expected_digest,
                             )
                             checkpoint = self._save_locked(
                                 restored,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command="undo",
-                                    args={"command_restore": restore_metadata},
-                                    description=(
-                                        f"Undo command 'mem merge' [{receipt_uid[:8]}]"
-                                    ),
+                                    command_details={"command_restore": restore_metadata},
                                 ),
-                                expected_context_digest=expected_digest,
                             )
                             if checkpoint is None:
                                 raise RuntimeError(
@@ -117,14 +113,10 @@ class _MergeRestorationMixin:
                             current = current_by_name[change.context_name]
                             checkpoint = self._save_locked(
                                 current,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command="undo",
-                                    args={"command_restore": restore_metadata},
-                                    description=(
-                                        f"Undo command 'mem merge' [{receipt_uid[:8]}]"
-                                    ),
+                                    command_details={"command_restore": restore_metadata},
                                 ),
-                                expected_context_digest=context_record_digest(current),
                             )
                             if checkpoint is None:
                                 raise RuntimeError(
@@ -287,23 +279,17 @@ class _MergeRestorationMixin:
                         for change in updated_changes:
                             assert change.after is not None
                             current = current_by_name[change.context_name]
-                            expected_digest = context_record_digest(current)
                             restored = self._context_for_restoration(
                                 change.after,
                                 context_uid=change.context_uid,
                                 context_name=change.context_name,
-                                expected_context_digest=expected_digest,
                             )
                             checkpoint = self._save_locked(
                                 restored,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command="redo",
-                                    args={"command_restore": restore_metadata},
-                                    description=(
-                                        f"Redo command 'mem merge' [{receipt_uid[:8]}]"
-                                    ),
+                                    command_details={"command_restore": restore_metadata},
                                 ),
-                                expected_context_digest=expected_digest,
                             )
                             if checkpoint is None:
                                 raise RuntimeError(
@@ -335,14 +321,10 @@ class _MergeRestorationMixin:
                             )
                             checkpoint = self._save_locked(
                                 archived,
-                                AutoCheckpoint(
+                                AutoCheckpointRequest(
                                     command="redo",
-                                    args={"command_restore": restore_metadata},
-                                    description=(
-                                        f"Redo command 'mem merge' [{receipt_uid[:8]}]"
-                                    ),
+                                    command_details={"command_restore": restore_metadata},
                                 ),
-                                expected_context_digest=context_record_digest(archived),
                             )
                             if checkpoint is None:
                                 raise RuntimeError(

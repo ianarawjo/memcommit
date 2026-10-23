@@ -17,16 +17,10 @@ def analyze_next_review_round(
     if audit is None:
         raise ValueError("An exact structural result has no next semantic Audit.")
     previous = proposal.analysis.frame
-    known = {item.uid for item in previous.source.items}
-    actionable = tuple(
-        item.uid
-        for item in audit.source.items
-        if item.uid in previous.actionable_uids or item.uid not in known
-    )
+    actionable = tuple(item.uid for item in audit.source.items)
     frame = replace(
         previous,
         source=audit.source,
-        memory_target=proposal.memory_target,
         revision=digest(
             {"previous": previous.revision, "audit": audit.snapshot_digest}
         ),

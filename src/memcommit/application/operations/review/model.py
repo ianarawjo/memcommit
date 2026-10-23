@@ -12,7 +12,8 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Literal
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityReport,
 )
@@ -79,7 +80,7 @@ def direct_context_digest(ctx: Context) -> str:
     """Fingerprint the complete ordered direct-Memory interpretation frame."""
     payload = [
         {"uid": item.uid, "content": item.content}
-        for item in ctx.iter_items()
+        for item in ctx.iter_memories()
         if isinstance(item, Memory)
     ]
     encoded = json.dumps(
@@ -515,7 +516,7 @@ def create_ambiguity_review(
     report: AmbiguityReport,
 ) -> ReviewSession:
     """Convert one finder report into a source-ordered durable review."""
-    direct_memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    direct_memories = [item for item in ctx.iter_memories() if isinstance(item, Memory)]
     source_order = {memory.uid: index for index, memory in enumerate(direct_memories)}
     if report.memory_count != len(direct_memories):
         raise ReviewError("Ambiguity report does not match the Context.")
@@ -581,7 +582,7 @@ def create_atomize_review(ctx: Context, analysis) -> ReviewSession:
         raise ReviewError(
             "The saved atomize analysis is missing or stale for this Context."
         )
-    direct_memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    direct_memories = [item for item in ctx.iter_memories() if isinstance(item, Memory)]
     source_order = {memory.uid: index for index, memory in enumerate(direct_memories)}
     if any(item.memory_uid not in source_order for item in analysis.items):
         raise ReviewError(
@@ -689,7 +690,7 @@ def review_response_digest(session: ReviewSession) -> str:
 
 def review_matches_context(session: ReviewSession, ctx: Context) -> bool:
     """Return whether a saved review still has its complete local frame."""
-    direct_memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    direct_memories = [item for item in ctx.iter_memories() if isinstance(item, Memory)]
     source_order = {memory.uid: index for index, memory in enumerate(direct_memories)}
     return (
         session.context_uid == ctx.uid

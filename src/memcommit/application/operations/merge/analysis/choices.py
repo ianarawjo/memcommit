@@ -7,9 +7,7 @@ import uuid
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.capabilities.resolution.workbench import ResolutionOption
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 
 from ..inputs import StructuralAddition, StructuralConflict, StructuralResolutionInput
 from .candidate import MergeCandidate
@@ -105,9 +103,7 @@ def prepare_structural_input(
     additions = tuple(
         StructuralAddition(
             candidate.origin(uid).item_uid,
-            str(uuid.uuid4())
-            if isinstance(candidate.original_item(uid), Memory)
-            else None,
+            str(uuid.uuid4()),
         )
         for uid in report.additions
     )
@@ -144,11 +140,7 @@ def prepare_structural_choices(candidate, report, *, policy):
         if mutable and "UPDATE" in policy.allowed_effects:
             allowed.append("TAKE_SOURCE")
         both_uid = None
-        if (
-            policy.context_mutable
-            and "CREATE" in policy.allowed_effects
-            and isinstance(source_item, Memory)
-        ):
+        if policy.context_mutable and "CREATE" in policy.allowed_effects:
             allowed.append("KEEP_BOTH")
             both_uid = str(uuid.uuid4())
         conflicts.append(
@@ -170,8 +162,6 @@ def prepare_structural_choices(candidate, report, *, policy):
                 origin, item = candidate.origin(uid), candidate.original_item(uid)
                 lines.append(
                     f"[{origin.context_name}:{origin.item_uid[:8]}] {item.content}"
-                    if isinstance(item, Memory)
-                    else f"{origin.context_name} / {structural_item_description(item)}"
                 )
             return "\n".join(lines)
 
@@ -180,23 +170,6 @@ def prepare_structural_choices(candidate, report, *, policy):
             for value in allowed
         )
     return tuple(conflicts), choices
-
-
-def structural_item_description(item):
-    """Describe a stored pointer without loading any of its referenced content."""
-    if isinstance(item, MemoryRef):
-        return (
-            f"Memory reference [{item.uid[:8]}] → "
-            f"{item.target_context_name} / [{item.target_memory_uid[:8]}]"
-        )
-    if isinstance(item, QueryContextRef):
-        return (
-            f"Query view [{item.uid[:8]}] · {item.name} → "
-            f"[{item.target_source_uid[:8]}] via {item.provider}"
-        )
-    if isinstance(item, Context):
-        return f"Context placement [{item.uid[:8]}] · {item.name}"
-    raise TypeError("Expected a stored Context or Reference placement.")
 
 
 def merge_sides(candidate, issue):
@@ -208,18 +181,6 @@ def merge_sides(candidate, issue):
         origin.uid for origin in origins if origin.context_name != origin.placement
     )
     return targets, sources
-
-
-def merge_item_kind(item):
-    if isinstance(item, Memory):
-        return "MEMORY"
-    if isinstance(item, MemoryRef):
-        return "MEMORY_REFERENCE" if item.is_snapshot else "MEMORY_EMBED"
-    if isinstance(item, ContextSnapshotRef):
-        return "CONTEXT_REFERENCE"
-    if isinstance(item, QueryContextRef):
-        return "QUERY_CONTEXT_REFERENCE"
-    return "CONTEXT_EMBED"
 
 
 def initial_review_decisions(review: LiteralMergeReview, choice: str | None):

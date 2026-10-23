@@ -4,9 +4,6 @@ from __future__ import annotations
 
 import uuid
 
-from memcommit.application.operations.query.granted_application import (
-    GrantedQueryResponse,
-)
 from memcommit.application.operations.query.save_answer import (
     SaveQueryAnswerError,
     SaveQueryAnswerPort,
@@ -14,8 +11,10 @@ from memcommit.application.operations.query.save_answer import (
     SaveQueryAnswerResult,
     save_query_answer,
 )
-from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.persistence.store import MemoryStore
 
 
@@ -26,31 +25,22 @@ class MemoryStoreSaveQueryAnswerPort(SaveQueryAnswerPort):
         self._store = store
 
     def save(self, request: SaveQueryAnswerRequest) -> SaveQueryAnswerResult:
-        validate_portable_context_name(request.destination_name)
+        validate_context_name(request.destination_name)
         self._store.assert_context_creatable(request.destination_name)
 
         response = request.response
         answer = Memory(uid=str(uuid.uuid4()), content=response.answer)
         output = Context(uid=str(uuid.uuid4()), name=request.destination_name)
         output.add(answer)
-        if isinstance(response, GrantedQueryResponse):
-            source: dict[str, object] = {
-                "kind": "QUERY_VIEW",
-                "access_name": response.request.target.access_name,
-                "federate_descendants": response.request.federate_descendants,
-            }
-            question = response.request.question
-        else:
-            source = {
-                "kind": "READABLE_CONTEXTS",
-                "target_names": list(response.request.target_names),
-                "follow_embeds": response.request.follow_embeds,
-                "grounded": response.grounded,
-            }
-            question = response.request.question
-        checkpoint = AutoCheckpoint(
+        source = {
+            "kind": "READABLE_CONTEXTS",
+            "target_names": list(response.request.target_names),
+            "grounded": response.grounded,
+        }
+        question = response.request.question
+        checkpoint = AutoCheckpointRequest(
             command="query",
-            args={
+            command_details={
                 "context_creation": {
                     "version": 1,
                     "context_uid": output.uid,
@@ -64,10 +54,6 @@ class MemoryStoreSaveQueryAnswerPort(SaveQueryAnswerPort):
                     "output": output.name,
                 },
             },
-            description=(
-                "Saved one completed Query answer in new Context "
-                f"'{request.destination_name}'"
-            ),
         )
         created_checkpoint = self._store.create_context(output, checkpoint)
         if created_checkpoint is None:

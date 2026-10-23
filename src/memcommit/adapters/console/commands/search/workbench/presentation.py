@@ -1,4 +1,4 @@
-"""Search screen labels, result fragments, footer, and plain-text clipboard projection."""
+"""Find screen labels, result fragments, footer, and plain-text clipboard projection."""
 
 from __future__ import annotations
 
@@ -35,8 +35,6 @@ from memcommit.source_projection.presentation import (
 
 _RESULT_SOURCE_FORMS = {
     "memory": SourceForm.MEMORY,
-    "ref": SourceForm.MEMORY_REF,
-    "query": SourceForm.QUERY_VIEW,
 }
 
 
@@ -59,7 +57,7 @@ def search_result_selection_label(
     number: int,
     context_annotation: SourceDisplayValue | None = None,
 ) -> str:
-    """Project one complete selectable Search result as one logical row."""
+    """Project one complete selectable Find result as one logical row."""
 
     location = [result.context_name]
     annotation = source_display_text(context_annotation)
@@ -96,7 +94,7 @@ def render_search_results(response: SearchResponse | None) -> str:
     """Render only rows whose request still matches the visible controls."""
 
     if response is None:
-        return "SEARCH RESULTS\n  Enter a query to search the selected scope."
+        return "FIND RESULTS\n  Enter a query to search the selected scope."
     rows = tuple(
         _search_result_view_row(result, rank=index)
         for index, result in enumerate(response.results, start=1)
@@ -116,18 +114,18 @@ def project_search_results_clipboard(
     """Project host-resolved results without checkbox or viewport wrapping."""
 
     if response is None or not response.results:
-        raise ValueError("There are no Search results to copy.")
+        raise ValueError("There are no Find results to copy.")
     count = len(response.results)
     if whole_result_set:
         suffix = "Result" if count == 1 else "Results"
         return SearchResultsClipboardProjection(
             text=render_search_results(response),
             scope="RESULT_SET",
-            label=f"complete Search result set · {count} {suffix}",
+            label=f"complete Find result set · {count} {suffix}",
             result_count=count,
         )
     if isinstance(focused_index, bool) or not 0 <= focused_index < count:
-        raise ValueError("The focused Search result is no longer available.")
+        raise ValueError("The focused Find result is no longer available.")
     result = response.results[focused_index]
     return SearchResultsClipboardProjection(
         text=render_grouped_search_results(
@@ -141,7 +139,7 @@ def project_search_results_clipboard(
         ),
         scope="FOCUSED",
         label=(
-            f"Search result {focused_index + 1} · "
+            f"Find result {focused_index + 1} · "
             f"{safe_terminal_text(result.context_name)} · "
             f"{safe_terminal_text(_search_result_kind_label(result))}"
         ),

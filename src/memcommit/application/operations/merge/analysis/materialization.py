@@ -1,6 +1,7 @@
 """Calculate choice post-images and occurrence mappings without saving them."""
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 from ..inputs import StructuralResolutionInput
 from .candidate import copy_direct_context, copy_direct_item
@@ -26,7 +27,8 @@ def materialize_structural_choices(
         if tuple(
             origin.record() for origin in candidate.origins if origin.frame == frame
         ) != tuple(
-            context.to_dict()["memories"][uid] for uid in context.ordered_uids()
+            context.to_dict()["memories"][uid]
+            for uid in context.get_ordered_memory_uids()
         ):
             raise ValueError("Structural input changed its frozen original items.")
     issues = {issue.uid: issue for issue in analysis.review_issues}
@@ -74,7 +76,8 @@ def materialize_structural_choices(
             ):
                 raise ValueError("Keep Both requires a fresh frozen Memory identity.")
             positions = [
-                result.ordered_uids().index(uid) for uid in conflict.target_uids
+                result.get_ordered_memory_uids().index(uid)
+                for uid in conflict.target_uids
             ]
             result.add(
                 copy_direct_item(source_item, memory_uid=conflict.keep_both_uid),
@@ -84,7 +87,7 @@ def materialize_structural_choices(
         if decision != "TAKE_SOURCE":
             raise ValueError("Unknown structural choice.")
         positions = [
-            result.ordered_uids().index(uid)
+            result.get_ordered_memory_uids().index(uid)
             for uid in conflict.target_uids
             if uid in result.memories
         ]
@@ -121,9 +124,7 @@ def materialize_exact_decisions(analysis, decisions, target):
             continue
         issue = issues[decision.issue_uid]
         members = issue.item_uids
-        if issue.item_kind != "MEMORY":
-            continue
-        if any(not isinstance(target.memories.get(uid), Memory) for uid in members):
+        if any((not isinstance(target.memories.get(uid), Memory) for uid in members)):
             raise ValueError(
                 "Exact Memory choices require their frozen Memory members."
             )

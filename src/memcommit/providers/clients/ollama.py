@@ -15,7 +15,6 @@ from memcommit.providers.clients.completion import (
     model_name,
     schema_instruction,
     usage_count,
-    build_query_prompt,
 )
 from memcommit.persistence.command_ledger.study_actions import (
     record_study_provider_turn,
@@ -204,11 +203,3 @@ class OllamaProvider:
             upstream_provider="ollama",
         )
         return content.strip()
-
-    def query(self, source_name: str, source_content: str, question: str) -> str:
-        if not question.strip():
-            raise QueryProviderError("Question must be non-empty.")
-        return self.complete(
-            build_query_prompt(source_name, source_content, question),
-            operation="query",
-        )

@@ -1,47 +1,26 @@
-"""Run one process-local Query over readable or authority-granted Sources."""
+"""Run one process-local Query over local Sources."""
 
 from typing import Annotated, Optional
 
 import typer
 
-import memcommit.core.context_targeting.direct_items as direct_items
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
 from memcommit.application.context_access.access import (
-    ContextAccess,
-    context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.application.context_access.operand_resolution import (
-    freeze_profile_context_access_candidates,
     resolve_existing_context_access,
 )
 from memcommit.application.capabilities.durable_uid_resolution import (
-    DurableUidAmbiguityError,
-    DurableUidCandidate,
     is_unresolved_uid_selector,
-    try_resolve_durable_uid,
 )
 from memcommit.application.capabilities.operand_resolution import (
-    ContextOperandAmbiguityError,
-    ContextOperandCandidate,
     ContextOperandNotFoundError,
 )
-from memcommit.application.operations.query.granted_application import (
-    GrantedQueryRequest,
-    GrantedQueryTarget,
-)
-from memcommit.application.operations.query.granted_runtime import (
-    execute_granted_query_request,
-    freeze_granted_query_targets,
-    resolve_granted_query_target,
-)
-from memcommit.providers.connection import (
-    connect_ordinary_query_provider,
-    connect_query_route_provider,
-)
+from memcommit.providers.connection import connect_ordinary_query_provider
 from memcommit.adapters.console.commands.query.workbench.screen import (
     run_query_workbench,
 )
@@ -59,11 +38,8 @@ from memcommit.adapters.console.terminal.core.capabilities import (
     is_interactive_terminal,
 )
 from memcommit.adapters.console.commands.query.presentation import (
-    render_granted_query_response,
     render_ordinary_query_response,
-    render_query_reference_response,
 )
-from memcommit.core.context import QueryContextRef
 from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
 )
@@ -73,12 +49,10 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.errors import QueryProviderError
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
@@ -86,25 +60,12 @@ from memcommit.application.operations.query.ordinary_runtime import (
     execute_ordinary_query,
 )
 from memcommit.application.operations.query.save_answer import (
-    SaveQueryAnswerError,
     SaveQueryAnswerRequest,
 )
 from memcommit.application.operations.query.save_answer_runtime import (
     execute_save_query_answer,
 )
-from memcommit.application.operations.query.reference_application import (
-    QueryReferenceRequest,
-)
-from memcommit.application.operations.query.reference_runtime import (
-    execute_query_reference,
-)
-from memcommit.application.operations.query.granted_source import (
-    GrantedQuerySourceError,
-)
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.retrieval_corpus.errors import (
-    RetrievalCorpusError,
-)
 
 
 def _query_ordinary_context(
@@ -122,7 +83,6 @@ def _query_ordinary_context(
             store,
             context_name,
             current_name=current_name,
-            required_permission="READ",
         )
         for context_name in context_names
     )
@@ -138,8 +98,6 @@ def _query_ordinary_context(
         catalog = freeze_profile_readable_context_catalog(store, accesses[0])
         target_names = tuple(catalog.list_context_names())
     elif len(accesses) == 1:
-        # A granted public name is the semantic Source. Its local attachment is
-        # authorization metadata and must never replace this exact target.
         catalog = freeze_readable_context_catalog(store, accesses[0])
     else:
         # Multiple explicit roots need the shared Profile catalog only as a
@@ -149,7 +107,6 @@ def _query_ordinary_context(
         question=question,
         target_names=target_names,
         include_descendants=traversal.include_descendants,
-        follow_embeds=traversal.follow_embeds,
     )
     with CommandProgress(
         "QUERY",
@@ -177,32 +134,17 @@ def _open_query_workbench(
     store: MemoryStore,
     *,
     context_name: str | None,
-    query_target: GrantedQueryTarget | None = None,
-    language: str,
     traversal: ContextTraversal | None = None,
 ) -> None:
-    """Open one blank Query over frozen readable and public QUERY catalogs."""
+    """Open one blank Query over a frozen local Context catalog."""
 
     context_snapshot = ContextOperandSnapshot.capture(store)
-    if query_target is not None:
-        selected_name = context_snapshot.current_name
-        if selected_name is None:
-            local_names = store.list_context_names()
-            selected_name = local_names[0] if local_names else None
-        access = resolve_context_access(
-            store,
-            selected_name,
-            current_name=context_snapshot.current_name,
-            required_permission="READ",
-        )
-    else:
-        resolved = resolve_existing_context_access(
-            store,
-            context_name,
-            current_name=context_snapshot.current_name,
-            required_permission="READ",
-        )
-        access = resolved.value
+    resolved = resolve_existing_context_access(
+        store,
+        context_name,
+        current_name=context_snapshot.current_name,
+    )
+    access = resolved.value
     catalog = freeze_profile_readable_context_catalog(store, access)
     names = tuple(catalog.list_context_names())
     displayed_current = (
@@ -210,11 +152,7 @@ def _open_query_workbench(
         if context_snapshot.current_name in names
         else access.access_name
     )
-    annotations = {
-        name: context_access_display_facts(catalog.access_for(name))
-        for name in names
-        if catalog.access_for(name).is_granted
-    }
+    annotations = {}
 
     def run_ordinary(request: OrdinaryQueryRequest):
         return execute_ordinary_query(
@@ -224,38 +162,16 @@ def _open_query_workbench(
             provider_factory=connect_ordinary_query_provider,
         )
 
-    query_targets = freeze_granted_query_targets(store)
-    if query_target is not None:
-        # A granted operand may select a descendant route under a base Grant.
-        # Replace that Grant's catalog row so the exact public route remains
-        # visible and selected without fabricating a second Grant identity.
-        query_targets = tuple(
-            query_target if item.grant_uid == query_target.grant_uid else item
-            for item in query_targets
-        )
-        if all(item.grant_uid != query_target.grant_uid for item in query_targets):
-            query_targets = (*query_targets, query_target)
     initial_descendants = (
         traversal.include_descendants if traversal is not None else True
     )
-    initial_embeds = traversal.follow_embeds if traversal is not None else True
     workbench_result = run_query_workbench(
         names,
         current_context=displayed_current,
         initial_context=access.access_name,
-        query_targets=query_targets,
         run_ordinary=run_ordinary,
-        run_granted=lambda request: execute_granted_query_request(
-            request,
-            store=store,
-            provider_factory=lambda: connect_query_route_provider("codex_chatgpt"),
-        ),
-        initial_query_target=query_target,
         initial_include_descendants=initial_descendants,
-        initial_follow_embeds=initial_embeds,
-        initial_federate_descendants=initial_descendants,
         annotations=annotations,
-        initial_language=language,
         help_binder=bind_session_help,
         local_context_names=tuple(store.list_context_names()),
         validate_save_location=store.assert_context_creatable,
@@ -279,577 +195,144 @@ def _open_query_workbench(
     )
 
 
-def _query_granted_target(
-    store: MemoryStore,
-    *,
-    target: GrantedQueryTarget,
-    question: str,
-    language: str,
-    federate_descendants: bool,
-) -> None:
-    """Execute and render one already resolved public QUERY target."""
-
-    progress = CommandProgress(
-        "QUERY",
-        "connecting provider",
-        total=3,
-    )
-    try:
-        progress.start()
-        response = execute_granted_query_request(
-            GrantedQueryRequest(
-                target=target,
-                question=question,
-                language=language,
-                federate_descendants=federate_descendants,
-            ),
-            store=store,
-            provider_factory=lambda: connect_query_route_provider("codex_chatgpt"),
-            observer=lambda stage: progress.update(
-                {
-                    "PREPARING_SOURCES": "preparing authorized sources",
-                    "ANSWERING": "answering query",
-                }[stage],
-                step={"PREPARING_SOURCES": 2, "ANSWERING": 3}[stage],
-            )
-            if stage in {"PREPARING_SOURCES", "ANSWERING"}
-            else None,
-        )
-        progress.close()
-        render_granted_query_response(response)
-    except (
-        FileNotFoundError,
-        OSError,
-        ProfileConfigError,
-        ProfileError,
-        QueryProviderError,
-        GrantedQuerySourceError,
-        ValueError,
-    ) as error:
-        progress.close()
-        typer.secho(
-            f"Query error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-
 def _resolve_positional_query_target(
-    store: MemoryStore,
-    selector: str,
-    *,
-    snapshot: ContextOperandSnapshot,
-    explicit_context_option: bool = False,
-    context_candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
-) -> ContextAccess | GrantedQueryTarget | None:
-    """Resolve one accessible target before allowing question fallback.
-
-    Only a genuinely absent bare name may fall back to an ordinary question.
-    Relative locators and authority failures are explicit target intent and
-    must remain visible errors instead of silently changing operation meaning.
-    """
-
-    if explicit_context_option:
-        frozen_contexts = (
-            context_candidates
-            if context_candidates is not None
-            else freeze_profile_context_access_candidates(
-                store,
-                current_name=snapshot.current_name,
-            )
-        )
-        try:
-            return resolve_existing_context_access(
-                store,
-                selector,
-                current_name=snapshot.current_name,
-                required_permission="READ",
-                candidates=frozen_contexts,
-            ).value
-        except (
-            FileNotFoundError,
-            ProfileError,
-            ContextOperandNotFoundError,
-        ) as read_error:
-            query_target = resolve_granted_query_target(store, selector)
-            if query_target is not None:
-                return query_target
-            if is_unresolved_uid_selector(selector):
-                query_candidates = tuple(
-                    DurableUidCandidate(
-                        uid=target.grant_uid,
-                        kind="query-view",
-                        value=target,
-                    )
-                    for target in freeze_granted_query_targets(store)
-                )
-                try:
-                    identity = try_resolve_durable_uid(query_candidates, selector)
-                except DurableUidAmbiguityError as error:
-                    raise ContextOperandAmbiguityError(str(error)) from error
-                if identity is not None:
-                    coordinates = tuple(dict.fromkeys(identity.values))
-                    if len(coordinates) != 1:
-                        raise ContextOperandAmbiguityError(
-                            f"UID {selector!r} identifies multiple query-only "
-                            "Views; pass one exact public View name."
-                        )
-                    return coordinates[0]
-            raise read_error
-
-    ordinary: ContextAccess | None = None
-    ordinary_error: FileNotFoundError | ProfileError | None = None
+    store, selector, *, snapshot, explicit_context_option=False, context_candidates=None
+):
+    """Resolve explicit target intent before permitting ordinary-question fallback."""
     try:
-        ordinary = resolve_context_access(
+        return resolve_existing_context_access(
             store,
             selector,
             current_name=snapshot.current_name,
-            required_permission="READ",
-        )
-    except (FileNotFoundError, ProfileError) as error:
-        ordinary_error = error
-
-    granted = resolve_granted_query_target(store, selector)
-    if ordinary is not None and granted is not None:
-        raise ValueError(
-            f"Query target {selector!r} is available as both a readable Context "
-            "and a query-only View; use --context/-c for the readable Context."
-        )
-    if ordinary is not None:
-        return ordinary
-    if granted is not None:
-        return granted
-    if isinstance(ordinary_error, ProfileError) or is_relative_context_locator(
-        selector
-    ):
-        assert ordinary_error is not None
-        raise ordinary_error
-    if is_unresolved_uid_selector(selector):
-        context_candidates = freeze_profile_context_access_candidates(
-            store,
-            current_name=snapshot.current_name,
-        )
-        query_targets = freeze_granted_query_targets(store)
-        candidates: tuple[
-            DurableUidCandidate[
-                ContextOperandCandidate[ContextAccess] | GrantedQueryTarget
-            ],
-            ...,
-        ] = tuple(
-            DurableUidCandidate(
-                uid=candidate.uid,
-                kind="context",
-                value=candidate,
-            )
-            for candidate in context_candidates
-        ) + tuple(
-            DurableUidCandidate(
-                uid=target.grant_uid,
-                kind="query-view",
-                value=target,
-            )
-            for target in query_targets
-        )
-        try:
-            identity = try_resolve_durable_uid(candidates, selector)
-        except DurableUidAmbiguityError as error:
-            raise ContextOperandAmbiguityError(str(error)) from error
-        if identity is None:
-            raise ContextOperandNotFoundError(
-                f"UID {selector!r} is unavailable as a readable Context or "
-                "query-only View."
-            )
-        coordinates: list[
-            ContextOperandCandidate[ContextAccess] | GrantedQueryTarget
-        ] = []
-        keys: set[tuple[str, ...]] = set()
-        for value in identity.values:
-            key = (
-                ("query-view", value.grant_uid, value.access_name)
-                if isinstance(value, GrantedQueryTarget)
-                else ("context", value.uid, value.name)
-            )
-            if key not in keys:
-                keys.add(key)
-                coordinates.append(value)
-        if len(coordinates) != 1:
-            rendered = "; ".join(
-                (
-                    f"Query View {value.access_name} [{value.grant_uid}]"
-                    if isinstance(value, GrantedQueryTarget)
-                    else f"Context {value.name} [{value.uid}]"
-                )
-                for value in coordinates
-            )
-            raise ContextOperandAmbiguityError(
-                f"UID {selector!r} identifies multiple Query targets: "
-                f"{rendered}. Use --context/-c or an exact public View name."
-            )
-        selected = coordinates[0]
-        if isinstance(selected, GrantedQueryTarget):
-            return selected
-        return resolve_existing_context_access(
-            store,
-            selected.name,
-            current_name=snapshot.current_name,
-            required_permission="READ",
             candidates=context_candidates,
         ).value
-    return None
+    except (FileNotFoundError, ContextOperandNotFoundError):
+        if (
+            explicit_context_option
+            or is_relative_context_locator(selector)
+            or is_unresolved_uid_selector(selector)
+        ):
+            raise
+        return None
 
 
 def cmd(
     selector: Annotated[
         Optional[str],
-        typer.Argument(
-            help=(
-                "Existing readable Context or query-only View; when no accessible "
-                "target matches and QUESTION is omitted, ask SELECTOR of the "
-                "current Context"
-            )
-        ),
+        typer.Argument(help="Existing Context, or a question for the current Context"),
     ] = None,
     question: Annotated[
-        Optional[str],
-        typer.Argument(
-            help=(
-                "Question for the selected Context or query-only View; omit it "
-                "in a terminal to open that target in the Query workbench"
-            )
-        ),
+        Optional[str], typer.Argument(help="Question for the selected Context")
     ] = None,
     context_name: Annotated[
         Optional[list[str]],
-        typer.Option(
-            "--context",
-            "-c",
-            show_default=False,
-            help=(
-                "Readable Context root to answer from; repeat for multiple "
-                "ordinary roots"
-            ),
-        ),
+        typer.Option("--context", "-c", help="Context root; repeat for multiple roots"),
     ] = None,
     all_contexts: Annotated[
         bool,
-        typer.Option(
-            "--all",
-            "-a",
-            help="Query all readable Contexts in the active Profile",
-        ),
+        typer.Option("--all", "-a", help="Query all Contexts in the active Profile"),
     ] = False,
-    language: Annotated[
-        str,
-        typer.Option(
-            "--language",
-            "-l",
-            help=(
-                "Concealed source language to query; exact translations "
-                "must cover the whole source"
-            ),
-        ),
-    ] = "en",
     include_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--descendants/--context-only",
-            help="Control lexical descendant reach for an ordinary query",
-        ),
-    ] = None,
-    follow_embeds: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--follow-embeds/--exclude-embeds",
-            help="Control embedded Context traversal for an ordinary query",
+            "--descendants/--context-only", help="Include lexical descendants"
         ),
     ] = None,
     direct: Annotated[
-        bool,
-        typer.Option("-d", "--direct", help="Query only the selected Context root"),
+        bool, typer.Option("-d", "--direct", help="Query only the selected Context")
     ] = False,
     recursive: Annotated[
-        bool,
-        typer.Option(
-            "-r",
-            "--recursive",
-            help="Include descendants and follow embedded Contexts",
-        ),
+        bool, typer.Option("-r", "--recursive", help="Include lexical descendants")
     ] = False,
 ) -> None:
-    scope_flags_supplied = (
-        all_contexts
-        or direct
-        or recursive
-        or include_descendants is not None
-        or follow_embeds is not None
-    )
-    traversal_flags_supplied = (
-        direct
-        or recursive
-        or include_descendants is not None
-        or follow_embeds is not None
-    )
     try:
         preset = resolve_scope_preset(
-            direct=direct,
-            recursive=recursive,
-            default=ContextScopePreset.DIRECT,
+            direct=direct, recursive=recursive, default=ContextScopePreset.DIRECT
         )
         traversal = resolve_context_traversal(
-            preset=preset,
-            include_descendants=include_descendants,
-            follow_embeds=follow_embeds,
+            preset=preset, include_descendants=include_descendants
         )
-    except (TypeError, ValueError) as error:
-        typer.secho(
-            f"Query error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    store = MemoryStore()
-    context_operands: tuple[str, ...] = (
-        (context_name,)
-        if isinstance(context_name, str)
-        else tuple(context_name)
-        if context_name
-        else ()
-    )
-    if all_contexts and context_operands:
-        typer.secho(
-            "Query error: --all/-a cannot be combined with --context/-c.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if selector is None:
-        if len(context_operands) > 1:
-            typer.secho(
-                "Query error: the interactive workbench accepts at most one "
-                "initial --context; choose multiple Sources in its Scope control.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
-        if scope_flags_supplied:
-            typer.secho(
-                "Query error: scope flags require a one-shot SELECTOR; "
-                "the interactive workbench owns its visible scope controls.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
-        if not is_interactive_terminal():
-            typer.secho(
-                "Query error: SELECTOR is required outside a terminal. In a "
-                "terminal, run 'mem query' to open the interactive Query "
-                "workbench.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        try:
-            _open_query_workbench(
+        store = MemoryStore()
+        current = store.current_context_name()
+        operands = tuple(context_name or ())
+        if all_contexts and operands:
+            raise ValueError("--all/-a cannot be combined with --context/-c.")
+        if question is not None and (operands or all_contexts):
+            raise ValueError("Use one question with --context/-c or --all/-a.")
+        if selector is None:
+            if not is_interactive_terminal():
+                raise ValueError("A question is required outside a terminal.")
+            if (
+                len(operands) > 1
+                or all_contexts
+                or direct
+                or recursive
+                or include_descendants is not None
+            ):
+                raise ValueError("Choose scope in the interactive Query workbench.")
+            _open_query_workbench(store, context_name=operands[0] if operands else None)
+            return
+        if not selector.strip() or (question is not None and not question.strip()):
+            raise ValueError("Question must be non-empty.")
+        if operands or all_contexts:
+            names = operands
+            if all_contexts:
+                names = tuple(store.list_context_names())
+                if not names:
+                    raise ValueError("No Contexts are available for Query.")
+            _query_ordinary_context(
                 store,
-                context_name=(context_operands[0] if context_operands else None),
-                language=language,
+                context_names=names,
+                current_name=current,
+                question=selector,
+                traversal=traversal,
+                all_contexts=all_contexts,
             )
-        except (
-            FileNotFoundError,
-            OrdinaryQueryCorpusTooLarge,
-            RetrievalCorpusError,
-            OSError,
-            ProfileConfigError,
-            ProfileError,
-            QueryProviderError,
-            SaveQueryAnswerError,
-            GrantedQuerySourceError,
-            RuntimeError,
-            ValueError,
-        ) as error:
-            typer.secho(
-                f"Query error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        return
-    if all_contexts:
-        if question is not None:
-            typer.secho(
-                "Query error: --all/-a applies only to the ordinary one-question "
-                "form, not a query-only view.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
-        if language != "en":
-            typer.secho(
-                "Query error: --language applies only to a query-only view.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
+            return
+        selected = None
         try:
-            context_snapshot = ContextOperandSnapshot.capture(store)
+            selected = resolve_existing_context_access(
+                store, selector, current_name=current
+            ).value
+        except (FileNotFoundError, ContextOperandNotFoundError):
+            if (
+                question is not None
+                or is_relative_context_locator(selector)
+                or is_unresolved_uid_selector(selector)
+            ):
+                raise
+        if selected is not None:
+            if question is None:
+                if not is_interactive_terminal():
+                    raise ValueError(
+                        "QUESTION is required outside a terminal for a selected Context."
+                    )
+                explicit_scope = direct or recursive or include_descendants is not None
+                _open_query_workbench(
+                    store,
+                    context_name=selected.access_name,
+                    traversal=traversal if explicit_scope else None,
+                )
+            else:
+                _query_ordinary_context(
+                    store,
+                    context_names=(selected.access_name,),
+                    current_name=current,
+                    question=question,
+                    traversal=traversal,
+                )
+        else:
             _query_ordinary_context(
                 store,
                 context_names=(None,),
-                current_name=context_snapshot.current_name,
-                question=selector,
-                traversal=traversal,
-                all_contexts=True,
-            )
-        except (
-            FileNotFoundError,
-            OrdinaryQueryCorpusTooLarge,
-            RetrievalCorpusError,
-            OSError,
-            ProfileConfigError,
-            ProfileError,
-            QueryProviderError,
-            SaveQueryAnswerError,
-            RuntimeError,
-            ValueError,
-        ) as error:
-            typer.secho(
-                f"Query error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        return
-    try:
-        context_snapshot = ContextOperandSnapshot.capture(store)
-        context_candidates = freeze_profile_context_access_candidates(
-            store,
-            current_name=context_snapshot.current_name,
-        )
-        query_context_option: GrantedQueryTarget | None = None
-        if len(context_operands) == 1 and question is None:
-            option_target = _resolve_positional_query_target(
-                store,
-                context_operands[0],
-                snapshot=context_snapshot,
-                explicit_context_option=True,
-                context_candidates=context_candidates,
-            )
-            if isinstance(option_target, GrantedQueryTarget):
-                query_context_option = option_target
-                resolved_context_names = ()
-            else:
-                resolved_context_names = (option_target.access_name,)
-        else:
-            resolved_context_names = tuple(
-                resolve_existing_context_access(
-                    store,
-                    operand,
-                    current_name=context_snapshot.current_name,
-                    required_permission="READ",
-                    candidates=context_candidates,
-                ).name
-                for operand in context_operands
-            )
-        if question is not None and not question.strip():
-            raise ValueError("Question must be non-empty.")
-        if query_context_option is not None:
-            _query_granted_target(
-                store,
-                target=query_context_option,
-                question=selector,
-                language=language,
-                federate_descendants=traversal.include_descendants,
-            )
-            return
-        if resolved_context_names and question is None:
-            if language != "en":
-                raise ValueError("--language applies only to a query-only view.")
-            _query_ordinary_context(
-                store,
-                context_names=resolved_context_names,
-                current_name=context_snapshot.current_name,
+                current_name=current,
                 question=selector,
                 traversal=traversal,
             )
-            return
-
-        if not resolved_context_names:
-            positional_target = _resolve_positional_query_target(
-                store,
-                selector,
-                snapshot=context_snapshot,
-            )
-            if isinstance(positional_target, ContextAccess):
-                if question is None:
-                    if not is_interactive_terminal():
-                        raise ValueError(
-                            "QUESTION is required outside a terminal for a selected "
-                            "Context. In a terminal, omit it to open the Query "
-                            "workbench."
-                        )
-                    _open_query_workbench(
-                        store,
-                        context_name=positional_target.access_name,
-                        language=language,
-                        traversal=(traversal if traversal_flags_supplied else None),
-                    )
-                else:
-                    if language != "en":
-                        raise ValueError(
-                            "--language applies only to a query-only view."
-                        )
-                    _query_ordinary_context(
-                        store,
-                        context_names=(positional_target.access_name,),
-                        current_name=context_snapshot.current_name,
-                        question=question,
-                        traversal=traversal,
-                    )
-                return
-            if isinstance(positional_target, GrantedQueryTarget):
-                if question is None:
-                    if not is_interactive_terminal():
-                        raise ValueError(
-                            "QUESTION is required outside a terminal for a selected "
-                            "Query View. In a terminal, omit it to open the Query "
-                            "workbench."
-                        )
-                    _open_query_workbench(
-                        store,
-                        context_name=None,
-                        query_target=positional_target,
-                        language=language,
-                        traversal=(traversal if traversal_flags_supplied else None),
-                    )
-                else:
-                    _query_granted_target(
-                        store,
-                        target=positional_target,
-                        question=question,
-                        language=language,
-                        federate_descendants=traversal.include_descendants,
-                    )
-                return
-            if question is None:
-                if language != "en":
-                    raise ValueError("--language applies only to a query-only view.")
-                _query_ordinary_context(
-                    store,
-                    context_names=(None,),
-                    current_name=context_snapshot.current_name,
-                    question=selector,
-                    traversal=traversal,
-                )
-                return
     except (
-        FileNotFoundError,
-        OrdinaryQueryCorpusTooLarge,
-        RetrievalCorpusError,
         OSError,
         ProfileConfigError,
         ProfileError,
-        QueryProviderError,
         RuntimeError,
         ValueError,
     ) as error:
@@ -858,113 +341,4 @@ def cmd(
             fg=typer.colors.RED,
             err=True,
         )
-        raise typer.Exit(1)
-    if len(resolved_context_names) > 1:
-        typer.secho(
-            "Query error: repeated --context applies only to the ordinary "
-            "one-question form.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    try:
-        anchor_name = (
-            resolved_context_names[0]
-            if resolved_context_names
-            else context_snapshot.current_name
-        )
-        if not anchor_name:
-            raise RuntimeError(
-                "No current context. Pass --context or run 'mem init <name>' first."
-            )
-        ctx = store.load(anchor_name) if store.context_exists(anchor_name) else None
-    except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
-        typer.secho(
-            f"Error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    resolution_error: KeyError | ValueError | None = None
-    try:
-        item = direct_items.resolve_direct_item(ctx, selector) if ctx is not None else None
-    except (KeyError, ValueError) as error:
-        item = None
-        resolution_error = error
-
-    if isinstance(item, QueryContextRef):
-        assert question is not None
-        progress = CommandProgress(
-            "QUERY",
-            "connecting provider",
-            total=2,
-        )
-        try:
-            progress.start()
-            response = execute_query_reference(
-                QueryReferenceRequest(
-                    source_uid=item.target_source_uid,
-                    source_name=item.name,
-                    provider_name=item.provider,
-                    question=question,
-                    language=language,
-                ),
-                store=store,
-                provider_factory=connect_query_route_provider,
-                observer=lambda stage: (
-                    progress.update("answering query", step=2)
-                    if stage == "ANSWERING"
-                    else None
-                ),
-            )
-            progress.close()
-        except (
-            FileNotFoundError,
-            ValueError,
-            QueryProviderError,
-        ) as error:
-            progress.close()
-            typer.secho(
-                f"Query error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        render_query_reference_response(response)
-        return
-
-    # Grant routing metadata is control-plane state. Inspecting it does
-    # not open authority content and avoids authenticating for an ordinary
-    # item or a selector that has no query-view route at all.
-    route_selector = selector
-    try:
-        query_target = resolve_granted_query_target(store, route_selector)
-    except ProfileConfigError as error:
-        typer.secho(
-            f"Query error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-    if query_target is None:
-        message = (
-            str(resolution_error)
-            if resolution_error is not None
-            else f"'{route_selector}' is not a query-only Context."
-        )
-        typer.secho(
-            f"Error: {display_escape_text(message)}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    assert question is not None
-    _query_granted_target(
-        store,
-        target=query_target,
-        question=question,
-        language=language,
-        federate_descendants=traversal.include_descendants,
-    )
+        raise typer.Exit(1) from error

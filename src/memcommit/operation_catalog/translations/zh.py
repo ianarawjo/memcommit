@@ -8,7 +8,10 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "sync": LocalizedOperationCopy('将自己拥有的 Context 文档与外部文件同步，执行一次或在命令完成后自动执行。', '维护与 Context 名称对应的外部文档树，并开启或关闭所选范围的自动 Sync。'),
+    "sync": LocalizedOperationCopy(
+        "发现 Profile 项目文档并与自有 Context 同步。",
+        "遵循 .memignore，接受文件的新增、修改、重命名和删除，并将 mem 修改写回文件。",
+    ),
     "export": LocalizedOperationCopy(
         "将当前 Context 内容导出为文档、Agent Skill 或 mem 格式。",
         "将编辑后的记忆文档输出为可在 mem 外部使用的文件。",
@@ -64,10 +67,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "浏览本地 Context 和可读的跨 Profile Context 视图，而不进行切换。",
         "查看当前 Profile 可访问的全部 Context 时。",
     ),
-    "dedup": _copy(
-        "审查已确认的重复组，在每组中保留一个现有 Memory，并在 Apply 时删除其余项。",
-        "删除已确认的语义重复项，同时保留一个精确的现有 Memory 及其 UID 时。",
-    ),
     "delete": _copy(
         "选择要删除的 Context 或直接项目，或通过 locator、名称或 UID 指定它。",
         "移除不再需要的特定 Context 或项目时。",
@@ -101,8 +100,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "创建可重复使用的测试数据，并通过可重复的场景验证操作。",
     ),
     "find": _copy(
-        "在可读 Memory 中查找精确文本或明确的正则表达式（regex）匹配。",
-        "在选定的 Context 范围内定位精确词语、标识符或文本模式时。",
+        "按语义查找相关 Memory；--literal 无需语义模型即可查找精确文本或正则表达式匹配。",
+        "通过含义和上下文查找相关 Memory，或使用 --literal 定位精确词语、标识符和文本模式时。",
     ),
     "find-ambiguities": _copy(
         "报告当前或指定 Context 中含义模糊的直接 Memory；不修改 Context。",
@@ -148,7 +147,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "准备可复现且隔离的用户研究环境时。",
     ),
     "list": _copy(
-        "列出 Context 的直接项目——Memory、Memory reference、query view 和嵌入的 Context——以及可读子 Context；-r 递归包含后代和嵌入 Context 中的项目，ls 是简短别名。",
+        "列出 Context 中的 Memory 以及单独存储的下级 Context。-r 包含下级 Context 的 Memory；ls 是简短别名。",
         "检查 Context 的结构和直接内容时。",
     ),
     "lock": _copy(
@@ -180,7 +179,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "在脚本或终端中确认当前活动 Context 时。",
     ),
     "query": _copy(
-        "根据可读 Context 知识或获授权的隐藏 query-only 视图生成基于 LLM 的答案。",
+        "根据本地 Context 中的 Memory 生成基于 LLM 的答案。",
         "需要有依据的自然语言回答，而不是匹配 Memory 列表时。",
     ),
     "rationale": _copy(
@@ -214,10 +213,6 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "打开已保存的语义产物以检查分析、提案或结果状态，并在支持时记录审查回应；Review 从不应用 Memory。",
         "重新查看已保存的分析、提案或结果状态时。",
     ),
-    "search": _copy(
-        "在选定 Context 中按语义排列与自然语言请求相关的 Memory。",
-        "通过含义和上下文寻找相关 Memory，包括没有明显关键词重合的相关内容时。",
-    ),
     "sever": _copy(
         "依据 Criteria Context 选择、转换或排除 Source Memory，以创建 Result。",
         "依据明确标准选择或转换 Source 内容时。",
@@ -227,7 +222,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "将自己拥有的 Context 交付给获授权接收者时。",
     ),
     "show": _copy(
-        "显示 Memory、reference、嵌入的 Context，或当前/指定 Context 的直接内容。",
+        "显示单个 Memory 或当前及指定 Context 的内容。",
         "阅读已知项目或 Context 的完整内容时。",
     ),
     "status": _copy(
@@ -263,17 +258,12 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
     ),
 }
 
-# These names were split after the original semantic Dedup contract was
-# separated into exact Dedup and inclusive semantic Dedun operations.
+# Dedup exposes semantic cleanup by default and exact cleanup with --literal.
 TRANSLATIONS.update(
     {
-        "dedun": _copy(
-            "立即处理精确与语义 DUN 组，并保留每个连通组中最先存在的 UID。",
-            "在一个检查点中一并清理精确 DUP 与语义 DUN。",
-        ),
         "dedup": _copy(
-            "立即删除内容逐字节相同的直接 Memories，并为每组保留最先存在的 UID。",
-            "无需语义推理即可清除完全相同的内容副本。",
+            "立即删除精确与语义重复项，并保留每组最先存在的 UID；--literal 仅删除角色相同的精确副本，不进行语义推理。",
+            "一并清理精确与语义重复项，或使用 --literal 仅清理精确副本。",
         ),
         "find-duplicates": _copy(
             "报告内容逐字节相同的直接 Memory 组；不修改 Context。",

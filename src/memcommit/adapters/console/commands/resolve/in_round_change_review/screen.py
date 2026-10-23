@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
 
 from memcommit.adapters.console.commands.resolve.decision_round.screen.inputs import (
     CompactScreenPresentation,
@@ -68,17 +67,6 @@ class InRoundChangeReview:
         items = []
         for conflict in conflicts:
             display_conflict = conflict
-            if analysis.frame.memory_target is not None:
-                origin = next(
-                    item
-                    for item in analysis.frame.memory_target.origins
-                    if item.analysis_uid == conflict.memory_uid
-                )
-                display_conflict = replace(
-                    conflict,
-                    owner_context_name=origin.context_name,
-                    memory_uid=origin.memory_uid,
-                )
             item_uid = f"{conflict.owner_context_uid}:{conflict.memory_uid}"
             before = getattr(
                 conflict.candidates[0].operation, "old_content", "(new Memory)"

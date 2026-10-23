@@ -9,7 +9,8 @@ from typing import Callable, Protocol
 import unicodedata
 import uuid
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.core.memory_translation import (
     TRANSLATED_CONTENT_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,
@@ -100,7 +101,7 @@ class TranslationApplyResult:
     plan: TranslationPlan
     translations: tuple[AppliedTranslation, ...]
 
-    def checkpoint_args(self) -> dict[str, object]:
+    def checkpoint_command_details(self) -> dict[str, object]:
         return {
             "schema_version": 1,
             "operation_uid": self.plan.operation_uid,
@@ -140,7 +141,7 @@ class DerivedTranslationApplyResult:
     context: Context
     translations: tuple[AppliedTranslation, ...]
 
-    def checkpoint_args(self) -> dict[str, object]:
+    def checkpoint_command_details(self) -> dict[str, object]:
         return {
             "schema_version": 2,
             "operation_uid": self.plan.operation_uid,
@@ -264,11 +265,11 @@ def _selected_memories(
 ) -> tuple[list[Memory], str | None]:
     if selector is None:
         return (
-            [item for item in ctx.iter_items() if isinstance(item, Memory)],
+            [item for item in ctx.iter_memories() if isinstance(item, Memory)],
             None,
         )
 
-    matches = [uid for uid in ctx.ordered_uids() if uid.startswith(selector)]
+    matches = [uid for uid in ctx.get_ordered_memory_uids() if uid.startswith(selector)]
     if not matches:
         raise TranslateError(f"No direct item has a uid starting with '{selector}'.")
     if len(matches) > 1:
@@ -614,7 +615,7 @@ def apply_translation(
             uid=result_uid,
             content=proposal.translated_content,
         )
-        source_position = ctx.ordered_uids().index(proposal.source_uid)
+        source_position = ctx.get_ordered_memory_uids().index(proposal.source_uid)
         ctx.add(result, position=source_position + 1)
         applied.append(
             AppliedTranslation(
@@ -681,7 +682,9 @@ def derive_translation_context(
             uid=result_uid,
             content=proposal.translated_content,
         )
-        source_position = translated.ordered_uids().index(proposal.source_uid)
+        source_position = translated.get_ordered_memory_uids().index(
+            proposal.source_uid
+        )
         translated.remove(proposal.source_uid)
         translated.add(result, position=source_position)
         applied.append(

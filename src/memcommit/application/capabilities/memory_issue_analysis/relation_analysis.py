@@ -13,7 +13,7 @@ from memcommit.application.capabilities.memory_issue_analysis.provider_contract 
     find_conflicts,
     find_redundancies,
 )
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
 )

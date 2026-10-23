@@ -17,7 +17,9 @@ from memcommit.application.capabilities.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import (
+    resolve_semantic_prompt_policy,
+)
 from memcommit.application.operations.distill.config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
@@ -230,9 +232,7 @@ class DistillAnalysis:
                 else {
                     "verdict": self.goal_fit.verdict,
                     "reason": self.goal_fit.reason,
-                    "considered_rule_uids": list(
-                        self.goal_fit.considered_rule_uids
-                    ),
+                    "considered_rule_uids": list(self.goal_fit.considered_rule_uids),
                     "material_rule_uids": list(self.goal_fit.material_rule_uids),
                     "contract_version": self.goal_fit.contract_version,
                 }
@@ -391,7 +391,6 @@ def _distill_payload(
                 if frame.include_descendants
                 else "THIS_CONTEXT_ONLY"
             ),
-            "follow_embeds": frame.follow_embeds,
             "memories": [
                 {
                     "memory_id": source.alias,
@@ -670,9 +669,7 @@ def analyze_distill(
             boundary_uids = tuple(by_alias[alias] for alias in boundary_aliases)
         except KeyError as error:
             raise DistillError("A Rule cited an unavailable Source Memory.") from error
-        content = _text(
-            value["content"], "Rule content", limit=config.rule_text_limit
-        )
+        content = _text(value["content"], "Rule content", limit=config.rule_text_limit)
         rationale = _text(
             value["rationale"], "Rule rationale", limit=config.rationale_limit
         )
@@ -705,9 +702,7 @@ def analyze_distill(
                 boundary_memory_uids=boundary_uids,
             )
         )
-    outside_aliases = _unique_texts(
-        decoded["outside_memory_ids"], "outside evidence"
-    )
+    outside_aliases = _unique_texts(decoded["outside_memory_ids"], "outside evidence")
     try:
         outside_uids = tuple(by_alias[alias] for alias in outside_aliases)
     except KeyError as error:

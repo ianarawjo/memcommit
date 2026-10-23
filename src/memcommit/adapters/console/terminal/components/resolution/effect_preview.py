@@ -29,6 +29,8 @@ class EffectReportPresentation:
     unchanged_label: str = "KEEP"
     unchanged_entry_uids: frozenset[str] = frozenset()
     entry_details: tuple[EffectReportDetail, ...] = ()
+    # Result-style rows omit per-entry rationale and extra inter-Memory spacing.
+    inline_memory_diffs: bool = False
 
     def details_for(self, uid: str) -> tuple[EffectReportDetail, ...]:
         return tuple(detail for detail in self.entry_details if detail.entry_uid == uid)

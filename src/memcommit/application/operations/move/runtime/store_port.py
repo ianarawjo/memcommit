@@ -10,7 +10,7 @@ from memcommit.application.operations.move.contracts import (
 )
 from memcommit.application.operations.move.runtime.apply import apply_move
 from memcommit.application.operations.move.runtime.prepare import freeze_move
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.persistence.store import MemoryStore
 
 
@@ -22,24 +22,16 @@ class MemoryStoreMovePort:
         store: MemoryStore,
         *,
         current_name: str | None,
-        allow_granted_sources: bool = False,
     ):
-        if type(allow_granted_sources) is not bool:
-            raise TypeError("allow_granted_sources must be a boolean.")
         self._store = store
         self._current_name = current_name
-        # This compatibility flag enables Grant diagnosis, never granted Move.
-        self._allow_granted_sources = allow_granted_sources
         self._owner = object()
 
     @classmethod
-    def capture(
-        cls, store: MemoryStore, *, allow_granted_sources: bool = False
-    ) -> MemoryStoreMovePort:
+    def capture(cls, store: MemoryStore) -> MemoryStoreMovePort:
         return cls(
             store,
             current_name=store.current_context_name(),
-            allow_granted_sources=allow_granted_sources,
         )
 
     @property
@@ -63,7 +55,6 @@ class MemoryStoreMovePort:
             store=self._store,
             current_name=self._current_name,
             owner=self._owner,
-            allow_granted_sources=self._allow_granted_sources,
         )
 
     def apply_move(self, plan: FrozenMoveMemoriesPlan) -> MoveMemoriesResult:

@@ -1,4 +1,4 @@
-"""Process-local Search workbench results, selection, and save eligibility."""
+"""Process-local Find workbench results, selection, and save eligibility."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ from memcommit.application.capabilities.save_context_from_selection.application 
 
 @dataclass(frozen=True)
 class SearchResultsClipboardProjection:
-    """One focused Search result or the complete frozen ranked result set."""
+    """One focused Find result or the complete frozen ranked result set."""
 
     text: str
     scope: Literal["FOCUSED", "RESULT_SET"]
@@ -49,16 +49,16 @@ class SearchWorkbenchResult:
                 or self.save_as is not None
                 or self.save_location is not None
             ):
-                raise ValueError("A closed Search workbench cannot request a save.")
+                raise ValueError("A closed Find workbench cannot request a save.")
             return
         if (
             self.response is None
             or not self.selected_result_indices
-            or self.save_as not in {"COPY", "REFERENCE", "EMBED"}
+            or self.save_as not in {"COPY"}
             or not isinstance(self.save_location, str)
             or not self.save_location.strip()
         ):
-            raise ValueError("Search Save As requires reviewed result choices.")
+            raise ValueError("Find Save As requires reviewed result choices.")
         if len(set(self.selected_result_indices)) != len(
             self.selected_result_indices
         ) or any(
@@ -67,7 +67,7 @@ class SearchWorkbenchResult:
             or not 0 <= index < len(self.response.results)
             for index in self.selected_result_indices
         ):
-            raise ValueError("Search Save As selected invalid result rows.")
+            raise ValueError("Find Save As selected invalid result rows.")
 
 
 SearchRunner = Callable[[SearchRequest], SearchResponse]
@@ -120,16 +120,14 @@ class SearchWorkbenchState:
         self.response = response
         self.copy_receipt = None
         self.result_selection = (
-            MultiSelectionState(options, cursor_value="0")
-            if response.results
-            else None
+            MultiSelectionState(options, cursor_value="0") if response.results else None
         )
         count = len(response.results)
         self.status = f"{count} {'RESULT' if count == 1 else 'RESULTS'}"
 
     def selected_save_indices(self) -> tuple[int, ...]:
         if self.response is None or self.result_selection is None:
-            raise ValueError("RUN SEARCH AND CHECK AT LEAST ONE RESULT")
+            raise ValueError("RUN FIND AND CHECK AT LEAST ONE RESULT")
         indices = tuple(int(uid) for uid in self.result_selection.selected_values)
         if not indices:
             raise ValueError("CHECK AT LEAST ONE RESULT")
@@ -138,7 +136,7 @@ class SearchWorkbenchState:
             (
                 result.kind
                 for result in selected_results
-                if result.kind not in {"memory", "ref"}
+                if result.kind not in {"memory"}
             ),
             None,
         )
@@ -153,9 +151,9 @@ def validate_search_response(
     request: SearchRequest, response: SearchResponse
 ) -> SearchResponse:
     if not isinstance(response, SearchResponse):
-        raise ValueError("Search controller returned an invalid response.")
+        raise ValueError("Find controller returned an invalid response.")
     if response.request != request:
         raise ValueError(
-            "Search inputs changed while the request was running. Run the search again."
+            "Find inputs changed while the request was running. Run the search again."
         )
     return response

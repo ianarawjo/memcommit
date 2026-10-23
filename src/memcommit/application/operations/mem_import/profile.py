@@ -13,12 +13,12 @@ import uuid
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     ProfileConfigError,
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     validate_profile_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.model._storage import (
     ProfileError,
     StoreInspection,
@@ -106,7 +106,7 @@ def _copy_store_baseline(
 def _baseline_import_provenance(
     source_root: Path,
     *,
-    source_profile: ProfileEntry | None,
+    source_profile: Profile | None,
 ) -> tuple[str, dict[str, object]]:
     """Freeze the digest and path-free provenance for one clean copy."""
 
@@ -137,12 +137,12 @@ def _publish_baseline_profile_locked(
     digest: str,
     source_record: dict[str, object],
     root_dir: Path | None = None,
-) -> tuple[ProfileEntry, StoreInspection]:
+) -> tuple[Profile, StoreInspection]:
     """Publish one clean copy while the caller holds the registry lock."""
 
     if any(profile.name.casefold() == name.casefold() for profile in registry.profiles):
         raise ProfileError(f"Profile {name!r} already exists.")
-    profile = ProfileEntry(
+    profile = Profile(
         uid=str(uuid.uuid4()),
         name=name,
         kind="MANAGED",
@@ -198,9 +198,9 @@ def import_baseline_profile(
     name: str,
     source: Path,
     *,
-    source_profile: ProfileEntry | None = None,
+    source_profile: Profile | None = None,
     root_dir: Path | None = None,
-) -> tuple[ProfileEntry, StoreInspection]:
+) -> tuple[Profile, StoreInspection]:
     """Create a managed Profile from content baseline without run history."""
 
     canonical = validate_profile_name(name)
@@ -239,7 +239,7 @@ def import_profile_from_profile(
     *,
     expected_source_profile_uid: str | None = None,
     root_dir: Path | None = None,
-) -> tuple[ProfileEntry, StoreInspection]:
+) -> tuple[Profile, StoreInspection]:
     """Create one clean Profile from another registered Profile."""
 
     registry = load_profile_registry()

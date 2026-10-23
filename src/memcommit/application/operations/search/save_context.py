@@ -41,14 +41,12 @@ def save_context_request_from_search(
         or not 0 <= index < len(response.results)
         for index in selected_result_indices
     ):
-        raise SaveContextFromSelectionError(
-            "Search selected an invalid result row."
-        )
+        raise SaveContextFromSelectionError("Search selected an invalid result row.")
 
     selection: list[SelectedMemory] = []
     for index in selected_result_indices:
         result = response.results[index]
-        if result.kind not in {"memory", "ref"}:
+        if result.kind not in {"memory"}:
             raise SaveContextFromSelectionError(
                 f"{result.kind} results cannot be saved as Memory selections."
             )
@@ -62,9 +60,7 @@ def save_context_request_from_search(
             )
         source_name = resolve_selection_source_public_name(
             catalog,
-            containing_name=result.context_name,
             source_name=result.source_context_name,
-            is_reference=result.kind == "ref",
         )
         selection.append(
             SelectedMemory(

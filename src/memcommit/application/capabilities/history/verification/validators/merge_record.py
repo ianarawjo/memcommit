@@ -13,16 +13,17 @@ from memcommit.application.operations.merge.checkpoint import (
 )
 from memcommit.application.operations.merge.lineage import project_merge_lineage
 from memcommit.application.operations.merge.records import LiteralMergeRound
-from memcommit.application.operations.resolve.analysis.convert_audit_to_issues import all_audit_issue_keys
-from memcommit.persistence.store import context_record_digest
+from memcommit.application.operations.resolve.analysis.convert_audit_to_issues import (
+    all_audit_issue_keys,
+)
 
 
 def validated_merge_record(entry):
-    record = entry["args"]["merge"]
+    record = entry["command_details"]["merge"]
     if (
         entry.get("command") != "merge"
         or entry.get("auto") is not True
-        or record["schema_version"] != MERGE_CHECKPOINT_VERSION
+        or record["schema_version"] not in {3, MERGE_CHECKPOINT_VERSION}
         or record["method"] not in {"LITERAL", "SEMANTIC"}
         or str(UUID(record["operation_uid"])) != record["operation_uid"]
     ):
@@ -40,7 +41,6 @@ def validated_merge_record(entry):
         or after["uid"] != before["uid"]
         or before["name"] != target["context_name"]
         or after["name"] != before["name"]
-        or context_record_digest(before) != target["context_digest"]
         or item_effects(before, after) != record["effects"]
     ):
         raise ValueError("Merge effects do not match the Target snapshots.")
@@ -153,9 +153,7 @@ def validated_merge_record(entry):
     )
     if encode(record["summary"]) != encode(expected_summary):
         raise ValueError("Merge summary does not match the retained result.")
-    local = not record["inputs"]["cross_profile_memory_only"] and not any(
-        endpoint["grant"] is not None for endpoint in (source, target)
-    )
+    local = True
     if record["lineage"]["local"] != local or record["lineage"]["edges"] != (
         project_merge_lineage(
             decoded_rounds, source["context_uid"], target["context_uid"]

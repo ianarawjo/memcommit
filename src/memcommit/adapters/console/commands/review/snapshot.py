@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.coordination.review import (
     ATOMIZE_RESPONSE_LABEL,
@@ -24,7 +25,7 @@ def visible_ordinal_index(selector: str, item_count: int) -> int | None:
 def _direct_memory_map(ctx: Context) -> dict[str, Memory]:
     return {
         item.uid: item
-        for item in ctx.iter_items()
+        for item in ctx.iter_memories()
         if isinstance(item, Memory)
     }
 

@@ -4,11 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import TYPE_CHECKING
 
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
-    ExactDuplicateGroup,
-)
 from memcommit.application.capabilities.semantic_execution.relations import (
     connected_relation_components,
 )
@@ -20,10 +16,7 @@ from memcommit.application.operations.duplicates.dedun.application import (
     DedunRequest,
     FrozenDedunPlan,
 )
-from memcommit.core.context import Memory
-
-if TYPE_CHECKING:
-    from memcommit.application.operations.update.model import GrantedUpdateTarget
+from memcommit.models.memory import Memory
 
 
 def _component_uid(
@@ -134,10 +127,8 @@ def dedun_analysis_revision(
     display_name: str,
     context_digest: str,
     component_uids: tuple[str, ...],
-    exact_item_groups: tuple[ExactDuplicateGroup, ...],
 ) -> str:
     """Bind analyzed relations to their complete direct-item Source frame."""
-
     payload = {
         "contract": DEDUN_CONTRACT_VERSION,
         "context": {
@@ -147,23 +138,11 @@ def dedun_analysis_revision(
             "digest": context_digest,
         },
         "components": list(component_uids),
-        "exact_item_groups": [
-            {
-                "item_kind": group.item_kind,
-                "survivor_uid": group.survivor_uid,
-                "absorbed_uids": list(group.absorbed_uids),
-                "summary": group.summary,
-            }
-            for group in exact_item_groups
-        ],
         "handoffs": [handoff.uid for handoff in request.handoffs],
     }
     return hashlib.sha256(
         json.dumps(
-            payload,
-            ensure_ascii=False,
-            separators=(",", ":"),
-            sort_keys=True,
+            payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True
         ).encode("utf-8")
     ).hexdigest()
 
@@ -177,11 +156,8 @@ def freeze_dedun_analysis(
     display_name: str,
     context_digest: str,
     direct_memory_digest: str,
-    exact_item_groups: tuple[ExactDuplicateGroup, ...] = (),
-    granted_binding: "GrantedUpdateTarget | None" = None,
 ) -> FrozenDedunPlan:
     """Freeze analyzed Dedun evidence for a stored or projected Context."""
-
     source = request.source
     if (
         source.context_uid != context_uid
@@ -202,8 +178,7 @@ def freeze_dedun_analysis(
         context_name=context_name,
         display_name=display_name,
         context_digest=context_digest,
-        component_uids=tuple(component.uid for component in components),
-        exact_item_groups=exact_item_groups,
+        component_uids=tuple((component.uid for component in components)),
     )
     return FrozenDedunPlan(
         request=request,
@@ -213,8 +188,6 @@ def freeze_dedun_analysis(
         context_digest=context_digest,
         revision=revision,
         components=components,
-        exact_item_groups=exact_item_groups,
-        granted_binding=granted_binding,
     )
 
 

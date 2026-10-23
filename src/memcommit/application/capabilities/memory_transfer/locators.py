@@ -16,7 +16,8 @@ from memcommit.application.capabilities.operand_resolution import (
     ContextOperandNotFoundError,
     resolve_existing_context_operand,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 
 
@@ -28,7 +29,7 @@ def placement_for_context(
 ) -> MemoryTransferPlacement:
     if before is not None and after is not None:
         raise MemoryTransferError("Pass only one of --before or --after.")
-    order = context.ordered_uids()
+    order = context.get_ordered_memory_uids()
     if before is None and after is None:
         position = len(order)
     else:
@@ -50,7 +51,7 @@ def _memory_matches(
     owner_name: str | None,
 ) -> tuple[tuple[StoreTransferFrame, Memory], ...]:
     candidates = (
-        tuple(frame for frame in frames if not frame.access.is_granted)
+        tuple(frame for frame in frames)
         if owner_name is None
         else tuple(frame for frame in frames if frame.display_name == owner_name)
     )
@@ -59,7 +60,7 @@ def _memory_matches(
     return tuple(
         (frame, item)
         for frame in candidates
-        for item in frame.context.iter_items()
+        for item in frame.context.iter_memories()
         if isinstance(item, Memory) and item.uid.startswith(selector)
     )
 
@@ -137,7 +138,7 @@ def target_frame(
         raise MemoryTransferError(
             "No current Context. Pass --into TARGET_CONTEXT explicitly."
         )
-    target_locator = locator or current_name or ""
+    target_locator = locator or current_name
     try:
         resolved = resolve_existing_context_operand(
             tuple(
@@ -147,7 +148,6 @@ def target_frame(
                     value=frame,
                 )
                 for frame in frames
-                if not frame.access.is_granted
             ),
             target_locator,
             current=current_name,
@@ -164,11 +164,7 @@ def unique_local_source_frames(
     frames_by_name: dict[str, StoreTransferFrame],
 ) -> tuple[StoreTransferFrame, ...]:
     names = tuple(dict.fromkeys(item.source_context_name for item in memories))
-    return tuple(
-        frames_by_name[name]
-        for name in names
-        if not frames_by_name[name].access.is_granted
-    )
+    return tuple(frames_by_name[name] for name in names)
 
 
 def source_owner_locators(

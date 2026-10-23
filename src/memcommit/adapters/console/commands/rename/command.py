@@ -1,4 +1,4 @@
-"""Rename one local Context namespace or granted Context access path."""
+"""Rename one local Context namespace."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ from typing import Annotated
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.application.operations.rename.application import RenameRequest
 from memcommit.application.operations.rename.runtime import (
     execute_rename,
@@ -20,7 +21,7 @@ def cmd(
         typer.Argument(
             metavar="OLD",
             help=(
-                "Existing local Context or exact granted Context access name; local "
+                "Existing local Context name; local "
                 "Contexts also accept '.', '..', './child', or a UID selector"
             ),
         ),
@@ -44,7 +45,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Rename a local Context namespace or granted Context access path."""
+    """Rename a local Context namespace."""
     store = MemoryStore()
     # Resolve the source exactly once against one current-state snapshot. NEW
     # is a new identity locator, so the existing-Context resolver must not
@@ -69,31 +70,22 @@ def cmd(
         raise typer.Exit(1)
 
     if not force:
-        if plan.subject == "GRANT_PLACEMENT":
-            typer.echo(
-                f"This will rename granted Context access '{plan.old_name}' to "
-                f"'{plan.new_name}' ({len(plan.bindings)} placed Grant"
-                f"{'s' if len(plan.bindings) != 1 else ''})."
-            )
-            typer.echo(
-                "Authority Context names, permissions, and Grant UIDs are unchanged."
-            )
-        else:
-            typer.echo(
-                "This will rename ordinary Context namespace "
-                f"'{plan.old_name}' to '{plan.new_name}' "
-                f"({len(plan.bindings)} Context"
-                f"{'s' if len(plan.bindings) != 1 else ''}, including "
-                f"{plan.descendant_count} descendant"
-                f"{'s' if plan.descendant_count != 1 else ''})."
-            )
-            typer.echo(
-                "Ordinary Context references, restorable checkpoint pointers, "
-                "the current Context pointer will "
-                "follow the stable UIDs; query-only Context references are "
-                "unchanged."
-            )
+        typer.echo(
+            "This will rename ordinary Context namespace "
+            f"'{plan.old_name}' to '{plan.new_name}' "
+            f"({len(plan.bindings)} Context"
+            f"{'s' if len(plan.bindings) != 1 else ''}, including "
+            f"{plan.descendant_count} descendant"
+            f"{'s' if plan.descendant_count != 1 else ''})."
+        )
+        typer.echo(
+            "Ordinary Context references, restorable checkpoint pointers, "
+            "the current Context pointer will "
+            "follow the stable UIDs. "
+            "unchanged."
+        )
         if not typer.confirm("Continue?", default=False):
+            annotate_command_outcome("CANCELLED")
             typer.echo("Rename cancelled.")
             return
 
@@ -109,18 +101,11 @@ def cmd(
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    if result.subject == "GRANT_PLACEMENT":
-        message = (
-            f"Renamed granted Context access '{plan.old_name}' to '{plan.new_name}' "
-            f"({result.renamed_placement_count} access path"
-            f"{'s' if result.renamed_placement_count != 1 else ''})."
-        )
-    else:
-        message = (
-            f"Renamed Context namespace '{plan.old_name}' to '{plan.new_name}' "
-            f"({result.renamed_context_count} Context"
-            f"{'s' if result.renamed_context_count != 1 else ''})."
-        )
+    message = (
+        f"Renamed Context namespace '{plan.old_name}' to '{plan.new_name}' "
+        f"({result.renamed_context_count} Context"
+        f"{'s' if result.renamed_context_count != 1 else ''})."
+    )
     typer.secho(message, fg=typer.colors.GREEN)
 
 

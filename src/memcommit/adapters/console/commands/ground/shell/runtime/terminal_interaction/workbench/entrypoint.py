@@ -42,7 +42,7 @@ from memcommit.adapters.console.terminal.components.progress import (
 from memcommit.adapters.console.terminal.core.capabilities import (
     require_interactive_terminal,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_name_validation import validate_context_name
 
 
 _THINKING_SUFFIXES = BUSY_FRAMES
@@ -69,7 +69,7 @@ def run_ground_shell(
     current_context_name: str | None = None,
     context_catalog_count: int = 0,
     context_catalog_names: Sequence[str] = (),
-    validate_new_context: Callable[[str], str] = validate_portable_context_name,
+    validate_new_context: Callable[[str], str] = validate_context_name,
     choose_save_location: Callable[[str | None], str | None] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,

@@ -1,8 +1,8 @@
 """Console DIRECT and RECURSIVE Context-scope option presets.
 
 The presets are interface conveniences, not a replacement for an operation's
-precise scope fields. A command or TUI may expose role-specific descendant or
-embedded-Context controls and use those explicit values to refine the preset.
+precise scope fields. A command or TUI can refine each Source or Target's
+lexical reach independently.
 """
 
 from __future__ import annotations
@@ -24,7 +24,6 @@ class ContextTraversal:
     """The two independent read axes used by operations that expose both."""
 
     include_descendants: bool
-    follow_embeds: bool
 
 
 def legacy_root_only_option_alias(role: str) -> str:
@@ -82,20 +81,16 @@ def resolve_context_traversal(
     *,
     preset: ContextScopePreset,
     include_descendants: bool | None = None,
-    follow_embeds: bool | None = None,
 ) -> ContextTraversal:
-    """Resolve independent lexical and embedded axes from one common preset."""
+    """Resolve lexical descendant reach from the common preset."""
 
     if not isinstance(preset, ContextScopePreset):
         raise TypeError("Context scope preset is invalid.")
     if include_descendants is not None and type(include_descendants) is not bool:
         raise TypeError("Context descendant override must be a boolean or None.")
-    if follow_embeds is not None and type(follow_embeds) is not bool:
-        raise TypeError("Embedded Context override must be a boolean or None.")
     fallback = preset is ContextScopePreset.RECURSIVE
     return ContextTraversal(
         include_descendants=(
             fallback if include_descendants is None else include_descendants
         ),
-        follow_embeds=fallback if follow_embeds is None else follow_embeds,
     )

@@ -7,6 +7,9 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.models.context import Context
+
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 
 from memcommit.adapters.console.commands.atomize.impact import (
@@ -53,12 +56,7 @@ from memcommit.application.capabilities.operand_resolution import (
     resolve_existing_context_operand,
 )
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
-from memcommit.core.context_targeting.model import (
-    ContextTarget,
-    DirectMemoryLocator,
-    DirectMemoryTarget,
-    ExistingContextOperand,
-)
+from memcommit.core.context_targeting.model import DirectMemoryLocator
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
@@ -159,6 +157,7 @@ def _browse_impact_sessions(
         )
         raise typer.Exit(1)
     if receipt is None:
+        annotate_command_outcome("CANCELLED")
         typer.echo("Impact selection cancelled; no analysis was opened.")
         return
     _operation_session_impact(
@@ -371,11 +370,13 @@ def _dispatch_impact(
                     auto_context_memory_operand,
                     current=context_snapshot.current_name,
                 )
-                canonical_context_name = auto_target.context_name
-                if isinstance(auto_target, DirectMemoryTarget):
-                    memory_selector = auto_target.memory_uid
+                canonical_context_name = (
+                    auto_target.name if isinstance(auto_target, Context) else auto_target[0].name
+                )
+                if isinstance(auto_target, tuple):
+                    memory_selector = auto_target[1].uid
                 else:
-                    assert isinstance(auto_target, ContextTarget)
+                    assert isinstance(auto_target, Context)
             else:
                 canonical_context_name = (
                     resolve_existing_context_operand(
@@ -660,7 +661,7 @@ def atomize_impact_cmd(
             else None
         )
         if (
-            isinstance(parsed_operand, ExistingContextOperand)
+            isinstance(parsed_operand, str)
             and context_name is None
             and is_memory_uid_prefix(context_operand)
         ):
@@ -680,10 +681,10 @@ def atomize_impact_cmd(
                 # the complete ambiguity diagnostic.
                 parsed_operand = DirectMemoryLocator(context_operand)
                 early_target = None
-            if isinstance(early_target, DirectMemoryTarget):
+            if isinstance(early_target, tuple):
                 parsed_operand = DirectMemoryLocator(
-                    early_target.memory_uid,
-                    early_target.context_name,
+                    early_target[1].uid,
+                    early_target[0].name,
                 )
         if isinstance(parsed_operand, DirectMemoryLocator):
             if context_name is not None:
@@ -699,11 +700,7 @@ def atomize_impact_cmd(
             memory_selector = parsed_operand.memory_selector
         else:
             context_name = choose_context_operand(
-                (
-                    parsed_operand.locator
-                    if isinstance(parsed_operand, ExistingContextOperand)
-                    else None
-                ),
+                parsed_operand if isinstance(parsed_operand, str) else None,
                 option=context_name,
             )
     except ValueError as error:

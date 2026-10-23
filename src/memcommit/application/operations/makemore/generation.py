@@ -44,7 +44,9 @@ from memcommit.application.capabilities.semantic.generative_reduction_reference 
     render_distill_makemore_reference_examples,
 )
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
-from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import (
+    resolve_semantic_prompt_policy,
+)
 
 
 def analyze_makemore(
@@ -172,7 +174,6 @@ def analyze_makemore(
             "AMBIENT_DESTINATION_CONTEXT. Use its MEMORY items to keep new "
             "proposals consistent with the destination's established terminology, "
             "presentation form, distinctions, and useful variation. A "
-            "QUERY_ONLY_CONTEXT item contributes its public name only; never infer "
             "or claim hidden content. Target items are context, not source Goal or "
             "Rule evidence: current inputs remain authoritative, and every Case "
             "must still check every current Rule. Treat the listed Target MEMORY "
@@ -243,7 +244,10 @@ def analyze_makemore(
         decoded = json.loads(raw, object_pairs_hook=_strict_json_object)
     except (TypeError, ValueError, json.JSONDecodeError) as error:
         raise MakemoreError("The Makemore provider returned invalid JSON.") from error
-    expected_keys = {"overview", "rules" if mode is MakemoreMode.GOAL_TO_RULES else "cases"}
+    expected_keys = {
+        "overview",
+        "rules" if mode is MakemoreMode.GOAL_TO_RULES else "cases",
+    }
     if not isinstance(decoded, dict) or set(decoded) != expected_keys:
         raise MakemoreError("The Makemore provider returned an invalid object.")
 
@@ -280,7 +284,9 @@ def analyze_makemore(
             )
             proposed_rules.append(
                 MakemoreRule(
-                    uid=str(uuid.uuid5(uuid.UUID(analysis_uid), f"rule:{index}:{content}")),
+                    uid=str(
+                        uuid.uuid5(uuid.UUID(analysis_uid), f"rule:{index}:{content}")
+                    ),
                     content=content,
                     rationale=rationale,
                     target_context_refs=target_refs,
@@ -331,14 +337,18 @@ def analyze_makemore(
             )
             role = value["case_role"]
             if role not in {"FIT", "BOUNDARY", "CONTRAST"}:
-                raise MakemoreError("The Makemore provider returned an invalid Case role.")
+                raise MakemoreError(
+                    "The Makemore provider returned an invalid Case role."
+                )
             target_refs = _decode_target_context_refs(
                 value.get("target_context_refs", ()),
                 target_context=target_context,
             )
             checks_value = value["rule_checks"]
             if not isinstance(checks_value, list):
-                raise MakemoreError("The Makemore provider returned invalid Rule checks.")
+                raise MakemoreError(
+                    "The Makemore provider returned invalid Rule checks."
+                )
             rule_checks: list[MakemoreRuleCheck] = []
             for check_value in checks_value:
                 if not isinstance(check_value, dict) or set(check_value) != {
@@ -349,10 +359,9 @@ def analyze_makemore(
                         "The Makemore provider returned an invalid Rule check."
                     )
                 source_rule_index = check_value["source_rule_index"]
-                if (
-                    type(source_rule_index) is not int
-                    or not 1 <= source_rule_index <= len(inputs)
-                ):
+                if type(
+                    source_rule_index
+                ) is not int or not 1 <= source_rule_index <= len(inputs):
                     raise MakemoreError("A Case checked an unavailable source Rule.")
                 rule_checks.append(
                     MakemoreRuleCheck(

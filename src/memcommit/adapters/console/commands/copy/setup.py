@@ -1,4 +1,4 @@
-"""Grant-aware interactive setup for the Copy command."""
+"""Interactive local Context setup for the Copy command."""
 
 from __future__ import annotations
 
@@ -14,14 +14,6 @@ from memcommit.adapters.console.coordination.copy_and_move.model import (
 from memcommit.adapters.console.terminal.components.context_picker import (
     context_memory_rows,
 )
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
-    resolve_context_access,
-)
-from memcommit.application.context_access.granted_context_navigation import (
-    freeze_granted_context_navigation,
-)
 from memcommit.application.operations.copy.application import prepare_copy
 from memcommit.application.operations.copy.contracts import (
     CopyMemoriesRequest,
@@ -29,93 +21,18 @@ from memcommit.application.operations.copy.contracts import (
 )
 from memcommit.application.operations.copy.runtime.store_port import MemoryStoreCopyPort
 from memcommit.application.operations.move.contracts import MoveMemoriesRequest
-from memcommit.application.operations.profile.model import ProfileError
-from memcommit.core.context import Context
-from memcommit.source_projection.presentation import (
-    SourceDisplayToken,
-    SourceDisplayValue,
-    SourceTokenRole,
-    combine_source_display_tokens,
-)
-
-_RETAINED_COPY_PERMISSIONS = frozenset({"READ"})
 
 
-def _copy_granted_sources(
-    port: MemoryStoreCopyPort,
-) -> tuple[
-    tuple[str, ...],
-    dict[str, ContextAccess],
-    tuple[tuple[str, SourceDisplayValue], ...],
-]:
-    """Freeze explicit public Sources that can authorize retained Copy."""
-
-    if not port.allows_granted_sources:
-        return (), {}, ()
-    navigation = freeze_granted_context_navigation(port.store)
-    accesses: dict[str, ContextAccess] = {}
-    annotations: list[tuple[str, SourceDisplayValue]] = []
-    for name in navigation.names:
-        try:
-            access = resolve_context_access(
-                port.store,
-                name,
-                current_name=port.current_context_name,
-                required_permission="READ",
-            )
-        except (FileNotFoundError, ProfileError, RuntimeError, ValueError):
-            continue
-        if not access.is_granted or access.view is None:
-            continue
-        if not _RETAINED_COPY_PERMISSIONS <= set(access.view.grant.permissions):
-            continue
-        accesses[name] = access
-        annotations.append(
-            (
-                name,
-                combine_source_display_tokens(
-                    navigation.annotations[name],
-                    SourceDisplayToken(
-                        "COPY + RETAIN",
-                        SourceTokenRole.CAPABILITY,
-                    ),
-                ),
-            )
-        )
-    return tuple(sorted(accesses)), accesses, tuple(annotations)
-
-
-def _copy_setup_and_granted_sources(
-    port: MemoryStoreCopyPort,
-) -> tuple[CopyAndMoveTuiSetup, dict[str, ContextAccess]]:
+def build_copy_tui_setup(port: MemoryStoreCopyPort) -> CopyAndMoveTuiSetup:
     local_names = port.local_context_names
     if not local_names:
-        raise ValueError("Interactive Copy/Move requires a local Context.")
-    granted_names, granted_accesses, annotations = _copy_granted_sources(port)
-    source_names = tuple(sorted({*local_names, *granted_names}, key=str.casefold))
-    return (
-        CopyAndMoveTuiSetup(
-            source_names=source_names,
-            local_source_names=local_names,
-            into_names=local_names,
-            current_context=(
-                port.current_context_name
-                if port.current_context_name in local_names
-                else None
-            ),
-            source_annotations=annotations,
-        ),
-        granted_accesses,
+        raise ValueError("Interactive Copy requires a local Context.")
+    return CopyAndMoveTuiSetup(
+        source_names=local_names,
+        local_source_names=local_names,
+        into_names=local_names,
+        current_context=port.current_context_name,
     )
-
-
-def build_copy_tui_setup(
-    port: MemoryStoreCopyPort,
-) -> CopyAndMoveTuiSetup:
-    """Freeze Copy's local and retained-Grant role catalogs."""
-
-    setup, _accesses = _copy_setup_and_granted_sources(port)
-    return setup
 
 
 def choose_copy_setup(
@@ -127,13 +44,7 @@ def choose_copy_setup(
 ) -> FrozenCopyMemoriesPlan | None:
     """Review and freeze Copy without letting the workbench publish it."""
 
-    setup, granted_accesses = _copy_setup_and_granted_sources(port)
-
-    def inspect_source(name: str) -> Context:
-        access = granted_accesses.get(name)
-        if access is None:
-            return port.inspect_local_context(name)
-        return GrantedReadStore(access).load_direct(name)
+    setup = build_copy_tui_setup(port)
 
     def freeze_plan(
         request: CopyMemoriesRequest | MoveMemoriesRequest,
@@ -146,7 +57,9 @@ def choose_copy_setup(
         setup,
         kind="COPY",
         inspect_into_context=port.inspect_local_context,
-        memory_loader=lambda name: context_memory_rows(inspect_source(name)),
+        memory_loader=lambda name: context_memory_rows(
+            port.inspect_local_context(name)
+        ),
         freeze_plan=freeze_plan,
         app_input=app_input,
         app_output=app_output,

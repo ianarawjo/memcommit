@@ -31,9 +31,9 @@ class CurrentContextResult:
 def get_current_context(reader: CurrentContextReader) -> CurrentContextResult:
     """Return current orientation without loading or authorizing a Context.
 
-    The current pointer is deliberately weaker than READ authority.  Commands
-    that consume this name must still resolve and authorize it for their own
-    operation; this use case only reports the active Store's navigation state.
+    A reported name does not prove its record still exists. Commands that
+    consume it resolve and load their own captured target; this use case only
+    reports the active Store's navigation state.
     """
 
     name = reader.current_context_name()

@@ -6,12 +6,10 @@ import copy
 import json
 import uuid
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
-from memcommit.core.context import Context
-from memcommit.core.context_targeting.naming import (
-    validate_portable_context_name,
-)
+from memcommit.models.context import Context
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.context_navigation import (
     rewrite_context_navigation_names,
 )
@@ -31,12 +29,10 @@ from .models import (
 )
 from .records import (
     _mapped_context_name,
-    _rewrite_checkpoint_record,
-    _rewrite_context_pointers,
+    validate_checkpoint_context_frames,
     _validate_context_header,
     canonical_context_record,
     context_record_digest,
-    validate_context_name,
 )
 
 
@@ -89,10 +85,7 @@ class _ContextRenameMixin:
                             "is invalid."
                         )
                     try:
-                        _rewrite_checkpoint_record(
-                            raw_checkpoint,
-                            moved_names_by_uid={},
-                        )
+                        validate_checkpoint_context_frames(raw_checkpoint)
                     except ValueError as error:
                         raise ValueError(
                             f"Checkpoint '{checkpoint_file.name}' for '{name}' "
@@ -115,7 +108,7 @@ class _ContextRenameMixin:
         records: dict[str, dict[str, object]],
     ) -> None:
         validate_context_name(old_name)
-        validate_portable_context_name(new_name)
+        validate_context_name(new_name)
         if old_name == new_name:
             raise ValueError(
                 f"source and destination Context namespaces are the same: '{old_name}'."
@@ -272,32 +265,26 @@ class _ContextRenameMixin:
 
         post_records: dict[str, dict[str, object]] = {}
         changed_owner_names: list[str] = []
-        live_reference_count = 0
         for owner_name, record in records.items():
-            pre_probe, _, pre_collisions = _rewrite_context_pointers(
-                record,
-                moved_names_by_uid={},
-                rewrite_owner_name=False,
-                require_current_pointer_names=True,
-            )
-            if pre_probe != record:
-                raise ValueError(
-                    f"Context '{owner_name}' changed during rename validation."
-                )
-            post, count, post_collisions = _rewrite_context_pointers(
-                record,
-                moved_names_by_uid=moved_names_by_uid,
-                rewrite_owner_name=True,
-                require_current_pointer_names=True,
-            )
-            introduced = set(post_collisions) - set(pre_collisions)
-            if introduced:
-                raise ValueError(
-                    f"Renaming would give Context '{owner_name}' both an "
-                    "ordinary and query-only child named "
-                    + ", ".join(repr(name) for name in sorted(introduced))
-                    + "."
-                )
+            post = copy.deepcopy(record)
+            moved = moved_names_by_uid.get(str(record["uid"]))
+            if moved is not None:
+                post["name"] = moved[1]
+            document = post.get("document")
+            if document and document.get("path_scope") == "PROFILE":
+                path = document["path"]
+                mapped_path = _mapped_context_name(path, old_name, new_name)
+                suffix = PurePosixPath(path).suffix
+                if (
+                    post["name"] != owner_name
+                    and document["role"] == "document"
+                    and path in {owner_name, owner_name + suffix}
+                ):
+                    mapped_path = post["name"]
+                    if suffix and not mapped_path.lower().endswith(suffix.lower()):
+                        mapped_path += suffix
+                if mapped_path is not None:
+                    document["path"] = mapped_path
             post_name = (
                 _mapped_context_name(owner_name, old_name, new_name) or owner_name
             )
@@ -309,34 +296,10 @@ class _ContextRenameMixin:
                     f"Renamed Context '{post_name}' would be invalid."
                 ) from error
             post_records[owner_name] = post
-            live_reference_count += count
             if post != record:
                 changed_owner_names.append(owner_name)
 
-        post_checkpoints: dict[str, dict[str, dict[str, object]]] = {}
-        checkpoint_reference_count = 0
-        for owner_name, entries in checkpoints.items():
-            next_entries: dict[str, dict[str, object]] = {}
-            for filename, entry in entries.items():
-                _, _, pre_collisions = _rewrite_checkpoint_record(
-                    entry,
-                    moved_names_by_uid={},
-                )
-                post, count, post_collisions = _rewrite_checkpoint_record(
-                    entry,
-                    moved_names_by_uid=moved_names_by_uid,
-                )
-                introduced = set(post_collisions) - set(pre_collisions)
-                if introduced:
-                    raise ValueError(
-                        f"Renaming would make checkpoint '{filename}' in "
-                        f"'{owner_name}' ambiguous with query-only child "
-                        + ", ".join(repr(name) for name in sorted(introduced))
-                        + "."
-                    )
-                next_entries[filename] = post
-                checkpoint_reference_count += count
-            post_checkpoints[owner_name] = next_entries
+        post_checkpoints = copy.deepcopy(checkpoints)
 
         if self.state_file.is_symlink() or not self.state_file.is_file():
             raise ValueError("Context state storage is invalid.")
@@ -390,10 +353,8 @@ class _ContextRenameMixin:
         post_name_by_uid = {
             str(record["uid"]): str(record["name"]) for record in post_records.values()
         }
-        changed_uids = {str(records[name]["uid"]) for name in changed_owner_names}
-        # Rename rewrites both moved Context headers and inbound Context/Memory
-        # reference owners. Validate every changed owner against one frozen
-        # policy snapshot while all graph Context locks are still held.
+        # Freeze write protection while all moved Context locks are held so
+        # publication cannot bypass a policy change during rename.
         protection = self.write_protection_state()
         for owner_name in changed_owner_names:
             self._assert_context_record_change_allowed(
@@ -406,39 +367,25 @@ class _ContextRenameMixin:
         post_translation_records: dict[str, dict[str, object]] = {}
         translation_artifact_count = 0
         from memcommit.core.memory_translation import TranslationCatalogError
-        from memcommit.persistence.store.translation_catalog import (
-            decode_translation_catalog_record,
+
+        from memcommit.persistence.store.translation_catalog.record_format import (
+            rewrite_translation_context_binding,
         )
 
         for filename, record in translation_records.items():
-            post = copy.deepcopy(record)
-            context_uid = post.get("context_uid")
-            if isinstance(context_uid, str) and context_uid in changed_uids:
-                before_artifact = copy.deepcopy(post)
-                post["context_name"] = post_name_by_uid[context_uid]
-                entries = post.get("entries")
-                if not isinstance(entries, list):
-                    raise ValueError(
-                        f"Saved translation catalog '{filename}' is invalid."
-                    )
-                for entry in entries:
-                    provider = (
-                        entry.get("provider") if isinstance(entry, dict) else None
-                    )
-                    if (
-                        isinstance(provider, dict)
-                        and provider.get("context_digest")
-                        == pre_digest_by_uid[context_uid]
-                    ):
-                        provider["context_digest"] = post_digest_by_uid[context_uid]
-                if post != before_artifact:
-                    translation_artifact_count += 1
             try:
-                decode_translation_catalog_record(post)
+                post = rewrite_translation_context_binding(
+                    record,
+                    context_names=post_name_by_uid,
+                    before_digests=pre_digest_by_uid,
+                    after_digests=post_digest_by_uid,
+                )
             except TranslationCatalogError as error:
                 raise ValueError(
                     f"Saved translation catalog '{filename}' cannot follow this rename."
                 ) from error
+            if post != record:
+                translation_artifact_count += 1
             post_translation_records[filename] = post
 
         graph_digest = self._context_graph_digest_for_rename(
@@ -452,8 +399,6 @@ class _ContextRenameMixin:
             new_name=new_name,
             bindings=bindings,
             changed_owner_names=tuple(sorted(changed_owner_names)),
-            reference_count=live_reference_count,
-            checkpoint_reference_count=checkpoint_reference_count,
             translation_artifact_count=translation_artifact_count,
             current_before=current_before,
             current_after=current_after,
@@ -499,7 +444,7 @@ class _ContextRenameMixin:
         # migration can retire it. Only the new canonical locator must satisfy
         # the portable creation contract.
         validate_context_name(old_name)
-        validate_portable_context_name(new_name)
+        validate_context_name(new_name)
         with self._context_graph_lock(exclusive=True):
             records, _ = self._read_context_graph_for_rename()
             lock_names = self._rename_lock_names(records, old_name, new_name)
@@ -572,29 +517,18 @@ class _ContextRenameMixin:
         for owner_name in plan.changed_owner_names:
             owner_after = live_name(owner_name)
             checkpoint_uid = str(uuid.uuid4())
-            description = (
-                f"Renamed Context namespace '{plan.old_name}' to "
-                f"'{plan.new_name}'; updated '{owner_name}'"
-                + (
-                    f" to '{owner_after}'."
-                    if owner_name != owner_after
-                    else " references."
-                )
-            )
             checkpoint = {
                 "uid": checkpoint_uid,
-                "message": description,
                 "timestamp": timestamp.isoformat(),
                 "snapshot": canonical_context_record(prepared.post_records[owner_name]),
                 "command": "rename",
-                "args": {
+                "command_details": {
                     "old_name": plan.old_name,
                     "new_name": plan.new_name,
                     "context_uid": prepared.records[owner_name]["uid"],
                     "owner_before": owner_name,
                     "owner_after": owner_after,
                 },
-                "description": description,
                 "auto": True,
             }
             checkpoint_dir = self._checkpoints_dir(owner_after)
@@ -696,8 +630,6 @@ class _ContextRenameMixin:
         return ContextRenameResult(
             renamed_context_count=len(plan.bindings),
             changed_owner_count=len(plan.changed_owner_names),
-            reference_count=plan.reference_count,
-            checkpoint_reference_count=plan.checkpoint_reference_count,
             translation_artifact_count=plan.translation_artifact_count,
             current_context=plan.current_after,
         )
@@ -719,7 +651,7 @@ class _ContextRenameMixin:
         if not isinstance(plan, ContextRenamePlan):
             raise TypeError("Expected a ContextRenamePlan.")
         validate_context_name(plan.old_name)
-        validate_portable_context_name(plan.new_name)
+        validate_context_name(plan.new_name)
         with self._context_graph_lock(exclusive=True):
             records, _ = self._read_context_graph_for_rename()
             lock_names = self._rename_lock_names(

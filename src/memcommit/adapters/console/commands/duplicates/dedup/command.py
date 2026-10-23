@@ -1,4 +1,4 @@
-"""Remove same-role exact duplicate direct items without semantic inference."""
+"""Remove exact and semantic duplicates, or only exact copies with --literal."""
 
 from __future__ import annotations
 
@@ -6,6 +6,9 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.adapters.console.commands.duplicates.find_redundancies import (
+    command as find_redundancies,
+)
 from memcommit.adapters.console.commands.duplicates.find_redundancies.receipt.dedup import (
     render_dedup_receipt,
 )
@@ -14,6 +17,7 @@ from memcommit.application.context_access.operand_resolution import (
 )
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
+    choose_context_operand,
 )
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
@@ -33,10 +37,23 @@ from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStor
 
 
 def cmd(
-    context_name: Annotated[
+    context_operand: Annotated[
         Optional[str],
         typer.Argument(help="Context to deduplicate (defaults to current)"),
     ] = None,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context", "-c", help="Context to deduplicate (defaults to current)"
+        ),
+    ] = None,
+    literal: Annotated[
+        bool,
+        typer.Option(
+            "--literal",
+            help="Remove only same-role exact copies without semantic inference",
+        ),
+    ] = False,
     direct: Annotated[
         bool,
         typer.Option(
@@ -57,9 +74,10 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Remove later same-role exact items, retaining the first existing UID."""
+    """Remove duplicate items, retaining the first existing UID in each group."""
 
     try:
+        context_name = choose_context_operand(context_operand, option=context_name)
         preset = resolve_scope_preset(
             direct=direct,
             recursive=recursive,
@@ -73,6 +91,24 @@ def cmd(
         )
         raise typer.Exit(2)
 
+    if not literal:
+        try:
+            # Keep the existing semantic Apply and checkpoint contract intact.
+            find_redundancies.run_dedun(
+                context_name=context_name,
+                include_descendants=preset is ContextScopePreset.RECURSIVE,
+            )
+        except typer.Exit:
+            raise
+        except Exception as error:
+            typer.secho(
+                "Dedup error: " + display_escape_text(str(error)),
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
+
     active_store = MemoryStore(create=False)
     try:
         snapshot = ContextOperandSnapshot.capture(active_store)
@@ -80,7 +116,6 @@ def cmd(
             active_store,
             context_name,
             current_name=snapshot.current_name,
-            required_permission="READ",
         ).value
         analysis = analyze_exact_duplicate_scope(
             active_store,

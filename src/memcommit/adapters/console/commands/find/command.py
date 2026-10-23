@@ -1,4 +1,4 @@
-"""CLI bootstrap for provider-free literal or explicit-regex Find."""
+"""Semantic Find by default, with provider-free exact matching via --literal."""
 
 from __future__ import annotations
 
@@ -6,9 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.context_access.access import (
-    context_access_display_facts,
-)
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
@@ -56,11 +53,31 @@ from memcommit.persistence.store import MemoryStore
 
 
 def cmd(
-    pattern: Annotated[
+    query: Annotated[
         Optional[str],
         typer.Argument(
             show_default=False,
-            help=("Exact text pattern; omit in a terminal to open interactive Find"),
+            help=(
+                "Natural-language query, or exact text with --literal; omit in a "
+                "terminal to open interactive Find with compact exact-Context Scope, "
+                "Browse-only Profile/multiple selection, lexical range choices, and checked-result COPY Save"
+            ),
+        ),
+    ] = None,
+    literal: Annotated[
+        bool,
+        typer.Option(
+            "--literal",
+            help="Find exact text or explicit regex matches without a semantic provider",
+        ),
+    ] = False,
+    limit: Annotated[
+        Optional[int],
+        typer.Option(
+            "--limit",
+            "-n",
+            show_default=False,
+            help="Maximum semantic matches (1-20; default 5); unavailable with --literal",
         ),
     ] = None,
     context_name: Annotated[
@@ -79,13 +96,6 @@ def cmd(
             help="Include readable lexical descendants of each selected root",
         ),
     ] = None,
-    follow_embeds: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--follow-embeds/--exclude-embeds",
-            help="Follow embedded Contexts independently of lexical descendants",
-        ),
-    ] = None,
     direct: Annotated[
         bool,
         typer.Option("-d", "--direct", help="Search only selected Context roots"),
@@ -95,23 +105,25 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Include lexical descendants and follow embedded Contexts",
+            help="Include lexical descendants",
         ),
     ] = False,
     regex: Annotated[
         bool,
         typer.Option(
             "--regex",
-            help="Interpret PATTERN as a regular expression instead of literal text",
+            help="With --literal: interpret the text as a regular expression",
         ),
     ] = False,
     ignore_case: Annotated[
         bool,
-        typer.Option("--ignore-case", "-i", help="Match without case sensitivity"),
+        typer.Option(
+            "--ignore-case", "-i", help="With --literal: match without case sensitivity"
+        ),
     ] = False,
     copy_result: Annotated[
         bool,
-        typer.Option("--copy", help="Copy the complete plain result after execution"),
+        typer.Option("--copy", help="With --literal: copy the complete plain result"),
     ] = False,
     all_contexts: Annotated[
         bool,
@@ -125,11 +137,72 @@ def cmd(
         bool,
         typer.Option(
             "--all-results",
-            help="Print every matching row instead of the bounded preview",
+            help="With --literal: print every match instead of the bounded preview",
         ),
     ] = False,
 ) -> None:
-    """Find exact text spans without a provider, cache, session, or mutation."""
+    """Find relevant Memories semantically, or exact text with --literal."""
+
+    if literal:
+        if limit is not None:
+            typer.secho(
+                "Find error: --limit/-n is unavailable with --literal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
+        _run_literal_find(
+            pattern=query,
+            context_name=context_name,
+            include_descendants=include_descendants,
+            direct=direct,
+            recursive=recursive,
+            regex=regex,
+            ignore_case=ignore_case,
+            copy_result=copy_result,
+            all_contexts=all_contexts,
+            show_all_results=show_all_results,
+        )
+        return
+
+    if regex or ignore_case or copy_result or show_all_results:
+        typer.secho(
+            "Find error: --regex, --ignore-case/-i, --copy and --all-results require --literal.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+
+    # Preserve the reviewed semantic and exact application contracts separately.
+    from memcommit.adapters.console.commands.search.command import (
+        cmd as run_semantic_find,
+    )
+
+    run_semantic_find(
+        query=query,
+        context_name=context_name,
+        all_contexts=all_contexts,
+        limit=5 if limit is None else limit,
+        include_descendants=include_descendants,
+        direct=direct,
+        recursive=recursive,
+    )
+
+
+def _run_literal_find(
+    *,
+    pattern: str | None,
+    context_name: list[str] | None,
+    include_descendants: bool | None,
+    direct: bool,
+    recursive: bool,
+    regex: bool,
+    ignore_case: bool,
+    copy_result: bool,
+    all_contexts: bool,
+    show_all_results: bool,
+) -> None:
+    """Run the existing complete exact-match path without a semantic provider."""
 
     try:
         traversal = resolve_context_traversal(
@@ -139,13 +212,12 @@ def cmd(
                 default=ContextScopePreset.DIRECT,
             ),
             include_descendants=include_descendants,
-            follow_embeds=follow_embeds,
         )
         terminal = SystemTerminalCapabilities()
         if pattern is None and not terminal.is_interactive():
             raise ValueError(
                 "PATTERN is required outside a terminal. In a terminal, run "
-                "'mem find' to open interactive Find."
+                "'mem find --literal' to open interactive Find."
             )
 
         store = MemoryStore(create=False)
@@ -164,7 +236,6 @@ def cmd(
                 store,
                 operand,
                 current_name=snapshot.current_name,
-                required_permission="READ",
                 candidates=context_candidates,
             ).value
             for operand in operands
@@ -177,7 +248,6 @@ def cmd(
         catalog = freeze_profile_readable_context_catalog(
             store,
             accesses[0],
-            include_query_routes=False,
         )
         if all_contexts:
             # Expand the virtual Profile target before request construction;
@@ -194,7 +264,6 @@ def cmd(
                 pattern=pattern,
                 target_names=target_names,
                 include_descendants=traversal.include_descendants,
-                follow_embeds=traversal.follow_embeds,
                 mode="REGEX" if regex else "LITERAL",
                 ignore_case=ignore_case,
             )
@@ -209,11 +278,7 @@ def cmd(
             names = tuple(catalog.list_context_names())
             current = snapshot.current_name
             current_name = current if current in names else target_names[0]
-            annotations = tuple(
-                (name, context_access_display_facts(access))
-                for name in names
-                if (access := catalog.access_for(name)).is_granted
-            )
+            annotations = tuple()
             outcome = run_find_workbench(
                 request,
                 setup=FindTuiSetup(

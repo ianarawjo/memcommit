@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
+
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from typing import AbstractSet
 
-from memcommit.core.context_targeting.model import DirectMemoryTarget
+
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTreeRow,
     ContextTreeState,
@@ -22,7 +25,7 @@ from memcommit.adapters.console.terminal.components.context_picker.rendering imp
 
 @dataclass
 class ContextMemoryPreviewController:
-    """Share lazy Memory previews across embedded Context trees."""
+    """Share lazy Memory previews across inline Context trees."""
 
     tree: ContextTreeState
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]]
@@ -105,7 +108,7 @@ class ContextMemoryPreviewController:
         self.memory_anchor = None
         return True
 
-    def focused_target(self) -> DirectMemoryTarget | None:
+    def focused_target(self) -> tuple[Context, Memory] | None:
         """Return an exact selectable Memory at the hover anchor, if any."""
 
         if self.memory_anchor is None:
@@ -114,10 +117,10 @@ class ContextMemoryPreviewController:
         memories = self.memory_cache.get(context_name, ())
         if not 0 <= memory_index < len(memories):
             return None
-        selector = memories[memory_index].selector
-        if selector is None:
+        row = memories[memory_index]
+        if row.selector is None or row.owner_context is None or row.memory is None:
             return None
-        return DirectMemoryTarget(context_name, selector)
+        return row.owner_context, row.memory
 
     def toggle_selected_memories(self) -> None:
         self.tree.toggle_selected_memories()
@@ -161,8 +164,8 @@ class ContextMemoryPreviewController:
         *,
         wrap_width: int | None,
         selectable_memories: bool = False,
-        selected_memory: DirectMemoryTarget | None = None,
-        selected_memories: AbstractSet[DirectMemoryTarget] | None = None,
+        selected_memory: tuple[str, str] | None = None,
+        selected_memories: AbstractSet[tuple[str, str]] | None = None,
     ) -> tuple[tuple[str, str], ...]:
         if row.name not in self.visible_memory_contexts() or not row.materialized:
             return ()

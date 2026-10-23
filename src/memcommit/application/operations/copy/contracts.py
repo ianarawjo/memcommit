@@ -14,7 +14,7 @@ from memcommit.application.capabilities.memory_transfer.contracts import (
 
 @dataclass(frozen=True, slots=True)
 class CopyMemoriesRequest:
-    """Copy exact local or READ-granted Memories into one local Context."""
+    """Copy exact local Memories into one local Context."""
 
     memory_locators: tuple[str, ...]
     into_locator: str | None = None
@@ -29,7 +29,6 @@ class FrozenCopyMemoriesPlan:
     memories: tuple[FrozenTransferMemory, ...]
     into_name: str
     into_uid: str
-    into_digest: str
     placement: MemoryTransferPlacement
     plan_digest: str
     token: object = field(repr=False, compare=False)

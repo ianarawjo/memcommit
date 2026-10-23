@@ -76,11 +76,3 @@ class SemanticProvider(Protocol):
         output_schema: dict[str, object] | None = None,
     ) -> str:
         """Return one completion; callers retain semantic validation authority."""
-
-    def query(self, source_name: str, source_content: str, question: str) -> str:
-        """Answer from one opaque query-only source."""
-
-
-class QueryProvider(Protocol):
-    def query(self, source_name: str, source_content: str, question: str) -> str:
-        """Answer a question using one opaque source."""

@@ -2,22 +2,19 @@
 
 from __future__ import annotations
 
+
 from dataclasses import dataclass, field, replace
 import hashlib
 from typing import Protocol
 
-from memcommit.application.context_access.access import (
-    ContextAccess,
-    GrantedReadStore,
-    freeze_granted_context_binding,
-    revalidate_granted_context_binding,
-)
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
     try_resolve_context_access_or_local_memory,
 )
-from memcommit.core.context import Context, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
 )
@@ -32,7 +29,6 @@ from memcommit.application.capabilities.semantic.memory_scope import (
     resolve_memory_scope,
 )
 from memcommit.core.context_targeting.model import (
-    DirectMemoryTarget,
     DirectMemoryLocator,
 )
 from memcommit.core.context_targeting.resolution import (
@@ -67,12 +63,10 @@ from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace,
 )
 from memcommit.application.operations.fit.store import FitStore
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
 )
-from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 
 class FitProviderFactory(Protocol):
@@ -116,7 +110,6 @@ class FitSourceError(ValueError):
 class _FitSourceAccumulator:
     access: ContextAccess
     context: Context
-    granted_binding: GrantedUpdateTarget | None
     whole_context_digest: str | None = None
     selected_memory_digests: dict[str, str] = field(default_factory=dict)
 
@@ -125,7 +118,6 @@ class _FitSourceAccumulator:
 class _FrozenFitSource:
     access: ContextAccess
     context_uid: str
-    granted_binding: GrantedUpdateTarget | None
     whole_context_digest: str | None
     selected_memory_digests: tuple[tuple[str, str], ...]
 
@@ -138,27 +130,12 @@ class _SelectedFitMemory:
 
 
 def _fit_access_key(access: ContextAccess) -> tuple[str, ...]:
-    if access.is_granted:
-        assert access.view is not None
-        return (
-            "GRANT",
-            access.view.grant.uid,
-            access.view.authority.uid,
-            access.context_name,
-            access.access_name,
-        )
     return ("LOCAL", str(access.store.store_dir.resolve()), access.context_name)
 
 
 def _load_fit_context_direct(
     access: ContextAccess,
-    *,
-    registry=None,
 ) -> Context:
-    if access.is_granted:
-        return GrantedReadStore(access, registry=registry).load_direct(
-            access.access_name
-        )
     return access.store.load_direct(access.context_name)
 
 
@@ -171,23 +148,15 @@ def _revalidate_fit_sources(
     *,
     store: MemoryStore,
 ) -> None:
-    """Recheck identities, content, and Grant authority before publication."""
+    """Recheck local identities and content before publication."""
 
-    def validate(registry=None) -> None:
+    def validate() -> None:
         current_accesses: list[ContextAccess] = []
         current_contexts: list[Context] = []
         for source in frozen:
-            access = (
-                revalidate_granted_context_binding(
-                    source.granted_binding,
-                    registry=registry,
-                    active_store=store,
-                )
-                if source.granted_binding is not None
-                else source.access
-            )
+            access = source.access
             try:
-                context = _load_fit_context_direct(access, registry=registry)
+                context = _load_fit_context_direct(access)
             except FileNotFoundError as error:
                 raise FitSourceError(
                     f"Fit Source Context {access.access_name!r} disappeared "
@@ -217,10 +186,6 @@ def _revalidate_fit_sources(
                         f"{source.access.access_name!r} changed during judgment."
                     )
 
-    if any(source.granted_binding is not None for source in frozen):
-        with authority_grant_snapshot_lock() as registry:
-            validate(registry)
-        return
     validate()
 
 
@@ -247,7 +212,6 @@ def run_stored_source_fit(
             store,
             locator,
             current_name=current_name,
-            required_permission="READ",
             candidates=context_candidates,
         ).value
         key = _fit_access_key(access)
@@ -258,23 +222,18 @@ def run_stored_source_fit(
         value = _FitSourceAccumulator(
             access=access,
             context=context,
-            granted_binding=(
-                freeze_granted_context_binding(access) if access.is_granted else None
-            ),
         )
         accumulators[key] = value
         access_order.append(key)
         return value
 
-    # Resolve every named source before provider construction. Literal text is
-    # a separate caller-owned domain when authority-granted content participates.
     ordered_rows: list[FitProposition | _SelectedFitMemory] = list(request.propositions)
 
     def select_memory(memory_source: FitMemorySourceRequest) -> None:
         selected_context = source(memory_source.context_locator)
         direct_memories = tuple(
             item
-            for item in selected_context.context.iter_items()
+            for item in selected_context.context.iter_memories()
             if isinstance(item, Memory)
         )
         try:
@@ -296,7 +255,7 @@ def run_stored_source_fit(
         selected_context = source(locator)
         direct_memories = tuple(
             item
-            for item in selected_context.context.iter_items()
+            for item in selected_context.context.iter_memories()
             if isinstance(item, Memory)
         )
         if not direct_memories:
@@ -331,7 +290,10 @@ def run_stored_source_fit(
             continue
 
         parsed = parse_auto_typed_context_memory_operand(operand)
-        if isinstance(parsed, DirectMemoryLocator) and parsed.context_locator is not None:
+        if (
+            isinstance(parsed, DirectMemoryLocator)
+            and parsed.context_locator is not None
+        ):
             select_memory(
                 FitMemorySourceRequest(
                     selector=parsed.memory_selector.casefold(),
@@ -348,23 +310,21 @@ def run_stored_source_fit(
         if isinstance(resolved, ResolvedExistingContextOperand):
             select_context(resolved.name)
             continue
-        if isinstance(resolved, DirectMemoryTarget):
+        if isinstance(resolved, tuple):
             select_memory(
                 FitMemorySourceRequest(
-                    selector=resolved.memory_uid,
-                    context_locator=resolved.context_name,
+                    selector=resolved[1].uid,
+                    context_locator=resolved[0].name,
                 )
             )
             continue
         if is_relative_context_locator(operand):
             raise FitSourceError(
-                f"Fit Context locator {operand!r} is outside the readable "
-                "namespace."
+                f"Fit Context locator {operand!r} is outside the readable namespace."
             )
         if is_unresolved_uid_selector(operand):
             raise FitSourceError(
-                f"No direct Fit Memory or readable Context has UID prefix "
-                f"{operand!r}."
+                f"No direct Fit Memory or readable Context has UID prefix {operand!r}."
             )
         add_literal(operand)
 
@@ -406,7 +366,6 @@ def run_stored_source_fit(
         _FrozenFitSource(
             access=accumulator.access,
             context_uid=accumulator.context.uid,
-            granted_binding=accumulator.granted_binding,
             whole_context_digest=accumulator.whole_context_digest,
             selected_memory_digests=tuple(accumulator.selected_memory_digests.items()),
         )

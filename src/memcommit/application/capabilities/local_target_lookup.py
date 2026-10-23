@@ -5,7 +5,8 @@ from __future__ import annotations
 import json
 from typing import Protocol
 
-from memcommit.core.context import Context, Information, Memory
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
@@ -17,14 +18,8 @@ from memcommit.application.capabilities.durable_uid_resolution import (
     try_resolve_durable_uid,
 )
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
-from memcommit.core.context_targeting.model import (
-    ContextTarget,
-    DirectItemTarget,
-    DirectMemoryTarget,
-    ExistingContextOperand,
-    InlineTextOperand,
-)
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.core.context_targeting.model import DirectMemoryLocator
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
@@ -79,7 +74,7 @@ def _direct_memory_matches(
 ) -> tuple[Memory, ...]:
     return tuple(
         item
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if isinstance(item, Memory) and item.uid.startswith(selector)
     )
 
@@ -89,7 +84,7 @@ def _resolved_direct_memory_target(
     matches: tuple[tuple[Context, Memory], ...],
     *,
     context_name: str | None,
-) -> DirectMemoryTarget:
+) -> tuple[Context, Memory]:
     if not matches:
         if context_name is not None:
             raise DirectMemoryNotFoundError(
@@ -115,7 +110,7 @@ def _resolved_direct_memory_target(
             "To select one, rerun with its CONTEXT:UID value shown above."
         )
     context, memory = matches[0]
-    return DirectMemoryTarget(context.name, memory.uid)
+    return context, memory
 
 
 def resolve_local_direct_memory_locator(
@@ -124,15 +119,8 @@ def resolve_local_direct_memory_locator(
     *,
     current: str | None,
     explicit_context: str | None = None,
-) -> DirectMemoryTarget:
-    """Resolve one exact ordinary local owner without hidden current priority.
-
-    A qualified locator searches only its canonical direct owner. A bare
-    selector scans one strict snapshot of every ordinary local direct record;
-    exactly one match is required even when one match happens to be current.
-    MemoryRefs, snapshots, embedded traversal, and Grant content never enter
-    this local ownership catalog.
-    """
+) -> tuple[Context, Memory]:
+    """Resolve an exact locally owned Memory without loading another Profile."""
 
     locator = parse_direct_memory_locator(
         operand,
@@ -173,10 +161,10 @@ def resolve_local_direct_memory_locator(
 
 def _resolved_direct_item_target(
     selector: str,
-    matches: tuple[tuple[Context, Information], ...],
+    matches: tuple[tuple[Context, Memory], ...],
     *,
     context_name: str | None,
-) -> DirectItemTarget:
+) -> tuple[Context, Memory]:
     if not matches:
         if context_name is not None:
             raise DirectItemNotFoundError(
@@ -208,7 +196,7 @@ def _resolved_direct_item_target(
             "CONTEXT:UID value shown above."
         )
     context, item = matches[0]
-    return DirectItemTarget(context.name, item.uid)
+    return context, item
 
 
 def resolve_local_direct_item_locator(
@@ -217,14 +205,13 @@ def resolve_local_direct_item_locator(
     *,
     current: str | None,
     explicit_context: str | None = None,
-) -> DirectItemTarget:
+) -> tuple[Context, Memory]:
     """Resolve one exact local direct-item UID without opening nested content.
 
     This is the all-direct-item sibling of the Memory-only locator.  Bare
     selectors scan every strict ordinary-local direct record and require one
     owner coordinate.  Qualified selectors search only their canonical owner.
-    Name-based embedded/query selection remains operation-specific because a
-    name can also be a public Context locator.
+    Memory selectors are distinct from Context name locators.
     """
 
     locator = parse_direct_memory_locator(
@@ -241,7 +228,7 @@ def resolve_local_direct_item_locator(
         context = store.load_direct(context_name)
         matches = tuple(
             (context, item)
-            for item in context.iter_items()
+            for item in context.iter_memories()
             if item.uid.startswith(locator.memory_selector)
         )
         return _resolved_direct_item_target(
@@ -253,7 +240,7 @@ def resolve_local_direct_item_locator(
     matches = tuple(
         (context, item)
         for context in store.load_direct_context_graph_strict()
-        for item in context.iter_items()
+        for item in context.iter_memories()
         if item.uid.startswith(locator.memory_selector)
     )
     return _resolved_direct_item_target(
@@ -268,20 +255,15 @@ def resolve_local_context_memory_target(
     operand: object,
     *,
     current: str | None,
-) -> ContextTarget | DirectMemoryTarget:
-    """Resolve one auto-typed local Context or directly owned Memory target.
-
-    This is the reusable local-storage completion of the pure shared operand
-    parser.  It is intentionally not Grant-aware: operations that accept public
-    Grant owners compose the parser with their authority-specific access port.
-    """
+) -> Context | tuple[Context, Memory]:
+    """Resolve an auto-typed local Context or directly owned Memory from one frozen candidate frame."""
 
     parsed = parse_auto_typed_context_memory_operand(operand)
     # CONTEXT:UID is an explicit Memory spelling. Bare UUID-shaped operands
     # remain auto-typed until the same frozen frame has considered both
     # Context and Memory identities; otherwise a Context UID is irreversibly
     # misclassified as Memory before storage is consulted.
-    if not isinstance(parsed, ExistingContextOperand) and parsed.context_locator:
+    if isinstance(parsed, DirectMemoryLocator) and parsed.context_locator is not None:
         return resolve_local_direct_memory_locator(
             store,
             operand,
@@ -293,7 +275,7 @@ def resolve_local_context_memory_target(
     context_name = resolve_context_locator(operand, current=current)
     named = tuple(context for context in graph if context.name == context_name)
     if len(named) == 1:
-        return ContextTarget(named[0].name)
+        return named[0]
     if len(named) > 1:
         raise LocalContextMemoryTargetAmbiguityError(
             f"Context name {context_name!r} has multiple local identities."
@@ -303,7 +285,7 @@ def resolve_local_context_memory_target(
         short_matches = tuple(
             (context, item)
             for context in graph
-            for item in context.iter_items()
+            for item in context.iter_memories()
             if isinstance(item, Memory) and item.uid.startswith(operand)
         )
         if short_matches:
@@ -314,24 +296,25 @@ def resolve_local_context_memory_target(
             )
         raise FileNotFoundError(f"Context {context_name!r} does not exist locally.")
 
-    candidates: tuple[
-        DurableUidCandidate[ContextTarget | DirectMemoryTarget], ...
-    ] = tuple(
-        DurableUidCandidate(
-            uid=context.uid,
-            kind="context",
-            value=ContextTarget(context.name),
+    candidates: tuple[DurableUidCandidate[Context | tuple[Context, Memory]], ...] = (
+        tuple(
+            DurableUidCandidate(
+                uid=context.uid,
+                kind="context",
+                value=context,
+            )
+            for context in graph
         )
-        for context in graph
-    ) + tuple(
-        DurableUidCandidate(
-            uid=item.uid,
-            kind="memory",
-            value=DirectMemoryTarget(context.name, item.uid),
+        + tuple(
+            DurableUidCandidate(
+                uid=item.uid,
+                kind="memory",
+                value=(context, item),
+            )
+            for context in graph
+            for item in context.iter_memories()
+            if isinstance(item, Memory)
         )
-        for context in graph
-        for item in context.iter_items()
-        if isinstance(item, Memory)
     )
     try:
         identity = try_resolve_durable_uid(candidates, operand)
@@ -342,12 +325,16 @@ def resolve_local_context_memory_target(
             f"No directly owned Memory or local Context has a UID starting "
             f"with {operand!r}."
         )
-    targets = tuple(dict.fromkeys(identity.values))
+    targets = tuple({
+        ("context", value.name) if isinstance(value, Context)
+        else ("memory", value[0].name, value[1].uid): value
+        for value in identity.values
+    }.values())
     if len(targets) != 1:
         choices = "; ".join(
-            target.context_name
-            if isinstance(target, ContextTarget)
-            else f"{target.context_name}:{target.memory_uid}"
+            target.name
+            if isinstance(target, Context)
+            else f"{target[0].name}:{target[1].uid}"
             for target in targets
         )
         raise LocalContextMemoryTargetAmbiguityError(
@@ -362,7 +349,7 @@ def resolve_local_context_memory_or_inline_text_target(
     operand: object,
     *,
     current: str | None,
-) -> ContextTarget | DirectMemoryTarget | InlineTextOperand:
+) -> Context | tuple[Context, Memory] | str:
     """Resolve a local Context/Memory first, then allow unambiguous prose.
 
     This is the three-kind grammar used by semantic Goal-like inputs. Missing
@@ -371,6 +358,11 @@ def resolve_local_context_memory_or_inline_text_target(
     process-local inline input.
     """
 
+    if not isinstance(operand, str) or not operand.strip():
+        raise ValueError(
+            "A Context, Memory, or inline-text operand must be nonblank text."
+        )
+
     try:
         return resolve_local_context_memory_target(
             store,
@@ -378,16 +370,12 @@ def resolve_local_context_memory_or_inline_text_target(
             current=current,
         )
     except (FileNotFoundError, DirectMemoryNotFoundError):
-        if not isinstance(operand, str):
-            raise
-        if is_unresolved_uid_selector(operand) or is_relative_context_locator(
-            operand
-        ):
+        if is_unresolved_uid_selector(operand) or is_relative_context_locator(operand):
             raise
         try:
-            validate_portable_context_name(operand)
+            validate_context_name(operand)
         except ValueError:
-            return InlineTextOperand(operand)
+            return operand
         raise
 
 
@@ -396,7 +384,7 @@ def try_resolve_short_local_direct_memory_locator(
     operand: object,
     *,
     current: str | None,
-) -> DirectMemoryTarget | None:
+) -> tuple[Context, Memory] | None:
     """Resolve a short bare UID only after an exact Context has missed.
 
     The pure overloaded-operand parser deliberately reserves only the public

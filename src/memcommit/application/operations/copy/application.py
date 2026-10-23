@@ -51,7 +51,6 @@ def prepare_copy(
         plan.memories,
         into_name=plan.into_name,
         into_uid=plan.into_uid,
-        into_digest=plan.into_digest,
         placement=plan.placement,
         plan_digest=plan.plan_digest,
     )
@@ -74,7 +73,6 @@ def run_copy(
         plan.memories,
         into_name=plan.into_name,
         into_uid=plan.into_uid,
-        into_digest=plan.into_digest,
         placement=plan.placement,
         plan_digest=plan.plan_digest,
     )

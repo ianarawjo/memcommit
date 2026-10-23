@@ -1,6 +1,7 @@
 """Provide cooperative Store transaction and session locks."""
 
 from __future__ import annotations
+
 from contextlib import ExitStack, contextmanager
 import fcntl
 import hashlib
@@ -8,8 +9,7 @@ import os
 import uuid
 from typing import Iterable, Iterator
 
-
-from ..context_memory.records import _context_name_parts
+from memcommit.core.context_name_validation import validate_context_name
 
 
 class _StoreLockingMixin:
@@ -19,11 +19,9 @@ class _StoreLockingMixin:
     def _context_graph_lock(self, *, exclusive: bool) -> Iterator[None]:
         """Coordinate graph-wide Context migrations with ordinary writers.
 
-        Per-name locks cannot protect an inbound-reference scan: another
-        process could add a new owner under a previously unseen name while a
-        namespace migration is being prepared. Ordinary Context/state writers
-        therefore take this lock shared, while rename holds it exclusively
-        from its final scan through publication and rollback.
+        Per-name locks cannot freeze namespace membership. Ordinary name/state
+        writers take this lock shared; rename holds it exclusively from its
+        final namespace scan through publication and rollback.
         """
         lock_path = self.store_dir / "context-graph.lock"
         if lock_path.is_symlink():
@@ -52,7 +50,7 @@ class _StoreLockingMixin:
     @contextmanager
     def _context_write_lock(self, name: str) -> Iterator[None]:
         """Serialize cooperative Context saves across local mem processes."""
-        _context_name_parts(name)
+        validate_context_name(name)
         lock_dir = self.store_dir / "context-write-locks"
         if lock_dir.is_symlink():
             raise ValueError("Refusing to use a symbolic-link Context lock directory.")

@@ -1,4 +1,4 @@
-"""Compose the Search screen and dispatch its explicit selection-save outcome."""
+"""Compose the Find screen and dispatch its explicit selection-save outcome."""
 
 from memcommit.adapters.console.commands.search import execution
 from memcommit.adapters.console.commands.search.preparation import PreparedSearch
@@ -6,7 +6,6 @@ from memcommit.adapters.console.commands.search.receipt import render_save_recei
 from memcommit.adapters.console.commands.search.workbench.screen import (
     run_search_workbench,
 )
-from memcommit.application.context_access.access import context_access_display_facts
 from memcommit.application.operations.search.save_context import (
     save_context_request_from_search,
 )
@@ -21,10 +20,9 @@ def open_search_workbench(
     prepared: PreparedSearch,
     *,
     include_descendants: bool,
-    follow_embeds: bool,
     limit: int,
 ) -> None:
-    """Open a blank, query-focused Search over one frozen readable catalog."""
+    """Open a blank, query-focused Find over one frozen readable catalog."""
 
     catalog = prepared.catalog
     current_name = prepared.current_name
@@ -33,27 +31,18 @@ def open_search_workbench(
     if initial_target not in names:
         raise RuntimeError("The selected Context is outside the readable catalog.")
     displayed_current = current_name if current_name in names else initial_target
-    granted_names = frozenset(
-        name for name in names if catalog.access_for(name).is_granted
-    )
-    annotations = {
-        name: context_access_display_facts(catalog.access_for(name))
-        for name in granted_names
-    }
     workbench_result = run_search_workbench(
         names,
         current=displayed_current,
         initial_target=initial_target,
         initial_targets=prepared.target_names,
         initial_include_descendants=include_descendants,
-        initial_follow_embeds=follow_embeds,
         limit=limit,
         run_search=lambda request: execution.run_search_request(
             store,
             catalog,
             request,
         ),
-        annotations=annotations,
         local_context_names=tuple(store.list_context_names()),
         validate_save_location=store.assert_context_creatable,
     )

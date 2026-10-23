@@ -1,19 +1,14 @@
-"""Read-only port for evidence consumed by canonical History projections."""
+"""Read retained local evidence without traversing other Profiles."""
 
 from __future__ import annotations
 
 from typing import Any, Protocol
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 
 
 class HistoryEvidenceSource(Protocol):
-    """Minimum raw-evidence interface required by History reconstruction.
-
-    Implementations own I/O and authorization. History receives already
-    authorized direct Context names and never uses this port to open referenced
-    or query-only targets implicitly.
-    """
+    """Raw local evidence interface used by History reconstruction. The caller supplies exact Context names; implementations own I/O."""
 
     def list_context_names(self) -> list[str]: ...
 

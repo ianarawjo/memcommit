@@ -13,17 +13,17 @@ from memcommit.application.operations.init_study.profile.composition import (
     _legacy_study_packages,
 )
 from memcommit.application.operations.init_study.profile.publication import (
-    _publish_study_run_pair,
+    publish_local_study_profile,
 )
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     ProfileConfigError,
-    ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_stores_dir,
     validate_profile_name,
 )
+from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.model import (
     ProfileError,
     _registry_lock,
@@ -67,12 +67,12 @@ def init_legacy_study_profile(
         staging.mkdir()
         try:
             packages, scenario_digest = _legacy_study_packages(staging)
-            baseline = ProfileEntry(
+            baseline = Profile(
                 uid=LEGACY_BASELINE_UID,
                 name=LEGACY_SCENARIO_ID,
                 kind="MANAGED",
             )
-            return _publish_study_run_pair(
+            return publish_local_study_profile(
                 registry,
                 baseline=baseline,
                 packages=packages,
@@ -131,12 +131,12 @@ def init_coffee_study_profile(
             # The built-in scenario behaves as an immutable virtual baseline:
             # its stable UID and content digest provide the same run provenance
             # without publishing a mutable Profile that could drift.
-            baseline = ProfileEntry(
+            baseline = Profile(
                 uid=COFFEE_BASELINE_UID,
                 name=COFFEE_SCENARIO_ID,
                 kind="MANAGED",
             )
-            return _publish_study_run_pair(
+            return publish_local_study_profile(
                 registry,
                 baseline=baseline,
                 packages=packages,
@@ -164,7 +164,7 @@ def generate_study_profile_name(
         raise ValueError("Study name timestamps must be timezone-aware.")
     day = timestamp.astimezone().strftime("%y%m%d")
     registry = registry if registry is not None else load_profile_registry()
-    pattern = re.compile(rf"study-{day}-([1-9][0-9]*)(?:-granted-memory)?", re.IGNORECASE)
+    pattern = re.compile(rf"study-{day}-([1-9][0-9]*)", re.IGNORECASE)
     # Include tombstones and authority-only collisions: old study names must
     # not acquire a new meaning when a participant Profile is removed.
     used = (

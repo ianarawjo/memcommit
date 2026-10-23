@@ -63,12 +63,7 @@ class SummarizeTuiOutcome:
             raise ValueError("Summarize TUI outcome requires one or two results.")
         if len({result.context_name for result in self.results}) != 1:
             raise ValueError("Summarize TUI result Contexts do not match.")
-        scopes = {
-            (result.include_descendants, result.follow_embeds)
-            for result in self.results
-        }
-        if any(descendants != embeds for descendants, embeds in scopes):
-            raise ValueError("Summarize TUI results require preset reach pairs.")
+        scopes = {result.include_descendants for result in self.results}
         if len(scopes) != len(self.results):
             raise ValueError("Summarize TUI result scopes must be distinct.")
         if len(self.results) == 2 and (

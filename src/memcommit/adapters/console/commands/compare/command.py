@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+
 from typing import Annotated, Optional
 
 import typer
 
+from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.commands.compare.endpoint_setup import (
     choose_compare_setup,
 )
@@ -73,10 +75,7 @@ from memcommit.application.operations.compare.provider_contract import (
     COMPARISON_SUMMARY_OPERATION,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import (
-    ProfileError,
-    authority_grant_snapshot_lock,
-)
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.rationale.application import build_rationale
 from memcommit.application.operations.rationale.model import RationaleError
 from memcommit.application.operations.rationale.scope import (
@@ -145,6 +144,7 @@ def _start_new_comparison_from_setup(
 
     setup = choose_compare_setup(store)
     if setup is None:
+        annotate_command_outcome("CANCELLED")
         typer.echo("Compare setup cancelled; no analysis was opened.")
         return
     start_kwargs = {
@@ -185,7 +185,7 @@ def _render_selected_rationale(
         target.owner,
         trace,
         None,
-        recorded_evidence_available=not scope.granted,
+        recorded_evidence_available=True,
     )
     projection = generate_memory_rationale(
         report.trace,
@@ -381,9 +381,7 @@ def cmd(
             and from_ is not None
             and (
                 isinstance(
-                    reference_parsed := parse_auto_typed_context_memory_operand(
-                        from_
-                    ),
+                    reference_parsed := parse_auto_typed_context_memory_operand(from_),
                     DirectMemoryLocator,
                 )
                 and reference_parsed.context_locator is not None
@@ -535,43 +533,39 @@ def cmd(
             return
         current_name = store.current_context_name()
         assert to is not None
-        with authority_grant_snapshot_lock() as registry:
-            targets = resolve_compare_cli_targets(
-                store,
-                reference_operand=from_,
-                compared_operand=to,
-                reference_is_auto_memory=reference_is_auto_memory,
-                compared_is_auto_memory=compared_is_auto_memory,
-                reference_is_auto_typed=auto_type_positionals,
-                compared_is_auto_typed=auto_type_positionals,
-                reference_memory_selector=reference_memory,
-                compared_memory_selector=compared_memory,
-                current_name=current_name,
-                registry=registry,
+        targets = resolve_compare_cli_targets(
+            store,
+            reference_operand=from_,
+            compared_operand=to,
+            reference_is_auto_memory=reference_is_auto_memory,
+            compared_is_auto_memory=compared_is_auto_memory,
+            reference_is_auto_typed=auto_type_positionals,
+            compared_is_auto_typed=auto_type_positionals,
+            reference_memory_selector=reference_memory,
+            compared_memory_selector=compared_memory,
+            current_name=current_name,
+        )
+        reference_access = targets.reference_access
+        compared_access = targets.compared_access
+        reference_memory = targets.reference_memory_uid
+        compared_memory = targets.compared_memory_uid
+        if targets.reference_operand_is_memory and reference_descendants:
+            raise CompareCommandError(
+                "REFERENCE Memory selection cannot be combined with "
+                "--reference-descendants."
             )
-            reference_access = targets.reference_access
-            compared_access = targets.compared_access
-            reference_memory = targets.reference_memory_uid
-            compared_memory = targets.compared_memory_uid
-            if targets.reference_operand_is_memory and reference_descendants:
-                raise CompareCommandError(
-                    "REFERENCE Memory selection cannot be combined with "
-                    "--reference-descendants."
-                )
-            if targets.compared_operand_is_memory and compared_descendants:
-                raise CompareCommandError(
-                    "PEER Memory selection cannot be combined with "
-                    "--compared-descendants."
-                )
-            reference = load_comparison_context(
-                reference_access,
-                include_descendants=reference_descendants,
+        if targets.compared_operand_is_memory and compared_descendants:
+            raise CompareCommandError(
+                "PEER Memory selection cannot be combined with --compared-descendants."
             )
-            compared = load_comparison_context(
-                compared_access,
-                include_descendants=compared_descendants,
-            )
-            profile_registry = registry
+        reference = load_comparison_context(
+            reference_access,
+            include_descendants=reference_descendants,
+        )
+        compared = load_comparison_context(
+            compared_access,
+            include_descendants=compared_descendants,
+        )
         if reference.uid == compared.uid or reference.name == compared.name:
             raise CompareCommandError("Compare requires two distinct Contexts.")
 

@@ -8,8 +8,10 @@ import hashlib
 from typing import Iterator, Protocol
 import uuid
 
-from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.core.context_targeting.naming import validate_portable_context_name
+from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.application.operations.distill.model import (
     DistillAnalysis,
     DistillError,
@@ -30,20 +32,24 @@ from memcommit.application.operations.distill.config import (
     DistillSemanticConfig,
 )
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
-from memcommit.application.capabilities.semantic.goal_focus_runtime import revalidate_goal_focus
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    revalidate_goal_focus,
+)
 from memcommit.application.capabilities.semantic_result_memorization import (
     FrozenMemorizationTarget,
     SemanticResultMemorizationReceipt,
     freeze_memorization_target,
     memorize_semantic_result,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
     SummarySourcePort,
 )
-from memcommit.application.operations.summarize.runtime import MemoryStoreSummarySourcePort
+from memcommit.application.operations.summarize.runtime import (
+    MemoryStoreSummarySourcePort,
+)
 
 
 class DistillProviderFactory(Protocol):
@@ -56,7 +62,7 @@ class _LocalDistillSourceToken:
     """Delegate binding plus exact local Context bytes used by Distill."""
 
     delegate: FrozenSummarySource
-    local_bindings: tuple[tuple[str, str, str], ...]
+    local_bindings: tuple[tuple[str, str], ...]
 
 
 @dataclass
@@ -78,18 +84,13 @@ class LocalMemoryStoreDistillSourcePort:
             *(item.context_name for item in source.frame.sources),
         }
         if any(not self.store.context_exists(name) for name in names):
-            # This first adapter stores only local Source bindings. Granted
-            # Distill needs an authority-aware frozen token before the provider
-            # may receive those otherwise READ-authorized bytes.
             raise DistillError(
-                "Distill currently requires an entirely local Source frame; "
-                "granted Context distillation is not yet implemented."
+                "The Distill Source frame contains an unavailable local Context."
             )
         bindings = tuple(
             (
                 name,
                 context.uid,
-                context_record_digest(context),
             )
             for name in sorted(names)
             for context in (self.store.load_direct(name),)
@@ -99,9 +100,7 @@ class LocalMemoryStoreDistillSourcePort:
         # later unrelated local drift is caught by the retained record digests.
         current = self.delegate.revalidate(delegated)
         if current != delegated.frame:
-            raise DistillError(
-                "The Distill Source changed while it was being frozen."
-            )
+            raise DistillError("The Distill Source changed while it was being frozen.")
         return FrozenSummarySource(
             frame=delegated.frame,
             token=_LocalDistillSourceToken(
@@ -119,7 +118,7 @@ class LocalMemoryStoreDistillSourcePort:
     def source_bindings(
         self,
         source: FrozenSummarySource,
-    ) -> tuple[tuple[str, str, str], ...]:
+    ) -> tuple[tuple[str, str], ...]:
         token = source.token
         if not isinstance(token, _LocalDistillSourceToken):
             raise DistillError("The frozen local Distill Source is invalid.")
@@ -137,13 +136,13 @@ class PreparedDistillAdd:
 
 def _goal_source_bindings(
     focus: FrozenGoalFocus | None,
-) -> tuple[tuple[str, str, str], ...]:
+) -> tuple[tuple[str, str], ...]:
     if focus is None or focus.kind == "INLINE":
         return ()
     assert focus.context_name is not None
     assert focus.context_uid is not None
     assert focus.context_digest is not None
-    return ((focus.context_name, focus.context_uid, focus.context_digest),)
+    return ((focus.context_name, focus.context_uid),)
 
 
 def _goal_fit_record(analysis: DistillAnalysis) -> dict[str, object] | None:
@@ -214,8 +213,7 @@ def apply_prepared_distill_add(
     current = prepared.source_port.revalidate(prepared.result.frozen_source)
     if current.digest != analysis.source.digest or current != analysis.source:
         raise DistillError(
-            "The Distill Source changed before Add; no generated Memories "
-            "were added."
+            "The Distill Source changed before Add; no generated Memories were added."
         )
     source_bindings = prepared.source_port.source_bindings(
         prepared.result.frozen_source
@@ -242,9 +240,7 @@ def apply_prepared_distill_add(
         source_name=analysis.source.context_name,
         target=prepared.target,
         contents=tuple(rule.content for rule in analysis.rules),
-        source_bindings=tuple(
-            dict.fromkeys((*source_bindings, *goal_source_bindings))
-        ),
+        source_bindings=tuple(dict.fromkeys((*source_bindings, *goal_source_bindings))),
         operation_args={
             "version": 3,
             "analysis_uid": analysis.uid,
@@ -276,11 +272,6 @@ def apply_prepared_distill_add(
             "rules": result_records,
             "outside_memory_uids": list(analysis.outside_memory_uids),
         },
-        description=(
-            f"Added {len(analysis.rules)} distilled Rules from "
-            f"'{analysis.source.context_name}' to "
-            f"'{prepared.target.context_name}'"
-        ),
     )
 
 
@@ -331,7 +322,7 @@ class MemoryStoreDistillOutputPort:
         source_port: SummarySourcePort,
     ) -> DistillApplyReceipt:
         analysis = request.result.analysis
-        validate_portable_context_name(request.output_name)
+        validate_context_name(request.output_name)
         if request.output_name == analysis.source.context_name:
             raise DistillError("Distill Result must be separate from its Source.")
         if self.store.context_exists(request.output_name):
@@ -346,26 +337,21 @@ class MemoryStoreDistillOutputPort:
         if request.result.goal_focus is not None:
             revalidate_goal_focus(self.store, request.result.goal_focus)
 
-        # The first durable slice supports local Context frames only. A granted
-        # Source needs an authority-aware frozen token and must not silently
-        # fall back to an unbound local copy.
         context_names = tuple(
             dict.fromkeys(
                 [analysis.source.context_name]
                 + [source.context_name for source in analysis.source.sources]
             )
         )
-        local_bindings: list[tuple[str, str, str]] = []
+        local_bindings: list[tuple[str, str]] = []
         for name in context_names:
             if not self.store.context_exists(name):
                 raise DistillError(
                     "Durable Distill Apply currently requires an entirely "
-                    "local Source frame; granted analysis remains read-only."
+                    "local Source frame."
                 )
             context = self.store.load_direct(name)
-            local_bindings.append(
-                (name, context.uid, context_record_digest(context))
-            )
+            local_bindings.append((name, context.uid))
         local_bindings.extend(_goal_source_bindings(request.result.goal_focus))
         local_bindings = list(dict.fromkeys(local_bindings))
 
@@ -392,9 +378,9 @@ class MemoryStoreDistillOutputPort:
         )
         checkpoint = self.store.create_context_with_sources(
             output,
-            AutoCheckpoint(
+            AutoCheckpointRequest(
                 command="distill",
-                args={
+                command_details={
                     "context_creation": {
                         "version": 2,
                         "context_uid": output.uid,
@@ -433,10 +419,6 @@ class MemoryStoreDistillOutputPort:
                         "outside_memory_uids": list(analysis.outside_memory_uids),
                     },
                 },
-                description=(
-                    f"Created Distill result '{output.name}' from "
-                    f"'{analysis.source.context_name}'; source unchanged"
-                ),
             ),
             source_bindings=tuple(local_bindings),
         )

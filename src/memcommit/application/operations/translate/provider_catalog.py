@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import uuid
 
-from memcommit.core.context import Context
+from memcommit.models.context import Context
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TRANSLATION_CATALOG_CONTRACT_VERSION,

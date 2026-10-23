@@ -5,7 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 import uuid
 
-from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 from .model import (
     AtomizeChild,
@@ -51,12 +52,7 @@ class AtomizeNormalFormAudit:
         if self.dedun is None:
             return 0
         components = self.dedun.get("components")
-        exact_groups = self.dedun.get("exact_item_groups")
-        return (
-            len(components) if isinstance(components, list) else 0
-        ) + (
-            len(exact_groups) if isinstance(exact_groups, list) else 0
-        )
+        return len(components) if isinstance(components, list) else 0
 
     @property
     def absorbed_count(self) -> int:
@@ -153,8 +149,7 @@ class AtomizeNormalFormAudit:
         ):
             raise AtomizeImpactError("Invalid Atomize validation evidence.")
         absorbed_to_survivor = tuple(
-            (mapping["absorbed_uid"], mapping["survivor_uid"])
-            for mapping in mappings
+            (mapping["absorbed_uid"], mapping["survivor_uid"]) for mapping in mappings
         )
         if len({absorbed for absorbed, _survivor in absorbed_to_survivor}) != len(
             absorbed_to_survivor
@@ -197,11 +192,7 @@ class AtomizeApplyResult:
                     "kind": (
                         "SPLIT"
                         if item.classification == "COMPOSITE"
-                        else (
-                            "KEEP"
-                            if item.classification == "ATOMIC"
-                            else "PRESERVE"
-                        )
+                        else ("KEEP" if item.classification == "ATOMIC" else "PRESERVE")
                     ),
                     "classification": item.classification,
                     "source_uids": [item.source_uid],
@@ -251,16 +242,13 @@ class AtomizeApplyResult:
 
 def project_atomize_source(ctx: Context, new_name: str) -> Context:
     """Copy a process-local analysis frame while retaining its evidence UIDs."""
-    from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 
     # The reviewed analysis is keyed by Source Memory UID. Final Save As owns
     # durable result identities; this projection must not use Branch semantics.
     output = Context.create(new_name)
-    for item in ctx.iter_items():
+    for item in ctx.iter_memories():
         if isinstance(item, Memory):
             output.add(Memory(uid=item.uid, content=item.content))
-        elif isinstance(item, (MemoryRef, QueryContextRef, ContextSnapshotRef)):
-            output.add(item.copy())
         else:
             output.add(item)
     return output
@@ -277,21 +265,14 @@ def apply_atomize_analysis(
         )
 
     current_memories = {
-        item.uid: item
-        for item in ctx.iter_items()
-        if isinstance(item, Memory)
+        item.uid: item for item in ctx.iter_memories() if isinstance(item, Memory)
     }
     current_positions = {
-        item.uid: position
-        for position, item in enumerate(current_memories.values())
+        item.uid: position for position, item in enumerate(current_memories.values())
     }
     session_memory_uids = {item.memory_uid for item in session.items}
-    if (
-        not session_memory_uids.issubset(current_memories)
-        or (
-            session.evidence_digest is None
-            and set(current_memories) != session_memory_uids
-        )
+    if not session_memory_uids.issubset(current_memories) or (
+        session.evidence_digest is None and set(current_memories) != session_memory_uids
     ):
         raise AtomizeImpactError(
             "Saved atomize analysis does not cover its selected direct Memories."
@@ -316,9 +297,7 @@ def apply_atomize_analysis(
             )
         else:
             current = current_memories[item.memory_uid]
-            children = (
-                Memory(uid=current.uid, content=current.content),
-            )
+            children = (Memory(uid=current.uid, content=current.content),)
         prepared.append((item, children))
 
     # Validation and UID allocation complete before the first Context mutation.
@@ -327,7 +306,7 @@ def apply_atomize_analysis(
     for item, results in prepared:
         if item.classification != "COMPOSITE":
             continue
-        position = ctx.ordered_uids().index(item.memory_uid)
+        position = ctx.get_ordered_memory_uids().index(item.memory_uid)
         ctx.remove(item.memory_uid)
         for offset, child in enumerate(results):
             ctx.add(child, position=position + offset)
@@ -356,18 +335,12 @@ def apply_atomize_analysis(
     )
     return AtomizeApplyResult(
         analysis_uid=session.uid,
-        split_count=sum(
-            item.classification == "COMPOSITE"
-            for item, _ in prepared
-        ),
+        split_count=sum(item.classification == "COMPOSITE" for item, _ in prepared),
         child_count=sum(
             len(results)
             for item, results in prepared
             if item.classification == "COMPOSITE"
         ),
-        preserved_count=sum(
-            item.classification != "COMPOSITE"
-            for item, _ in prepared
-        ),
+        preserved_count=sum(item.classification != "COMPOSITE" for item, _ in prepared),
         items=applied_items,
     )
