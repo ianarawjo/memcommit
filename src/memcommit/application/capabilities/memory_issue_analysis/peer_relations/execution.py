@@ -24,9 +24,6 @@ from memcommit.models.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     project_memory_relation_context as _project_memory_relation_context,
 )
-from memcommit.application.capabilities.context_scope_loading import (
-    load_context_and_descendants,
-)
 from memcommit.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
@@ -77,7 +74,7 @@ def load_memory_relation_context(
 
     reader = access.store
     contexts = (
-        load_context_and_descendants(reader, access.context_name)
+        reader.load_context_and_descendants(access.context_name)
         if include_descendants
         else (reader.load(access.context_name),)
     )

@@ -155,9 +155,6 @@ app.command(
     "list",
     help=operation_summary("list"),
 )(list_command.cmd)
-# Keep the compact spelling executable without presenting it as a second
-# operation in command discovery.
-app.command("ls", hidden=True)(list_command.cmd)
 app.command(
     "show",
     help=operation_summary("show"),

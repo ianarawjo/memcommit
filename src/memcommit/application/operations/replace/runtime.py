@@ -9,7 +9,9 @@ from dataclasses import dataclass
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.application.operations.replace.application import (
     FrozenReplaceContext,
     FrozenReplacePlan,
@@ -56,11 +58,9 @@ class MemoryStoreReplacePort(ReplacePort):
             raise FileNotFoundError(
                 "Replace targets must be ordinary local Contexts in this Store."
             )
-        return expand_lexical_context_names(
-            request.target_names,
-            catalog,
-            include_descendants=request.include_descendants,
-        )
+        if request.include_descendants:
+            return list_context_and_descendant_names(request.target_names, catalog)
+        return request.target_names
 
     def _scope_names(self, request: ReplaceRequest) -> tuple[str, ...]:
         initial = self._lexical_names(request)

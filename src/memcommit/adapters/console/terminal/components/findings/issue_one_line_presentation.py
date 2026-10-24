@@ -6,8 +6,8 @@ from collections.abc import Mapping
 
 import typer
 
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     semantic_role_style,
@@ -75,7 +75,7 @@ def issue_one_line_fragments(
     if show_issue_label or classification:
         fragments.append((styled("class:report-neutral"), " · "))
     prefixes = (
-        collision_safe_uid_prefixes((source.memory_uid for source in item.sources))
+        extend_uid_prefixes_until_unique((source.memory_uid for source in item.sources))
         if uid_prefixes is None
         else uid_prefixes
     )

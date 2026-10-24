@@ -21,9 +21,9 @@ from memcommit.application.capabilities.local_target_lookup import (
 )
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import DirectMemoryLocator
-from memcommit.core.context_targeting.resolution import (
-    expand_lexical_context_names,
-    parse_auto_typed_context_memory_operand,
+from memcommit.core.context_targeting.resolution import parse_auto_typed_context_memory_operand
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
 )
 from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
@@ -87,10 +87,11 @@ class MemoryStoreShowPort:
                 context_name,
                 current_name=current_context_name,
             ).value
-        names = expand_lexical_context_names(
-            (selected.context_name,),
-            self._store.list_context_names(),
-            include_descendants=include_descendants,
+        catalog_names = self._store.list_context_names()
+        names = (
+            list_context_and_descendant_names((selected.context_name,), catalog_names)
+            if include_descendants
+            else (selected.context_name,)
         )
         return tuple(
             _snapshot_context(

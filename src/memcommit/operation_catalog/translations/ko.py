@@ -149,8 +149,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "재현 가능하고 격리된 사용자 연구 환경을 준비할 때.",
     ),
     "list": _copy(
-        "Context의 Memory와 별도로 저장된 하위 Context를 나열합니다. -r은 하위 Context의 Memory까지 포함하며 ls는 짧은 alias입니다.",
-        "Context의 구조와 직접 내용을 살펴볼 때.",
+        "현재 Context의 직접 Memory와 바로 아래 단계의 Context를 나열합니다.",
+        "현재 Context의 구조와 직접 내용을 살펴볼 때.",
     ),
     "lock": _copy(
         "현재 Context, 재귀 Context 집합, Memory 또는 Profile을 잠급니다.",

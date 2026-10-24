@@ -8,7 +8,9 @@ from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
 
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.import_export.output import write_output_files
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.attached_files import read_attached_file
@@ -27,10 +29,11 @@ class DocumentExportRuntime:
             self.store, source, current_name=self.current
         ).value
         self.catalog = freeze_readable_context_catalog(self.store, self.access)
-        names = expand_lexical_context_names(
-            (self.access.access_name,),
-            self.catalog.list_context_names(),
-            include_descendants=request.recursive,
+        catalog_names = self.catalog.list_context_names()
+        names = (
+            list_context_and_descendant_names((self.access.access_name,), catalog_names)
+            if request.recursive
+            else (self.access.access_name,)
         )
         contexts = []
         attached = {}

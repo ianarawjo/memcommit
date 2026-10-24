@@ -20,7 +20,9 @@ from memcommit.application.capabilities.memory_issue_analysis.source import (
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.memory import Memory
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.application.operations.duplicates.dedun.application import (
     DEDUN_ELIGIBLE_RELATIONS,
     DedunConflictError,
@@ -235,8 +237,9 @@ def freeze_recursive_dedun_scope(
     )
 
     catalog = tuple(access.store.list_context_names())
-    names = expand_lexical_context_names(
-        (access.context_name,), catalog, include_descendants=True
+    names = list_context_and_descendant_names(
+        (access.context_name,),
+        catalog,
     )
     source = QualityFindSourceFrame.create(
         tuple(access.store.load_direct(name) for name in names),

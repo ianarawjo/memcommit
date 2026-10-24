@@ -13,8 +13,8 @@ from memcommit.application.capabilities.command_recovery import (
     CommandRestoreResult,
     ContextCommandUnit,
 )
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
@@ -296,7 +296,7 @@ def _compact_direct_item_selector(
     matches = [uid for uid in catalog if uid.startswith(selector)]
     if len(matches) != 1:
         return selector
-    return collision_safe_uid_prefixes(catalog)[matches[0]]
+    return extend_uid_prefixes_until_unique(catalog)[matches[0]]
 
 
 def _meld_command(args: Mapping[str, object]) -> str | None:

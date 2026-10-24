@@ -102,7 +102,7 @@ BEST_FOR_BY_OPERATION = {
         "Starting a separate workspace for a new topic, task, or group of Memories."
     ),
     "init-study": "Preparing a reproducible, isolated user-study environment.",
-    "list": "Inspecting the structure and direct contents of a Context.",
+    "list": "Inspecting the structure and direct contents of the current Context.",
     "lock": "Preventing accidental modification of stable material.",
     "log": "Investigating previous operations, checkpoints, or Memory history.",
     "merge": (

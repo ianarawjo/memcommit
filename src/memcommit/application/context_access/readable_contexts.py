@@ -7,7 +7,9 @@ from typing import Literal
 
 from memcommit.application.context_access.access import ContextAccess
 from memcommit.models.context import Context
-from memcommit.core.context_targeting.resolution import sort_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    sort_context_names,
+)
 from memcommit.persistence.store import MemoryStore
 
 

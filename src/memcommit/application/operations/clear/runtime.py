@@ -13,7 +13,9 @@ from memcommit.persistence.store.checkpoint.requests import AutoCheckpointReques
 from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.application.operations.clear.application import ClearRequest, ClearResult
 from memcommit.persistence.store import MemoryStore
 
@@ -31,8 +33,9 @@ def _clear_recursive(
 
     store = access.store
     catalog_names = tuple(store.list_context_names())
-    context_names = expand_lexical_context_names(
-        (access.context_name,), catalog_names, include_descendants=True
+    context_names = list_context_and_descendant_names(
+        (access.context_name,),
+        catalog_names,
     )
     frames = tuple(
         (

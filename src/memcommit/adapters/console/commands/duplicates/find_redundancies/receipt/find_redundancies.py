@@ -9,8 +9,8 @@ from memcommit.adapters.console.terminal.components.quality_find.rendering impor
     render_cleanup_member,
     render_heading,
 )
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.capabilities.memory_issue_analysis.model import (
@@ -120,7 +120,7 @@ def _render_redundancy_groups(
             bold=True,
         )
         typer.echo("    CLEANUP MAP · READY FOR REVIEW")
-        uid_prefixes = collision_safe_uid_prefixes(memory.uid for memory in members)
+        uid_prefixes = extend_uid_prefixes_until_unique(memory.uid for memory in members)
         for member_index, memory in enumerate(members):
             role = "SURVIVOR" if member_index == 0 else "ABSORB"
             render_cleanup_member(

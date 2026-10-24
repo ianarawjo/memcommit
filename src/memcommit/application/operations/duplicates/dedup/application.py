@@ -18,7 +18,9 @@ from memcommit.application.operations.duplicates.find_duplicates.application imp
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -177,8 +179,9 @@ def apply_exact_dedup_scope(
         raise ExactDedupConflictError(
             "The Context namespace changed after Find Duplicates; nothing was written."
         )
-    context_names = expand_lexical_context_names(
-        (access.context_name,), catalog_names, include_descendants=True
+    context_names = list_context_and_descendant_names(
+        (access.context_name,),
+        catalog_names,
     )
     if tuple(frame.context_name for frame in analysis.contexts) != context_names:
         raise ExactDedupError(

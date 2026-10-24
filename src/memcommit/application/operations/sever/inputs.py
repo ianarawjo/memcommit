@@ -20,7 +20,9 @@ from memcommit.application.operations.sever.model import (
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
     MemoryStore,
@@ -42,10 +44,9 @@ def capture_sever_binding(
     roots = [root]
     if include_descendants:
         seen_root_uids = {root.uid}
-        for name in expand_lexical_context_names(
+        for name in list_context_and_descendant_names(
             (root_name,),
             read_store.list_context_names(),
-            include_descendants=include_descendants,
         )[1:]:
             descendant = load_recursive(name)
             if descendant.uid in seen_root_uids:

@@ -27,8 +27,8 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
@@ -218,7 +218,7 @@ def cmd(
     if not report.findings:
         return
 
-    uid_prefixes = collision_safe_uid_prefixes(
+    uid_prefixes = extend_uid_prefixes_until_unique(
         finding.memory.uid for finding in report.findings
     )
     for index, finding in enumerate(report.findings, start=1):

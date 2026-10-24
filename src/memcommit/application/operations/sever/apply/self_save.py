@@ -22,7 +22,9 @@ from memcommit.application.operations.sever.model import (
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.context import Context
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.store import (
     MemoryStore,
     _write_json_atomic,
@@ -116,8 +118,9 @@ def materialize_self_save(
     source_names = {name for name, _uid in source_receipts}
     catalog = tuple(store.list_context_names())
     if session.source.include_descendants:
-        live_lexical_names = expand_lexical_context_names(
-            (session.source.root_name,), catalog, include_descendants=True
+        live_lexical_names = list_context_and_descendant_names(
+            (session.source.root_name,),
+            catalog,
         )
         if not set(live_lexical_names) <= source_names:
             raise SeverApplicationError(
@@ -220,10 +223,9 @@ def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
             exclusive=reviewed.source.include_descendants
         ):
             if reviewed.source.include_descendants:
-                live_lexical_names = expand_lexical_context_names(
+                live_lexical_names = list_context_and_descendant_names(
                     (reviewed.source.root_name,),
                     store.list_context_names(),
-                    include_descendants=True,
                 )
                 if not set(live_lexical_names) <= set(names):
                     raise SeverApplicationError(

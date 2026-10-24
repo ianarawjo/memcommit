@@ -6,7 +6,9 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 
 
 class BranchError(RuntimeError):
@@ -182,10 +184,12 @@ def plan_branch(request: BranchRequest) -> BranchPlan:
     except ValueError as error:
         raise BranchError(str(error)) from error
 
-    source_names = expand_lexical_context_names(
-        (request.source_name,),
-        request.local_context_names,
-        include_descendants=request.include_descendants,
+    source_names = (
+        list_context_and_descendant_names(
+            (request.source_name,), request.local_context_names,
+        )
+        if request.include_descendants
+        else (request.source_name,)
     )
     contexts = tuple(
         BranchContextPlan(

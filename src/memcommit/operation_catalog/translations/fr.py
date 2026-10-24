@@ -149,8 +149,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Préparer un environnement d’étude utilisateur isolé et reproductible.",
     ),
     "list": _copy(
-        "Lister les Memories d’un Context et ses Contexts descendants, enregistrés séparément. -r inclut les descendants ; ls est un alias court.",
-        "Examiner la structure et le contenu direct d’un Context.",
+        "Lister les Memories directement contenues dans le Context courant et ses Contexts enfants immédiats.",
+        "Examiner la structure et le contenu direct du Context courant.",
     ),
     "lock": _copy(
         "Verrouiller le Context courant, un ensemble récursif de Contexts, une Memory ou un Profile.",

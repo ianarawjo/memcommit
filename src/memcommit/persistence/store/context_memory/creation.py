@@ -294,14 +294,13 @@ class _ContextCreationMixin:
             with self._context_graph_lock(exclusive=include_descendants):
                 with self._context_write_locks(lock_names):
                     if include_descendants:
-                        from memcommit.core.context_targeting.resolution import (
-                            expand_lexical_context_names,
-                        )
+                        from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 
-                        live_source_names = expand_lexical_context_names(
+                        live_source_names = list_context_and_descendant_names(
                             (source_root,),
                             self.list_context_names(),
-                            include_descendants=True,
                         )
                         if live_source_names != source_names:
                             raise ConcurrentContextUpdateError(

@@ -18,7 +18,9 @@ from memcommit.application.operations.checkpoint.application import (
     plan_checkpoint,
 )
 from memcommit.models.context import Context
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -53,8 +55,9 @@ class MemoryStoreCheckpointPort:
             checkpoint_uids: tuple[str | None, ...] = (None,)
         else:
             expected_catalog = tuple(self._store.list_context_names())
-            context_names = expand_lexical_context_names(
-                (context_name,), expected_catalog, include_descendants=True
+            context_names = list_context_and_descendant_names(
+                (context_name,),
+                expected_catalog,
             )
             contexts = tuple(
                 root if name == context_name else self._store.load_direct(name)

@@ -17,7 +17,9 @@ from memcommit.application.capabilities.reviewing.direct_item_duplicates import 
 )
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -133,8 +135,9 @@ def analyze_exact_duplicate_scope(
         active_store,
         access,
     )
-    names = expand_lexical_context_names(
-        (access.access_name,), catalog.list_context_names(), include_descendants=True
+    names = list_context_and_descendant_names(
+        (access.access_name,),
+        catalog.list_context_names(),
     )
     return ExactDuplicateScopeReport(
         root_name=access.access_name,

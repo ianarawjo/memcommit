@@ -30,9 +30,6 @@ from memcommit.application.operations.update.model import (
     update_inputs_match,
     freeze_update_context_inputs,
 )
-from memcommit.application.capabilities.context_scope_loading import (
-    load_context_and_descendants,
-)
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.errors import QueryProviderError
@@ -92,12 +89,12 @@ def run_directional_update_impact(
         source_store = store
         target_store = store
         source_contexts = (
-            load_context_and_descendants(source_store, source_access.context_name)
+            source_store.load_context_and_descendants(source_access.context_name)
             if source_descendants
             else (source_store.load(source_access.context_name),)
         )
         target_contexts = (
-            load_context_and_descendants(target_store, target_access.context_name)
+            target_store.load_context_and_descendants(target_access.context_name)
             if target_descendants
             else (target_store.load(target_access.context_name),)
         )
@@ -140,16 +137,12 @@ def run_directional_update_impact(
         current_source_store = store
         current_target_store = store
         current_source_contexts = (
-            load_context_and_descendants(
-                current_source_store, current_source_access.context_name
-            )
+            current_source_store.load_context_and_descendants(current_source_access.context_name)
             if source_descendants
             else (current_source_store.load(current_source_access.context_name),)
         )
         current_target_contexts = (
-            load_context_and_descendants(
-                current_target_store, current_target_access.context_name
-            )
+            current_target_store.load_context_and_descendants(current_target_access.context_name)
             if target_descendants
             else (current_target_store.load(current_target_access.context_name),)
         )

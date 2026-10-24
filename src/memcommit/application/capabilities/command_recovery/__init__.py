@@ -18,9 +18,6 @@ from memcommit.application.capabilities.command_recovery.stack_reconstruction im
 from memcommit.application.capabilities.command_recovery.restore_receipt import (
     command_restore_metadata,
 )
-from memcommit.application.capabilities.command_recovery.execution import (
-    restore_context_command,
-)
 
 __all__ = [
     "BranchTreeContext",
@@ -35,5 +32,4 @@ __all__ = [
     "build_command_stacks",
     "command_restore_metadata",
     "command_unit_uid",
-    "restore_context_command",
 ]

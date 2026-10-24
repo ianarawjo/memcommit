@@ -36,8 +36,6 @@ from memcommit.application.operations.init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
-from memcommit.application.operations.list.application import ListRequest
-from memcommit.application.operations.list.runtime import execute_list
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.persistence.store import MemoryStore
@@ -74,12 +72,6 @@ def _memory_values(context: Context) -> tuple[tuple[str, str], ...]:
     return tuple((item.uid, item.content) for item in items)
 
 
-def _list_context(store: MemoryStore, name: str) -> Context:
-    return execute_list(
-        store, ListRequest(name, store.current_context_name(), recursive=False)
-    ).context
-
-
 def run_scenario(
     *,
     store: MemoryStore,
@@ -101,11 +93,11 @@ def run_scenario(
                 AddRequest(CONTENTS, name),
                 target_port=MemoryStoreAddTargetPort.capture(store),
             )
-            seed = _list_context(store, name)
+            seed = store.load_direct(name)
             if _memory_values(seed) != tuple(
                 (item.uid, item.content) for item in added.memories
             ):
-                raise RuntimeError("List no longer matches the completed Add receipt.")
+                raise RuntimeError("Stored Memories do not match the completed Add receipt.")
             if variant == "original":
                 source = seed
                 source_checkpoints = store.list_checkpoints(source.name)
@@ -131,7 +123,7 @@ def run_scenario(
                         ),
                         (
                             "Find DUP preserves Memories",
-                            _memory_values(_list_context(store, seed.name))
+                            _memory_values(store.load_direct(seed.name))
                             == _memory_values(seed),
                         ),
                         (
@@ -164,7 +156,7 @@ def run_scenario(
                 (
                     (
                         f"{variant.upper()} survivors retain UID, content, and order",
-                        _memory_values(_list_context(store, seed.name))
+                        _memory_values(store.load_direct(seed.name))
                         == _survivors(seed, expected_groups),
                     ),
                     (
@@ -177,7 +169,7 @@ def run_scenario(
             (
                 (
                     "Original scenario Memories preserved",
-                    _memory_values(_list_context(store, source.name))
+                    _memory_values(store.load_direct(source.name))
                     == _memory_values(source),
                 ),
                 (

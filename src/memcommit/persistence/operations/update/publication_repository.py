@@ -4,9 +4,6 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from memcommit.application.capabilities.context_scope_loading import (
-    load_context_and_descendants,
-)
 from memcommit.application.capabilities.semantic.goal_focus import GoalFocusError
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     revalidate_goal_focus,
@@ -45,7 +42,7 @@ def _load_endpoint(store, name, *, include_descendants, direct=False):
     if direct:
         return (store.load_direct(name),)
     return (
-        load_context_and_descendants(store, name)
+        store.load_context_and_descendants(name)
         if include_descendants
         else (store.load(name),)
     )

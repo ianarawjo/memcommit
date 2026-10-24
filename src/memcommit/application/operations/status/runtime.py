@@ -8,7 +8,9 @@ from typing import Any
 
 from memcommit.source_projection.model import SourceDisplayFacts
 
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.application.operations.profile.config import (
     active_profile_registry_for_store,
 )
@@ -73,10 +75,11 @@ class MemoryStoreStatusSource:
             )
         registry = active_profile_registry_for_store(self._store.store_dir)
         profile_name = registry.active.name if registry else "standalone"
-        names = expand_lexical_context_names(
-            (current,),
-            self._store.list_context_names(),
-            include_descendants=request.include_descendants,
+        catalog_names = self._store.list_context_names()
+        names = (
+            list_context_and_descendant_names((current,), catalog_names)
+            if request.include_descendants
+            else (current,)
         )
         contexts = []
         for name in names:

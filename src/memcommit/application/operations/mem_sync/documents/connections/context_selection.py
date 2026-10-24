@@ -3,7 +3,9 @@
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.mem_sync.model import SyncRequest, SyncSelection
 
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.core.context_name_validation import validate_context_name
 
 
@@ -21,8 +23,10 @@ def select_sync_contexts(request: SyncRequest, *, current_name, contexts):
         root = resolve_context_locator(source, current=current_name)
         if root not in by_name:
             raise ValueError(f"No local Context named {root!r}.")
-        names = expand_lexical_context_names(
-            (root,), by_name, include_descendants=request.recursive
+        names = (
+            list_context_and_descendant_names((root,), by_name)
+            if request.recursive
+            else (root,)
         )
         scope = "recursive" if request.recursive else "exact"
         if (

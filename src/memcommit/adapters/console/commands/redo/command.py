@@ -7,7 +7,7 @@ from memcommit.application.capabilities.command_recovery import CommandHistoryEr
 from memcommit.adapters.console.terminal.components.restoration_receipt import (
     render_command_restore_receipt,
 )
-from memcommit.application.operations.redo.runtime import execute_redo
+from memcommit.application.operations.undo_redo.runtime import execute_redo
 from memcommit.persistence.store import MemoryStore
 
 

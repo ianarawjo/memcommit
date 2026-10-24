@@ -8,7 +8,17 @@ from types import ModuleType
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 
 from . import context_memory as _context_memory_module
-from . import record_restore_checkpoint as _checkpoint_module
+from .checkpoint import CheckpointStoreMixin
+from .checkpoint import repository as _checkpoint_repository_module
+from .checkpoint import revert as _checkpoint_revert_module
+from .saving.command_restoration import (
+    atomize as _atomize_restoration_module,
+    branch as _branch_restoration_module,
+    companion_sessions as _companion_restore_module,
+    context_records as _context_restore_module,
+    merge as _merge_restoration_module,
+    sever as _sever_restoration_module,
+)
 from .context_memory import ContextMemoryStoreMixin
 from .context_memory.models import (
     ConcurrentContextUpdateError,
@@ -52,7 +62,13 @@ from .infrastructure.paths import (
     resolve_active_store_dir,
 )
 from .infrastructure.protection import _WriteProtectionStoreMixin
-from .record_restore_checkpoint import RecordRestoreCheckpointStoreMixin
+from .loading.context_records import _ContextLoadingMixin
+from .lookup.context_catalog import _ContextCatalogStoreMixin
+from .lookup.context_paths import _ContextPathLookupMixin
+from .lookup.command_archives import _CommandArchiveLookupMixin
+from .loading.command_archives import _CommandArchiveLoadingMixin
+from .saving import context_records as _saving_module
+from .saving.context_records import _ContextSavingMixin
 
 from memcommit.persistence.operations.atomize import (
     state_repository as _atomize_state_module,
@@ -78,11 +94,17 @@ class MemoryStore(
     _StorePathsMixin,
     _WriteProtectionStoreMixin,
     _StoreLockingMixin,
+    _ContextPathLookupMixin,
+    _ContextCatalogStoreMixin,
+    _ContextLoadingMixin,
+    _CommandArchiveLookupMixin,
+    _CommandArchiveLoadingMixin,
+    _ContextSavingMixin,
     ContextMemoryStoreMixin,
     _UpdateReceiptStoreMixin,
     _ReviewStateStoreMixin,
     _AtomizeStateStoreMixin,
-    RecordRestoreCheckpointStoreMixin,
+    CheckpointStoreMixin,
 ):
     """Compose Context persistence and operation-owned repositories."""
 
@@ -96,7 +118,15 @@ _IMPLEMENTATION_MODULES = (
     _review_state_module,
     _atomize_state_module,
     _context_memory_module,
-    _checkpoint_module,
+    _saving_module,
+    _checkpoint_repository_module,
+    _checkpoint_revert_module,
+    _atomize_restoration_module,
+    _branch_restoration_module,
+    _companion_restore_module,
+    _context_restore_module,
+    _merge_restoration_module,
+    _sever_restoration_module,
 )
 
 _FORWARDED_COMPATIBILITY_NAMES = frozenset(

@@ -6,7 +6,9 @@ from collections.abc import Mapping, Sequence, Set
 from dataclasses import dataclass, field
 
 
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
 )
@@ -58,8 +60,10 @@ def project_checked_context_names(
         raise ValueError("Selectable checked Contexts are outside the frozen tree.")
     if not roots:
         return ()
-    expanded = expand_lexical_context_names(
-        roots, catalog, include_descendants=include_descendants
+    expanded = (
+        list_context_and_descendant_names(roots, catalog)
+        if include_descendants
+        else roots
     )
     return tuple(name for name in expanded if name in selectable)
 

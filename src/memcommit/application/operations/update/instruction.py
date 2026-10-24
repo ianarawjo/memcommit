@@ -18,9 +18,6 @@ from .model.planning import UpdateProvider
 from memcommit.persistence.operations.update.publication_repository import (
     publish_update_transaction,
 )
-from memcommit.application.capabilities.context_scope_loading import (
-    load_context_and_descendants,
-)
 
 
 @dataclass(frozen=True)
@@ -39,7 +36,7 @@ def prepare_instruction_update(
     if current_name is None:
         raise UpdateError("No current Context. Run 'mem switch' or 'mem init' first.")
     target_contexts = (
-        load_context_and_descendants(store, current_name)
+        store.load_context_and_descendants(current_name)
         if request.recursive
         else (store.load_direct(current_name),)
     )

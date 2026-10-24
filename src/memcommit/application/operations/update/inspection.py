@@ -6,9 +6,6 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.application.capabilities.context_scope_loading import (
-    load_context_and_descendants,
-)
 from memcommit.application.operations.update.model import (
     UpdateReceipt,
     inline_update_source,
@@ -41,13 +38,13 @@ def inspect_update(
                 (active_store.load_direct(inputs.source_name),)
                 if inputs.instruction is not None
                 else (
-                    load_context_and_descendants(active_store, inputs.source_name)
+                    active_store.load_context_and_descendants(inputs.source_name)
                     if inputs.source_include_descendants
                     else (active_store.load(inputs.source_name),)
                 )
             )
         target_contexts = (
-            load_context_and_descendants(active_store, inputs.target_name)
+            active_store.load_context_and_descendants(inputs.target_name)
             if inputs.target_include_descendants
             else (active_store.load(inputs.target_name),)
         )

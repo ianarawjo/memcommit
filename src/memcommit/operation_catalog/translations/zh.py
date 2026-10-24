@@ -147,8 +147,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "准备可复现且隔离的用户研究环境时。",
     ),
     "list": _copy(
-        "列出 Context 中的 Memory 以及单独存储的下级 Context。-r 包含下级 Context 的 Memory；ls 是简短别名。",
-        "检查 Context 的结构和直接内容时。",
+        "列出当前 Context 的直接 Memory 和直接下级 Context。",
+        "检查当前 Context 的结构和直接内容时。",
     ),
     "lock": _copy(
         "锁定当前 Context、递归 Context 集、Memory 或 Profile。",

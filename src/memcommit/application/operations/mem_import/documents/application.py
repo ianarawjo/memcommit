@@ -21,7 +21,9 @@ from memcommit.application.operations.mem_import.memory import (
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.memory import Memory
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.attached_files import (
     read_attached_file,
@@ -58,8 +60,10 @@ def import_context_from_documents(
     if source_name is not None:
         if source_name not in names:
             raise ValueError(f"Context {source_name!r} is absent from the JSON source.")
-        selected = expand_lexical_context_names(
-            (source_name,), names, include_descendants=recursive
+        selected = (
+            list_context_and_descendant_names((source_name,), names)
+            if recursive
+            else (source_name,)
         )
         documents = tuple(
             document for document in documents if document.value.name in selected

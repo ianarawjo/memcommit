@@ -149,8 +149,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Дахин давтагдах, тусгаарлагдсан хэрэглэгчийн судалгааны орчин бэлтгэх үед.",
     ),
     "list": _copy(
-        "Context-ийн Memory болон тусад нь хадгалсан дэд Context-уудыг жагсаана. -r нь дэд Context-ийн Memory-г хамруулна; ls нь товч alias.",
-        "Context-ийн бүтэц болон шууд агуулгыг шалгах үед.",
+        "Одоогийн Context-ийн шууд Memory болон шууд дэд Context-уудыг жагсаана.",
+        "Одоогийн Context-ийн бүтэц болон шууд агуулгыг шалгах үед.",
     ),
     "lock": _copy(
         "Одоогийн Context, рекурсив Context багц, Memory эсвэл Profile-г түгжинэ.",

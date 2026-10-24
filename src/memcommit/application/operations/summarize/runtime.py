@@ -15,7 +15,9 @@ from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
 from memcommit.models.context import Context
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
@@ -66,10 +68,11 @@ def _load_frame(
         access,
     )
     root_name = access.access_name
-    names = expand_lexical_context_names(
-        (root_name,),
-        store.list_context_names(sort_order="alphabetical"),
-        include_descendants=include_descendants,
+    catalog_names = store.list_context_names(sort_order="alphabetical")
+    names = (
+        list_context_and_descendant_names((root_name,), catalog_names)
+        if include_descendants
+        else (root_name,)
     )
     load = store.load_direct
     contexts = tuple(load(name) for name in names)

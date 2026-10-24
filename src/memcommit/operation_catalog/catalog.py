@@ -389,18 +389,11 @@ _OPERATIONS = (
     ),
     _operation(
         "list",
-        (
-            "List a Context's Memories and its lexical child Contexts. "
-            "Use -r to recursively include Memories from descendant "
-            "Contexts; ls is the compact alias."
-        ),
-        "Context -> direct-item and child-Context listing",
+        "List the current Context's direct Memories and immediate child Contexts.",
+        "Current Context -> direct-item and child-Context listing",
         ExecutionKind.DETERMINISTIC,
         "Read-only",
-        (
-            "One exact Context; -r follows readable lexical descendants and "
-            "local Contexts"
-        ),
+        "Current Context only; child Context rows are navigation labels only",
     ),
     _operation(
         "lock",

@@ -10,7 +10,9 @@ from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsProvider,
@@ -85,8 +87,9 @@ def freeze_redundancy_scope(
         active_store,
         access,
     )
-    names = expand_lexical_context_names(
-        (access.access_name,), catalog.list_context_names(), include_descendants=True
+    names = list_context_and_descendant_names(
+        (access.access_name,),
+        catalog.list_context_names(),
     )
     return QualityFindSourceFrame.create(
         tuple(catalog.load_direct(name) for name in names),

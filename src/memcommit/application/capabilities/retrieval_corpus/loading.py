@@ -14,7 +14,9 @@ from memcommit.application.capabilities.retrieval_corpus.candidates import (
     collect_candidates_from_roots,
 )
 from memcommit.models.context import Context
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 
 if TYPE_CHECKING:
     from memcommit.persistence.store import MemoryStore
@@ -41,8 +43,10 @@ def load_readable_corpus_roots(
     """Freeze ordinary local Context roots with explicit lexical reach."""
 
     catalog_names = tuple(store.list_context_names())
-    selected_names = expand_lexical_context_names(
-        target_names, catalog_names, include_descendants=include_descendants
+    selected_names = (
+        list_context_and_descendant_names(target_names, catalog_names)
+        if include_descendants
+        else tuple(target_names)
     )
     for target_name in target_names:
         if not store.context_exists(target_name):

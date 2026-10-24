@@ -7,8 +7,8 @@ import typer
 from memcommit.adapters.console.terminal.components.findings import (
     echo_issue_one_line,
 )
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.core.theme import (
@@ -167,7 +167,7 @@ def _render_unresolved_issues(
         fg=typer.colors.YELLOW,
         bold=True,
     )
-    uid_prefixes = collision_safe_uid_prefixes(
+    uid_prefixes = extend_uid_prefixes_until_unique(
         source.memory_uid for item in items for source in item.sources
     )
     for item in items:

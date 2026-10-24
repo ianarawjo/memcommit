@@ -8,20 +8,12 @@ from types import ModuleType
 from . import models as _models_module
 from . import records as _records_module
 from . import current as _current_module
-from . import addressing as _addressing_module
-from . import context_catalog as _context_catalog_module
 from . import context_creation_availability as _context_creation_availability_module
-from . import loading as _loading_module
 from . import rename as _rename_module
-from . import saving as _saving_module
 from . import creation as _creation_module
 from . import lifecycle as _lifecycle_module
-from .addressing import _ContextAddressingMixin
-from .context_catalog import _ContextCatalogStoreMixin
 from .context_creation_availability import _ContextCreationAvailabilityMixin
-from .loading import _ContextLoadingMixin
 from .rename import _ContextRenameMixin
-from .saving import _ContextSavingMixin
 from .creation import _ContextCreationMixin
 from .lifecycle import _ContextLifecycleMixin
 from .current import _CurrentContextStoreMixin
@@ -31,12 +23,8 @@ _IMPLEMENTATION_MODULES = (
     _models_module,
     _records_module,
     _current_module,
-    _addressing_module,
-    _context_catalog_module,
     _context_creation_availability_module,
-    _loading_module,
     _rename_module,
-    _saving_module,
     _creation_module,
     _lifecycle_module,
 )
@@ -44,12 +32,8 @@ _IMPLEMENTATION_MODULES = (
 
 class ContextMemoryStoreMixin(
     _CurrentContextStoreMixin,
-    _ContextAddressingMixin,
-    _ContextCatalogStoreMixin,
     _ContextCreationAvailabilityMixin,
-    _ContextLoadingMixin,
     _ContextRenameMixin,
-    _ContextSavingMixin,
     _ContextCreationMixin,
     _ContextLifecycleMixin,
 ):

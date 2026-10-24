@@ -26,8 +26,8 @@ def _materialize_study_context_parents(
 
     Study packages can legitimately predate a namespace root such as
     ``participant``.  Once several packages are composed below ``task-N``, a
-    missing prefix would make both ``mem switch ..`` and ``mem ls -R`` stop at
-    that gap.  The clean-store write boundary is the one place shared by
+    missing prefix would break ``mem switch ..`` and leave ``mem list`` without
+    a materialized next-level Context row. The clean-store write boundary is shared by
     baseline bootstrap and live-baseline cloning, so completing the chain here
     preserves the invariant in the local Study Store.
     """

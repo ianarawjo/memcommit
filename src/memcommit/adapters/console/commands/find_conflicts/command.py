@@ -22,8 +22,8 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
@@ -168,7 +168,7 @@ def cmd(
     if not report.findings:
         return
 
-    uid_prefixes = collision_safe_uid_prefixes(involved_uids)
+    uid_prefixes = extend_uid_prefixes_until_unique(involved_uids)
     for index, finding in enumerate(report.findings, start=1):
         typer.echo()
         label = conflict_label(finding.conflict)

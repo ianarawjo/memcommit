@@ -7,8 +7,8 @@ import typer
 from memcommit.adapters.console.terminal.components.findings import (
     echo_issue_one_line,
 )
-from memcommit.adapters.console.terminal.core.identity import (
-    collision_safe_uid_prefixes,
+from memcommit.core.uid_prefixes import (
+    extend_uid_prefixes_until_unique,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
@@ -61,7 +61,7 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
         f"{len(session.source.items)} direct items · {memory_count} {memory_label}"
     )
 
-    uid_prefixes = collision_safe_uid_prefixes(
+    uid_prefixes = extend_uid_prefixes_until_unique(
         item.uid for item in session.source.items
     )
     typer.echo()

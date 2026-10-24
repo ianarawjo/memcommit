@@ -18,11 +18,10 @@ from memcommit.models.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     project_memory_relation_context,
 )
-from memcommit.application.capabilities.context_scope_loading import (
-    load_context_and_descendants,
-)
 
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
+)
 
 
 class ConcurrentMemoryRelationUpdateError(RuntimeError):
@@ -178,27 +177,24 @@ def save_memory_relation_analysis(
             analysis.include_descendants,
             strict=True,
         ):
-            lock_names.update(
-                expand_lexical_context_names(
-                    (frame.context_name,),
-                    catalog,
-                    include_descendants=include_descendants,
+            if include_descendants:
+                lock_names.update(
+                    list_context_and_descendant_names((frame.context_name,), catalog)
                 )
-            )
         locks.enter_context(store._context_write_locks(lock_names))
         locks.enter_context(store.profile_write_guard())
 
         try:
             reference = _memory_relation_projection(
                 (
-                    load_context_and_descendants(store, reference_frame.context_name)
+                    store.load_context_and_descendants(reference_frame.context_name)
                     if analysis.include_descendants[0]
                     else (store.load(reference_frame.context_name),)
                 )
             )
             compared = _memory_relation_projection(
                 (
-                    load_context_and_descendants(store, compared_frame.context_name)
+                    store.load_context_and_descendants(compared_frame.context_name)
                     if analysis.include_descendants[1]
                     else (store.load(compared_frame.context_name),)
                 )

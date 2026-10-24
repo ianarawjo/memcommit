@@ -28,7 +28,6 @@ COMMAND_ANNOTATIONS = {
 # checkout do not belong here because they route to more than one operation.
 COMMAND_DISPLAY_ALIASES = {
     "delete": ("remove",),
-    "list": ("ls",),
 }
 
 # Related spellings can live under another command group while remaining
@@ -481,11 +480,6 @@ COMMAND_FORMS = {
     ),
     "list": (
         "mem list (list the current Context)",
-        "mem list [context] (explicit Context listing)",
-        "mem list -r (recursive current-Context listing; -R remains an alias)",
-        "mem list [context] -R (recursive Context listing)",
-        "mem list --copy (copy the current listing as plain text)",
-        "mem list [context] --copy (copy an explicit listing as plain text)",
     ),
     "lock": (
         "mem lock (lock the current Context)",
