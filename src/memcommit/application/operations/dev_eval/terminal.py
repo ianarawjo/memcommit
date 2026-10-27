@@ -16,7 +16,7 @@ from dataclasses import dataclass
 
 import memcommit
 from memcommit.application.operations.profile.config import resolve_active_store_dir
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -29,7 +29,7 @@ class TerminalResult:
 class ScenarioTerminal:
     """One 180×52 terminal for sequential commands in the current Profile."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self.store = store
         self.results: list[TerminalResult] = []
         self._master: int | None = None

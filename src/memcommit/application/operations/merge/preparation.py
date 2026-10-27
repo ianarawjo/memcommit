@@ -15,10 +15,7 @@ from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
-from memcommit.persistence.store.infrastructure.write_protection import (
-    WriteProtectionError,
-)
+from memcommit.persistence.store import ProfileStore
 
 from .analysis.candidate import combine_contexts, encode
 from .analysis.choices import (
@@ -33,7 +30,7 @@ from .target_policy import MergeTargetPolicy
 
 
 def prepare_merge(
-    request: MergeRequest, *, store: MemoryStore, current_name: str | None
+    request: MergeRequest, *, store: ProfileStore, current_name: str | None
 ) -> PreparedMerge:
     """Freeze one Source/Target pair; Resolve owns Audit and review preparation."""
     if not isinstance(request, MergeRequest):
@@ -63,7 +60,7 @@ def prepare_literal_input(
 
 
 def load_merge_context_inputs(
-    request: MergeRequest, *, store: MemoryStore, current_name: str | None
+    request: MergeRequest, *, store: ProfileStore, current_name: str | None
 ) -> MergeContextInputs:
     """Load direct endpoints once and retain the verified publication conditions."""
     candidates = freeze_profile_context_access_candidates(
@@ -88,7 +85,6 @@ def load_merge_context_inputs(
         and source_access.store.store_dir == target_access.store.store_dir
     ):
         raise ValueError("cannot merge a context into itself.")
-    mutable, protected = _target_plan_protection(target_access, target)
     projected_source = source
     lineage = _lineage_target_uids(source_access, target_access, source, target)
     effects = ("CREATE", "UPDATE", "DELETE")
@@ -102,25 +98,8 @@ def load_merge_context_inputs(
         target_json=encode(target.to_dict()),
         source_access=source_access,
         target_access=target_access,
-        policy=MergeTargetPolicy(effects, mutable, protected),
+        policy=MergeTargetPolicy(effects),
         lineage_targets=tuple(lineage.items()),
-    )
-
-
-def _target_plan_protection(
-    access: ContextAccess,
-    target: Context,
-) -> tuple[bool, frozenset[str]]:
-    """Freeze the Target policy that determines reviewable replacements."""
-
-    state = access.store.write_protection_state()
-    if state.profile_is_protected():
-        raise WriteProtectionError(
-            "Profile is locked against writes. Unlock that Profile first."
-        )
-    return (
-        not state.context_is_protected(target.uid),
-        state.protected_memory_uids(target.uid),
     )
 
 

@@ -68,13 +68,11 @@ class _ContextLoadingMixin:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
         return self.load_direct(name)
 
-    def _read_direct_context_records_strict(
-        self,
-    ) -> dict[str, dict[str, object]]:
-        """Read every ordinary direct record or reject an incomplete graph."""
+    def load_all_contexts(self) -> tuple[Context, ...]:
+        """Load and validate all Contexts in this Profile."""
         record_paths = self.scan_context_catalog()
 
-        records: dict[str, dict[str, object]] = {}
+        contexts: list[Context] = []
         uid_owners: dict[str, str] = {}
         for name, context_file in record_paths:
             try:
@@ -88,7 +86,7 @@ class _ContextLoadingMixin:
             record = _validate_context_header(raw, name)
             # Validate the complete local frame before including its identity.
             try:
-                Context.from_dict(record)
+                context = Context.from_dict(record)
             except (KeyError, TypeError, ValueError) as error:
                 raise ValueError(
                     f"Context '{name}' has an invalid direct record: {error}"
@@ -100,26 +98,11 @@ class _ContextLoadingMixin:
                     f"Ordinary Context uid is duplicated by '{previous}' and '{name}'."
                 )
             uid_owners[uid] = name
-            records[name] = record
-        return records
-
-    def load_direct_context_graph_strict(self) -> tuple[Context, ...]:
-        """Load one complete direct ordinary graph without resolving pointers.
-
-        Unlike :meth:`list_context_names`, this API is a completeness boundary
-        for mutation preflights. It reads and validates every record before
-        returning Context objects; a name listing never opens those records.
-        """
-        contexts: list[Context] = []
-        for name, record in self._read_direct_context_records_strict().items():
-            try:
-                context = Context.from_dict(record)
-            except (KeyError, TypeError, ValueError) as error:
-                # The private record reader already performs this validation;
-                # retain a local guard so this public API never returns partial
-                # results if the model's constructor changes later.
-                raise ValueError(
-                    f"Context '{name}' has an invalid direct record: {error}"
-                ) from error
             contexts.append(context)
         return tuple(contexts)
+
+    def _read_direct_context_records_strict(
+        self,
+    ) -> dict[str, dict[str, object]]:
+        """Return validated canonical records for native publication planning."""
+        return {context.name: context.to_dict() for context in self.load_all_contexts()}

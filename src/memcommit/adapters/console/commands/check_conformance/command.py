@@ -23,7 +23,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def render_conformance(report: ConformanceReport) -> str:
@@ -130,7 +130,7 @@ def cmd(
 ) -> None:
     """Check one readable Context against Rules without changing either."""
 
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         rules_operands = tuple(rules_context or ())
         subject_operands = tuple(subject_context or ())

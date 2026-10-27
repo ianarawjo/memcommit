@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import ExitStack, contextmanager
+from dataclasses import replace
 import fcntl
 import json
 import os
@@ -14,8 +15,8 @@ from typing import Callable, Iterator
 
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.models.context import Context
-from memcommit.core.context_navigation import (
-    record_current_context_transition,
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
 )
 from memcommit.persistence.store.context_memory.lifecycle_model import (
     ContextLifecycleEvent,
@@ -225,23 +226,42 @@ class _ContextLifecycleMixin:
         else:
             previous_uid = None
             previous_digest = None
+        from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
+            flatten_checkpoint_entries,
+        )
+
+        try:
+            entries, _warnings = flatten_checkpoint_entries(checkpoints)
+        except (KeyError, RuntimeError, TypeError, ValueError):
+            entries = checkpoints
+        deleted_checkpoint_uids = tuple(
+            dict.fromkeys(
+                entry["uid"]
+                for entry in entries
+                if isinstance(entry.get("uid"), str) and entry["uid"]
+            )
+        )
         return ContextLifecycleEvent.deleted(
             context_uid=context.uid,
             last_context_name=context.name,
             previous_checkpoint_status=previous_status,
             previous_checkpoint_uid=previous_uid,
             previous_checkpoint_digest=previous_digest,
+            deleted_checkpoint_uids=deleted_checkpoint_uids,
         )
 
     def delete(self, name: str) -> ContextLifecycleEvent:
         """Delete one Context and retain metadata in its Profile ledger."""
+        # Creators hold the exclusive graph span, so independent leaf deletions may share it.
         with self._context_graph_lock(exclusive=False):
+            from ..context_hierarchy import validate_context_hierarchy
+
+            validate_context_hierarchy(set(self.list_context_names()) - {name})
             with self._context_write_lock(name):
-                with self.profile_write_guard():
-                    event = self._context_deletion_event_locked(name)
-                    recorded = self._delete_locked(name, lifecycle_event=event)
-                    assert recorded is event
-                    return event
+                event = self._context_deletion_event_locked(name)
+                recorded = self._delete_locked(name, lifecycle_event=event)
+                assert recorded is event
+                return event
 
     def delete_context_if(
         self,
@@ -251,48 +271,149 @@ class _ContextLifecycleMixin:
     ) -> ContextLifecycleEvent:
         """Delete only the exact Context identity that was previously reviewed."""
         with self._context_graph_lock(exclusive=False):
-            with self._context_write_lock(name):
-                with self.profile_write_guard():
-                    try:
-                        current = self.load_direct(name)
-                    except FileNotFoundError as error:
-                        raise ConcurrentContextUpdateError(
-                            f"Context '{name}' no longer exists."
-                        ) from error
-                    if (
-                        current.uid != expected_context_uid
-                    ):
-                        raise ConcurrentContextUpdateError(
-                            f"Context '{name}' changed after deletion was reviewed."
-                        )
-                    event = self._context_deletion_event_locked(
-                        name,
-                        current=current,
-                    )
-                    recorded = self._delete_locked(name, lifecycle_event=event)
-                    assert recorded is event
-                    return event
+            from ..context_hierarchy import validate_context_hierarchy
 
-    def _delete_locked(
+            validate_context_hierarchy(set(self.list_context_names()) - {name})
+            with self._context_write_lock(name):
+                try:
+                    current = self.load_direct(name)
+                except FileNotFoundError as error:
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{name}' no longer exists."
+                    ) from error
+                if current.uid != expected_context_uid:
+                    raise ConcurrentContextUpdateError(
+                        f"Context '{name}' changed after deletion was reviewed."
+                    )
+                event = self._context_deletion_event_locked(
+                    name,
+                    current=current,
+                )
+                recorded = self._delete_locked(name, lifecycle_event=event)
+                assert recorded is event
+                return event
+
+    def delete_context_and_descendants(
         self,
         name: str,
         *,
-        lifecycle_event: ContextLifecycleEvent | None = None,
-    ) -> ContextLifecycleEvent | None:
-        """Delete one Context; internal creation rollback passes no event."""
-        if not self.context_exists(name):
-            raise FileNotFoundError(f"Context '{name}' not found.")
-        current_context = self.load_direct(name)
-        context_uid = current_context.uid
-        if lifecycle_event is not None:
-            self._assert_context_deletion_allowed(current_context)
-        if lifecycle_event is not None and (
-            lifecycle_event.context_uid != context_uid
-            or lifecycle_event.last_context_name != name
-        ):
-            raise ConcurrentContextUpdateError(
-                "Context changed before its deletion event could be committed."
+        expected_contexts: tuple[tuple[str, str], ...],
+        expected_current: str | None = None,
+    ) -> tuple[ContextLifecycleEvent, ...]:
+        """Delete one reviewed subtree, retaining metadata but no recovery copy."""
+        validate_context_name(name)
+        with self._context_graph_lock(exclusive=True):
+            names = list_context_and_descendant_names(
+                (name,), self.list_context_names()
             )
+            with self._context_write_locks(names), self._state_write_lock():
+                contexts = tuple(self.load_direct(target) for target in names)
+                identities = tuple((context.name, context.uid) for context in contexts)
+                if identities != expected_contexts:
+                    raise ConcurrentContextUpdateError(
+                        "The Context subtree changed after confirmation was prepared; "
+                        "nothing was deleted."
+                    )
+                original_state = self._read_state()
+                if (
+                    expected_current is not None
+                    and original_state.get("current") != expected_current
+                ):
+                    raise ConcurrentContextUpdateError(
+                        "The current Context changed; nothing was deleted."
+                    )
+                operation_id = str(uuid.uuid4())
+                events = tuple(
+                    replace(
+                        self._context_deletion_event_locked(
+                            context.name, current=context
+                        ),
+                        operation_id=operation_id,
+                        descendants_preserved=False,
+                    ).validated()
+                    for context in contexts
+                )
+                cleanup_actions = tuple(
+                    (f"{context.name}: {label}", action)
+                    for context in contexts
+                    for label, action in self._context_deletion_cleanup_actions(context)
+                )
+                source = self._context_dir(name)
+                staged = self.store_dir / f".delete-context-{operation_id}"
+                following_state = dict(original_state)
+                if following_state.get("current") in names:
+                    following_state["current"] = None
+                published_events: list[Path] = []
+                moved = False
+                state_write_attempted = False
+                with self._context_lifecycle_ledger_lock(exclusive=True):
+                    try:
+                        for event in events:
+                            published_events.append(
+                                self._write_context_lifecycle_event(event)
+                            )
+                        # Move the complete namespace once; a child must not be
+                        # permanently removed before a later sibling can fail.
+                        source.rename(staged)
+                        moved = True
+                        if following_state != original_state:
+                            state_write_attempted = True
+                            self._write_state(following_state)
+                        _fsync_directory(source.parent)
+                        _fsync_directory(self.store_dir)
+                    except Exception as error:
+                        rollback_errors: list[Exception] = []
+                        if moved:
+                            try:
+                                staged.rename(source)
+                            except Exception as rollback_error:
+                                rollback_errors.append(rollback_error)
+                        if state_write_attempted:
+                            try:
+                                _write_json_atomic(self.state_file, original_state)
+                            except Exception as rollback_error:
+                                rollback_errors.append(rollback_error)
+                        for path in reversed(published_events):
+                            try:
+                                self._remove_context_lifecycle_event(path)
+                            except Exception as rollback_error:
+                                rollback_errors.append(rollback_error)
+                        if rollback_errors:
+                            raise RuntimeError(
+                                "Context subtree deletion failed and rollback was incomplete."
+                            ) from rollback_errors[0]
+                        raise error
+
+                cleanup_failures: list[tuple[str, Exception]] = []
+                for label, action in (
+                    (
+                        "Context subtree and checkpoint histories",
+                        lambda: shutil.rmtree(staged),
+                    ),
+                    *cleanup_actions,
+                    (
+                        "Store directory durability",
+                        lambda: _fsync_directory(self.store_dir),
+                    ),
+                ):
+                    try:
+                        action()
+                    except Exception as error:
+                        cleanup_failures.append((label, error))
+                self._prune_empty_namespace_dirs(source.parent)
+                if cleanup_failures:
+                    raise ContextDeletionCommittedError(
+                        events[0], tuple(cleanup_failures)
+                    ) from cleanup_failures[0][1]
+                return events
+
+    def _context_deletion_cleanup_actions(
+        self,
+        context: Context,
+    ) -> tuple[tuple[str, Callable[[], None]], ...]:
+        """Preflight Context-owned sidecars before irreversible deletion."""
+        name = context.name
+        context_uid = context.uid
         # Validate the derived-artifact path before deleting the primary
         # Context so a malformed analysis store cannot turn cleanup into a
         # surprising partial operation.
@@ -304,10 +425,6 @@ class _ContextLifecycleMixin:
             comparison_paths_for_context,
             delete_comparison_paths,
         )
-        from memcommit.persistence.store.translation_catalog import (
-            delete_translation_catalog_paths,
-            translation_catalog_paths_for_context,
-        )
         from memcommit.application.operations.rationale.cache import (
             delete_rationale_inference_paths,
             rationale_inference_paths_for_context,
@@ -318,11 +435,6 @@ class _ContextLifecycleMixin:
         # deleted, regardless of which side was the display reference.
         comparison_paths = (
             comparison_paths_for_context(context_uid)
-            if canonical_context_uid == context_uid
-            else ()
-        )
-        translation_catalog_paths = (
-            translation_catalog_paths_for_context(context_uid)
             if canonical_context_uid == context_uid
             else ()
         )
@@ -382,6 +494,75 @@ class _ContextLifecycleMixin:
             # Strict loading rejects malformed entries before the primary
             # Context deletion can commit.
             self.list_atomize_session_history()
+        actions: list[tuple[str, Callable[[], None]]] = []
+        if analysis_path is not None and analysis_path.exists():
+            actions.append(("Atomize analysis", analysis_path.unlink))
+        if workbench_path is not None and workbench_path.exists():
+            # Workbench responses may contain free-form user context. They are
+            # scoped to the deleted Context and must not survive it.
+            actions.append(("Atomize workbench", workbench_path.unlink))
+        actions.append(
+            (
+                "Compare analyses",
+                lambda: delete_comparison_paths(comparison_paths),
+            )
+        )
+        # A contextual explanation is derived from the deleted direct frame,
+        # so its cache shares that Context's privacy lifetime.
+        actions.append(
+            (
+                "rationale inference cache",
+                lambda: delete_rationale_inference_paths(rationale_inference_paths),
+            )
+        )
+        if (
+            atomize_session_history_dir is not None
+            and atomize_session_history_dir.exists()
+        ):
+
+            def remove_atomize_session_history() -> None:
+                shutil.rmtree(atomize_session_history_dir)
+                _fsync_directory(atomize_session_history_dir.parent)
+                try:
+                    self.atomize_session_history_dir.rmdir()
+                except OSError:
+                    pass
+
+            actions.append(("Atomize session history", remove_atomize_session_history))
+        if delete_review_session and self.review_session_file.exists():
+            # Review answers may contain user-supplied local context. Once
+            # their exact Context is deleted, retaining that global artifact
+            # would be both misleading state and an avoidable privacy leak.
+            actions.append(("review session", self.review_session_file.unlink))
+        for retained_review_path in review_history_paths:
+            if retained_review_path.exists():
+                actions.append(("review session history", retained_review_path.unlink))
+        for review_source_path in review_source_paths:
+            if review_source_path.exists():
+                actions.append(("review source snapshot", review_source_path.unlink))
+
+        return tuple(actions)
+
+    def _delete_locked(
+        self,
+        name: str,
+        *,
+        lifecycle_event: ContextLifecycleEvent | None = None,
+        clear_current: bool = True,
+    ) -> ContextLifecycleEvent | None:
+        """Delete one Context; internal creation rollback passes no event."""
+        if not self.context_exists(name):
+            raise FileNotFoundError(f"Context '{name}' not found.")
+        current_context = self.load_direct(name)
+        context_uid = current_context.uid
+        if lifecycle_event is not None and (
+            lifecycle_event.context_uid != context_uid
+            or lifecycle_event.last_context_name != name
+        ):
+            raise ConcurrentContextUpdateError(
+                "Context changed before its deletion event could be committed."
+            )
+        cleanup_actions = self._context_deletion_cleanup_actions(current_context)
         ctx_dir = self._context_dir(name)
         context_file = self._context_file(name)
         checkpoints_dir = self._checkpoints_dir(name)
@@ -486,62 +667,18 @@ class _ContextLifecycleMixin:
                 _fsync_directory(ctx_dir)
 
             attempt_cleanup("checkpoint history", remove_checkpoint_history)
-        if analysis_path is not None and analysis_path.exists():
-            attempt_cleanup("Atomize analysis", analysis_path.unlink)
-        if workbench_path is not None and workbench_path.exists():
-            # Workbench responses may contain free-form user context. They are
-            # scoped to the deleted Context and must not survive it.
-            attempt_cleanup("Atomize workbench", workbench_path.unlink)
-        attempt_cleanup(
-            "Compare analyses",
-            lambda: delete_comparison_paths(comparison_paths),
-        )
-        # Translation catalogs retain provider-derived copies of source content.
-        # Their privacy and validity lifetime therefore ends with the source.
-        attempt_cleanup(
-            "translation catalogs",
-            lambda: delete_translation_catalog_paths(translation_catalog_paths),
-        )
-        # A contextual explanation is derived from the deleted direct frame,
-        # so its cache shares that Context's privacy lifetime.
-        attempt_cleanup(
-            "rationale inference cache",
-            lambda: delete_rationale_inference_paths(rationale_inference_paths),
-        )
-        if (
-            atomize_session_history_dir is not None
-            and atomize_session_history_dir.exists()
-        ):
-
-            def remove_atomize_session_history() -> None:
-                shutil.rmtree(atomize_session_history_dir)
-                _fsync_directory(atomize_session_history_dir.parent)
-                try:
-                    self.atomize_session_history_dir.rmdir()
-                except OSError:
-                    pass
-
-            attempt_cleanup("Atomize session history", remove_atomize_session_history)
-        if delete_review_session and self.review_session_file.exists():
-            # Review answers may contain user-supplied local context. Once
-            # their exact Context is deleted, retaining that global artifact
-            # would be both misleading state and an avoidable privacy leak.
-            attempt_cleanup("review session", self.review_session_file.unlink)
-        for retained_review_path in review_history_paths:
-            if retained_review_path.exists():
-                attempt_cleanup("review session history", retained_review_path.unlink)
-        for review_source_path in review_source_paths:
-            if review_source_path.exists():
-                attempt_cleanup("review source snapshot", review_source_path.unlink)
+        for label, action in cleanup_actions:
+            attempt_cleanup(label, action)
 
         def clear_current_pointer() -> None:
             with self._state_write_lock():
                 state = self._read_state()
                 if state.get("current") == name:
-                    record_current_context_transition(state, None)
+                    state["current"] = None
                     self._write_state(state)
 
-        attempt_cleanup("current pointer", clear_current_pointer)
+        if clear_current:
+            attempt_cleanup("current pointer", clear_current_pointer)
         self._prune_empty_namespace_dirs(ctx_dir)
         if cleanup_failures:
             if lifecycle_event is not None:

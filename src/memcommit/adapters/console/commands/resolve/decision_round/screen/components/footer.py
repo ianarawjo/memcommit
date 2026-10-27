@@ -20,6 +20,8 @@ def render_footer(state, *, intent=None, is_focused, activation_hint) -> str:
     if state.status_message:
         return " " + safe_terminal_text(state.status_message)
     if intent is not None and is_focused("intent"):
+        if intent.current_response_is_submitted():
+            return " Enter continue · Type to revise · ↑/↓ or Tab choices · PgUp/PgDn result · Esc choices"
         if intent.prepare is not None:
             return " Type your intent · Enter refresh result · ↑/↓ or Tab choices · PgUp/PgDn result · Esc choices"
         return " Type your intent · ←/→ cursor · Enter save · ↑/↓ or Tab choices · Esc choices"

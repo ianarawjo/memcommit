@@ -36,7 +36,7 @@ from memcommit.application.operations.audit.runtime import run_audit
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 from memcommit.providers.connection import connect_semantic_provider
 from memcommit.providers.errors import QueryProviderError
 
@@ -73,7 +73,7 @@ def _check_stage(kind: AuditCheckKind) -> str:
 def _run_audit_with_progress(
     request: AuditRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     repository: AuditRecordRepository,
     provider_factory: Callable[[], FindingsProvider],
     interactive: bool | None = None,
@@ -164,7 +164,7 @@ def cmd(
         )
         raise typer.Exit(2)
     try:
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         session = _run_audit_with_progress(
             request,
             store=store,

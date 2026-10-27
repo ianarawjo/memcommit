@@ -18,7 +18,7 @@ from typing import Any
 
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     checkpoint_history_digest,
 )
 
@@ -153,12 +153,12 @@ class CheckpointCatalog:
             raise CheckpointCatalogError("Ordinary Context identity is duplicated.")
 
     @classmethod
-    def freeze(cls, store: MemoryStore) -> "CheckpointCatalog":
+    def freeze(cls, store: ProfileStore) -> "CheckpointCatalog":
         """Freeze the complete direct local graph and every retained history."""
 
         histories: list[_FrozenHistory] = []
         for context in sorted(
-            store.load_direct_context_graph_strict(), key=lambda value: value.name
+            store.load_all_contexts(), key=lambda value: value.name
         ):
             checkpoints = store.list_checkpoints(context.name)
             copied: list[dict[str, Any]] = []
@@ -528,14 +528,14 @@ class CheckpointCatalog:
         )
 
 
-def freeze_checkpoint_catalog(store: MemoryStore) -> CheckpointCatalog:
+def freeze_checkpoint_catalog(store: ProfileStore) -> CheckpointCatalog:
     """Return the shared command-local Profile checkpoint catalog."""
 
     return CheckpointCatalog.freeze(store)
 
 
 def resolve_checkpoint_unit(
-    store: MemoryStore,
+    store: ProfileStore,
     selector: str,
     *,
     context_name: str | None = None,

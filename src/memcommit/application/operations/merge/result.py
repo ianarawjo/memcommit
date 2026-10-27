@@ -60,8 +60,6 @@ class LiteralMergeReview:
                 "issues": [asdict(issue) for issue in self.analysis.review_issues],
                 "policy": {
                     "effects": self.target_policy.allowed_effects,
-                    "mutable": self.target_policy.context_mutable,
-                    "protected": sorted(self.target_policy.protected_uids),
                 }
                 if self.target_policy
                 else None,

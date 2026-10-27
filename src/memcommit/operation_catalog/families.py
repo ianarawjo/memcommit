@@ -4,12 +4,19 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Literal
 
 
 class OperationFamilyId(str, Enum):
     """Stable, presentation-independent identity for one operation family."""
 
+    MEMORIES = "MEMORIES"
+    CONTEXTS = "CONTEXTS"
+    FIND_QUERY = "FIND_QUERY"
+    AUDIT_RESOLVE = "AUDIT_RESOLVE"
+    MERGE = "MERGE"
+    UNDO_REDO = "UNDO_REDO"
+    SYNC = "SYNC"
+    HELP = "HELP"
     BROWSE_NAVIGATE = "BROWSE_NAVIGATE"
     CREATE_COPY_CONNECT = "CREATE_COPY_CONNECT"
     SEARCH_EXPLAIN = "SEARCH_EXPLAIN"
@@ -38,9 +45,6 @@ class OperationFamilySectionId(str, Enum):
     QUALITY_RESOLUTION_VALIDATE = "QUALITY_RESOLUTION_VALIDATE"
     HISTORY_INSPECTION = "HISTORY_INSPECTION"
     HISTORY_RECOVERY = "HISTORY_RECOVERY"
-
-
-FamilyExecutionLabel = Literal["NO LLM", "LLM-BASED", "MIXED"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -72,7 +76,6 @@ class OperationFamily:
     title: str
     operation_names: tuple[str, ...]
     description: str
-    execution_label: FamilyExecutionLabel | None
     sections: tuple[OperationFamilySection, ...] = ()
 
     def __post_init__(self) -> None:
@@ -86,11 +89,8 @@ class OperationFamily:
             raise ValueError("Operation family members must be nonblank.")
         if len(set(self.operation_names)) != len(self.operation_names):
             raise ValueError("Operation family members must be unique.")
-        if self.execution_label not in {None, "NO LLM", "LLM-BASED", "MIXED"}:
-            raise ValueError("Operation family execution label is invalid.")
         if not isinstance(self.sections, tuple) or any(
-            not isinstance(section, OperationFamilySection)
-            for section in self.sections
+            not isinstance(section, OperationFamilySection) for section in self.sections
         ):
             raise TypeError("Operation family sections must be an immutable tuple.")
         section_ids = [section.id for section in self.sections]
@@ -115,16 +115,89 @@ class OperationFamily:
 
 
 OPERATION_FAMILIES = (
+    # One common order serves ordinary and Study Help. Study's existing
+    # visibility filter leaves these first nine families and hides the tail.
+    OperationFamily(
+        id=OperationFamilyId.MEMORIES,
+        title="MEMORIES",
+        operation_names=("add", "edit", "delete", "update", "list"),
+        description=(
+            "Add, edit, delete, or semantically update Memories, and inspect "
+            "the current Context's direct contents."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.CONTEXTS,
+        title="CONTEXTS",
+        operation_names=("contexts", "pwd", "init", "switch", "branch"),
+        description=(
+            "Inspect Context names and your current location, create a Context, "
+            "switch to another Context, or branch existing work."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.FIND_QUERY,
+        title="FIND & QUERY",
+        operation_names=("find", "query"),
+        description=(
+            "Find matching Memories or ask for an answer grounded in the "
+            "selected authorized knowledge."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.AUDIT_RESOLVE,
+        title="AUDIT & RESOLVE",
+        operation_names=("audit", "resolve"),
+        description=(
+            "Inspect quality issues and resolve retained findings through "
+            "reviewed decisions."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.MERGE,
+        title="MERGE",
+        operation_names=("merge",),
+        description=(
+            "Combine two exact Contexts into an existing Target through "
+            "semantic or literal Merge."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.UNDO_REDO,
+        title="UNDO & REDO",
+        operation_names=("undo", "redo"),
+        description="Recover or reapply recorded changes through Undo and Redo.",
+    ),
+    OperationFamily(
+        id=OperationFamilyId.PROFILES,
+        title="PROFILES",
+        operation_names=("profile",),
+        description=(
+            "Select and administer complete local Profile stores and their "
+            "managed names."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.SYNC,
+        title="SYNC",
+        operation_names=("sync",),
+        description=(
+            "Synchronize project documents and owned Contexts in the active "
+            "Profile through reviewed version choices."
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.HELP,
+        title="HELP",
+        operation_names=("help",),
+        description="Browse command guidance and look up relevant operations.",
+    ),
     OperationFamily(
         id=OperationFamilyId.BROWSE_NAVIGATE,
         title="BROWSE & NAVIGATE",
         operation_names=(
             "status",
-            "pwd",
-            "contexts",
-            "list",
             "show",
-            "switch",
             "checkout",
             "rename",
         ),
@@ -132,19 +205,14 @@ OPERATION_FAMILIES = (
             "Inspect the current location and available Contexts, then move "
             "through the Context namespace."
         ),
-        execution_label="NO LLM",
     ),
     OperationFamily(
         id=OperationFamilyId.CREATE_COPY_CONNECT,
         title="CREATE, COPY & CONNECT",
         operation_names=(
-            "init",
-            "add",
             "copy",
-            "branch",
             "import",
             "export",
-            "sync",
             "reference",
             "embed",
         ),
@@ -152,24 +220,16 @@ OPERATION_FAMILIES = (
             "Create Contexts or Memories, copy or import resources, or connect "
             "existing material."
         ),
-        execution_label="NO LLM",
     ),
     OperationFamily(
         id=OperationFamilyId.SEARCH_EXPLAIN,
         title="SEARCH & EXPLAIN",
-        operation_names=("find", "query", "summarize", "compare"),
+        operation_names=("summarize", "compare"),
         description=(
-            "Find exact text directly, or use LLM-based semantic retrieval, "
-            "answering, summarization, and comparison within the selected "
+            "Use LLM-based summarization and comparison within the selected "
             "authorized scope."
         ),
-        execution_label="MIXED",
         sections=(
-            OperationFamilySection(
-                id=OperationFamilySectionId.SEARCH_RETRIEVE_ANSWER,
-                title="RETRIEVE & ANSWER",
-                operation_names=("find", "query"),
-            ),
             OperationFamilySection(
                 id=OperationFamilySectionId.SEARCH_SYNTHESIZE,
                 title="SYNTHESIZE",
@@ -181,43 +241,32 @@ OPERATION_FAMILIES = (
         id=OperationFamilyId.DIRECT_CHANGES,
         title="DIRECT CHANGES",
         operation_names=(
-            "edit",
             "move",
             "replace",
             "chunk",
-            "delete",
             "clear",
         ),
         description=(
             "Apply explicit inputs and reviewed choices through deterministic "
             "program logic to change content."
         ),
-        execution_label="NO LLM",
     ),
     OperationFamily(
         id=OperationFamilyId.SEMANTIC_UPDATES,
         title="SEMANTIC UPDATES",
         operation_names=(
-            "update",
             "atomize",
             "distill",
             "elaborate",
             "makemore",
             "forget",
             "sever",
-            "merge",
         ),
         description=(
-            "Use semantic decisions to update, derive, curate, or integrate "
+            "Use semantic decisions to derive or curate "
             "content through operation-owned review and Apply boundaries."
         ),
-        execution_label="MIXED",
         sections=(
-            OperationFamilySection(
-                id=OperationFamilySectionId.SEMANTIC_UPDATE_FOUNDATION,
-                title="FOUNDATION",
-                operation_names=("update",),
-            ),
             OperationFamilySection(
                 id=OperationFamilySectionId.SEMANTIC_UPDATE_DERIVE,
                 title="DERIVE",
@@ -226,7 +275,7 @@ OPERATION_FAMILIES = (
             OperationFamilySection(
                 id=OperationFamilySectionId.SEMANTIC_UPDATE_CURATE_INTEGRATE,
                 title="CURATE & INTEGRATE",
-                operation_names=("forget", "sever", "merge"),
+                operation_names=("forget", "sever"),
             ),
         ),
     ),
@@ -238,7 +287,6 @@ OPERATION_FAMILIES = (
             "Create reusable language views or materializations while preserving "
             "the selected Source content."
         ),
-        execution_label="LLM-BASED",
     ),
     OperationFamily(
         id=OperationFamilyId.QUALITY_RESOLUTION,
@@ -248,9 +296,7 @@ OPERATION_FAMILIES = (
             "find-redundancies",
             "find-ambiguities",
             "find-conflicts",
-            "audit",
             "dedup",
-            "resolve",
             "fit",
             "check-conformance",
         ),
@@ -258,7 +304,6 @@ OPERATION_FAMILIES = (
             "Diagnose quality issues, repair exact or semantic problems, and "
             "validate compatibility or rule conformance."
         ),
-        execution_label="MIXED",
         sections=(
             OperationFamilySection(
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_DIAGNOSE,
@@ -268,13 +313,12 @@ OPERATION_FAMILIES = (
                     "find-redundancies",
                     "find-ambiguities",
                     "find-conflicts",
-                    "audit",
                 ),
             ),
             OperationFamilySection(
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_REPAIR,
                 title="REPAIR",
-                operation_names=("dedup", "resolve"),
+                operation_names=("dedup",),
             ),
             OperationFamilySection(
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_VALIDATE,
@@ -291,7 +335,6 @@ OPERATION_FAMILIES = (
             "Inspect a planned operation before Apply or examine retained "
             "evidence after execution."
         ),
-        execution_label="MIXED",
     ),
     OperationFamily(
         id=OperationFamilyId.GROUND_WORKBENCH,
@@ -301,7 +344,6 @@ OPERATION_FAMILIES = (
             "Turn abstract ideas into reviewable common ground by developing a "
             "Goal, Rules, and example Memories together."
         ),
-        execution_label="LLM-BASED",
     ),
     OperationFamily(
         id=OperationFamilyId.HISTORY_RECOVERY,
@@ -312,15 +354,12 @@ OPERATION_FAMILIES = (
             "trace",
             "rationale",
             "checkpoint",
-            "undo",
-            "redo",
             "revert",
         ),
         description=(
             "Inspect provenance and recorded changes. Restore an earlier state "
             "through explicit history operations."
         ),
-        execution_label="MIXED",
         sections=(
             OperationFamilySection(
                 id=OperationFamilySectionId.HISTORY_INSPECTION,
@@ -330,19 +369,9 @@ OPERATION_FAMILIES = (
             OperationFamilySection(
                 id=OperationFamilySectionId.HISTORY_RECOVERY,
                 title="RECOVERY",
-                operation_names=("checkpoint", "undo", "redo", "revert"),
+                operation_names=("checkpoint", "revert"),
             ),
         ),
-    ),
-    OperationFamily(
-        id=OperationFamilyId.PROFILES,
-        title="PROFILES",
-        operation_names=("profile",),
-        description=(
-            "Select and administer complete local Profile stores and their "
-            "managed names."
-        ),
-        execution_label="NO LLM",
     ),
     OperationFamily(
         id=OperationFamilyId.SHARING_PROTECTION,
@@ -351,33 +380,27 @@ OPERATION_FAMILIES = (
         description=(
             "Deliver owned Contexts and protect Memory, Context, or Profile writes."
         ),
-        execution_label="NO LLM",
     ),
     OperationFamily(
         id=OperationFamilyId.SYSTEM_STUDY_TOOLS,
         title="SYSTEM & STUDY TOOLS",
-        operation_names=("help", "provider", "config", "init-study", "dev-eval"),
+        operation_names=("provider", "config", "init-study", "dev-eval"),
         description=(
             "Configure MemCommit, prepare studies, and run repeatable developer scenarios."
         ),
-        execution_label=None,
     ),
 )
 
 
 OPERATION_FAMILY_BY_ID = {family.id: family for family in OPERATION_FAMILIES}
-OPERATION_FAMILY_BY_TITLE = {
-    family.title: family for family in OPERATION_FAMILIES
-}
+OPERATION_FAMILY_BY_TITLE = {family.title: family for family in OPERATION_FAMILIES}
 OPERATION_FAMILY_BY_OPERATION = {
     operation_name: family
     for family in OPERATION_FAMILIES
     for operation_name in family.operation_names
 }
 OPERATION_FAMILY_SECTION_BY_ID = {
-    section.id: section
-    for family in OPERATION_FAMILIES
-    for section in family.sections
+    section.id: section for family in OPERATION_FAMILIES for section in family.sections
 }
 OPERATION_FAMILY_SECTION_BY_OPERATION = {
     operation_name: section
@@ -427,7 +450,6 @@ def operation_family_section(
 
 
 __all__ = [
-    "FamilyExecutionLabel",
     "OPERATION_FAMILIES",
     "OPERATION_FAMILY_BY_ID",
     "OPERATION_FAMILY_BY_OPERATION",

@@ -1,10 +1,13 @@
-"""MemoryStore composition for terminal-independent ordinary Query answers."""
+"""ProfileStore composition for terminal-independent ordinary Query answers."""
 
 from __future__ import annotations
 
 from typing import Protocol
 
 from memcommit.application.context_access.access import ContextAccess
+from memcommit.application.context_access.readable_contexts import (
+    freeze_profile_readable_context_catalog,
+)
 from memcommit.models.context import Context
 from memcommit.application.capabilities.retrieval_corpus.loading import (
     collect_readable_corpus_candidates,
@@ -19,7 +22,7 @@ from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQuerySourcePort,
     run_ordinary_query,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class OrdinaryQueryReadableCatalog(Protocol):
@@ -41,7 +44,7 @@ class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
 
     def __init__(
         self,
-        store: MemoryStore,
+        store: ProfileStore,
         catalog: OrdinaryQueryReadableCatalog,
     ) -> None:
         self._store = store
@@ -70,7 +73,7 @@ class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
 def execute_ordinary_query(
     request: OrdinaryQueryRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     catalog: OrdinaryQueryReadableCatalog,
     provider_factory: OrdinaryQueryProviderFactory,
     observer: OrdinaryQueryObserver | None = None,
@@ -85,9 +88,32 @@ def execute_ordinary_query(
     )
 
 
+def execute_profile_query(
+    question: str,
+    *,
+    store: ProfileStore,
+    provider_factory: OrdinaryQueryProviderFactory,
+    observer: OrdinaryQueryObserver | None = None,
+) -> OrdinaryQueryResponse:
+    """Answer from every Context in the active Profile, independent of current."""
+
+    catalog = freeze_profile_readable_context_catalog(store)
+    context_names = tuple(catalog.list_context_names())
+    if not context_names:
+        raise ValueError("No Contexts are available for Query in this Profile.")
+    return execute_ordinary_query(
+        OrdinaryQueryRequest(question=question, target_names=context_names),
+        store=store,
+        catalog=catalog,
+        provider_factory=provider_factory,
+        observer=observer,
+    )
+
+
 __all__ = [
     "MemoryStoreOrdinaryQuerySourcePort",
     "ContextAccess",
     "OrdinaryQueryReadableCatalog",
     "execute_ordinary_query",
+    "execute_profile_query",
 ]

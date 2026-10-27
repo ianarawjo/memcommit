@@ -17,11 +17,11 @@ from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
 from memcommit.application.operations.clear.application import ClearRequest, ClearResult
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _clear_recursive(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     access: ContextAccess,
 ) -> ClearResult:
     """Clear one frozen local lexical subtree as one Undoable command unit."""
@@ -107,7 +107,7 @@ def _clear_recursive(
 
 
 def execute_clear(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     request: ClearRequest,
     *,
     current_name: str | None,

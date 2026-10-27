@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, Optional
 
+from click import UsageError
 import typer
 
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
@@ -12,14 +13,14 @@ from memcommit.application.operations.add.application import MemAddError, AddReq
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 
 
 def require_add_memories(memories: Optional[list[str]]) -> list[str]:
-    # Parse-time validation keeps missing input outside automatic Sync boundaries.
+    # Missing input must fail before command setup can touch the Store.
     if not memories:
-        raise typer.BadParameter(
-            'Example: mem add "Memory content".'
+        raise UsageError(
+            'Missing required input. Example: mem add "Memory content".'
         )
     return memories
 
@@ -35,7 +36,7 @@ def cmd(
     ] = None,
 ) -> None:
     try:
-        store = MemoryStore()
+        store = ProfileStore()
         current_context_name = store.current_context_name()
         result = run_add(
             AddRequest(context_locator=None, contents=tuple(memories or ())),

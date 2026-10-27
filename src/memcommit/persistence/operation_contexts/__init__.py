@@ -1,1 +1,1 @@
-"""Read application-owned Context resources without creating a MemoryStore."""
+"""Read application-owned Context resources without creating a ProfileStore."""

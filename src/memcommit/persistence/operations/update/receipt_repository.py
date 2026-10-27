@@ -26,7 +26,6 @@ class UpdateReceiptRepository:
     def save(self, receipt: UpdateReceipt):
         from memcommit.application.operations.update.model import UpdateReceipt
 
-        self.store._assert_profile_write_allowed()
         if not isinstance(receipt, UpdateReceipt):
             raise TypeError("Expected a completed UpdateReceipt.")
         data = receipt.to_dict()

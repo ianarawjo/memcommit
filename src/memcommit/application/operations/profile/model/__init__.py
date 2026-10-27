@@ -14,12 +14,8 @@ from ._storage import (
     _prepare_profile_deletion_batch as _prepare_profile_deletion_batch,
     _publish_permanent_removal as _publish_permanent_removal,
     _read_json as _read_json,
-    _registry_lock as _registry_lock,
     _reject_duplicate_keys as _reject_duplicate_keys,
     _rollback_profile_deletion_batch as _rollback_profile_deletion_batch,
-    _source_digest as _source_digest,
-    _source_store as _source_store,
-    _translation_catalogs as _translation_catalogs,
     _write_registry as _write_registry,
     inspect_store as inspect_store,
 )
@@ -32,7 +28,6 @@ from .lifecycle import (
     _profile_study_target as _profile_study_target,
     _write_empty_profile_store as _write_empty_profile_store,
     create_profile as create_profile,
-    import_profile as import_profile,
     list_profiles as list_profiles,
     remove_profile as remove_profile,
     rename_profile as rename_profile,
@@ -51,10 +46,7 @@ __all__ = [
     "StudyRemovalResult",
     "StudyRenameResult",
     "StudyRunProfileGroup",
-    "baseline_store_digest",
     "create_profile",
-    "import_baseline_profile",
-    "import_profile",
     "inspect_store",
     "list_profiles",
     "migrate_visible_study_provider_policy",
@@ -65,17 +57,6 @@ __all__ = [
     "group_study_run_profiles",
     "use_profile",
 ]
-
-
-_MEM_IMPORT_COMPAT_EXPORTS = {
-    "_BASELINE_TOP_LEVEL_DIRECTORIES",
-    "_baseline_import_provenance",
-    "_baseline_store_files",
-    "_copy_store_baseline",
-    "_publish_baseline_profile_locked",
-    "baseline_store_digest",
-    "import_baseline_profile",
-}
 
 
 # Study transactions import this package's storage primitives. Keep their
@@ -102,10 +83,6 @@ def __getattr__(name: str):
             f"memcommit.application.operations.profile.study.{_CURRENT_STUDY_EXPORTS[name]}"
         )
         value = getattr(module, name)
-    elif name in _MEM_IMPORT_COMPAT_EXPORTS:
-        from memcommit.application.operations.mem_import import profile
-
-        value = getattr(profile, name)
     else:
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     globals()[name] = value

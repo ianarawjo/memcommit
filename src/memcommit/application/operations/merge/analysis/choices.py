@@ -110,10 +110,8 @@ def prepare_structural_input(
     if (
         additions
         and not defer_target_validation
-        and (not policy.context_mutable or "CREATE" not in policy.allowed_effects)
+        and "CREATE" not in policy.allowed_effects
     ):
-        if not policy.context_mutable:
-            raise ValueError(f"Context '{target.name}' is locked against changes.")
         raise ValueError(
             "Target does not permit CREATE for the required Merge additions."
         )
@@ -134,13 +132,10 @@ def prepare_structural_choices(candidate, report, *, policy):
         source_item = candidate.original_item(finding.source_uid)
         targets = tuple(candidate.original_item(uid) for uid in finding.target_uids)
         allowed = ["KEEP_TARGET"]
-        mutable = policy.context_mutable and not any(
-            item.uid in policy.protected_uids for item in targets
-        )
-        if mutable and "UPDATE" in policy.allowed_effects:
+        if "UPDATE" in policy.allowed_effects:
             allowed.append("TAKE_SOURCE")
         both_uid = None
-        if policy.context_mutable and "CREATE" in policy.allowed_effects:
+        if "CREATE" in policy.allowed_effects:
             allowed.append("KEEP_BOTH")
             both_uid = str(uuid.uuid4())
         conflicts.append(

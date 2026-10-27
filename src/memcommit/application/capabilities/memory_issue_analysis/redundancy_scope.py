@@ -30,7 +30,7 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -60,7 +60,7 @@ class RedundancyScopeAnalysis:
 
 
 def freeze_redundancy_scope(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     access: ContextAccess,
     *,
     include_descendants: bool,
@@ -68,7 +68,7 @@ def freeze_redundancy_scope(
     """Freeze one root or readable lexical subtree as independent frames."""
 
     if (
-        not isinstance(active_store, MemoryStore)
+        not isinstance(active_store, ProfileStore)
         or not isinstance(access, ContextAccess)
         or type(include_descendants) is not bool
     ):

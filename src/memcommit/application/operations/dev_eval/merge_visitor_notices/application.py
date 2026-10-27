@@ -11,13 +11,13 @@ from memcommit.application.operations.dev_eval.merge_visitor_notices.steps impor
     init_context as init_context_step,
 )
 from memcommit.application.operations.dev_eval.terminal import ScenarioTerminal
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.types import SemanticProvider
 
 
 def run_scenario(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], SemanticProvider],
 ) -> list[tuple[str, bool]]:
     """Run CLI Init/Add and verify both endpoints through application queries."""

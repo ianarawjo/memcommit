@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from .fingerprints import ContextFingerprint
 from .inputs import UpdateContextInputs
 from .plan import UpdatePlan
 from .changes import (
@@ -55,69 +54,53 @@ class UpdateCheckpointReceipt:
 class UpdateApplicationReceipt:
     applied_at: str
     operation_digest: str
-    target_digest: str
-    target_contexts: tuple[ContextFingerprint, ...]
     checkpoints: tuple[UpdateCheckpointReceipt, ...]
 
     def to_dict(self) -> dict[str, object]:
         return {
             "applied_at": self.applied_at,
             "operation_digest": self.operation_digest,
-            "target_digest": self.target_digest,
-            "target_contexts": [context.to_dict() for context in self.target_contexts],
             "checkpoints": [checkpoint.to_dict() for checkpoint in self.checkpoints],
         }
 
     @classmethod
     def from_dict(cls, value: object) -> UpdateApplicationReceipt:
+        # Older receipts retain state snapshots; new evidence needs only the effects.
+        if isinstance(value, dict):
+            value = {
+                key: item
+                for key, item in value.items()
+                if key not in {"target_digest", "target_contexts"}
+            }
         data = _require_exact_keys(
             value,
             {
                 "applied_at",
                 "operation_digest",
-                "target_digest",
-                "target_contexts",
                 "checkpoints",
             },
             "update application receipt",
         )
         operation_hash = data["operation_digest"]
-        target_digest = data["target_digest"]
         if not _is_sha256(operation_hash):
             raise ValueError("Invalid update operation digest.")
-        if not _is_sha256(target_digest):
-            raise ValueError("Invalid applied target digest.")
-        if not isinstance(data["target_contexts"], list):
-            raise ValueError("Invalid applied target Context fingerprints.")
         if not isinstance(data["checkpoints"], list):
             raise ValueError("Invalid update checkpoint receipts.")
-        target_contexts = tuple(
-            ContextFingerprint.from_dict(item) for item in data["target_contexts"]
-        )
         checkpoints = tuple(
             UpdateCheckpointReceipt.from_dict(item) for item in data["checkpoints"]
         )
-        context_identities = [
-            (context.uid, context.name) for context in target_contexts
-        ]
-        if len(context_identities) != len(set(context_identities)):
-            raise ValueError("Duplicate applied target Context fingerprint.")
         checkpoint_owners = [
             (checkpoint.context_uid, checkpoint.context_name)
             for checkpoint in checkpoints
         ]
         if len(checkpoint_owners) != len(set(checkpoint_owners)):
             raise ValueError("Duplicate update checkpoint owner.")
-        if not set(checkpoint_owners) <= set(context_identities):
-            raise ValueError("Update checkpoint owner is outside the target.")
         return cls(
             applied_at=_require_string(
                 data["applied_at"],
                 "update application time",
             ),
             operation_digest=operation_hash,
-            target_digest=target_digest,
-            target_contexts=target_contexts,
             checkpoints=checkpoints,
         )
 
@@ -153,10 +136,8 @@ class UpdateReceipt:
         }
         if owners != checkpoints:
             raise ValueError("Update checkpoints do not cover its changed Contexts.")
-        before = [(c.uid, c.name) for c in self.inputs.target_contexts]
-        after = [(c.uid, c.name) for c in self.application.target_contexts]
-        if before != after or not owners <= set(before):
-            raise ValueError("Update receipt changed its Target identities.")
+        if not owners <= set(self.inputs.target_contexts):
+            raise ValueError("Update receipt has an owner outside its Target scope.")
         for op in self.plan.operations:
             if self.inputs.target_memory_uid is not None and (
                 isinstance(op, AddOperation)

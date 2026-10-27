@@ -171,7 +171,7 @@ def run_in_round_change_review(
         decisions=review,
         presentation=CompactScreenPresentation(
             continue_label="Review combined changes",
-            activation_hint="select/review",
+            activation_hint="select/continue",
             show_item_navigation=True,
             require_all_decisions=True,
             back_label="Back to choices",

@@ -50,6 +50,7 @@ class OrdinaryQueryEvidence:
     kind: OrdinaryQueryEvidenceKind
     uid: str
     content: str
+    memory_position_in_context: int | None = None
 
     def __post_init__(self) -> None:
         alias = _bounded_nonblank_text(
@@ -63,6 +64,14 @@ class OrdinaryQueryEvidence:
             )
         if self.kind not in {"memory", "artifact"}:
             raise OrdinaryQueryReferenceError("Invalid evidence kind.")
+        if self.memory_position_in_context is not None and (
+            self.kind != "memory"
+            or type(self.memory_position_in_context) is not int
+            or self.memory_position_in_context < 1
+        ):
+            raise OrdinaryQueryReferenceError(
+                "Memory position must be a positive Context-local ordinal."
+            )
         object.__setattr__(self, "alias", alias)
         object.__setattr__(
             self,
@@ -175,7 +184,11 @@ def _render_reference(
             content=evidence.content,
             uid=evidence.uid,
             context_name=evidence.context_name,
-            alias=evidence.alias,
+            alias=(
+                f"Memory {evidence.memory_position_in_context}"
+                if evidence.memory_position_in_context is not None
+                else None
+            ),
         ),
         uid_prefix_length=ORDINARY_QUERY_UID_PREFIX_LENGTH,
     )

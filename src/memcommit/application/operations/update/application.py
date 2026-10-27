@@ -21,19 +21,17 @@ class UpdateApplicationError(UpdateError):
 
 
 def _create_working_copy(context: Context) -> Context:
-    working_copy = Context.from_dict(context.to_dict())
-    # A later publication boundary may use this immutable load token for CAS.
-    return working_copy
+    return Context.from_dict(context.to_dict())
 
 
 def apply_update_to_working_contexts(
     plan: UpdatePlan, target_contexts: tuple[Context, ...]
 ) -> UpdateResult:
-    """Apply a prepared plan to working copies of its unchanged Target.
+    """Apply a prepared plan to working copies of the supplied Target.
 
     Internal planning/composition establishes typed effects, exact owner
-    identities and writable Memory targets. Callers supply the matching
-    baseline and revalidate frozen state before publication. New Memory UID
+    identities and writable Memory targets. Publication separately checks the
+    affected Memories against their recorded before contents. New Memory UID
     collisions are checked here; neither success nor failure mutates the supplied
     Contexts.
     """

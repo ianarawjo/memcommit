@@ -12,7 +12,7 @@ from memcommit.application.operations.dev_eval.catalog import (
     get_scenario,
     list_scenarios,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.connection import connect_semantic_provider
 
 
@@ -36,7 +36,7 @@ def cmd(
         echo_text("{error}", error=error, err=True)
         raise typer.Exit(2) from error
     try:
-        store = MemoryStore()
+        store = ProfileStore()
         secho_text("DEV EVAL  {name}\n", name=selected.name, bold=True)
         checks = selected.run(
             store=store,

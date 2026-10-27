@@ -16,10 +16,8 @@ from memcommit.application.capabilities.semantic.memory_scope import (
 from .changes import (
     SourceReference,
     UpdateError,
-    _sha256_json,
     _sha256_text,
 )
-from .fingerprints import ContextFingerprint
 from .instruction import UpdateInstruction
 
 
@@ -91,43 +89,11 @@ class UpdateInputs:
     source_candidates: tuple[SourceCandidate, ...]
     target_contexts: tuple[TargetContextCandidate, ...]
     target_memories: tuple[TargetMemoryCandidate, ...]
-    source_digest: str
-    target_digest: str
-    source_contexts: tuple[ContextFingerprint, ...]
-    target_context_fingerprints: tuple[ContextFingerprint, ...]
     source_context_only: tuple[SourceCandidate, ...] = ()
     target_context_only: tuple[TargetMemoryCandidate, ...] = ()
     source_memory_uid: str | None = None
     target_memory_uid: str | None = None
     instruction: UpdateInstruction | None = None
-
-
-def _fingerprint_contexts(
-    contexts: tuple[Context, ...],
-) -> tuple[ContextFingerprint, ...]:
-    return tuple(
-        ContextFingerprint(
-            uid=context.uid,
-            name=context.name,
-        )
-        for context in contexts
-    )
-
-
-def _inline_update_source_digest(context: Context) -> str:
-    """Return the same Source digest used by ``collect_update_inputs``."""
-
-    return _sha256_json(
-        [
-            {
-                "context_uid": context.uid,
-                "context_name": context.name,
-                "memory_uid": memory.uid,
-                "content": memory.content,
-            }
-            for memory in context.memories.values()
-        ]
-    )
 
 
 def collect_update_inputs(
@@ -137,7 +103,6 @@ def collect_update_inputs(
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
     instruction: UpdateInstruction | None = None,
-    target_include_descendants: bool = False,
 ) -> UpdateInputs:
     """Collect readable source facts and directly writable target Memories."""
     # The instruction Source stays exact even when its Target spans several owners.
@@ -203,32 +168,6 @@ def collect_update_inputs(
                 )
             )
 
-    source_payload = [
-        {
-            "context_uid": candidate.context_uid,
-            "context_name": candidate.context_name,
-            "memory_uid": candidate.memory_uid,
-            "content": candidate.content,
-        }
-        for candidate in source_candidates
-    ]
-    target_payload = {
-        "contexts": [
-            {
-                "context_uid": candidate.context_uid,
-                "context_name": candidate.context_name,
-            }
-            for candidate in target_context_candidates
-        ],
-        "memories": [
-            {
-                "context_uid": candidate.context_uid,
-                "memory_uid": candidate.memory_uid,
-                "content": candidate.content,
-            }
-            for candidate in target_memories
-        ],
-    }
     try:
         source_scope = resolve_memory_scope(
             source_candidates,
@@ -261,18 +200,6 @@ def collect_update_inputs(
             () if target_scope.selected_uid is not None else target_context_candidates
         ),
         target_memories=target_scope.actionable,
-        source_digest=_sha256_json(source_payload),
-        target_digest=_sha256_json(target_payload),
-        source_contexts=_fingerprint_contexts(source_contexts),
-        target_context_fingerprints=tuple(
-            ContextFingerprint(
-                owner.uid,
-                owner.name,
-            )
-            for owner in target_contexts
-        )
-        if target_include_descendants and instruction is not None
-        else _fingerprint_contexts(target_contexts),
         source_context_only=()
         if instruction is not None
         else source_scope.context_only,
@@ -289,12 +216,10 @@ class UpdateContextInputs:
 
     source_uid: str
     source_name: str
-    source_digest: str
-    source_contexts: tuple[ContextFingerprint, ...]
+    source_contexts: tuple[tuple[str, str], ...]
     target_uid: str
     target_name: str
-    target_digest: str
-    target_contexts: tuple[ContextFingerprint, ...]
+    target_contexts: tuple[tuple[str, str], ...]
     source_include_descendants: bool = False
     target_include_descendants: bool = False
     source_memory_uid: str | None = None
@@ -310,10 +235,8 @@ class UpdateContextInputs:
                 for name in (
                     "source_uid",
                     "source_name",
-                    "source_digest",
                     "target_uid",
                     "target_name",
-                    "target_digest",
                     "source_include_descendants",
                     "target_include_descendants",
                     "source_memory_uid",
@@ -321,8 +244,12 @@ class UpdateContextInputs:
                     "inline_source_content",
                 )
             },
-            "source_contexts": [item.to_dict() for item in self.source_contexts],
-            "target_contexts": [item.to_dict() for item in self.target_contexts],
+            "source_contexts": [
+                {"uid": uid, "name": name} for uid, name in self.source_contexts
+            ],
+            "target_contexts": [
+                {"uid": uid, "name": name} for uid, name in self.target_contexts
+            ],
             "goal_focus": self.goal_focus.receipt_record() if self.goal_focus else None,
             "instruction": self.instruction.text
             if self.instruction is not None
@@ -336,9 +263,15 @@ class UpdateContextInputs:
             _require_exact_keys,
             _require_string,
             _require_uuid,
-            _is_sha256,
         )
 
+        # Retired state hashes are read compatibility only, never new save conditions.
+        if isinstance(value, dict):
+            value = {
+                key: item
+                for key, item in value.items()
+                if key not in {"source_digest", "target_digest"}
+            }
         # Older completed evidence predates instruction-based direct execution.
         if isinstance(value, dict) and "instruction" not in value:
             value = {**value, "instruction": None}
@@ -348,8 +281,6 @@ class UpdateContextInputs:
         for role in ("source", "target"):
             for field in ("uid", "name"):
                 _require_string(data[f"{role}_{field}"], f"{role} {field}")
-            if not _is_sha256(data[f"{role}_digest"]):
-                raise ValueError("Invalid Update input digest.")
             if type(data[f"{role}_include_descendants"]) is not bool:
                 raise ValueError("Invalid Update scope.")
             selected = data[f"{role}_memory_uid"]
@@ -359,10 +290,23 @@ class UpdateContextInputs:
                     raise ValueError("Focused Update cannot include descendants.")
             records = data[f"{role}_contexts"]
             if not isinstance(records, list):
-                raise ValueError("Invalid Update fingerprints.")
-            data[f"{role}_contexts"] = tuple(
-                ContextFingerprint.from_dict(item) for item in records
-            )
+                raise ValueError("Invalid Update Context identities.")
+            context_identities = []
+            for record in records:
+                if isinstance(record, dict):
+                    record = {
+                        key: item for key, item in record.items() if key != "digest"
+                    }
+                identity = _require_exact_keys(
+                    record, {"uid", "name"}, "Update Context identity"
+                )
+                context_identities.append(
+                    (
+                        _require_string(identity["uid"], "Context uid"),
+                        _require_string(identity["name"], "Context name"),
+                    )
+                )
+            data[f"{role}_contexts"] = tuple(context_identities)
         data["goal_focus"] = (
             FrozenGoalFocus.from_receipt_record(data["goal_focus"])
             if data["goal_focus"] is not None
@@ -398,24 +342,25 @@ def freeze_update_context_inputs(
         source_memory_selector=source_memory_selector,
         target_memory_selector=target_memory_selector,
         instruction=instruction,
-        target_include_descendants=target_include_descendants,
     )
     return UpdateContextInputs(
-        source.uid,
-        source.name,
-        collected.source_digest,
-        collected.source_contexts,
-        target.uid,
-        target.name,
-        collected.target_digest,
-        collected.target_context_fingerprints,
-        source_include_descendants,
-        target_include_descendants,
-        collected.source_memory_uid,
-        collected.target_memory_uid,
-        inline_source_content,
-        goal_focus,
-        instruction,
+        source_uid=source.uid,
+        source_name=source.name,
+        source_contexts=tuple(
+            (context.uid, context.name) for context in source_contexts
+        ),
+        target_uid=target.uid,
+        target_name=target.name,
+        target_contexts=tuple(
+            (context.uid, context.name) for context in target_contexts
+        ),
+        source_include_descendants=source_include_descendants,
+        target_include_descendants=target_include_descendants,
+        source_memory_uid=collected.source_memory_uid,
+        target_memory_uid=collected.target_memory_uid,
+        inline_source_content=inline_source_content,
+        goal_focus=goal_focus,
+        instruction=instruction,
     )
 
 
@@ -430,46 +375,9 @@ def inline_update_source(inputs: UpdateContextInputs) -> Context | None:
     if (
         source.uid != inputs.source_uid
         or source.name != inputs.source_name
-        or inputs.source_digest != _inline_update_source_digest(source)
-        or inputs.source_contexts != _fingerprint_contexts((source,))
+        or inputs.source_contexts != ((source.uid, source.name),)
         or inputs.source_include_descendants
         or inputs.source_memory_uid is not None
     ):
         raise UpdateError("Inline Update Source no longer matches its frozen frame.")
     return source
-
-
-def update_inputs_match(
-    inputs: UpdateContextInputs,
-    source_contexts: tuple[Context, ...],
-    target_contexts: tuple[Context, ...],
-) -> bool:
-    """Return whether an impact plan still describes the exact A/B inputs."""
-    source = source_contexts[0]
-    target = target_contexts[0]
-    if (
-        inputs.source_uid != source.uid
-        or inputs.source_name != source.name
-        or inputs.target_uid != target.uid
-        or inputs.target_name != target.name
-    ):
-        return False
-    try:
-        collected = collect_update_inputs(
-            source_contexts,
-            target_contexts,
-            source_memory_selector=inputs.source_memory_uid,
-            target_memory_selector=inputs.target_memory_uid,
-            instruction=inputs.instruction,
-            target_include_descendants=inputs.target_include_descendants,
-        )
-    except UpdateError:
-        return False
-    return (
-        inputs.source_memory_uid == collected.source_memory_uid
-        and inputs.target_memory_uid == collected.target_memory_uid
-        and inputs.source_digest == collected.source_digest
-        and inputs.target_digest == collected.target_digest
-        and inputs.source_contexts == collected.source_contexts
-        and inputs.target_contexts == collected.target_context_fingerprints
-    )

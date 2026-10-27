@@ -30,7 +30,7 @@ from memcommit.core.context_targeting.resolution import (
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _preview_chunk(chunk_number: int, chunk_memory: Memory) -> None:
@@ -122,7 +122,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    active_store = MemoryStore()
+    active_store = ProfileStore()
     snapshot = ContextOperandSnapshot.capture(active_store)
     try:
         parsed_operand = (

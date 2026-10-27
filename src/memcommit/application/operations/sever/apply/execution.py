@@ -22,7 +22,7 @@ from memcommit.application.operations.sever.model import (
     SeverSession,
 )
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     ConcurrentContextUpdateError,
 )
 
@@ -31,7 +31,7 @@ from memcommit.persistence.store import (
 class MemoryStoreSeverOutputPort:
     """Keep authority validation around the complete save-mode transaction."""
 
-    store: MemoryStore
+    store: ProfileStore
 
     def recover_materialization(self, session: SeverSession) -> SeverSession | None:
         if not self.store.context_exists(session.output_name):

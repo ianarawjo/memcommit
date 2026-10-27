@@ -12,7 +12,6 @@ from memcommit.application.operations.profile.config import (
 from memcommit.models.profile import Profile
 from memcommit.application.operations.profile.errors import ProfileError
 from memcommit.application.operations.profile.model._storage import (
-    _registry_lock,
     _write_registry,
 )
 from .topology import group_study_run_profiles
@@ -51,52 +50,51 @@ def migrate_visible_study_provider_policy(
         raise ProfileError("Study provider migration has no accepted source.")
 
     target = (target_version, target_digest)
-    with _registry_lock():
-        registry = load_profile_registry()
-        migrated_uids: set[str] = set()
-        migrated_studies = 0
-        for group in group_study_run_profiles(registry.profiles):
-            identity = study_run_identity(group.profiles[0])
-            assert identity is not None
-            current = (
-                identity.provider_policy_version,
-                identity.provider_policy_digest,
-            )
-            if current == target:
-                continue
-            if current not in accepted_sources:
-                raise ProfileError(
-                    f"Visible Study {group.uid!r} has an unaccepted provider policy."
-                )
-            migrated_studies += 1
-            migrated_uids.update(profile.uid for profile in group.profiles)
-
-        if not migrated_uids:
-            return StudyProviderPolicyMigrationResult(
-                generation=registry.generation,
-                migrated_study_count=0,
-                migrated_profile_count=0,
-            )
-
-        profiles: list[Profile] = []
-        for profile in registry.profiles:
-            if profile.uid not in migrated_uids:
-                profiles.append(profile)
-                continue
-            assert profile.source is not None
-            source = dict(profile.source)
-            source["provider_policy_version"] = target_version
-            source["provider_policy_digest"] = target_digest
-            profiles.append(replace(profile, source=source))
-
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=tuple(profiles),
+    registry = load_profile_registry()
+    migrated_uids: set[str] = set()
+    migrated_studies = 0
+    for group in group_study_run_profiles(registry.profiles):
+        identity = study_run_identity(group.profiles[0])
+        assert identity is not None
+        current = (
+            identity.provider_policy_version,
+            identity.provider_policy_digest,
         )
-        _write_registry(updated)
+        if current == target:
+            continue
+        if current not in accepted_sources:
+            raise ProfileError(
+                f"Visible Study {group.uid!r} has an unaccepted provider policy."
+            )
+        migrated_studies += 1
+        migrated_uids.update(profile.uid for profile in group.profiles)
+
+    if not migrated_uids:
         return StudyProviderPolicyMigrationResult(
-            generation=updated.generation,
-            migrated_study_count=migrated_studies,
-            migrated_profile_count=len(migrated_uids),
+            generation=registry.generation,
+            migrated_study_count=0,
+            migrated_profile_count=0,
         )
+
+    profiles: list[Profile] = []
+    for profile in registry.profiles:
+        if profile.uid not in migrated_uids:
+            profiles.append(profile)
+            continue
+        assert profile.source is not None
+        source = dict(profile.source)
+        source["provider_policy_version"] = target_version
+        source["provider_policy_digest"] = target_digest
+        profiles.append(replace(profile, source=source))
+
+    updated = ProfileRegistry(
+        generation=max(1, registry.generation + 1),
+        active_uid=registry.active_uid,
+        profiles=tuple(profiles),
+    )
+    _write_registry(updated)
+    return StudyProviderPolicyMigrationResult(
+        generation=updated.generation,
+        migrated_study_count=migrated_studies,
+        migrated_profile_count=len(migrated_uids),
+    )

@@ -20,13 +20,13 @@ from memcommit.application.operations.sever.model import (
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     context_record_digest,
 )
 
 
 def recover_other_save(
-    store: MemoryStore, session: SeverSession
+    store: ProfileStore, session: SeverSession
 ) -> SeverSession | None:
     """Adopt only an untouched Result produced by this exact review.
 
@@ -68,7 +68,7 @@ def recover_other_save(
 
 
 def materialize_other_save(
-    store: MemoryStore,
+    store: ProfileStore,
     session: SeverSession,
     *,
     expected_context_catalog: tuple[str, ...],
@@ -102,7 +102,7 @@ def materialize_other_save(
     )
 
 
-def rollback_other_save(store: MemoryStore, applied: SeverSession) -> None:
+def rollback_other_save(store: ProfileStore, applied: SeverSession) -> None:
     """Compensate only the exact save named by an uncommitted receipt."""
 
     application = applied.application
@@ -123,24 +123,22 @@ def rollback_other_save(store: MemoryStore, applied: SeverSession) -> None:
     # This is compensation for an outcome that never committed, not a
     # user-visible deletion. Hold the same Store boundaries as creation
     # and intentionally avoid publishing a lifecycle event.
-    with store._command_write_lock():  # noqa: SLF001
-        with store._context_graph_lock(exclusive=False):  # noqa: SLF001
-            with store._context_write_lock(applied.output_name):  # noqa: SLF001
-                with store.profile_write_guard():
-                    current = store.load_direct(applied.output_name)
-                    if (
-                        current.uid != application.output_context_uid
-                        or context_record_digest(current) != expected_digest
-                    ):
-                        raise SeverApplicationError(
-                            "The new Sever Result changed before rollback."
-                        )
-                    checkpoints = store.list_checkpoints(applied.output_name)
-                    if (
-                        len(checkpoints) != 1
-                        or checkpoints[0].get("uid") != application.checkpoint_uid
-                    ):
-                        raise SeverApplicationError(
-                            "The new Sever Result checkpoint changed before rollback."
-                        )
-                    store._delete_locked(applied.output_name)  # noqa: SLF001
+    with store._context_graph_lock(exclusive=False):  # noqa: SLF001
+        with store._context_write_lock(applied.output_name):  # noqa: SLF001
+            current = store.load_direct(applied.output_name)
+            if (
+                current.uid != application.output_context_uid
+                or context_record_digest(current) != expected_digest
+            ):
+                raise SeverApplicationError(
+                    "The new Sever Result changed before rollback."
+                )
+            checkpoints = store.list_checkpoints(applied.output_name)
+            if (
+                len(checkpoints) != 1
+                or checkpoints[0].get("uid") != application.checkpoint_uid
+            ):
+                raise SeverApplicationError(
+                    "The new Sever Result checkpoint changed before rollback."
+                )
+            store._delete_locked(applied.output_name)  # noqa: SLF001

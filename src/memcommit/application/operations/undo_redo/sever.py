@@ -55,7 +55,7 @@ def restore_sever_context_creation(store, unit, direction: str):
     sessions = SeverSessionStore(store)
     checkpoint: Checkpoint | None = None
 
-    with store._context_graph_lock(exclusive=False):
+    with store._context_graph_lock(exclusive=True):
         with store._context_write_lock(change.context_name):
             if direction == "undo":
                 try:
@@ -71,7 +71,6 @@ def restore_sever_context_creation(store, unit, direction: str):
                         f"Affected Context '{change.context_name}' changed "
                         "after the command selected for undo."
                     )
-                store._assert_context_deletion_allowed(current)
                 source_checkpoint = next(
                     (
                         entry

@@ -18,14 +18,13 @@ from ...verification.validators.chunk import verify_context_chunk, verify_legacy
 from ...verification.validators.command_operation import _update_command_operation
 from ...verification.validators.meld import _meld_change_evidence
 from ...verification.validators.merge_record import merge_change_evidence
-from ...verification.validators.translate import verify_translation
 from ..memory_state_delta import direct_memory_deltas
 from ..operation_record_correlation import (
     operation_record_identity,
     OperationRecordCorrelationError,
 )
 from .annotations import duplicate_relations, relation_annotations, update_annotations
-from .recorded import atomize_events, chunk_events, translation_events
+from .recorded import atomize_events, chunk_events
 from .snapshot import CommandRevision, snapshot_events
 
 
@@ -83,21 +82,6 @@ def _transition_events(
                 changes, before=trace_before or before, after=after, entry=entry
             ).relations
         )
-        translation, messages = verify_translation(
-            before=before,
-            after=after,
-            entry=entry,
-            removed=removed,
-            added=added,
-            changed=changed,
-        )
-        warnings.extend(messages)
-        if translation is not None:
-            relations.extend(
-                translation_events(
-                    translation, before=before, after=after, entry=entry
-                ).relations
-            )
         chunk = verify_context_chunk(
             before=before, after=after, entry=entry, removed=removed, added=added
         )

@@ -50,6 +50,7 @@ class RetrievalCandidate:
     context_names: tuple[str, ...]
     item: RetrievalItem
     search_text: str
+    memory_position_in_context: int | None = None
 
     @property
     def context_name(self) -> str:
@@ -104,6 +105,7 @@ def collect_candidates_from_roots(
         item: RetrievalItem,
         search_text: str,
         logical_identity: tuple[str, str, str],
+        memory_position_in_context: int,
     ) -> None:
         existing_index = by_logical_identity.get(logical_identity)
         if existing_index is not None:
@@ -123,6 +125,7 @@ def collect_candidates_from_roots(
                 context_names=(context.name,),
                 item=item,
                 search_text=search_text,
+                memory_position_in_context=memory_position_in_context,
             )
         )
 
@@ -130,7 +133,7 @@ def collect_candidates_from_roots(
         if current.uid in visited_contexts:
             return
         visited_contexts.add(current.uid)
-        for item in current.iter_memories():
+        for position, item in enumerate(current.iter_memories(), start=1):
             if isinstance(item, Memory):
                 add_candidate(
                     "memory",
@@ -138,6 +141,7 @@ def collect_candidates_from_roots(
                     item,
                     item.content,
                     ("memory", current.uid, item.uid),
+                    position,
                 )
 
     for root in roots:

@@ -1,18 +1,14 @@
-"""Shared Profile store inspection, locking, and atomic publication primitives."""
+"""Shared Profile store inspection and atomic publication primitives."""
 
 from __future__ import annotations
 
-from contextlib import contextmanager
 from dataclasses import dataclass
-import fcntl
-import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
 import stat
 import uuid
-from typing import Iterator
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.application.operations.profile.config import (
@@ -21,7 +17,6 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_control_dir,
     profile_registry_file,
-    profile_registry_lock_file,
     profile_store_dir,
     profile_stores_dir,
 )
@@ -29,10 +24,6 @@ from memcommit.models.profile import Profile
 from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
-)
-from memcommit.core.memory_translation import TranslationCatalogError
-from memcommit.persistence.store.translation_catalog import (
-    decode_translation_catalog_record,
 )
 
 
@@ -50,13 +41,12 @@ class ContextInventory:
 
 @dataclass(frozen=True)
 class StoreInspection:
-    """Read-only summary of one validated complete MemoryStore."""
+    """Read-only summary of one validated complete ProfileStore."""
 
     root: Path
     current_context: str | None
     context_names: tuple[str, ...]
     ordinary_memory_count: int
-    translation_catalog_count: int
     context_inventory: tuple[ContextInventory, ...]
 
 
@@ -105,7 +95,7 @@ def _context_records(
 ) -> dict[str, Context]:
     contexts_dir = root / "contexts"
     if contexts_dir.is_symlink() or not contexts_dir.is_dir():
-        raise ProfileError("MemoryStore contexts directory is missing or unsafe.")
+        raise ProfileError("ProfileStore contexts directory is missing or unsafe.")
     contexts: dict[str, Context] = {}
     for path in sorted(contexts_dir.rglob("context.json")):
         name = path.parent.relative_to(contexts_dir).as_posix()
@@ -132,7 +122,7 @@ def _context_record_at(root: Path, name: str) -> Context | None:
     canonical_name = validate_context_name(name)
     contexts_dir = root / "contexts"
     if contexts_dir.is_symlink() or not contexts_dir.is_dir():
-        raise ProfileError("MemoryStore contexts directory is missing or unsafe.")
+        raise ProfileError("ProfileStore contexts directory is missing or unsafe.")
     context_dir = contexts_dir
     for part in canonical_name.split("/"):
         context_dir /= part
@@ -157,52 +147,20 @@ def _context_record_at(root: Path, name: str) -> Context | None:
     return context
 
 
-def _translation_catalogs(
-    root: Path,
-    contexts: dict[str, Context],
-) -> int:
-    directory = root / "translation-views"
-    if not directory.exists():
-        return 0
-    if directory.is_symlink() or not directory.is_dir():
-        raise ProfileError("Translation-view storage is unsafe.")
-    count = 0
-    by_uid = {context.uid: context for context in contexts.values()}
-    for path in sorted(directory.glob("*--catalog.json")):
-        data = _read_json(path, label="Translation catalog")
-        try:
-            catalog = decode_translation_catalog_record(data)
-        except (
-            ProfileConfigError,
-            TranslationCatalogError,
-            TypeError,
-            ValueError,
-        ) as error:
-            raise ProfileError(f"Translation catalog is invalid: {path}") from error
-        context = by_uid.get(catalog.context_uid)
-        if context is None or context.name != catalog.context_name:
-            raise ProfileError(
-                "Translation catalog does not identify a Context in this store."
-            )
-        count += 1
-    return count
-
-
 def inspect_store(
     root: Path,
 ) -> StoreInspection:
     """Validate one complete store without creating or resolving content."""
 
     root = Path(root).absolute()
-    _assert_plain_tree(root, label="MemoryStore")
+    _assert_plain_tree(root, label="ProfileStore")
     contexts = _context_records(root)
-    state = _read_json(root / "state.json", label="MemoryStore state")
+    state = _read_json(root / "state.json", label="ProfileStore state")
     current = state.get("current")
     if current is not None and (
         not isinstance(current, str) or current not in contexts
     ):
-        raise ProfileError("MemoryStore current Context is invalid.")
-    catalog_count = _translation_catalogs(root, contexts)
+        raise ProfileError("ProfileStore current Context is invalid.")
     context_inventory = tuple(
         ContextInventory(
             uid=context.uid,
@@ -220,7 +178,6 @@ def inspect_store(
         ordinary_memory_count=sum(
             item.direct_memory_count for item in context_inventory
         ),
-        translation_catalog_count=catalog_count,
         context_inventory=context_inventory,
     )
 
@@ -239,41 +196,9 @@ def _ensure_control_dirs() -> None:
             raise ProfileError(str(error)) from error
 
 
-@contextmanager
-def _registry_lock() -> Iterator[None]:
-    _ensure_control_dirs()
-    path = profile_registry_lock_file()
-    if path.is_symlink():
-        raise ProfileError("Profile registry lock cannot be a symbolic link.")
-    flags = os.O_RDWR | os.O_CREAT
-    if hasattr(os, "O_NOFOLLOW"):
-        flags |= os.O_NOFOLLOW
-    descriptor = os.open(path, flags, 0o600)
-    try:
-        with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
-            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
-            try:
-                yield
-            finally:
-                fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
-    except Exception:
-        try:
-            os.close(descriptor)
-        except OSError:
-            pass
-        raise
-
-
-@contextmanager
-def locked_profile_registry() -> Iterator[ProfileRegistry]:
-    """Freeze Profile selection and registry identity during cross-Profile work."""
-    with _registry_lock():
-        yield load_profile_registry()
-
-
 def _write_registry(registry: ProfileRegistry) -> None:
+    _ensure_control_dirs()
     path = profile_registry_file()
-    ensure_private_directory(path.parent, parents=True)
     temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
     try:
         descriptor = open_private_exclusive(temporary)
@@ -312,6 +237,7 @@ def _prepare_profile_deletion_batch(profiles: tuple[Profile, ...]) -> Path:
         validate_profile_marker,
     )
 
+    _ensure_control_dirs()
     batch = profile_stores_dir() / f".permanent-profile-removal-{uuid.uuid4().hex}"
     batch.mkdir(mode=0o700)
     entries = []
@@ -426,20 +352,9 @@ def _publish_permanent_removal(
     _destroy_profile_deletion_batch(batch)
 
 
-def _source_digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
 def _copy_store(source: Path, destination: Path) -> StoreInspection:
-    _assert_plain_tree(source, label="Source MemoryStore")
+    _assert_plain_tree(source, label="Source ProfileStore")
     if destination.exists() or destination.is_symlink():
         raise ProfileError(f"Profile staging path is already occupied: {destination}")
     shutil.copytree(source, destination, symlinks=True, copy_function=shutil.copy2)
     return inspect_store(destination)
-
-
-def _source_store(path: Path) -> Path:
-    source = Path(path).expanduser().absolute()
-    if source.name != ".mem" and (source / ".mem").is_dir():
-        source = source / ".mem"
-    return source

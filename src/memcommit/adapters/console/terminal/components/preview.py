@@ -19,7 +19,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
-    SurfaceMoveResult,
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
@@ -42,7 +41,6 @@ from memcommit.adapters.console.terminal.components.scrollable_pane.component im
     build_scrollable_formatted_text_pane,
 )
 from memcommit.adapters.console.terminal.components.scrollable_pane.navigation import (
-    move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
@@ -71,8 +69,8 @@ def run_preview_screen(
     status = {"value": ""}
     last_error: dict[str, Exception | None] = {"value": None}
 
-    # A result may contain many long Memories. Share Diff's wrapped line/page
-    # navigation so reading never skips the middle of a section-sized block.
+    # Wrapped page navigation keeps long Memories readable without making
+    # document length determine how many arrow presses reach Apply.
     viewer = build_scrollable_formatted_text_pane(
         "PREVIEW",
         document.render(focused_uid=None, viewer_focused=False),
@@ -116,7 +114,7 @@ def run_preview_screen(
         if status["value"]:
             return " " + safe_terminal_text(status["value"])
         if get_app().layout.has_focus(viewer_control):
-            return " ↑/↓ scroll · PgUp/PgDn · Home/End · Tab Apply · Esc cancel"
+            return " ↓ Apply · PgUp/PgDn scroll · Home/End · Tab Apply · Esc cancel"
         return " Enter apply · ↑ Viewer · Tab Viewer · Esc cancel"
 
     footer = Window(
@@ -141,11 +139,6 @@ def run_preview_screen(
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
 
-    def move_viewer(event, delta: int) -> SurfaceMoveResult:
-        return (
-            "MOVED" if move_wrapped_read_cursor(event, direction=delta) else "BOUNDARY"
-        )
-
     def submit(event) -> SurfaceActionResult:
         nonlocal result
         try:
@@ -168,7 +161,7 @@ def run_preview_screen(
             FocusSurface(
                 "VIEWER",
                 viewer_control,
-                move_vertical=move_viewer,
+                move_vertical=lambda _event, _delta: "BOUNDARY",
             ),
             FocusSurface(
                 "TO_DO",

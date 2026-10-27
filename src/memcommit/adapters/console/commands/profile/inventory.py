@@ -33,6 +33,7 @@ class _ProfileStudyMembership:
     first: bool
     last: bool
     profile_count: int
+    session: str | None = None
 
 
 def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
@@ -62,6 +63,7 @@ def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
                 first=profile.uid == members[0].uid,
                 last=profile.uid == members[-1].uid,
                 profile_count=len(members),
+                session=identity.session,
             )
     return memberships
 

@@ -1,4 +1,4 @@
-"""MemoryStore entry point for the Move operation."""
+"""ProfileStore entry point for the Move operation."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from memcommit.application.operations.move.contracts import (
 from memcommit.application.operations.move.runtime.apply import apply_move
 from memcommit.application.operations.move.runtime.prepare import freeze_move
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class MemoryStoreMovePort:
@@ -19,7 +19,7 @@ class MemoryStoreMovePort:
 
     def __init__(
         self,
-        store: MemoryStore,
+        store: ProfileStore,
         *,
         current_name: str | None,
     ):
@@ -28,7 +28,7 @@ class MemoryStoreMovePort:
         self._owner = object()
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> MemoryStoreMovePort:
+    def capture(cls, store: ProfileStore) -> MemoryStoreMovePort:
         return cls(
             store,
             current_name=store.current_context_name(),
@@ -39,7 +39,7 @@ class MemoryStoreMovePort:
         return tuple(self._store.list_context_names())
 
     @property
-    def store(self) -> MemoryStore:
+    def store(self) -> ProfileStore:
         return self._store
 
     @property
@@ -62,6 +62,6 @@ class MemoryStoreMovePort:
 
 
 def execute_move(
-    request: MoveMemoriesRequest, *, store: MemoryStore
+    request: MoveMemoriesRequest, *, store: ProfileStore
 ) -> MoveMemoriesResult:
     return run_move(request, port=MemoryStoreMovePort.capture(store))

@@ -21,9 +21,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_scope_preset,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.terminal.components.quality_find.workbench import (
-    annotate_quality_find_attempt,
-)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.capabilities.memory_issue_analysis.model import FindingsError
 from memcommit.application.capabilities.memory_issue_analysis.source import (
@@ -39,7 +36,7 @@ from memcommit.application.operations.duplicates.runtime import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -54,7 +51,7 @@ def _run(
     """Connect console progress and receipts to the application-owned execution."""
 
     operation_label = "Dedup" if operation == "dedun" else "Find Redundancies"
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         with ExitStack() as progress:
 
@@ -65,16 +62,16 @@ def _run(
                     progress.enter_context(
                         CommandProgress(
                             operation_label.upper(),
-                            "analyzing independent direct Context frames",
-                            total=len(source.contexts),
+                            (
+                                "analyzing combined subtree Memories"
+                                if operation == "dedun" and include_descendants
+                                else "analyzing independent direct Context frames"
+                            ),
+                            total=1 if operation == "dedun" else len(source.contexts),
                         )
                     )
                 else:
-                    # Record a completed analysis even if subsequent Apply fails.
                     progress.close()
-                    annotate_quality_find_attempt(
-                        "duplicates", source, operation_name=operation
-                    )
 
             result = run_redundancies(
                 FindRedundanciesRequest(context_name, include_descendants),

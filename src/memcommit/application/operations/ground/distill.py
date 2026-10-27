@@ -38,7 +38,7 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     freeze_memorization_target,
 )
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
 )
 from memcommit.application.operations.summarize.model import (
     SummaryFrame,
@@ -78,7 +78,7 @@ class GroundDistillResult:
 
 
 def freeze_ground_distill(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     ground_name: str,
 ) -> FrozenGroundDistill:
@@ -207,7 +207,7 @@ def freeze_ground_distill(
 
 def _revalidate_ground(
     frozen: FrozenGroundDistill,
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     adoption: bool = False,
 ) -> None:
@@ -234,7 +234,7 @@ def _revalidate_ground(
 def execute_ground_distill(
     frozen: FrozenGroundDistill,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: GroundDistillProviderFactory,
 ) -> GroundDistillResult:
     """Run Distill without mutating the physical Ground workspace."""
@@ -283,7 +283,7 @@ def execute_ground_distill(
 def apply_ground_distill_result(
     result: GroundDistillResult,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> AdoptGroundWorkspaceMemoriesResult:
     """Explicitly adopt one unchanged physical-Ground Distill proposal."""
 

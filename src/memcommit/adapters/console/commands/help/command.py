@@ -53,11 +53,6 @@ from memcommit.adapters.console.commands.help.selector import (
     bind_focused_frame_style,
     run_help_selector,
 )
-from memcommit.adapters.console.commands.help.study_copy_guard import (
-    active_profile_is_study,
-    authored_study_help_fields,
-    find_study_help_copy_match,
-)
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.help.composer import compose_operation_help
@@ -218,24 +213,8 @@ def cmd(
             # is a no-op outside the current Participant Profile, so ordinary
             # Help adds no typed Study event beyond its generic command record.
             record_study_help_lookup_submitted(plan.request)
-            if (
-                active_profile_is_study()
-                and find_study_help_copy_match(
-                    plan.request,
-                    authored_study_help_fields(plan.operations),
-                )
-                is not None
-            ):
-                typer.secho(
-                    "Help error: Study lookup requires original task wording; "
-                    "the request exactly matches at least 50% of one Help "
-                    "Description/WHEN entry.",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(1)
             # Bare Help is local and deterministic. Start liveness feedback only
-            # after focused lookup preflight so invalid or Study-blocked input
+            # after focused lookup preflight so invalid input
             # never looks like provider work has begun.
             with CommandProgress("help", "thinking", total=1):
                 provider = connect_help_provider()

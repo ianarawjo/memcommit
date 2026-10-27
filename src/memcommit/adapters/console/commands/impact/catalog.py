@@ -1,6 +1,6 @@
 """Aggregate saved artifacts that can be reopened through ``mem impact``.
 
-The catalog is a presentation-only union.  Atomize, Merge, Sever, and Update
+The catalog is a presentation-only union.  Atomize and Sever
 retain their own persistence and reload checks; selecting a row returns only
 the frozen operation kind and artifact UID for redispatch through Impact.
 Process-local Impact routes are deliberately absent because they have no
@@ -10,7 +10,6 @@ durable artifact to reopen.
 from __future__ import annotations
 
 from dataclasses import replace
-from datetime import datetime
 import sys
 
 from memcommit.adapters.console.commands.atomize.records import atomize_record_entries
@@ -30,13 +29,10 @@ from memcommit.core.context_targeting.uid_locator import (
     resolve_exact_or_unique_uid,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.store import MemoryStore
-from memcommit.persistence.operations.update.receipt_repository import (
-    UpdateReceiptRepository,
-)
+from memcommit.persistence.store import ProfileStore
 
 
-IMPACT_SESSION_KINDS = ("atomize", "sever", "update")
+IMPACT_SESSION_KINDS = ("atomize", "sever")
 
 
 def select_saved_session(
@@ -77,20 +73,6 @@ def select_saved_session(
     return selected
 
 
-def _artifact_timestamp(path, *, fallback: str) -> float:
-    """Prefer durable file activity while retaining a serialized fallback."""
-
-    timestamp = datetime.fromisoformat(fallback).timestamp()
-    try:
-        if path.is_file() and not path.is_symlink():
-            timestamp = max(timestamp, path.stat().st_mtime)
-    except FileNotFoundError:
-        # Exact redispatch reloads the artifact after selection.  A concurrent
-        # deletion therefore becomes a normal unavailable-session failure.
-        pass
-    return timestamp
-
-
 def _impact_entry(
     entry: SessionPickerEntry,
     *,
@@ -127,44 +109,7 @@ def _impact_entry(
     )
 
 
-def _retained_update_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
-    receipts = UpdateReceiptRepository(store)
-    return tuple(
-        _impact_entry(
-            SessionPickerEntry(
-                kind="update",
-                key=session.uid,
-                title=f"{session.inputs.source_name} → {session.inputs.target_name}",
-                status="APPLIED",
-                subtitle=(
-                    f"{len(session.plan.operations)} retained "
-                    f"{'change' if len(session.plan.operations) == 1 else 'changes'}"
-                ),
-                group=session.inputs.target_name,
-                sort_timestamp=_artifact_timestamp(
-                    receipts.path(session.uid),
-                    fallback=session.application.applied_at,
-                ),
-                detail=(
-                    f"Receipt {session.uid}\n"
-                    f"Source {session.inputs.source_name}\n"
-                    f"Target {session.inputs.target_name}\n"
-                    "Immutable completed Update evidence."
-                ),
-                reopen_argv=(
-                    "mem",
-                    "impact",
-                    "update",
-                    "--session",
-                    session.uid,
-                ),
-            )
-        )
-        for session in receipts.list()
-    )
-
-
-def impact_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
+def impact_session_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...]:
     """Return every durable artifact currently inspectable by Impact."""
 
     entries: list[SessionPickerEntry] = []
@@ -173,12 +118,11 @@ def impact_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
         _impact_entry(entry.picker_entry)
         for entry in list_sever_session_catalog(SeverSessionStore(store))
     )
-    entries.extend(_retained_update_entries(store))
     return tuple(entries)
 
 
 def choose_impact_session(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     kinds: tuple[str, ...] | None = None,
     title: str = "MEM IMPACT · SAVED ANALYSES",

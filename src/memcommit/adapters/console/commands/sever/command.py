@@ -73,7 +73,7 @@ from memcommit.application.operations.sever.runtime import (
     execute_sever_session_start,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 # Compatibility name for callers that historically caught the command-local
@@ -102,7 +102,7 @@ def _start_progress(progress, event: SeverAnalysisProgress) -> None:
 
 def _start_analysis(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     current_name: str | None,
     source_name: str,
     criteria_name: str,
@@ -151,7 +151,7 @@ def _start_analysis(
 
 def _start(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     source_name: str,
     criteria_name: str,
     output_name: str,
@@ -321,14 +321,14 @@ def render_sever_incomplete_receipt(session: SeverSession) -> str:
     )
 
 
-def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
+def _apply(store: ProfileStore, session: SeverSession) -> SeverSession:
     return execute_sever_apply(
         SeverApplyRequest(session=session),
         store=store,
     ).session
 
 
-def _interactive_setup(store: MemoryStore) -> tuple[str, str, bool, bool] | None:
+def _interactive_setup(store: ProfileStore) -> tuple[str, str, bool, bool] | None:
     names = tuple(store.list_context_names())
     current_name = store.current_context_name()
 
@@ -394,7 +394,7 @@ def _choose_saved_sever_session(
     return "OPEN", reload_selected_sever_session(sessions, entry)
 
 
-def _run_preview(store: MemoryStore, session: SeverSession) -> SeverSession:
+def _run_preview(store: ProfileStore, session: SeverSession) -> SeverSession:
     from memcommit.adapters.console.commands.sever.preview import run_sever_preview
 
     snapshot = execute_sever_session_open(session.uid, store=store)
@@ -594,7 +594,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    store = MemoryStore()
+    store = ProfileStore()
     context_snapshot = ContextOperandSnapshot.capture(store)
     session_store = SeverSessionStore(store)
     try:

@@ -50,7 +50,7 @@ class CompactDecisionInput(Protocol):
 class CompactScreenPresentation:
     continue_label: str
     response_title: str = "DIRECTION OR NOTE · OPTIONAL"
-    activation_hint: str = "select/apply"
+    activation_hint: str = "select/continue"
     show_item_navigation: bool = False
     require_all_decisions: bool = True
     back_label: str | None = None

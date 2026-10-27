@@ -68,7 +68,7 @@ class ResolvedExistingContextOperand(Generic[T]):
 class LocalContextOperandStore(Protocol):
     """Strict ordinary-local Context catalog used by local-only operations."""
 
-    def load_direct_context_graph_strict(self) -> tuple[Context, ...]: ...
+    def load_all_contexts(self) -> tuple[Context, ...]: ...
 
 
 def _frozen_candidates(
@@ -187,7 +187,7 @@ def freeze_local_context_operand_candidates(
             name=context.name,
             value=context,
         )
-        for context in store.load_direct_context_graph_strict()
+        for context in store.load_all_contexts()
     )
 
 

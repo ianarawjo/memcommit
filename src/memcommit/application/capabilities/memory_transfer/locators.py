@@ -136,7 +136,7 @@ def target_frame(
 ) -> StoreTransferFrame:
     if locator is None and current_name is None:
         raise MemoryTransferError(
-            "No current Context. Pass --into TARGET_CONTEXT explicitly."
+            "No current Context. Pass --to TARGET_CONTEXT explicitly."
         )
     target_locator = locator or current_name
     try:

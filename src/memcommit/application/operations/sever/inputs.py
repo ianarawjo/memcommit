@@ -25,7 +25,7 @@ from memcommit.persistence.store.lookup.context_names import (
 )
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
 )
 
 
@@ -36,7 +36,7 @@ def capture_sever_binding(
 ) -> SeverContextBinding:
     """Freeze one authorized ordinary-Memory frame for analysis and later CAS."""
 
-    read_store: MemoryStore = access.store
+    read_store: ProfileStore = access.store
     root_name = access.context_name
     load_direct = read_store.load_direct
     load_recursive = read_store.load
@@ -93,7 +93,7 @@ def capture_sever_binding(
     )
 
 
-def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
+def _local_output_access(store: ProfileStore, name: str) -> ContextAccess:
     return ContextAccess(
         store=store,
         context_name=name,
@@ -104,13 +104,13 @@ def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
 class MemoryStoreSeverInputPort:
     """Resolve and freeze one Sever request against one current-name snapshot."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(self, store: ProfileStore, *, current_name: str | None):
         self._store = store
         self._current_name = current_name
         self.last_frozen: FrozenSeverInputs | None = None
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "MemoryStoreSeverInputPort":
+    def capture(cls, store: ProfileStore) -> "MemoryStoreSeverInputPort":
         return cls(store, current_name=store.current_context_name())
 
     def freeze(self, request: SeverAnalysisRequest) -> FrozenSeverInputs:

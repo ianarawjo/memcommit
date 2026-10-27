@@ -46,7 +46,7 @@ from memcommit.application.operations.merge.setup import build_merge_setup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.connection import connect_semantic_provider
 from memcommit.providers.errors import QueryProviderError
 
@@ -66,9 +66,6 @@ def cmd(
     ] = None,
     from_: Annotated[
         Optional[str], typer.Option("--from", help="Source Context.")
-    ] = None,
-    into: Annotated[
-        Optional[str], typer.Option("--into", help="Target Context.")
     ] = None,
     to: Annotated[Optional[str], typer.Option("--to", help="Target Context.")] = None,
     literal: Annotated[
@@ -103,7 +100,7 @@ def cmd(
             source, role="Source", options=(("--from", from_),)
         )
         target = choose_endpoint_operand(
-            target, role="Target", options=(("--into", into), ("--to", to))
+            target, role="Target", options=(("--to", to),)
         )
         if sum((keep_target_all, take_source_all, keep_both_all)) > 1:
             raise ValueError(
@@ -119,7 +116,7 @@ def cmd(
     try:
         # Reject an unavailable console before Store access or semantic work.
         require_interactive_terminal("Merge")
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         current_name = store.current_context_name()
         method = "LITERAL" if literal else "SEMANTIC"
         from_setup = source is None

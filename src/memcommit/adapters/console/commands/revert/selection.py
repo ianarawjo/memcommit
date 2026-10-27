@@ -23,7 +23,7 @@ from memcommit.application.capabilities.checkpoint_catalog import (
     freeze_checkpoint_catalog,
 )
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     checkpoint_history_digest,
 )
 
@@ -41,7 +41,7 @@ class ReviewedCheckpointSelection:
 
 
 def review_context_checkpoints(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_name: str,
     keep_history: bool = True,

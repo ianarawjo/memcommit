@@ -2,61 +2,26 @@
 
 from memcommit.operation_catalog.model import (
     DetailDiscovery,
-    OperationComparisonDetail,
-    OperationComparisonOption,
+    HelpDetailKind,
+    OperationTextDetail,
 )
 
 
 ADD_DETAILS = (
-    OperationComparisonDetail(
-        id="copy-or-link",
+    OperationTextDetail(
+        id="literal-input",
         operation="add",
-        title="COPY OR LINK",
-        use_when=(
-            "Choosing whether supplied material should become new Memory content "
-            "or point to an existing Memory or Context."
-        ),
+        title="LITERAL INPUT",
+        use_when="Checking how Add interprets supplied text.",
         discovery=DetailDiscovery.TOOL_SELECTION,
         discovery_summary=(
-            "Add stores input literally; use Reference for an immutable Memory "
-            "or Context snapshot and Embed for a live Memory or Context link."
+            "Add stores each positional text value as one new Memory in the current Context."
         ),
-        explanation=(
-            "Text passed to Add is always stored literally as Memory content. "
-            "Entering a Memory UID or Context name does not copy that object; "
-            "it creates a new Memory containing that text."
-        ),
-        options=(
-            OperationComparisonOption(
-                label="INDEPENDENT WORK",
-                guidance=(
-                    "Branch the containing Context and merge it later, or copy "
-                    "the Memory content and add it directly."
-                ),
-            ),
-            OperationComparisonOption(
-                label="EXACT MEMORY OR CONTEXT",
-                guidance=(
-                    "Use mem reference to retain an immutable snapshot of one "
-                    "reviewed Source Memory or a direct/recursive Context scope. "
-                    "Run it bare interactively to choose the unit."
-                ),
-            ),
-            OperationComparisonOption(
-                label="LIVE MEMORY",
-                guidance=(
-                    "Use mem embed SOURCE:MEMORY to follow the Source "
-                    "Memory's current content."
-                ),
-            ),
-            OperationComparisonOption(
-                label="LIVE CONTEXT",
-                guidance=(
-                    "Use mem embed. The parent stores only the Context identity; "
-                    "the child Memories remain in the child, although recursive "
-                    "operations may traverse them."
-                ),
-            ),
+        detail_kind=HelpDetailKind.LIMITATION,
+        body=(
+            "Each positional text value becomes one new Memory in the current Context. "
+            "Memory UIDs, Context names, and file paths are stored as text; "
+            "Add does not load their contents."
         ),
     ),
 )

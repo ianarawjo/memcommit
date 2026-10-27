@@ -29,7 +29,7 @@ from memcommit.application.operations.ground.contracts import GroundError
 from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace_navigation_contexts,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 from . import create as create_workflow
 
@@ -41,7 +41,7 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _run_ground_session_picker(store: MemoryStore) -> None:
+def _run_ground_session_picker(store: ProfileStore) -> None:
     """Loop over physical work and drafts until the person quits."""
 
     while True:

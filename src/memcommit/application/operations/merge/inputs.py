@@ -75,8 +75,6 @@ class MergeContextInputs:
                 "target": self.target_json,
                 "target_authority": authority(self.target_access),
                 "effects": self.policy.allowed_effects,
-                "mutable": self.policy.context_mutable,
-                "protected": sorted(self.policy.protected_uids),
                 "lineage": self.lineage_targets,
             }
         )
@@ -132,10 +130,7 @@ class LiteralMergeInput:
                 "candidate": self.candidate.to_dict(),
                 "source": self.source_json,
                 "target": self.target_json,
-                "policy": {
-                    **asdict(self.target_policy),
-                    "protected_uids": sorted(self.target_policy.protected_uids),
-                },
+                "policy": asdict(self.target_policy),
                 "method": self.method,
                 "binding": self.binding_digest,
             }

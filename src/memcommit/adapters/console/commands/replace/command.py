@@ -35,7 +35,7 @@ from memcommit.application.capabilities.operand_resolution import (
     freeze_local_context_operand_candidates,
     resolve_existing_context_operand,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
@@ -130,7 +130,7 @@ def cmd(
             ),
             include_descendants=include_descendants,
         )
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
         operands: tuple[str | None, ...] = (
             tuple(context_name) if context_name else (None,)

@@ -15,7 +15,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.mod
     ComparisonAnalysis,
     comparison_canonical_digest,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def compare_review_report(analysis: ComparisonAnalysis) -> ReviewReportController:
@@ -33,7 +33,7 @@ def compare_review_report(analysis: ComparisonAnalysis) -> ReviewReportControlle
 
 
 def open_compare_review(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     session_uid: str | None,
     snapshot: bool,

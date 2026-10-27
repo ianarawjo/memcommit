@@ -9,7 +9,7 @@ from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.operations.check_conformance.model import ConformanceError
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 class ConformanceInputError(ConformanceError):
@@ -18,7 +18,7 @@ class ConformanceInputError(ConformanceError):
 
 @dataclass(frozen=True)
 class ConformanceReadDependency:
-    store: MemoryStore
+    store: ProfileStore
     name: str
     uid: str
     digest: str | None
@@ -38,7 +38,7 @@ def _memory_digest(memory: Memory) -> str:
 
 
 def capture_conformance_dependency(
-    store: MemoryStore,
+    store: ProfileStore,
     context: Context,
     *,
     access: ContextAccess | None = None,
@@ -58,7 +58,7 @@ def capture_conformance_dependency(
 
 
 def prepare_conformance_inputs(
-    store: MemoryStore, name: str, *, loaded_context: Context | None = None
+    store: ProfileStore, name: str, *, loaded_context: Context | None = None
 ) -> ConformanceInputs:
     root = loaded_context if loaded_context is not None else store.load_direct(name)
     dependency = capture_conformance_dependency(store, root)
@@ -68,7 +68,7 @@ def prepare_conformance_inputs(
 def revalidate_conformance_inputs(
     dependencies: tuple[ConformanceReadDependency, ...],
     *,
-    active_store: MemoryStore,
+    active_store: ProfileStore,
 ) -> None:
     for dependency in dependencies:
         reader = dependency.store

@@ -1,17 +1,20 @@
-"""Freeze project documents before publishing a new Profile."""
+"""Prepare project documents through shared Sync conversion before Profile setup."""
 
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 
-from memcommit.application.capabilities.import_export.conversion import (
-    convert_for_import,
+from memcommit.application.operations.import_export_sync.common.conversion import (
+    parse_project_documents,
 )
-from memcommit.application.capabilities.import_export.model import InputFile, MemContent
-from memcommit.application.operations.mem_import.application import ImportRequest
-from memcommit.application.operations.mem_import.documents.publication import (
-    publish_document_import,
+from memcommit.application.operations.import_export_sync.common.model import (
+    InputFile,
+    MemContent,
 )
+from memcommit.application.operations.import_export_sync.common.native_store import (
+    import_context_records,
+)
+from memcommit.persistence.store.attached_files import save_attached_file
 from memcommit.persistence.import_export.source import read_project_documents
 
 
@@ -34,31 +37,11 @@ def prepare_project_import(root):
         files = tuple(
             InputFile(path=path, data=data)
             for path, data in source.files
-            if Path(path).suffix.lower() in {".md", ".txt", ".yaml", ".yml"}
         )
-        skipped = tuple(
-            sorted(
-                (
-                    *(
-                        path
-                        for path, _ in source.files
-                        if Path(path).suffix.lower()
-                        not in {".md", ".txt", ".yaml", ".yml"}
-                    ),
-                )
-            )
-        )
+        skipped = ()
     else:
         files, skipped = (), ()
-    content = (
-        convert_for_import(
-            files=files,
-            format="documents",
-            placement=None,
-        )[0]
-        if files
-        else MemContent(contexts=())
-    )
+    content = parse_project_documents(files) if files else MemContent(contexts=())
     digest = sha256()
     ignore_bytes = source.ignore_bytes if root.exists() else None
     digest.update(b"ignore\0" + (ignore_bytes or b""))
@@ -77,17 +60,23 @@ def prepare_project_import(root):
 
 
 def import_project_documents(store, prepared):
-    return publish_document_import(
-        destination=store,
-        request=ImportRequest(source=prepared.root, format="documents", recursive=True),
-        content=prepared.content,
+    for digest, data in prepared.content.attached_data.items():
+        if save_attached_file(store_root=store.store_dir, data=data) != digest:
+            raise ValueError("Attached-file identity mismatch.")
+    return import_context_records(
+        store, ((context, None) for context in prepared.content.contexts)
     )
 
 
 def verify_project_import_source(prepared):
     # Creation publishes only .mem; external edits must remain external edits.
-    if prepared.root.exists() and read_project_documents(prepared.root).ignore_bytes != prepared.ignore_bytes:
-        raise ValueError("Project files changed during Profile setup; review creation again.")
+    if (
+        prepared.root.exists()
+        and read_project_documents(prepared.root).ignore_bytes != prepared.ignore_bytes
+    ):
+        raise ValueError(
+            "Project files changed during Profile setup; review creation again."
+        )
     for file in prepared.files:
         path = prepared.root / file.path
         if path.is_symlink() or not path.is_file() or path.read_bytes() != file.data:

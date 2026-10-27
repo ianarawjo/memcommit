@@ -90,7 +90,7 @@ from memcommit.core.context_targeting.model import DirectMemoryLocator
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
 )
@@ -115,7 +115,7 @@ def _connect_compare_provider(provider_factory):
 
 def _resume_selected_comparison(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     analysis_uid: str,
     ledger: bool,
     snapshot: bool,
@@ -135,7 +135,7 @@ def _resume_selected_comparison(
 
 def _start_new_comparison_from_setup(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     refresh: bool,
     ledger: bool,
     snapshot: bool,
@@ -168,7 +168,7 @@ def _start_new_comparison_from_setup(
 
 def _render_selected_rationale(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
     memory_uid: str,
 ) -> None:
@@ -197,7 +197,7 @@ def _render_selected_rationale(
 
 def _present_comparison(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: ComparisonAnalysis,
     reused: bool,
     origin: str | None = None,
@@ -498,7 +498,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         if sessions:
             receipt = choose_comparison_session(store, ledger=ledger)

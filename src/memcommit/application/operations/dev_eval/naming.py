@@ -3,10 +3,10 @@
 from uuid import uuid4
 
 from memcommit.application.operations.contexts.runtime import load_contexts_catalog
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
-def new_context_names(store: MemoryStore, prefixes: tuple[str, ...]) -> tuple[str, ...]:
+def new_context_names(store: ProfileStore, prefixes: tuple[str, ...]) -> tuple[str, ...]:
     """Give every requested role one shared, unoccupied three-hex run code."""
     if not prefixes or len(set(prefixes)) != len(prefixes):
         raise ValueError("Scenario Context prefixes must be nonempty and distinct.")

@@ -13,13 +13,13 @@ from .checkpoint import repository as _checkpoint_repository_module
 from .checkpoint import revert as _checkpoint_revert_module
 from .saving.command_restoration import (
     atomize as _atomize_restoration_module,
-    branch as _branch_restoration_module,
+    context_creation as _branch_restoration_module,
     companion_sessions as _companion_restore_module,
     context_records as _context_restore_module,
     merge as _merge_restoration_module,
     sever as _sever_restoration_module,
 )
-from .context_memory import ContextMemoryStoreMixin
+from .context_memory import ContextStoreMixin
 from .context_memory.models import (
     ConcurrentContextUpdateError,
     ContextBranchBinding,
@@ -37,7 +37,6 @@ from .context_memory.records import (
 from .infrastructure import atomic_io as _atomic_io_module
 from .infrastructure import locking as _locking_module
 from .infrastructure import paths as _paths_module
-from .infrastructure import protection as _protection_module
 from .infrastructure.atomic_io import (
     _canonical_json_digest,
     _fsync_directory,
@@ -61,7 +60,6 @@ from .infrastructure.paths import (
     _StorePathsMixin,
     resolve_active_store_dir,
 )
-from .infrastructure.protection import _WriteProtectionStoreMixin
 from .loading.context_records import _ContextLoadingMixin
 from .lookup.context_catalog import _ContextCatalogStoreMixin
 from .lookup.context_paths import _ContextPathLookupMixin
@@ -90,9 +88,8 @@ from memcommit.persistence.operations.update.receipt_repository import (
 )
 
 
-class MemoryStore(
+class ProfileStore(
     _StorePathsMixin,
-    _WriteProtectionStoreMixin,
     _StoreLockingMixin,
     _ContextPathLookupMixin,
     _ContextCatalogStoreMixin,
@@ -100,19 +97,18 @@ class MemoryStore(
     _CommandArchiveLookupMixin,
     _CommandArchiveLoadingMixin,
     _ContextSavingMixin,
-    ContextMemoryStoreMixin,
+    ContextStoreMixin,
     _UpdateReceiptStoreMixin,
     _ReviewStateStoreMixin,
     _AtomizeStateStoreMixin,
     CheckpointStoreMixin,
 ):
-    """Compose Context persistence and operation-owned repositories."""
+    """Persist one Profile's Contexts, checkpoints, and operation records."""
 
 
 _IMPLEMENTATION_MODULES = (
     _atomic_io_module,
     _paths_module,
-    _protection_module,
     _locking_module,
     _update_state_module,
     _review_state_module,

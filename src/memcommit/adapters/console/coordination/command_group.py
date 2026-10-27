@@ -39,14 +39,19 @@ class CanonicalCommandGroup(TyperGroup):
             return None
         return canonical, command
 
-    def _command_suggestions(self, ctx: Any, candidate: str) -> tuple[str, ...]:
-        visible = {
+    def _get_command_names_for_suggestions(self, ctx: Any) -> set[str]:
+        return {
             name
             for name in self.commands
             if (command := self.get_command(ctx, name)) is not None
             and not command.hidden
         }
-        return canonical_name_suggestions(candidate, {name: name for name in visible})
+
+    def _command_suggestions(self, ctx: Any, candidate: str) -> tuple[str, ...]:
+        command_names = self._get_command_names_for_suggestions(ctx)
+        return canonical_name_suggestions(
+            candidate, {name: name for name in command_names}
+        )
 
     def resolve_command(
         self,

@@ -4,6 +4,12 @@ from collections.abc import Sequence
 from typing import Literal
 
 
+def list_context_and_ancestor_names(context_name: str) -> tuple[str, ...]:
+    """List every lexical ancestor and the Context itself, highest ancestor first."""
+    parts = context_name.split("/")
+    return tuple("/".join(parts[:depth]) for depth in range(1, len(parts) + 1))
+
+
 def list_child_context_names(
     context_name: str,
     catalog_names: Sequence[str],

@@ -1,4 +1,4 @@
-"""MemoryStore integration for Copy."""
+"""ProfileStore integration for Copy."""
 
 from memcommit.application.operations.copy.runtime.store_port import (
     MemoryStoreCopyPort,

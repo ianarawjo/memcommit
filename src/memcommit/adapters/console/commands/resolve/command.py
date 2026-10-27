@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Optional
-
 import typer
 
 from memcommit.adapters.console.terminal.core.capabilities import (
@@ -41,49 +39,19 @@ from memcommit.application.operations.resolve.analysis.resolution_options.genera
     ProviderResolveOptionsPort,
 )
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.connection import connect_semantic_provider
 from memcommit.providers.errors import QueryProviderError
 
 
-def cmd(
-    allow_create: Annotated[
-        bool,
-        typer.Option(
-            "--allow-create/--no-create",
-            help=(
-                "Allow finalized Resolve input to add supported direct Memories; "
-                "enabled by default"
-            ),
-        ),
-    ] = True,
-    allow_delete: Annotated[
-        bool,
-        typer.Option(
-            "--allow-delete",
-            help="Permit a supported removal in the finalized UpdatePlan",
-        ),
-    ] = False,
-    guidance: Annotated[
-        Optional[str],
-        typer.Option(
-            "--guidance",
-            help="Additional context available while deriving Audit directions",
-        ),
-    ] = None,
-) -> None:
+def cmd() -> None:
     """Review conflicts, choose resolutions, and apply the resulting changes."""
 
     try:
         require_interactive_terminal("Resolve")
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
-        request = ResolveRequest(
-            context_name=snapshot.current_name,
-            allow_create=allow_create,
-            allow_delete=allow_delete,
-            guidance=guidance or "",
-        )
+        request = ResolveRequest(context_name=snapshot.current_name)
         run_resolve_request(request, store=store, current_name=snapshot.current_name)
     except (
         FileNotFoundError,
@@ -107,7 +75,7 @@ def cmd(
 def run_resolve_request(
     request: ResolveRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     current_name: str | None,
 ) -> None:
     """Run review and Apply for the parsed Resolve request."""

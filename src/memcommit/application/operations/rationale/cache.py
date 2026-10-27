@@ -361,21 +361,20 @@ def save_rationale_inference(
     ) > _CACHE_FILE_BYTE_LIMIT:
         raise ValueError("Rationale inference is too large to cache.")
 
-    with store_module.MemoryStore(create=False).profile_write_guard():
-        root = rationale_inferences_dir()
-        root.mkdir(parents=True, exist_ok=True, mode=0o700)
-        if root.is_symlink() or not root.is_dir():
-            raise ValueError("Rationale inference cache storage is invalid.")
-        root.chmod(0o700)
-        context_dir = path.parent
-        context_dir.mkdir(exist_ok=True, mode=0o700)
-        if context_dir.is_symlink() or not context_dir.is_dir():
-            raise ValueError("Rationale inference cache storage is invalid.")
-        context_dir.chmod(0o700)
-        if path.is_symlink() or (path.exists() and not path.is_file()):
-            raise ValueError("Rationale inference cache storage is invalid.")
-        store_module._write_json_atomic(path, record)
-        path.chmod(0o600)
+    root = rationale_inferences_dir()
+    root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if root.is_symlink() or not root.is_dir():
+        raise ValueError("Rationale inference cache storage is invalid.")
+    root.chmod(0o700)
+    context_dir = path.parent
+    context_dir.mkdir(exist_ok=True, mode=0o700)
+    if context_dir.is_symlink() or not context_dir.is_dir():
+        raise ValueError("Rationale inference cache storage is invalid.")
+    context_dir.chmod(0o700)
+    if path.is_symlink() or (path.exists() and not path.is_file()):
+        raise ValueError("Rationale inference cache storage is invalid.")
+    store_module._write_json_atomic(path, record)
+    path.chmod(0o600)
 
 
 def rationale_inference_paths_for_context(

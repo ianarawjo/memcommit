@@ -4,6 +4,7 @@ The ledger deliberately stores no Memory text or restorable Context snapshot.
 Its job is to retain stable identity and deletion-boundary metadata after the
 Context-owned files and checkpoints have been destroyed.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -81,6 +82,7 @@ class ContextLifecycleEvent:
     previous_checkpoint_uid: str | None
     previous_checkpoint_digest: str | None
     descendants_preserved: bool
+    deleted_checkpoint_uids: tuple[str, ...] = ()
 
     @classmethod
     def deleted(
@@ -91,6 +93,7 @@ class ContextLifecycleEvent:
         previous_checkpoint_status: str,
         previous_checkpoint_uid: str | None,
         previous_checkpoint_digest: str | None,
+        deleted_checkpoint_uids: tuple[str, ...] = (),
     ) -> "ContextLifecycleEvent":
         """Create metadata for one reviewed exact-Context deletion."""
         return cls(
@@ -104,6 +107,7 @@ class ContextLifecycleEvent:
             previous_checkpoint_uid=previous_checkpoint_uid,
             previous_checkpoint_digest=previous_checkpoint_digest,
             descendants_preserved=True,
+            deleted_checkpoint_uids=deleted_checkpoint_uids,
         ).validated()
 
     def validated(self) -> "ContextLifecycleEvent":
@@ -120,9 +124,7 @@ class ContextLifecycleEvent:
             field="Context lifecycle last Context name",
         )
         if self.previous_checkpoint_status not in _PREVIOUS_CHECKPOINT_STATUSES:
-            raise ValueError(
-                "Context lifecycle previous checkpoint status is invalid."
-            )
+            raise ValueError("Context lifecycle previous checkpoint status is invalid.")
         if self.previous_checkpoint_uid is not None:
             _nonempty_text(
                 self.previous_checkpoint_uid,
@@ -145,13 +147,15 @@ class ContextLifecycleEvent:
                 and self.previous_checkpoint_digest is None
             )
         if not valid_checkpoint_state:
-            raise ValueError(
-                "Previous checkpoint metadata does not match its status."
-            )
-        if self.descendants_preserved is not True:
-            raise ValueError(
-                "Exact Context deletion events must preserve descendants."
-            )
+            raise ValueError("Previous checkpoint metadata does not match its status.")
+        if type(self.descendants_preserved) is not bool:
+            raise ValueError("Context deletion descendant policy must be a boolean.")
+        if not isinstance(self.deleted_checkpoint_uids, tuple) or any(
+            not isinstance(uid, str) or not uid for uid in self.deleted_checkpoint_uids
+        ):
+            raise ValueError("Deleted checkpoint identities must be nonempty text.")
+        if len(set(self.deleted_checkpoint_uids)) != len(self.deleted_checkpoint_uids):
+            raise ValueError("Deleted checkpoint identities must be distinct.")
         return self
 
     def to_dict(self) -> dict[str, object]:
@@ -168,6 +172,7 @@ class ContextLifecycleEvent:
             "previous_checkpoint_uid": self.previous_checkpoint_uid,
             "previous_checkpoint_digest": self.previous_checkpoint_digest,
             "descendants_preserved": self.descendants_preserved,
+            "deleted_checkpoint_uids": list(self.deleted_checkpoint_uids),
         }
 
     @classmethod
@@ -187,7 +192,10 @@ class ContextLifecycleEvent:
             "previous_checkpoint_digest",
             "descendants_preserved",
         }
-        if set(data) - {"last_context_digest"} != expected_fields:
+        if (
+            set(data) - {"last_context_digest", "deleted_checkpoint_uids"}
+            != expected_fields
+        ):
             raise ValueError("Context lifecycle event fields are invalid.")
         if data.get("schema_version") != CONTEXT_LIFECYCLE_SCHEMA_VERSION:
             raise ValueError("Context lifecycle schema version is unsupported.")
@@ -195,6 +203,9 @@ class ContextLifecycleEvent:
             raise ValueError(
                 "Context lifecycle descendants_preserved must be a boolean."
             )
+        deleted_checkpoint_uids = data.get("deleted_checkpoint_uids", [])
+        if not isinstance(deleted_checkpoint_uids, list):
+            raise ValueError("Deleted checkpoint identities must be a list.")
         event = cls(
             event_uid=data.get("event_uid"),  # type: ignore[arg-type]
             operation_id=data.get("operation_id"),  # type: ignore[arg-type]
@@ -207,5 +218,6 @@ class ContextLifecycleEvent:
             previous_checkpoint_uid=data.get("previous_checkpoint_uid"),  # type: ignore[arg-type]
             previous_checkpoint_digest=data.get("previous_checkpoint_digest"),  # type: ignore[arg-type]
             descendants_preserved=data["descendants_preserved"],
+            deleted_checkpoint_uids=tuple(deleted_checkpoint_uids),
         )
         return event.validated()

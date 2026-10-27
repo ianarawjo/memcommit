@@ -88,6 +88,17 @@ class IntentEditor:
     def response_needs_refresh(self, item: ResolutionItem) -> bool:
         return self.response_selected(item) and self.response_changed(item)
 
+    def current_response_is_submitted(self) -> bool:
+        item = self.state.current_issue()
+        return bool(
+            item is not None
+            and self.response_supported(item)
+            and self.response_selected(item)
+            and self.area.text.strip()
+            and self.area.text == self.read_text(item.uid)
+            and not self.pending
+        )
+
     def response_choice_index(self, item: ResolutionItem | None) -> int | None:
         if not self.response_supported(item) or item is None or self.option_uid is None:
             return None
@@ -162,13 +173,14 @@ class IntentEditor:
             return
         self.stage_inline_response(commit_unchanged=commit_unchanged)
         if self.option_uid is not None and delta == 0:
-            # Enter refreshes the result but never converts the editor into a
-            # read-only card. The next Backspace is ordinary text deletion.
+            # Keep the caret for revisions; the interaction handles a second
+            # Enter on this exact submitted text as continuation.
             return
         move_row(delta)
 
     async def prepare_response_preview(
-        self, delta, move_row, *, commit_unchanged=False
+        self, delta, move_row, *, commit_unchanged=False,
+        on_submitted: Callable[[], None] | None = None,
     ):
         if not self.response_is_valid():
             return
@@ -187,8 +199,13 @@ class IntentEditor:
             if current_app.is_done:
                 return
         self.complete_response(delta, move_row, commit_unchanged=commit_unchanged)
+        if on_submitted is not None:
+            on_submitted()
 
-    def submit_response(self, delta, move_row, *, commit_unchanged=False):
+    def submit_response(
+        self, delta, move_row, *, commit_unchanged=False,
+        on_submitted: Callable[[], None] | None = None,
+    ):
         item = self.state.current_issue()
         if (
             self.prepare is not None
@@ -207,10 +224,13 @@ class IntentEditor:
                     delta,
                     move_row,
                     commit_unchanged=commit_unchanged,
+                    on_submitted=on_submitted,
                 )
             )
         else:
             self.complete_response(delta, move_row, commit_unchanged=commit_unchanged)
+            if on_submitted is not None:
+                on_submitted()
 
     def remember_response_draft(self, buffer) -> None:
         item = self.state.current_issue()

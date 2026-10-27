@@ -10,6 +10,10 @@ import typer
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
+from memcommit.adapters.console.terminal.components.inline_diff import (
+    render_inline_memory_change,
+    render_inline_memory_change_text,
+)
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_report_fragments,
     run_resolution_workbench_shell,
@@ -141,7 +145,12 @@ def echo_review_report_snapshot(report: ReviewReport) -> None:
         *report.report_fragments,
     )
     for fragment in fragments:
-        if fragment.role is None:
+        if fragment.memory_change is not None:
+            click.echo(
+                render_inline_memory_change_text(fragment.memory_change, color=True),
+                nl=False,
+            )
+        elif fragment.role is None:
             click.echo(fragment.text, nl=False)
         else:
             click.secho(
@@ -158,9 +167,15 @@ def _review_report_tui_fragments(
 ) -> tuple[tuple[str, str], ...] | None:
     if not report.report_fragments:
         return None
-    return tuple(
-        (
-            (
+    styled_fragments: list[tuple[str, str]] = []
+    for fragment in report.report_fragments:
+        if fragment.memory_change is not None:
+            # Review owns line breaks; the common diff renderer supplies the row.
+            styled_fragments.extend(
+                render_inline_memory_change(fragment.memory_change)[:-1]
+            )
+        else:
+            style = (
                 "class:impact.add"
                 if fragment.role is SemanticColorRole.ADD
                 else "class:impact.remove"
@@ -168,11 +183,9 @@ def _review_report_tui_fragments(
                 else semantic_role_style(fragment.role)
                 if fragment.role is not None
                 else ""
-            ),
-            fragment.text,
-        )
-        for fragment in report.report_fragments
-    )
+            )
+            styled_fragments.append((style, fragment.text))
+    return tuple(styled_fragments)
 
 
 def _text_only_view(report: ReviewReport) -> ResolutionWorkbenchView:

@@ -35,7 +35,7 @@ from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     revalidate_goal_focus,
 )
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 from . import open as open_workflow
 
@@ -57,7 +57,7 @@ def _run_named_ground_workspace(
     # Operand interpretation and durable-Goal validation are still read-only.
     # An invalid inline Goal must not create Store infrastructure merely so it
     # can be rejected by the 40-word Ground contract.
-    inspection_store = MemoryStore(create=False)
+    inspection_store = ProfileStore(create=False)
     current_name = (
         inspection_store.current_context_name()
         if inspection_store.state_file.exists()
@@ -96,7 +96,7 @@ def _run_named_ground_workspace(
         )
     # A valid named command now owns the creation effect and may establish
     # missing Store infrastructure before taking the multi-Context lock.
-    store = MemoryStore()
+    store = ProfileStore()
     exists = ground_workspace_exists(store, name)
     if exists:
         if goal is not None:

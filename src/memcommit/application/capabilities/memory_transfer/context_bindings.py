@@ -13,7 +13,7 @@ from memcommit.application.context_access.access import (
 )
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,8 +32,8 @@ class StoreTransferToken:
     context_catalog: tuple[str, ...]
 
 
-def capture_context_frames(store: MemoryStore) -> tuple[StoreTransferFrame, ...]:
-    contexts = store.load_direct_context_graph_strict()
+def capture_context_frames(store: ProfileStore) -> tuple[StoreTransferFrame, ...]:
+    contexts = store.load_all_contexts()
     return tuple(
         StoreTransferFrame(
             context=context,

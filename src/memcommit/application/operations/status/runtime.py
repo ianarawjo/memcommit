@@ -1,4 +1,4 @@
-"""MemoryStore composition for the read-only Status application."""
+"""ProfileStore composition for the read-only Status application."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ from memcommit.application.operations.status.application import (
     StatusResult,
     inspect_status,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _required_text(record: Mapping[str, Any], key: str) -> str:
@@ -64,7 +64,7 @@ def _checkpoint(record: Mapping[str, Any]) -> StatusCheckpoint:
 class MemoryStoreStatusSource:
     """Freeze the local namespace, Memory preview and retained checkpoint summaries."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def freeze(self, request: StatusRequest) -> FrozenStatusFrame:
@@ -105,7 +105,7 @@ class MemoryStoreStatusSource:
 def execute_status(
     request: StatusRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> StatusResult:
     """Execute Status against one explicit Store without terminal effects."""
 

@@ -13,21 +13,19 @@ except ImportError:  # pragma: no cover - compatibility with older Typer
 
 from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
-from memcommit.persistence.store.infrastructure.write_protection import (
-    WriteProtectionError,
-    WriteProtectionRegistryError,
-)
 
 
 class MemCommandGroup(CanonicalCommandGroup):
-    """Render store-level protection failures without Python tracebacks.
+    """Coordinate setup, command dispatch and execution outcome recording."""
 
-    Protection is enforced below individual commands, including legacy and
-    semantic writers.  Converting only these typed failures at the root keeps
-    every mutation path consistent without teaching the persistence layer
-    about Click or relying on each command to remember a local catch block.
-    """
+    def _get_command_names_for_suggestions(self, ctx: Any) -> set[str]:
+        from memcommit.adapters.console.commands.help import study_commands
 
+        command_names = super()._get_command_names_for_suggestions(ctx)
+        if study_commands.active_profile_is_study():
+            # Filter before ranking so hidden commands cannot consume result slots.
+            return command_names & study_commands.STUDY_VISIBLE_COMMAND_NAMES
+        return command_names
 
     def main(self, args: Any = None, prog_name: Any = None, **kwargs: Any) -> Any:
         # main also covers bare mem and eager --help, which bypass invoke.
@@ -147,7 +145,7 @@ class MemCommandGroup(CanonicalCommandGroup):
             from memcommit.persistence.command_ledger.attempts import (
                 begin_command_attempt,
             )
-            from memcommit.persistence.store import MemoryStore
+            from memcommit.persistence.store import ProfileStore
 
             # Typer 0.27 keeps the unresolved command token on the private
             # compatibility field, while older Click exposes the public
@@ -164,7 +162,7 @@ class MemCommandGroup(CanonicalCommandGroup):
             operation = "mem"
             if entered and isinstance(entered[0], str):
                 operation = self.canonical_command_name(ctx, entered[0]) or "mem"
-            command_store_dir = MemoryStore(create=False).store_dir
+            command_store_dir = ProfileStore(create=False).store_dir
             active_attempt = begin_command_attempt(
                 store_dir=command_store_dir,
                 operation=operation,
@@ -213,23 +211,15 @@ class MemCommandGroup(CanonicalCommandGroup):
                         stdout_tty=active_attempt.record.stdout_tty,
                         command_argv=entered_argv,
                     )
-            try:
-                if active_study_actions is None:
-                    result = super().invoke(ctx)
-                else:
-                    from memcommit.persistence.command_ledger.study_actions import (
-                        study_recording_app_session,
-                    )
+            if active_study_actions is None:
+                result = super().invoke(ctx)
+            else:
+                from memcommit.persistence.command_ledger.study_actions import (
+                    study_recording_app_session,
+                )
 
-                    with study_recording_app_session():
-                        result = super().invoke(ctx)
-            except (WriteProtectionError, WriteProtectionRegistryError) as error:
-                # Typer renders ClickException with Rich panel chrome, while
-                # command-local failures use one plain error line. Protection
-                # is caught here for every writer, so render it here through
-                # the same shared surface and exit without a second formatter.
-                render_cli_error(error)
-                raise click.exceptions.Exit(1) from error
+                with study_recording_app_session():
+                    result = super().invoke(ctx)
         except BaseException as error:
             if active_attempt is not None:
                 from memcommit.persistence.command_ledger.attempts import (

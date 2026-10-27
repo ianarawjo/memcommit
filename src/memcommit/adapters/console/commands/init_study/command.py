@@ -1,4 +1,4 @@
-"""Initialize one isolated local Study Profile with all task Contexts."""
+"""Initialize independent Profiles from the prepared Study project folders."""
 
 from __future__ import annotations
 
@@ -28,11 +28,9 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.init_study.application import (
     generate_study_profile_name,
-    init_coffee_study_profile,
-    init_legacy_study_profile,
+    initialize_study,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.study_scenarios import COFFEE_SCENARIO_ID, LEGACY_SCENARIO_ID
 from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
     record_study_action_for_profile,
@@ -54,42 +52,21 @@ def cmd(
             )
         ),
     ] = None,
-    scenario: Annotated[
-        Optional[str],
-        typer.Option(
-            "--scenario",
-            show_default=False,
-            help=(
-                "Study scenario: coffee (default) or legacy "
-                "for the preserved debugging fixture"
-            ),
-        ),
-    ] = None,
 ) -> None:
-    """Initialize the Coffee Study, or explicitly reproduce the legacy fixture."""
+    """Initialize a Study from its prepared project folders."""
 
     try:
-        resolved_scenario = scenario or COFFEE_SCENARIO_ID
-        if resolved_scenario not in {COFFEE_SCENARIO_ID, LEGACY_SCENARIO_ID}:
-            raise ProfileError("Study scenario must be 'coffee' or 'legacy'.")
         previous_profile = load_profile_registry().active
         if name is None and _is_interactive_terminal():
             name = choose_study_profile_name(generate_study_profile_name())
             if name is None:
                 typer.echo("Cancelled — no Study Profile was created.")
                 return
-        if resolved_scenario == COFFEE_SCENARIO_ID:
-            result = init_coffee_study_profile(
-                name=name,
-                provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
-                provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
-            )
-        else:
-            result = init_legacy_study_profile(
-                name=name,
-                provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
-                provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
-            )
+        result = initialize_study(
+            name=name,
+            provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
+            provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
+        )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -110,14 +87,13 @@ def cmd(
                 other_profile_uid=result.profile.uid,
                 other_profile_name=result.profile.name,
             )
-            record_study_action_for_profile(
-                result.profile,
-                attempt_uid=attempt_uid,
-                event_kind="STUDY_CREATED",
-                role=participant_identity.role,
-                baseline_profile_uid=participant_identity.baseline_profile_uid,
-                baseline_profile_name=participant_identity.baseline_profile_name,
-            )
+            for profile in result.profiles:
+                record_study_action_for_profile(
+                    profile,
+                    attempt_uid=attempt_uid,
+                    event_kind="STUDY_CREATED",
+                    role=participant_identity.role,
+                )
             record_study_action_for_profile(
                 result.profile,
                 attempt_uid=attempt_uid,
@@ -127,8 +103,8 @@ def cmd(
             )
         except (OSError, ProfileConfigError, StudyActionError, ValueError) as error:
             typer.secho(
-                "Error: Study Profile was created, but its initial action "
-                "ledger could not be written: " + display_escape_text(str(error)),
+                "Error: Study projects were created, but their initial Study "
+                "records could not be written: " + display_escape_text(str(error)),
                 fg=typer.colors.RED,
                 err=True,
             )

@@ -14,8 +14,7 @@ from memcommit.application.operations.audit.model import (
 )
 
 
-RESOLVE_CONTRACT_VERSION = "resolve-context-audit-direction-update"
-ResolveEffectKind = Literal["CREATE", "UPDATE", "DELETE"]
+RESOLVE_CONTRACT_VERSION = "resolve-context-conflict-update"
 ResolveIssueKind = Literal[
     "REDUNDANCY",
     "AMBIGUITY",
@@ -29,10 +28,6 @@ ResolveStatus = Literal[
 
 class ResolveError(RuntimeError):
     """A Resolve request, semantic result, or Apply boundary is invalid."""
-
-
-class ResolveAuthorityError(ResolveError):
-    """The frozen authority no longer permits the reviewed Resolve plan."""
 
 
 class ResolveConflictError(ResolveError):
@@ -70,20 +65,9 @@ class ResolveSourcePrecondition:
 
 @dataclass(frozen=True)
 class ResolveRequest:
-    """One whole-Context Audit-resolution request.
-
-    UPDATE and information-preserving CREATE are ordinary Resolve effects.
-    DELETE is an explicit expansion and additionally requires nonempty grounding
-    guidance because conflict removal alone cannot justify retiring information.
-    """
+    """Resolve the whole Context through reviewed additions, edits and removals."""
 
     context_name: str | None = None
-    # Resolve starts from information preservation: adding one grounded
-    # interpretation or editing existing wording is ordinary, while DELETE
-    # remains the exceptional effect that needs an explicit retirement basis.
-    allow_create: bool = True
-    allow_delete: bool = False
-    guidance: str = ""
     source_precondition: ResolveSourcePrecondition | None = None
 
     def __post_init__(self) -> None:
@@ -91,12 +75,6 @@ class ResolveRequest:
             not isinstance(self.context_name, str) or not self.context_name.strip()
         ):
             raise ResolveError("Resolve Context name must be nonblank when supplied.")
-        if not isinstance(self.allow_create, bool) or not isinstance(
-            self.allow_delete, bool
-        ):
-            raise ResolveError("Resolve effect opt-ins must be boolean values.")
-        if not isinstance(self.guidance, str):
-            raise ResolveError("Resolve guidance must be text.")
         if self.source_precondition is not None and not isinstance(
             self.source_precondition,
             ResolveSourcePrecondition,
@@ -104,32 +82,17 @@ class ResolveRequest:
             raise ResolveError(
                 "Resolve source precondition must use the typed contract."
             )
-        if self.allow_delete and not self.guidance.strip():
-            raise ResolveError(
-                "Resolve --allow-delete requires grounding guidance that explains "
-                "when retiring a Memory is valid."
-            )
-
-    @property
-    def requested_effects(self) -> tuple[ResolveEffectKind, ...]:
-        result: list[ResolveEffectKind] = ["UPDATE"]
-        if self.allow_create:
-            result.append("CREATE")
-        if self.allow_delete:
-            result.append("DELETE")
-        return tuple(result)
 
 
 @dataclass(frozen=True)
 class ResolveTarget:
-    """Exact source, target capability, and freshness boundary for Resolve."""
+    """Exact whole-Context source and freshness boundary for Resolve."""
 
     request: ResolveRequest
     display_name: str
     source: AuditTarget
     revision: str
     actionable_uids: tuple[str, ...]
-    allowed_effects: tuple[ResolveEffectKind, ...]
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, ResolveRequest):
@@ -149,10 +112,6 @@ class ResolveTarget:
             or set(self.actionable_uids) != item_uids
         ):
             raise ResolveError("Resolve must include every Memory in the Context.")
-        if len(set(self.allowed_effects)) != len(self.allowed_effects) or set(
-            self.allowed_effects
-        ) != set(self.request.requested_effects):
-            raise ResolveError("Resolve effects must match the explicit request.")
 
 
 @dataclass(frozen=True, slots=True)

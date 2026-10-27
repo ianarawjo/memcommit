@@ -20,7 +20,7 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -66,7 +66,7 @@ def analyze_find_conflicts(
 
 
 def prepare_find_conflicts(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindConflictsRequest,
     *,
     current_name: str | None,
@@ -82,7 +82,7 @@ def prepare_find_conflicts(
 
 
 def find_conflicts(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindConflictsRequest,
     provider_factory: Callable[[], FindingsProvider],
     *,

@@ -17,7 +17,7 @@ from memcommit.models.context import Context
 from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
-    MemoryStore,
+    ProfileStore,
     canonical_context_record,
     context_record_digest,
 )
@@ -146,7 +146,7 @@ def _owned_record(
 
 
 def _parts_for_context(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     workspace_uid: str,
     workspace_name: str,
@@ -240,7 +240,7 @@ def _parts_for_context(
 
 
 def build_ground_workspace_command_stack(
-    store: MemoryStore,
+    store: ProfileStore,
     workspace_name: str,
 ) -> GroundWorkspaceCommandStack:
     """Reconstruct one workspace's applied edit stack from exact lanes only."""
@@ -340,7 +340,7 @@ def build_ground_workspace_command_stack(
 
 
 def undo_ground_workspace_command(
-    store: MemoryStore,
+    store: ProfileStore,
     workspace_name: str,
 ) -> GroundWorkspaceUndoResult:
     """Undo the latest command inside one Ground root and retain a receipt."""

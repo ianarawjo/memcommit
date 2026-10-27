@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from typing import Protocol
 import uuid
 
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_ancestor_names,
+)
+
 
 class ContextInitError(RuntimeError):
     """An ordinary Context initialization could not reach its exact outcome."""
@@ -49,7 +53,6 @@ class ContextInitEntry:
             "parents": True,
             "requested_name": self.requested_name,
         }
-
 
 
 @dataclass(frozen=True)
@@ -104,13 +107,7 @@ class ContextInitPort(Protocol):
 def plan_context_init(request: ContextInitRequest) -> ContextInitPlan:
     """Expand one exact name into the operation-owned creation/checkpoint plan."""
 
-    if request.create_parents:
-        parts = request.name.split("/")
-        names = tuple(
-            "/".join(parts[:index]) for index in range(1, len(parts) + 1)
-        )
-    else:
-        names = (request.name,)
+    names = list_context_and_ancestor_names(request.name)
     entries = tuple(
         ContextInitEntry(
             name=name,
@@ -144,7 +141,7 @@ def run_context_init(
         or any(name not in planned_names for name in created_names)
         or tuple(name for name in planned_names if name in created_name_set)
         != created_names
-        or (plan.require_all_new and created_names != planned_names)
+        or (plan.require_all_new and plan.request.name not in created_name_set)
     ):
         raise ContextInitError(
             "Context initialization returned a receipt outside its creation plan."

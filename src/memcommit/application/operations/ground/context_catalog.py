@@ -12,7 +12,7 @@ import re
 import unicodedata
 
 import memcommit.persistence.store as store_module
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -36,13 +36,13 @@ def _search_terms(value: str) -> set[str]:
 
 
 def discover_ground_context_locators(
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[GroundContextLocator, ...]:
     """Return ordinary Context locators without reading any Context record.
 
     A locator may point at a malformed or stale record.  That is intentional:
     discovery is allowed to be helpful but cannot become an authority check.
-    ``MemoryStore.load`` remains the validation boundary before any binding.
+    ``ProfileStore.load`` remains the validation boundary before any binding.
     """
     contexts_dir = store_module.CONTEXTS_DIR
     if not contexts_dir.exists() or contexts_dir.is_symlink():

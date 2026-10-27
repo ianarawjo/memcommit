@@ -15,7 +15,13 @@ from memcommit.application.operations.update.model import (
 )
 
 
-def render_update_receipt(receipt: UpdateReceipt, *, color: bool = False) -> str:
+def render_update_receipt(
+    receipt: UpdateReceipt,
+    *,
+    color: bool = False,
+    command_label: str = "UPDATE",
+    instruction_text: str | None = None,
+) -> str:
     """Render terminal Update success without reopening its full report."""
 
     edits, additions, removals = (
@@ -25,14 +31,16 @@ def render_update_receipt(receipt: UpdateReceipt, *, color: bool = False) -> str
     checkpoints = receipt.application.checkpoints
     target_label = display_escape_text(receipt.inputs.target_name)
     source_label = (
-        display_escape_text(receipt.inputs.instruction.text)
+        display_escape_text(instruction_text)
+        if instruction_text is not None
+        else display_escape_text(receipt.inputs.instruction.text)
         if receipt.inputs.instruction is not None
         else display_escape_text(receipt.inputs.inline_source_content)
         if receipt.inputs.inline_source_content is not None
         else display_escape_text(receipt.inputs.source_name)
     )
     lines = [
-        f"UPDATE APPLIED {target_label}",
+        f"{command_label} APPLIED {target_label}",
         f"{source_label} -> {target_label}",
     ]
     if (
@@ -76,7 +84,6 @@ def render_update_receipt(receipt: UpdateReceipt, *, color: bool = False) -> str
                 for item in checkpoints
             )
         )
-    lines.append(f"REVIEW · mem review update --session {receipt.uid}")
     if checkpoints:
         lines.append("RECOVERY · mem undo")
     return "\n".join(lines)

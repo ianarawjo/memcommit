@@ -51,7 +51,7 @@ from memcommit.providers.connection import connect_semantic_provider
 from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_existing_semantic_result_endpoints,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def render_distill(result: DistillResult) -> str:
@@ -179,12 +179,12 @@ def cmd(
             raise DistillError(
                 "Legacy --save-as cannot be combined with --from or --to."
             )
-        resources: tuple[MemoryStore, ContextOperandSnapshot] | None = None
+        resources: tuple[ProfileStore, ContextOperandSnapshot] | None = None
 
-        def command_resources() -> tuple[MemoryStore, ContextOperandSnapshot]:
+        def command_resources() -> tuple[ProfileStore, ContextOperandSnapshot]:
             nonlocal resources
             if resources is None:
-                store = MemoryStore(create=False)
+                store = ProfileStore(create=False)
                 resources = (store, ContextOperandSnapshot.capture(store))
             return resources
 

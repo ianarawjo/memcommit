@@ -1,0 +1,11 @@
+{
+  "uid": "a21543ca-ea57-44a2-8966-89ebe69cdcdc",
+  "name": "your-friend",
+  "memories": {},
+  "order": [],
+  "document": {
+    "path": "your-friend",
+    "format": "md",
+    "role": "directory"
+  }
+}

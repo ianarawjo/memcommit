@@ -40,7 +40,7 @@ from memcommit.adapters.console.terminal.components.history.display import (
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     semantic_action_style,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.update.model import UpdateReceipt
 
 
@@ -61,7 +61,7 @@ def _checkpoint_operation_identity(checkpoint: Mapping[str, object]) -> str | No
 
 
 def _local_operation_ids(
-    store: MemoryStore,
+    store: ProfileStore,
     names: Sequence[str],
     *,
     manual: bool = False,
@@ -261,7 +261,7 @@ def _update_operation_rows(
 
 
 def _browse_local_checkpoints(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
     *,
     back_navigation: bool = False,
@@ -299,7 +299,7 @@ def _browse_local_checkpoints(
 
 
 def browse_checkpoint_locations(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     session: UpdateReceipt | None,
     context_locator: str | None,

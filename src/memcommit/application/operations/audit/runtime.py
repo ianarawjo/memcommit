@@ -21,13 +21,13 @@ from memcommit.application.operations.audit.model import (
     QualityAuditSession,
 )
 from memcommit.application.operations.audit.repository import AuditRecordRepository
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def run_audit(
     request: AuditRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], FindingsProvider],
     repository: AuditRecordRepository,
     on_progress: Callable[[AuditCheckKind, int, int], None] | None = None,

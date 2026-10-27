@@ -1,4 +1,4 @@
-"""MemoryStore authority, freshness, and Apply boundary for Resolve."""
+"""ProfileStore authority, freshness, and Apply boundary for Resolve."""
 
 from __future__ import annotations
 import hashlib
@@ -15,10 +15,8 @@ from memcommit.models.memory import Memory
 from memcommit.application.operations.resolve.model import (
     RESOLVE_CONTRACT_VERSION,
     ResolveTarget,
-    ResolveAuthorityError,
     ResolveAnalysis,
     ResolveConflictError,
-    ResolveEffectKind,
     ResolveError,
     ResolveReceipt,
     ResolveRequest,
@@ -32,17 +30,15 @@ from memcommit.application.operations.update.model import (
     RemoveOperation,
     UpdatePlan,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 if TYPE_CHECKING:
     from memcommit.application.operations.audit.model import AuditCheckKind
     from memcommit.application.operations.audit.repository import AuditRecordRepository
     from ..application import ResolveProviderFactory, ResolveSemanticPort
-_EFFECT_PERMISSION_ORDER: tuple[ResolveEffectKind, ...] = ("CREATE", "UPDATE", "DELETE")
 
 
 def _revision(
-    request: ResolveRequest,
     *,
     context_uid: str,
     context_name: str,
@@ -59,8 +55,6 @@ def _revision(
             "digest": context_digest,
         },
         "actionable_uids": list(actionable_uids),
-        "requested_effects": list(request.requested_effects),
-        "guidance": request.guidance,
     }
     return hashlib.sha256(
         json.dumps(
@@ -73,12 +67,12 @@ def _revision(
 class ResolveStoreAdapter:
     """Adapt one Context scope to analysis and reviewed owner publication."""
 
-    active_store: MemoryStore
+    active_store: ProfileStore
     current_name: str | None = None
 
     def __post_init__(self) -> None:
-        if not isinstance(self.active_store, MemoryStore):
-            raise TypeError("Resolve runtime requires a MemoryStore.")
+        if not isinstance(self.active_store, ProfileStore):
+            raise TypeError("Resolve runtime requires a ProfileStore.")
         if self.current_name is None:
             self.current_name = self.active_store.current_context_name()
         if self.current_name is not None and (not isinstance(self.current_name, str)):
@@ -110,14 +104,11 @@ class ResolveStoreAdapter:
                 "Resolve requires at least two Memories in the current Context."
             )
         actionable_uids = tuple(item.uid for item in source.items)
-        requested = request.requested_effects
-        allowed = requested
         return ResolveTarget(
             source=source,
             request=request,
             display_name=access.access_name,
             revision=_revision(
-                request,
                 context_uid=authority.uid,
                 context_name=authority.name,
                 display_name=access.access_name,
@@ -125,7 +116,6 @@ class ResolveStoreAdapter:
                 actionable_uids=actionable_uids,
             ),
             actionable_uids=actionable_uids,
-            allowed_effects=allowed,
         )
 
     def _revalidated_access(self, frame: ResolveTarget) -> ContextAccess:
@@ -197,10 +187,6 @@ class ResolveStoreAdapter:
         )
         if any((label is None for label in effect_labels)):
             raise ResolveError("Resolve UpdatePlan contains an unsupported operation.")
-        if any((label not in frame.allowed_effects for label in effect_labels)):
-            raise ResolveAuthorityError(
-                "Resolve UpdatePlan exceeds the finalized effect capabilities."
-            )
         if any(
             (
                 operation.owner_context_uid != frame.source.context_uid
@@ -212,69 +198,67 @@ class ResolveStoreAdapter:
                 "Resolve UpdatePlan names an owner outside its frozen Context."
             )
         access = self._revalidated_access(frame)
-        # Revalidate the frozen frame under the same lock as every published effect.
-        with access.store._command_write_lock():
-            current = access.store.load_for_update(access.context_name)
-            if (
-                current.uid != frame.source.context_uid
-                or context_record_digest(current) != frame.source.context_digest
-            ):
-                raise ResolveConflictError(
-                    "The Resolve Context changed before Apply; nothing was written."
-                )
-            for operation in plan.operations:
-                current_item = current.memories.get(operation.memory_uid)
-                if isinstance(operation, AddOperation):
-                    if current_item is not None:
-                        raise ResolveConflictError(
-                            "Resolve addition uid already exists in the target."
-                        )
-                    current.add(Memory(operation.memory_uid, operation.new_content))
-                elif isinstance(operation, EditOperation):
-                    if (
-                        not isinstance(current_item, Memory)
-                        or current_item.content != operation.old_content
-                    ):
-                        raise ResolveConflictError(
-                            "Resolve edit target no longer matches its pre-image."
-                        )
-                    current.replace_memory(
-                        Memory(operation.memory_uid, operation.new_content)
-                    )
-                else:
-                    assert isinstance(operation, RemoveOperation)
-                    if (
-                        not isinstance(current_item, Memory)
-                        or current_item.content != operation.old_content
-                    ):
-                        raise ResolveConflictError(
-                            "Resolve removal target no longer matches its pre-image."
-                        )
-                    current.remove(operation.memory_uid)
-            checkpoint = access.store._save_command_locked(
-                current,
-                AutoCheckpointRequest(
-                    command="resolve",
-                    command_details={
-                        "contract": RESOLVE_CONTRACT_VERSION,
-                        "revision": frame.revision,
-                        "update_plan_uid": plan.uid,
-                        "update_plan_digest": plan.digest,
-                        "effects": [
-                            operation.to_dict() for operation in plan.operations
-                        ],
-                        "finalized_inputs": [
-                            value.to_dict() for value in finalized_inputs
-                        ],
-                        "unresolved_issue_uids": list(unresolved_issue_uids),
-                        "guidance": frame.request.guidance,
-                    },
-                ),
+        # Revalidate the frozen frame before publishing its effects.
+        current = access.store.load_for_update(access.context_name)
+        if (
+            current.uid != frame.source.context_uid
+            or context_record_digest(current) != frame.source.context_digest
+        ):
+            raise ResolveConflictError(
+                "The Resolve Context changed before Apply; nothing was written."
             )
-            if checkpoint is None:
-                raise ResolveError(
-                    "Resolve Apply produced no checkpoint for its UpdatePlan."
+        for operation in plan.operations:
+            current_item = current.memories.get(operation.memory_uid)
+            if isinstance(operation, AddOperation):
+                if current_item is not None:
+                    raise ResolveConflictError(
+                        "Resolve addition uid already exists in the target."
+                    )
+                current.add(Memory(operation.memory_uid, operation.new_content))
+            elif isinstance(operation, EditOperation):
+                if (
+                    not isinstance(current_item, Memory)
+                    or current_item.content != operation.old_content
+                ):
+                    raise ResolveConflictError(
+                        "Resolve edit target no longer matches its pre-image."
+                    )
+                current.replace_memory(
+                    Memory(operation.memory_uid, operation.new_content)
                 )
+            else:
+                assert isinstance(operation, RemoveOperation)
+                if (
+                    not isinstance(current_item, Memory)
+                    or current_item.content != operation.old_content
+                ):
+                    raise ResolveConflictError(
+                        "Resolve removal target no longer matches its pre-image."
+                    )
+                current.remove(operation.memory_uid)
+        checkpoint = access.store.save(
+            current,
+            AutoCheckpointRequest(
+                command="resolve",
+                command_details={
+                    "contract": RESOLVE_CONTRACT_VERSION,
+                    "revision": frame.revision,
+                    "update_plan_uid": plan.uid,
+                    "update_plan_digest": plan.digest,
+                    "effects": [
+                        operation.to_dict() for operation in plan.operations
+                    ],
+                    "finalized_inputs": [
+                        value.to_dict() for value in finalized_inputs
+                    ],
+                    "unresolved_issue_uids": list(unresolved_issue_uids),
+                },
+            ),
+        )
+        if checkpoint is None:
+            raise ResolveError(
+                "Resolve Apply produced no checkpoint for its UpdatePlan."
+            )
         return ResolveReceipt(
             context_uid=frame.source.context_uid,
             context_name=frame.display_name,

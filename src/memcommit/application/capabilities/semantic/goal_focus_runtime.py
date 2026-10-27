@@ -16,7 +16,7 @@ from memcommit.application.capabilities.semantic.goal_focus import (
     GoalFocusKind,
     inline_goal_focus,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 def _memory_digest(memory: Memory) -> str:
@@ -86,7 +86,7 @@ def freeze_goal_focus_context(
 
 
 def freeze_goal_focus_operand(
-    store: MemoryStore,
+    store: ProfileStore,
     operand: str,
     *,
     current_name: str | None,
@@ -126,7 +126,7 @@ def freeze_goal_focus_operand(
     return inline_goal_focus(target)
 
 
-def revalidate_goal_focus(store: MemoryStore, focus: FrozenGoalFocus) -> None:
+def revalidate_goal_focus(store: ProfileStore, focus: FrozenGoalFocus) -> None:
     """Reject any durable Goal focus whose exact Context pre-image changed."""
 
     if not isinstance(focus, FrozenGoalFocus):

@@ -142,25 +142,6 @@ def _parse(raw: object, labels: Sequence[str], *, operation: str) -> str:
         ):
             return "YES"
         return "NO"
-    if operation == "translate":
-        resolved_labels = {"PRESERVED", "LOSSY", "CONTRADICTED"}
-        if (
-            not isinstance(value, dict)
-            or set(value) != {"source_resolution", "resolved_label"}
-            or not isinstance(value["source_resolution"], str)
-            or not isinstance(value["resolved_label"], str)
-            or value["source_resolution"] not in {"RESOLVED", "UNRESOLVED"}
-            or value["resolved_label"] not in resolved_labels
-        ):
-            raise OperationGateError(
-                "Translate gate returned an invalid evidence object.",
-                raw_response=raw,
-            )
-        return (
-            "UNKNOWN"
-            if value["source_resolution"] == "UNRESOLVED"
-            else value["resolved_label"]
-        )
     if operation in {"compare", "meld"}:
         resolved_labels = {
             "EQUIVALENT", "COMPATIBLE", "CONFLICT", "DISTINCT", "UNKNOWN"
@@ -243,29 +224,6 @@ def classify_operation_gate(
             "candidate; do not resolve it by probability. Then report whether the "
             "claims would be compatible under the same scope. The host derives "
             "YES, MAY, or NO from these two evidence labels."
-        )
-    elif operation == "translate":
-        schema = {
-            "type": "object",
-            "properties": {
-                "source_resolution": {
-                    "type": "string",
-                    "enum": ["RESOLVED", "UNRESOLVED"],
-                },
-                "resolved_label": {
-                    "type": "string",
-                    "enum": ["PRESERVED", "LOSSY", "CONTRADICTED"],
-                },
-            },
-            "required": ["source_resolution", "resolved_label"],
-            "additionalProperties": False,
-        }
-        stage_instruction = (
-            " First decide whether the source itself fixes the relevant actors, "
-            "objects, referents, and conditions. Use source_resolution=UNRESOLVED "
-            "when it does not; a translation's added specificity must not resolve "
-            "the source. Then classify the relation under a resolved reading. The "
-            "host projects unresolved source meaning to UNKNOWN."
         )
     elif operation in {"compare", "meld"}:
         schema = {

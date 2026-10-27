@@ -15,7 +15,7 @@ from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def sever_review_report(session: SeverSession) -> ReviewReportController:
@@ -39,7 +39,7 @@ def sever_review_report(session: SeverSession) -> ReviewReportController:
 
 
 def open_sever_review(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     session_uid: str | None,
     snapshot: bool,

@@ -20,7 +20,7 @@ from memcommit.application.operations.compare.sessions import (
     iter_saved_comparisons,
 )
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 RetrievalArtifactRecord = tuple[str, str, RetrievalArtifact]
@@ -54,7 +54,7 @@ def _json_projection(value: object) -> str:
 
 
 def _checkpoint_artifacts(
-    store: MemoryStore,
+    store: ProfileStore,
     contexts: Sequence[Context],
 ) -> list[RetrievalArtifactRecord]:
     records: list[RetrievalArtifactRecord] = []
@@ -97,7 +97,7 @@ def _checkpoint_artifacts(
 
 
 def _comparison_artifacts(
-    store: MemoryStore,
+    store: ProfileStore,
     contexts: Sequence[Context],
 ) -> list[RetrievalArtifactRecord]:
     by_uid = {context.uid: context for context in contexts}
@@ -169,7 +169,7 @@ def _rationale_artifacts(
 
 
 def collect_retrieval_artifacts(
-    store: MemoryStore,
+    store: ProfileStore,
     contexts: Sequence[Context],
 ) -> tuple[RetrievalArtifactRecord, ...]:
     """Collect bounded artifacts owned by the active Profile and frame."""

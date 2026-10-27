@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _created_timestamp(value: str) -> float:
@@ -41,7 +41,7 @@ def _artifact_timestamp(analysis: ComparisonAnalysis, path: Path) -> float:
 
 
 def comparison_session_entries(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     ledger: bool = False,
 ) -> tuple[SessionPickerEntry, ...]:
@@ -96,7 +96,7 @@ def comparison_session_entries(
 
 
 def choose_comparison_session(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     ledger: bool = False,
 ) -> SessionOpenReceipt | SessionNewReceipt | None:

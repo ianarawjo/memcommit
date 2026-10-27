@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 
-from memcommit.core.context_navigation import record_current_context_transition
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store.context_memory.models import (
     ConcurrentContextUpdateError,
@@ -64,7 +63,7 @@ def save_sever_undo(
         with store._state_write_lock():
             state = store._read_state()
             if state.get("current") == change.context_name:
-                record_current_context_transition(state, None)
+                state["current"] = None
                 store._write_state(state)
     except Exception:
         if session_saved:

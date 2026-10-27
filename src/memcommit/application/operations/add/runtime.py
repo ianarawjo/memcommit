@@ -1,4 +1,4 @@
-"""MemoryStore infrastructure adapter for Add."""
+"""ProfileStore infrastructure adapter for Add."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
@@ -44,7 +44,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
 
     def __init__(
         self,
-        store: MemoryStore,
+        store: ProfileStore,
         *,
         current_context_name: str | None,
     ):
@@ -54,7 +54,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         self._current_context_name = current_context_name
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "MemoryStoreAddTargetPort":
+    def capture(cls, store: ProfileStore) -> "MemoryStoreAddTargetPort":
         return cls(
             store,
             current_context_name=store.current_context_name(),

@@ -15,7 +15,6 @@ from memcommit.adapters.console.commands.profile.inventory import current_cmd, l
 from memcommit.adapters.console.commands.profile.lifecycle import (
     _use_profile,
     create_cmd,
-    import_cmd,
     remove_cmd,
     rename_cmd,
 )
@@ -32,7 +31,7 @@ app = typer.Typer(
     no_args_is_help=False,
     subcommand_metavar="COMMAND|PROFILE",
     help=(
-        "Create, register, and select complete local MemoryStore profiles. "
+        "Create, register, and select complete local profiles. "
         "Use 'mem profile NAME' to select one."
     ),
 )
@@ -84,4 +83,3 @@ app.command("remove")(remove_cmd)
 app.command("remove-study")(remove_study_cmd)
 app.command("rename")(rename_cmd)
 app.command("rename-study")(rename_study_cmd)
-app.command("import")(import_cmd)

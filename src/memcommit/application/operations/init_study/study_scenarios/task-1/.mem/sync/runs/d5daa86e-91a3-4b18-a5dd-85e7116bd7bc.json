@@ -1,0 +1,69 @@
+{
+  "uid": "d5daa86e-91a3-4b18-a5dd-85e7116bd7bc",
+  "created_at": "2026-10-26T13:39:05.252309+00:00",
+  "command": "init-study",
+  "direction": "outbound",
+  "trigger": "STUDY_SETUP",
+  "checkpoint_uids": [
+    [
+      "task-1",
+      "17097a98-0058-4a42-80ef-96acf056dd1b"
+    ],
+    [
+      "task-1/customer-perspectives",
+      "5f2e39ce-661c-4964-af93-722ef437da26"
+    ],
+    [
+      "task-1/customer-perspectives/saycheesecake",
+      "266aead5-9551-4bf1-95bb-836f4dbb33ff"
+    ],
+    [
+      "task-1/customer-perspectives/strollersnackpack",
+      "88edc5fa-294e-4aa7-a8d3-e4b70aa0e829"
+    ],
+    [
+      "task-1/customer-perspectives/woohooovertime",
+      "9aa66dd7-17e7-4ce0-a3ab-34685a064b69"
+    ]
+  ],
+  "memory_effects": [],
+  "context_names": [
+    "task-1",
+    "task-1/customer-perspectives",
+    "task-1/customer-perspectives/saycheesecake",
+    "task-1/customer-perspectives/strollersnackpack",
+    "task-1/customer-perspectives/woohooovertime"
+  ],
+  "causing_command": "init-study",
+  "effects": [
+    {
+      "path": "task-1.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-1/customer-perspectives.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-1/customer-perspectives/saycheesecake.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-1/customer-perspectives/strollersnackpack.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-1/customer-perspectives/woohooovertime.md",
+      "action": "ADD",
+      "attached": false
+    }
+  ],
+  "profile": {
+    "undoable": false,
+    "root": "."
+  }
+}

@@ -19,7 +19,7 @@ from memcommit.application.operations.show.application import (
     ShowError,
 )
 from memcommit.application.operations.show.runtime import execute_show_cli_operand
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
@@ -76,7 +76,7 @@ def cmd(
             selector,
             context_name=context_name,
             include_descendants=include_recursive,
-            store=MemoryStore(),
+            store=ProfileStore(),
         )
     except ShowDirectItemScopeError as error:
         typer.secho(

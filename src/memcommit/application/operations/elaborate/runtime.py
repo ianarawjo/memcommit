@@ -1,4 +1,4 @@
-"""MemoryStore binding for append-only Elaborate preparation and Apply."""
+"""ProfileStore binding for append-only Elaborate preparation and Apply."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ from memcommit.persistence.store.checkpoint.requests import AutoCheckpointReques
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 @dataclass(frozen=True)
@@ -91,13 +91,13 @@ def _frame_for(
 class MemoryStoreElaboratePort(ElaborateSourcePort):
     """Freeze one READ+EDIT target and reject drift before Apply."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(self, store: ProfileStore, *, current_name: str | None):
         self._store = store
         self._current_name = current_name
         self._owner = object()
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "MemoryStoreElaboratePort":
+    def capture(cls, store: ProfileStore) -> "MemoryStoreElaboratePort":
         return cls(store, current_name=store.current_context_name())
 
     def _current_access(self, token: _StoreElaborateToken) -> ContextAccess:
@@ -225,7 +225,7 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
 def prepare_elaborate_with_store(
     request: ElaborateRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: ElaborateProviderFactory,
 ) -> tuple[MemoryStoreElaboratePort, ElaboratePrepared]:
     port = MemoryStoreElaboratePort.capture(store)
@@ -239,7 +239,7 @@ def prepare_elaborate_with_store(
 def execute_elaborate(
     request: ElaborateRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: ElaborateProviderFactory,
 ) -> ElaborateReceipt:
     port, prepared = prepare_elaborate_with_store(

@@ -12,9 +12,6 @@ from memcommit.models.checkpoint import Checkpoint
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.core.context_navigation import (
-    record_current_context_transition,
-)
 from memcommit.application.capabilities.history.reconstruction.memory_lineage_relations import (
     MemoryLineageEdge,
     memory_content_sha256,
@@ -33,6 +30,10 @@ from .models import (
     _NO_CURRENT_CONTEXT_EXPECTATION,
 )
 from .records import validate_checkpoint_context_frames, checkpoint_history_digest
+from ..context_hierarchy import (
+    prepare_context_creation_entries,
+    validate_context_hierarchy,
+)
 
 
 class _ContextCreationMixin:
@@ -42,15 +43,10 @@ class _ContextCreationMixin:
         auto_checkpoint: Optional[AutoCheckpointRequest] = None,
     ) -> Checkpoint | None:
         """Create one new Context without overwriting a concurrent owner."""
-        with self._command_write_lock():
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_lock(ctx.name):
-                    checkpoint = self._save_locked(
-                        ctx,
-                        auto_checkpoint,
-                        require_new=True,
-                    )
-        return checkpoint
+        _, checkpoints = self._create_contexts_with_ancestors(
+            ((ctx, auto_checkpoint),), require_all_new=True
+        )
+        return checkpoints.get(ctx.name)
 
     def create_context_with_sources(
         self,
@@ -74,29 +70,13 @@ class _ContextCreationMixin:
             or ctx.name in source_names
         ):
             raise ValueError("Invalid Context creation source lock set.")
-        expected_catalog = (
-            tuple(expected_context_catalog)
-            if expected_context_catalog is not None
-            else None
+        _, checkpoints = self._create_contexts_with_ancestors(
+            ((ctx, auto_checkpoint),),
+            require_all_new=True,
+            source_bindings=bindings,
+            expected_context_catalog=expected_context_catalog,
         )
-        with self._command_write_lock():
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_locks((*source_names, ctx.name)):
-                    # Membership and content belong to the same publication boundary.
-                    if (
-                        expected_catalog is not None
-                        and tuple(self.list_context_names()) != expected_catalog
-                    ):
-                        raise ConcurrentContextUpdateError(
-                            "Context namespace changed before the result could be saved."
-                        )
-                    self._assert_source_bindings_locked(bindings)
-                    checkpoint = self._save_locked(
-                        ctx,
-                        auto_checkpoint,
-                        require_new=True,
-                    )
-        return checkpoint
+        return checkpoints.get(ctx.name)
 
     def create_branch_context(
         self,
@@ -287,212 +267,222 @@ class _ContextCreationMixin:
             for binding in records
         )
         lock_names = (*source_names, *target_names)
-        with self._command_write_lock():
-            # Subtree membership is itself part of the reviewed request. An
-            # exclusive graph lock prevents a new lexical descendant from
-            # appearing after the final membership recheck.
-            with self._context_graph_lock(exclusive=include_descendants):
-                with self._context_write_locks(lock_names):
-                    if include_descendants:
-                        from memcommit.persistence.store.lookup.context_names import (
-    list_context_and_descendant_names,
-)
-
-                        live_source_names = list_context_and_descendant_names(
-                            (source_root,),
-                            self.list_context_names(),
-                        )
-                        if live_source_names != source_names:
-                            raise ConcurrentContextUpdateError(
-                                "The Source Context subtree changed before the "
-                                "Branch could be created."
-                            )
-                    self._assert_source_bindings_locked(
-                        source_receipts,
-                        result_label="branch",
+        # Subtree membership is itself part of the reviewed request. An
+        # exclusive graph lock prevents a new lexical descendant from
+        # appearing after the final membership recheck.
+        with self._context_graph_lock(exclusive=True):
+            catalog = tuple(self.list_context_names())
+            creation_entries = prepare_context_creation_entries(
+                (
+                    (
+                        binding.target,
+                        AutoCheckpointRequest(
+                            command="branch",
+                            command_details={
+                                "branch_tree": branch_tree,
+                                "command_contexts": command_contexts,
+                                "memory_lineage": branch_memory_lineage,
+                            },
+                        ),
                     )
-                    for binding in records:
-                        live_source = self.load_direct(binding.source_name)
-                        live_memories = {
-                            item.uid: item
-                            for item in live_source.iter_memories()
-                            if isinstance(item, Memory)
-                        }
-                        if set(live_memories) != {
-                            item.source_uid for item in binding.memories
-                        }:
-                            raise ConcurrentContextUpdateError(
-                                "The Branch Source Memory membership changed before "
-                                "publication."
-                            )
-                        for item in binding.memories:
-                            source_memory = live_memories[item.source_uid]
-                            if (
-                                memory_content_sha256(source_memory.content)
-                                != item.source_content_sha256
-                            ):
-                                raise ConcurrentContextUpdateError(
-                                    "A Branch Source Memory changed before publication."
-                                )
+                    for binding in records
+                ),
+                catalog,
+                current_before=expected_current,
+                current_after=target_root,
+            )
+            implicit_parents = tuple(
+                (context, request)
+                for context, request in creation_entries
+                if context.name not in target_names
+            )
+            creation_requests = {
+                context.name: request for context, request in creation_entries
+            }
+            validate_context_hierarchy(
+                (*catalog, *(context.name for context, _ in creation_entries))
+            )
+            lock_names = (
+                *lock_names,
+                *(context.name for context, _ in implicit_parents),
+            )
+            with self._context_write_locks(lock_names):
+                if include_descendants:
+                    from memcommit.persistence.store.lookup.context_names import (
+                        list_context_and_descendant_names,
+                    )
 
-                    checkpoint_files: dict[
-                        str,
-                        tuple[tuple[Path, dict[str, object] | None], ...],
-                    ] = {}
-                    for binding in records:
-                        history = self.list_checkpoints(binding.source_name)
+                    live_source_names = list_context_and_descendant_names(
+                        (source_root,),
+                        self.list_context_names(),
+                    )
+                    if live_source_names != source_names:
+                        raise ConcurrentContextUpdateError(
+                            "The Source Context subtree changed before the "
+                            "Branch could be created."
+                        )
+                self._assert_source_bindings_locked(
+                    source_receipts,
+                    result_label="branch",
+                )
+                for binding in records:
+                    live_source = self.load_direct(binding.source_name)
+                    live_memories = {
+                        item.uid: item
+                        for item in live_source.iter_memories()
+                        if isinstance(item, Memory)
+                    }
+                    if set(live_memories) != {
+                        item.source_uid for item in binding.memories
+                    }:
+                        raise ConcurrentContextUpdateError(
+                            "The Branch Source Memory membership changed before "
+                            "publication."
+                        )
+                    for item in binding.memories:
+                        source_memory = live_memories[item.source_uid]
                         if (
-                            checkpoint_history_digest(history)
-                            != binding.expected_history_digest
+                            memory_content_sha256(source_memory.content)
+                            != item.source_content_sha256
                         ):
                             raise ConcurrentContextUpdateError(
-                                f"Checkpoint history for '{binding.source_name}' "
-                                "changed before the branch could be created."
+                                "A Branch Source Memory changed before publication."
                             )
-                        source_checkpoints = self._checkpoints_dir(binding.source_name)
-                        files: tuple[Path, ...] = ()
-                        if source_checkpoints.exists():
-                            if (
-                                source_checkpoints.is_symlink()
-                                or not source_checkpoints.is_dir()
-                            ):
-                                raise ValueError(
-                                    f"Checkpoint history for "
-                                    f"'{binding.source_name}' is unsafe."
-                                )
-                            files = tuple(sorted(source_checkpoints.iterdir()))
-                            if any(
-                                path.is_symlink()
-                                or not path.is_file()
-                                or path.suffix != ".json"
-                                for path in files
-                            ):
-                                raise ValueError(
-                                    f"Checkpoint history for "
-                                    f"'{binding.source_name}' is unsafe."
-                                )
-                        prepared_files: list[tuple[Path, dict[str, object] | None]] = []
-                        for path in files:
-                            rewritten: dict[str, object] | None = None
-                            if include_descendants:
-                                try:
-                                    with open(path, encoding="utf-8") as file:
-                                        raw = json.load(
-                                            file,
-                                            object_pairs_hook=(
-                                                _reject_duplicate_json_keys
-                                            ),
-                                        )
-                                except (json.JSONDecodeError, ValueError) as error:
-                                    raise ValueError(
-                                        f"Checkpoint history for "
-                                        f"'{binding.source_name}' is invalid."
-                                    ) from error
-                                if not isinstance(raw, dict):
-                                    raise ValueError(
-                                        f"Checkpoint history for "
-                                        f"'{binding.source_name}' is invalid."
-                                    )
-                                validate_checkpoint_context_frames(raw)
-                                rewritten = raw
-                            prepared_files.append((path, rewritten))
-                        checkpoint_files[binding.source_name] = tuple(prepared_files)
 
-                    for target_name in target_names:
-                        if self.context_exists(target_name):
-                            self.load_direct(target_name)
-                            raise FileExistsError(
-                                f"Context '{target_name}' already exists."
+                checkpoint_files: dict[
+                    str,
+                    tuple[tuple[Path, dict[str, object] | None], ...],
+                ] = {}
+                for binding in records:
+                    history = self.list_checkpoints(binding.source_name)
+                    if (
+                        checkpoint_history_digest(history)
+                        != binding.expected_history_digest
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            f"Checkpoint history for '{binding.source_name}' "
+                            "changed before the branch could be created."
+                        )
+                    source_checkpoints = self._checkpoints_dir(binding.source_name)
+                    files: tuple[Path, ...] = ()
+                    if source_checkpoints.exists():
+                        if (
+                            source_checkpoints.is_symlink()
+                            or not source_checkpoints.is_dir()
+                        ):
+                            raise ValueError(
+                                f"Checkpoint history for "
+                                f"'{binding.source_name}' is unsafe."
                             )
-                        self._assert_context_storage_available(target_name)
-
-                    created: list[Context] = []
-                    branch_error: Exception | None = None
-                    with self._state_write_lock():
-                        state = self._read_state()
-                        if state.get("current") != expected_current:
-                            raise ConcurrentContextUpdateError(
-                                "The current Context changed before the branch "
-                                "could be created."
+                        files = tuple(sorted(source_checkpoints.iterdir()))
+                        if any(
+                            path.is_symlink()
+                            or not path.is_file()
+                            or path.suffix != ".json"
+                            for path in files
+                        ):
+                            raise ValueError(
+                                f"Checkpoint history for "
+                                f"'{binding.source_name}' is unsafe."
                             )
-                        try:
-                            for binding in records:
-                                target = binding.target
-                                self._save_locked(
-                                    target,
-                                    None,
-                                    require_new=True,
-                                )
-                                created.append(target)
-                                target_checkpoints = self._checkpoints_dir(target.name)
-                                for source_path, rewritten in checkpoint_files[
-                                    binding.source_name
-                                ]:
-                                    destination = target_checkpoints / source_path.name
-                                    if destination.exists() or destination.is_symlink():
-                                        raise FileExistsError(
-                                            f"Branch checkpoint destination for "
-                                            f"'{target.name}' already exists."
-                                        )
-                                    if rewritten is None:
-                                        _write_bytes_atomic(
-                                            destination,
-                                            source_path.read_bytes(),
-                                        )
-                                    else:
-                                        _write_json_atomic(destination, rewritten)
-                                checkpoint = self._save_locked(
-                                    target,
-                                    AutoCheckpointRequest(
-                                        command="branch",
-                                        command_details={
-                                            "branch_tree": branch_tree,
-                                            "command_contexts": command_contexts,
-                                            "memory_lineage": branch_memory_lineage,
-                                        },
-                                    ),
-                                )
-                                if checkpoint is None:
-                                    raise RuntimeError(
-                                        "Branch creation recorded no command "
-                                        "checkpoint."
-                                    )
-                            record_current_context_transition(state, target_root)
-                            self._write_state(state)
-                        except Exception as error:
-                            branch_error = error
-                    if branch_error is not None:
-                        rollback_error: Exception | None = None
-                        for target in reversed(created):
+                    prepared_files: list[tuple[Path, dict[str, object] | None]] = []
+                    for path in files:
+                        rewritten: dict[str, object] | None = None
+                        if include_descendants:
                             try:
-                                self._delete_locked(target.name)
-                            except Exception as candidate:
-                                rollback_error = rollback_error or candidate
-                        if rollback_error is not None:
-                            raise RuntimeError(
-                                "Branch creation failed and its new Context "
-                                "hierarchy could not be fully rolled back."
-                            ) from rollback_error
-                        raise branch_error
+                                with open(path, encoding="utf-8") as file:
+                                    raw = json.load(
+                                        file,
+                                        object_pairs_hook=(_reject_duplicate_json_keys),
+                                    )
+                            except (json.JSONDecodeError, ValueError) as error:
+                                raise ValueError(
+                                    f"Checkpoint history for "
+                                    f"'{binding.source_name}' is invalid."
+                                ) from error
+                            if not isinstance(raw, dict):
+                                raise ValueError(
+                                    f"Checkpoint history for "
+                                    f"'{binding.source_name}' is invalid."
+                                )
+                            validate_checkpoint_context_frames(raw)
+                            rewritten = raw
+                        prepared_files.append((path, rewritten))
+                    checkpoint_files[binding.source_name] = tuple(prepared_files)
+
+                for target_name in target_names:
+                    if self.context_exists(target_name):
+                        self.load_direct(target_name)
+                        raise FileExistsError(
+                            f"Context '{target_name}' already exists."
+                        )
+                    self._assert_context_storage_available(target_name)
+
+                created: list[Context] = []
+                branch_error: Exception | None = None
+                with self._state_write_lock():
+                    state = self._read_state()
+                    if state.get("current") != expected_current:
+                        raise ConcurrentContextUpdateError(
+                            "The current Context changed before the branch "
+                            "could be created."
+                        )
+                    try:
+                        for parent, request in implicit_parents:
+                            self._save_locked(parent, request, require_new=True)
+                            created.append(parent)
+                        for binding in records:
+                            target = binding.target
+                            self._save_locked(
+                                target,
+                                None,
+                                require_new=True,
+                            )
+                            created.append(target)
+                            target_checkpoints = self._checkpoints_dir(target.name)
+                            for source_path, rewritten in checkpoint_files[
+                                binding.source_name
+                            ]:
+                                destination = target_checkpoints / source_path.name
+                                if destination.exists() or destination.is_symlink():
+                                    raise FileExistsError(
+                                        f"Branch checkpoint destination for "
+                                        f"'{target.name}' already exists."
+                                    )
+                                if rewritten is None:
+                                    _write_bytes_atomic(
+                                        destination,
+                                        source_path.read_bytes(),
+                                    )
+                                else:
+                                    _write_json_atomic(destination, rewritten)
+                            checkpoint = self._save_locked(
+                                target,
+                                creation_requests[target.name],
+                            )
+                            if checkpoint is None:
+                                raise RuntimeError(
+                                    "Branch creation recorded no command checkpoint."
+                                )
+                        state["current"] = target_root
+                        self._write_state(state)
+                    except Exception as error:
+                        branch_error = error
+                if branch_error is not None:
+                    rollback_error: Exception | None = None
+                    for target in reversed(created):
+                        try:
+                            self._delete_locked(target.name)
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Branch creation failed and its new Context "
+                            "hierarchy could not be fully rolled back."
+                        ) from rollback_error
+                    raise branch_error
 
     def create_missing_contexts(
-        self,
-        entries: Iterable[tuple[Context, Optional[AutoCheckpointRequest]]],
-        *,
-        make_current: str | None = None,
-        require_all_new: bool = False,
-        expected_current: str | None | object = _NO_CURRENT_CONTEXT_EXPECTATION,
-    ) -> tuple[Context, ...]:
-        """Create one namespace batch and optionally CAS-select its target."""
-        with self._command_write_lock():
-            return self._create_missing_contexts_command_locked(
-                entries,
-                make_current=make_current,
-                require_all_new=require_all_new,
-                expected_current=expected_current,
-            )
-
-    def _create_missing_contexts_command_locked(
         self,
         entries: Iterable[tuple[Context, Optional[AutoCheckpointRequest]]],
         *,
@@ -515,73 +505,112 @@ class _ContextCreationMixin:
         ``expected_current`` prevents a long interactive creation flow from
         overwriting a later Context switch at the final state write.
         """
+        created, _ = self._create_contexts_with_ancestors(
+            entries,
+            make_current=make_current,
+            require_all_new=require_all_new,
+            expected_current=expected_current,
+        )
+        return created
+
+    def _create_contexts_with_ancestors(
+        self,
+        entries,
+        *,
+        make_current=None,
+        require_all_new=False,
+        expected_current=_NO_CURRENT_CONTEXT_EXPECTATION,
+        source_bindings=(),
+        expected_context_catalog=None,
+    ):
         records = tuple(entries)
         if not records:
             raise ValueError("At least one Context is required.")
-        if any(not isinstance(context, Context) for context, _ in records):
-            raise TypeError("Expected Context records.")
-        names = tuple(context.name for context, _ in records)
-        for name in names:
+        requested_names = tuple(context.name for context, _ in records)
+        for name in requested_names:
             validate_context_name(name)
-        if len(names) != len(set(names)):
+        if len(requested_names) != len(set(requested_names)):
             raise ValueError("Context batch contains duplicate names.")
-        if make_current is not None and make_current not in names:
+        if make_current is not None and make_current not in requested_names:
             raise ValueError("Selected Context must be part of the creation batch.")
-
-        with self._context_graph_lock(exclusive=False):
-            with self._context_write_locks(names):
-                existing: set[str] = set()
+        bindings = tuple(source_bindings)
+        with self._context_graph_lock(exclusive=True):
+            catalog = tuple(self.list_context_names())
+            if expected_context_catalog is not None and catalog != tuple(
+                expected_context_catalog
+            ):
+                raise ConcurrentContextUpdateError(
+                    "Context namespace changed before creation."
+                )
+            existing = set(catalog)
+            collisions = existing.intersection(requested_names)
+            if require_all_new and collisions:
+                raise FileExistsError(
+                    "Context destination already exists: "
+                    + ", ".join(sorted(collisions))
+                )
+            current_before = self.current_context_name()
+            records = prepare_context_creation_entries(
+                records,
+                existing,
+                current_before=current_before,
+                current_after=make_current
+                if make_current is not None
+                else current_before,
+            )
+            names = tuple(context.name for context, _ in records)
+            validate_context_hierarchy((*catalog, *names))
+            with self._context_write_locks((*names, *(name for name, _ in bindings))):
+                self._assert_source_bindings_locked(bindings)
                 for name in names:
-                    if self.context_exists(name):
-                        # A present file is not reusable until its stored identity
-                        # and path-bound header have passed normal validation.
+                    if name in existing:
                         self.load_direct(name)
-                        existing.add(name)
                     else:
                         self._assert_context_storage_available(name)
-
-                if require_all_new and existing:
-                    raise FileExistsError(
-                        "Context destination already exists: "
-                        + ", ".join(sorted(existing))
-                    )
-
-                created: list[Context] = []
+                created = []
+                checkpoints = {}
+                original_state = None
                 try:
-                    for context, auto_checkpoint in records:
+                    for context, request in sorted(
+                        records, key=lambda entry: entry[0].name.count("/")
+                    ):
                         if context.name in existing:
                             continue
-                        self._save_locked(
-                            context,
-                            auto_checkpoint,
-                            require_new=True,
+                        checkpoint = self._save_locked(
+                            context, request, require_new=True
                         )
                         created.append(context)
+                        if checkpoint is not None:
+                            checkpoints[context.name] = checkpoint
                     if make_current is not None:
                         with self._state_write_lock():
                             state = self._read_state()
+                            original_state = dict(state)
                             if (
                                 expected_current is not _NO_CURRENT_CONTEXT_EXPECTATION
                                 and state.get("current") != expected_current
                             ):
                                 raise ConcurrentContextUpdateError(
-                                    "The current Context changed before the new "
-                                    "Context could be selected."
+                                    "The current Context changed before creation."
                                 )
-                            record_current_context_transition(state, make_current)
+                            state["current"] = make_current
                             self._write_state(state)
-                except Exception as error:
-                    rollback_error: Exception | None = None
+                except Exception:
+                    rollback_error = None
+                    if original_state is not None:
+                        try:
+                            with self._state_write_lock():
+                                _write_json_atomic(self.state_file, original_state)
+                        except Exception as error:
+                            rollback_error = error
                     for context in reversed(created):
                         try:
-                            self._delete_locked(context.name)
-                        except Exception as candidate:
-                            rollback_error = candidate
-                            break
+                            self._delete_locked(context.name, clear_current=False)
+                        except Exception as error:
+                            rollback_error = rollback_error or error
                     if rollback_error is not None:
                         raise RuntimeError(
-                            "Context hierarchy creation failed and its newly "
-                            "created Contexts could not be rolled back."
+                            "Context creation could not be fully rolled back."
                         ) from rollback_error
-                    raise error
-        return tuple(created)
+                    raise
+        return tuple(created), checkpoints

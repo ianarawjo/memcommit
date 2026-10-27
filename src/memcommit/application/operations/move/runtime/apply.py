@@ -20,13 +20,13 @@ from memcommit.application.operations.move.contracts import (
 from memcommit.application.operations.move.runtime.prepare import move_plan_digest
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 
 
 def apply_move(
     plan: FrozenMoveMemoriesPlan,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     owner: object,
 ) -> MoveMemoriesResult:
     if not isinstance(plan, FrozenMoveMemoriesPlan):

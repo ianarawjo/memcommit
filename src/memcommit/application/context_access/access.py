@@ -5,20 +5,20 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
 class ContextAccess:
     """One local Context name bound to the Store captured by its operation."""
 
-    store: MemoryStore
+    store: ProfileStore
     context_name: str
     access_name: str
 
 
 def resolve_context_access(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     operand: str | None,
     *,
     current_name: str | None,

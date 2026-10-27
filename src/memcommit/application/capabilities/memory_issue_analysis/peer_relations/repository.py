@@ -35,7 +35,7 @@ _ATOMIC_TEMP_NAME = re.compile(
 )
 
 
-def memory_relation_analyses_dir(store: store_module.MemoryStore | None = None) -> Path:
+def memory_relation_analyses_dir(store: store_module.ProfileStore | None = None) -> Path:
     """Resolve against the store root at call time for isolated tests."""
     root = store.store_dir if store is not None else store_module.STORE_DIR
     return root / "comparison-analyses"
@@ -55,7 +55,7 @@ def memory_relation_analysis_path(
     reference_context_uid: str,
     compared_context_uid: str,
     *,
-    store: store_module.MemoryStore | None = None,
+    store: store_module.ProfileStore | None = None,
 ) -> Path:
     reference = _canonical_uuid(
         reference_context_uid,
@@ -90,7 +90,7 @@ def load_memory_relation_analysis(
     reference_context_uid: str,
     compared_context_uid: str,
     *,
-    store: store_module.MemoryStore | None = None,
+    store: store_module.ProfileStore | None = None,
 ) -> MemoryRelationAnalysis | None:
     """Load one ordered latest slot without creating store state."""
     path = memory_relation_analysis_path(
@@ -126,15 +126,15 @@ def load_memory_relation_analysis(
 
 
 def save_memory_relation_analysis(
-    store: store_module.MemoryStore,
+    store: store_module.ProfileStore,
     analysis: MemoryRelationAnalysis,
     *,
     expected_analysis_uid: str | None,
     expected_analysis_version: str | None = None,
 ) -> None:
     """CAS-save one analysis while every frozen local source stays locked."""
-    if not isinstance(store, store_module.MemoryStore):
-        raise TypeError("Expected a MemoryStore.")
+    if not isinstance(store, store_module.ProfileStore):
+        raise TypeError("Expected a ProfileStore.")
     if not isinstance(analysis, MemoryRelationAnalysis):
         raise TypeError("Expected a MemoryRelationAnalysis.")
     restored = MemoryRelationAnalysis.from_dict(analysis.to_dict())
@@ -182,7 +182,6 @@ def save_memory_relation_analysis(
                     list_context_and_descendant_names((frame.context_name,), catalog)
                 )
         locks.enter_context(store._context_write_locks(lock_names))
-        locks.enter_context(store.profile_write_guard())
 
         try:
             reference = _memory_relation_projection(

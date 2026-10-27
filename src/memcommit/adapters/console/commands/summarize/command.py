@@ -8,7 +8,6 @@ from typing import Annotated, Iterator, Optional
 import typer
 
 from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
-from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
@@ -26,8 +25,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
-from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
     SummarizeProvider,
@@ -107,7 +105,7 @@ def cmd(
         )
         traversal = resolve_context_traversal(preset=preset)
 
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
         result = run_summarize_with_store(
             SummarizeRequest(
@@ -119,15 +117,6 @@ def cmd(
             provider_session_factory=_provider_session,
         )
         render_summarize_plain(result)
-        annotate_read_report_attempt(
-            ReadReportTarget(
-                operation="summarize",
-                context_names=(result.context_name,),
-                target_names=(result.context_name,),
-                selection_mode="SINGLE",
-                ranges=("RECURSIVE" if result.include_descendants else "DIRECT",),
-            )
-        )
     except (
         FileNotFoundError,
         OSError,

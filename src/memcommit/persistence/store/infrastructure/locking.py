@@ -91,35 +91,6 @@ class _StoreLockingMixin:
             yield
 
     @contextmanager
-    def _command_write_lock(self) -> Iterator[None]:
-        """Serialize checkpoint-producing commands across Contexts.
-
-        Per-Context locks prevent lost writes but cannot order two commands
-        aimed at different Contexts. Undo/Redo reconstruct one global command
-        stack, so future command commits share this short store-wide boundary.
-        """
-        lock_path = self.store_dir / "context-command-write.lock"
-        if lock_path.is_symlink():
-            raise ValueError("Refusing to use a symbolic-link command lock.")
-        flags = os.O_RDWR | os.O_CREAT
-        if hasattr(os, "O_NOFOLLOW"):
-            flags |= os.O_NOFOLLOW
-        descriptor = os.open(lock_path, flags, 0o600)
-        try:
-            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
-                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
-                try:
-                    yield
-                finally:
-                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
-        except Exception:
-            try:
-                os.close(descriptor)
-            except OSError:
-                pass
-            raise
-
-    @contextmanager
     def _state_write_lock(self) -> Iterator[None]:
         """Serialize cooperative changes to the global current Context."""
         lock_path = self.store_dir / "state-write.lock"

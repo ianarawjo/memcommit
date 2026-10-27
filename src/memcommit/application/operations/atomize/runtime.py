@@ -52,7 +52,7 @@ from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     _fsync_directory,
     _write_json_atomic,
     context_record_digest,
@@ -81,7 +81,7 @@ def _session_version_token(
 class MemoryStoreAtomizeRecordRepository:
     """Treat the saved analysis/workbench pair as one opaque CAS snapshot."""
 
-    store: MemoryStore
+    store: ProfileStore
 
     def _load_unlocked(
         self,
@@ -178,7 +178,7 @@ class MemoryStoreAtomizeRecordRepository:
 class MemoryStoreAtomizeOutputPort:
     """Create, recover, or compensate one local in-place Atomize checkpoint."""
 
-    store: MemoryStore
+    store: ProfileStore
     provider_factory: Callable[[], AtomizeProvider]
 
     @staticmethod
@@ -467,35 +467,34 @@ class MemoryStoreAtomizeOutputPort:
         )
         projected = normal_form.context
         result = normal_form.result
-        # Provider work stays on an unpublished projection. The command lock
-        # orders Source CAS and the sole checkpoint as one Context command.
-        with self.store._command_write_lock():  # noqa: SLF001
-            recovered = self._matching_checkpoint(snapshot, audit)
-            if recovered is not None:
-                return recovered
-            current = self.store.load_for_update(analysis.context_name)
-            if context_record_digest(current) != source_digest:
-                raise AtomizeImpactError(
-                    "The Atomize Source changed during normal-form planning; "
-                    "no Context change was published."
-                )
-            checkpoint = self.store._save_command_locked(  # noqa: SLF001
-                projected,
-                AutoCheckpointRequest(
-                    command="atomize",
-                    command_details=self._checkpoint_command_details(analysis, result, audit),
-                ),
+        # Provider work stays on an unpublished projection until Source
+        # revalidation and checkpoint publication.
+        recovered = self._matching_checkpoint(snapshot, audit)
+        if recovered is not None:
+            return recovered
+        current = self.store.load_for_update(analysis.context_name)
+        if context_record_digest(current) != source_digest:
+            raise AtomizeImpactError(
+                "The Atomize Source changed during normal-form planning; "
+                "no Context change was published."
             )
-            if checkpoint is None:
-                raise AtomizeApplicationError(
-                    "Atomize application produced no Context checkpoint."
-                )
-            return AtomizeMaterialization(
-                result=result,
-                context_name=projected.name,
-                checkpoint_uid=checkpoint.uid,
-                created=True,
+        checkpoint = self.store.save(
+            projected,
+            AutoCheckpointRequest(
+                command="atomize",
+                command_details=self._checkpoint_command_details(analysis, result, audit),
+            ),
+        )
+        if checkpoint is None:
+            raise AtomizeApplicationError(
+                "Atomize application produced no Context checkpoint."
             )
+        return AtomizeMaterialization(
+            result=result,
+            context_name=projected.name,
+            checkpoint_uid=checkpoint.uid,
+            created=True,
+        )
 
     def rollback_materialization(
         self,
@@ -505,76 +504,74 @@ class MemoryStoreAtomizeOutputPort:
             raise AtomizeApplicationError(
                 "A recovered Atomize checkpoint cannot be compensated."
             )
-        with self.store._command_write_lock():  # noqa: SLF001
-            with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
-                with self.store._context_write_lock(  # noqa: SLF001
+        with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
+            with self.store._context_write_lock(  # noqa: SLF001
+                materialization.context_name
+            ):
+                checkpoints = self.store.list_checkpoints(
                     materialization.context_name
+                )
+                if (
+                    not checkpoints
+                    or checkpoints[0].get("uid")
+                    != materialization.checkpoint_uid
                 ):
-                    with self.store.profile_write_guard():
-                        checkpoints = self.store.list_checkpoints(
+                    raise AtomizeApplicationError(
+                        "The Atomize checkpoint is no longer the newest "
+                        "Context effect."
+                    )
+                checkpoint = checkpoints[0]
+                before = checkpoint.get("command_before")
+                after = checkpoint.get("snapshot")
+                if not isinstance(before, dict) or not isinstance(after, dict):
+                    raise AtomizeApplicationError(
+                        "The Atomize checkpoint lacks compensation state."
+                    )
+                current = self.store.load_direct(materialization.context_name)
+                if context_record_digest(current) != context_record_digest(
+                    after
+                ):
+                    raise AtomizeApplicationError(
+                        "The atomized Context changed before compensation."
+                    )
+                restored = Context.from_dict(before)
+                if restored.uid != current.uid or restored.name != current.name:
+                    raise AtomizeApplicationError(
+                        "The Atomize compensation state targets a "
+                        "different Context."
+                    )
+                _write_json_atomic(
+                    self.store._context_file(materialization.context_name),
+                    before,
+                )
+                try:
+                    self.store._remove_checkpoint_uid_locked(  # noqa: SLF001
+                        materialization.context_name,
+                        materialization.checkpoint_uid,
+                    )
+                    _fsync_directory(
+                        self.store._checkpoints_dir(  # noqa: SLF001
                             materialization.context_name
                         )
-                        if (
-                            not checkpoints
-                            or checkpoints[0].get("uid")
-                            != materialization.checkpoint_uid
-                        ):
-                            raise AtomizeApplicationError(
-                                "The Atomize checkpoint is no longer the newest "
-                                "Context effect."
-                            )
-                        checkpoint = checkpoints[0]
-                        before = checkpoint.get("command_before")
-                        after = checkpoint.get("snapshot")
-                        if not isinstance(before, dict) or not isinstance(after, dict):
-                            raise AtomizeApplicationError(
-                                "The Atomize checkpoint lacks compensation state."
-                            )
-                        current = self.store.load_direct(materialization.context_name)
-                        if context_record_digest(current) != context_record_digest(
-                            after
-                        ):
-                            raise AtomizeApplicationError(
-                                "The atomized Context changed before compensation."
-                            )
-                        restored = Context.from_dict(before)
-                        if restored.uid != current.uid or restored.name != current.name:
-                            raise AtomizeApplicationError(
-                                "The Atomize compensation state targets a "
-                                "different Context."
-                            )
-                        _write_json_atomic(
-                            self.store._context_file(materialization.context_name),
-                            before,
-                        )
-                        try:
-                            self.store._remove_checkpoint_uid_locked(  # noqa: SLF001
-                                materialization.context_name,
-                                materialization.checkpoint_uid,
-                            )
-                            _fsync_directory(
-                                self.store._checkpoints_dir(  # noqa: SLF001
-                                    materialization.context_name
-                                )
-                            )
-                        except Exception:
-                            # Restore the exact post-Apply record if checkpoint
-                            # removal itself fails, preserving the pair rather
-                            # than reporting a compensated state that is not.
-                            _write_json_atomic(
-                                self.store._context_file(  # noqa: SLF001
-                                    materialization.context_name
-                                ),
-                                after,
-                            )
-                            raise
+                    )
+                except Exception:
+                    # Restore the exact post-Apply record if checkpoint
+                    # removal itself fails, preserving the pair rather
+                    # than reporting a compensated state that is not.
+                    _write_json_atomic(
+                        self.store._context_file(  # noqa: SLF001
+                            materialization.context_name
+                        ),
+                        after,
+                    )
+                    raise
 
 
 @dataclass
 class MemoryStoreAtomizeSaveAsOutputPort:
     """Publish a final derived Context once, with no visible baseline copy."""
 
-    store: MemoryStore
+    store: ProfileStore
     provider_factory: Callable[[], AtomizeProvider]
 
     @staticmethod
@@ -964,7 +961,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
 
 def capture_atomize_execution_snapshot(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
     expected_review_record: AtomizeReviewRecord | None,
 ) -> AtomizeExecutionSnapshot:
@@ -977,7 +974,7 @@ def capture_atomize_execution_snapshot(
 
 
 def atomize_application_checkpoint_uid(
-    store: MemoryStore,
+    store: ProfileStore,
     context: Context,
     analysis_uid: str,
 ) -> str | None:
@@ -1010,7 +1007,7 @@ def atomize_application_checkpoint_uid(
 
 
 def atomize_analysis_was_applied(
-    store: MemoryStore,
+    store: ProfileStore,
     context: Context,
     analysis_uid: str,
 ) -> bool:
@@ -1040,7 +1037,7 @@ def _analysis_scope_matches_request(
 def execute_atomize_in_place(
     request: AtomizeInPlaceRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizeInPlaceResult:
     """Analyze or reuse one exact scope and apply it as one in-place outcome."""
@@ -1101,7 +1098,7 @@ def execute_atomize_in_place(
 
 def capture_atomize_execution_snapshot_at_version(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
     expected_version: str,
 ) -> AtomizeExecutionSnapshot:
@@ -1137,7 +1134,7 @@ def capture_atomize_execution_snapshot_at_version(
 
 def capture_current_atomize_execution_snapshot_at_version(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
     expected_version: str,
 ) -> AtomizeExecutionSnapshot:
@@ -1154,7 +1151,7 @@ def capture_current_atomize_execution_snapshot_at_version(
 def execute_atomize_output_plan_update(
     request: AtomizeOutputPlanRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> AtomizeReviewRecordUpdateResult:
     """Persist one exact Output-plan update through the production repository."""
 
@@ -1167,7 +1164,7 @@ def execute_atomize_output_plan_update(
 def execute_atomize_record_apply(
     request: AtomizeRecordApplyRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizeRecordApplyResult:
     """Apply one accepted revision through the production Store adapters."""
@@ -1185,7 +1182,7 @@ def execute_atomize_record_apply(
 def execute_atomize_save_as(
     request: AtomizeSaveAsRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizeSaveAsResult:
     """Create or recover one final Save As output through Store adapters."""

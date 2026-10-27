@@ -25,9 +25,6 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
     _current_impact,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.capabilities.reviewing.memory_diff import (
-    update_operation_change,
-)
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
@@ -35,14 +32,6 @@ from memcommit.application.operations.sever.model import SeverSession
 from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
-)
-from memcommit.application.operations.update.model import (
-    UpdateContextInputs,
-    UpdatePlan,
-)
-from memcommit.adapters.console.commands.update.effects import (
-    update_effect_view,
-    update_effect_report,
 )
 
 
@@ -62,34 +51,6 @@ class ImpactSessionPresentation:
         """Return the effect ledger only when it adds a distinct reading."""
 
         return self.controller if self.show_impact_ledger else None
-
-
-def update_impact_presentation(
-    inputs: UpdateContextInputs,
-    plan: UpdatePlan,
-    *,
-    completed=False,
-) -> ImpactSessionPresentation:
-    """Project one saved Update receipt as exact located Memory changes."""
-
-    view = update_effect_view(inputs, plan, completed=completed)
-    return ImpactSessionPresentation(
-        view=view,
-        controller=ImpactController.from_memory_changes(
-            operation=view.operation,
-            artifact_uid=view.artifact_uid,
-            revision=view.revision,
-            title="IMPACT · UPDATE",
-            summary="Recorded Update changes."
-            if completed
-            else "Proposed Update changes; nothing applied.",
-            changes=tuple(
-                update_operation_change(operation) for operation in plan.operations
-            ),
-        ),
-        handoff_available=False,
-        effect_report=update_effect_report(plan),
-    )
 
 
 def sever_impact_presentation(session: SeverSession) -> ImpactSessionPresentation:

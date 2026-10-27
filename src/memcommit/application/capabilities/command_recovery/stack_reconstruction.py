@@ -11,6 +11,7 @@ stacks.
 from __future__ import annotations
 
 import uuid
+import copy
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -32,7 +33,7 @@ from memcommit.application.capabilities.history.reconstruction.operation_record_
     OperationRecordCorrelationError,
     operation_record_identity,
 )
-from memcommit.persistence.store import MemoryStore, canonical_context_record
+from memcommit.persistence.store import ProfileStore, canonical_context_record
 
 
 _RESTORE_METADATA_KEY = "command_restore"
@@ -122,7 +123,9 @@ def _entry_fields(
     command = (
         raw_command if isinstance(raw_command, str) and raw_command else "checkpoint"
     )
-    raw_description = entry.get("checkpoint_message") or entry.get("command") or "checkpoint"
+    raw_description = (
+        entry.get("checkpoint_message") or entry.get("command") or "checkpoint"
+    )
     description = raw_description if isinstance(raw_description, str) else ""
     raw_args = entry.get("command_details")
     args = raw_args if isinstance(raw_args, dict) else {}
@@ -202,6 +205,12 @@ def command_unit_uid(
     command: str,
     args: dict[str, Any],
 ) -> str:
+    creation = args.get("context_creation_batch")
+    if isinstance(creation, dict):
+        return f"{command}:" + creation["operation_uid"]
+    if command == "revert":
+        unit = _revert_unit(args)
+        return f"revert:{unit[0] if unit is not None else checkpoint_uid}"
     try:
         return operation_record_identity(
             checkpoint_uid=checkpoint_uid,
@@ -397,10 +406,11 @@ def branch_tree_receipt(args: dict[str, Any]) -> BranchTreeReceipt:
 
 
 def _context_parts(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
     *,
     archived: tuple[Context, list[dict[str, Any]]] | None = None,
+    context_names_by_uid: dict[str, str] | None = None,
 ) -> tuple[list[_OriginalPart], list[_RestorePart]]:
     if archived is None:
         context = store.load_direct(context_name)
@@ -419,14 +429,42 @@ def _context_parts(
         )
         for entry in entries
     }
-    from memcommit.persistence.operations.mem_sync.run_repository import SyncRunRepository
-    grouped_sync_children = {uid for record in SyncRunRepository(store).profile_history()
-                             for uid in record["profile"].get("child_checkpoint_uids", ())}
     originals: list[_OriginalPart] = []
     restorations: list[_RestorePart] = []
     effective: dict[str, object] | None = None
     for entry in entries:
         uid, timestamp, command, description, args, auto = _entry_fields(entry)
+        if isinstance(args.get("context_creation_batch"), dict):
+            # Rename keeps historical snapshots unchanged; bind creation members
+            # to their live or archived names through stable Context identities.
+            args = copy.deepcopy(args)
+            receipt = args["context_creation_batch"]
+            names_by_uid = context_names_by_uid or {context.uid: context.name}
+            renamed = {
+                item["name"]: names_by_uid.get(item["uid"], item["name"])
+                for item in receipt["contexts"]
+            }
+            receipt["contexts"] = [
+                {
+                    "uid": item["uid"],
+                    "name": names_by_uid.get(item["uid"], item["name"]),
+                }
+                for item in receipt["contexts"]
+            ]
+            args["command_contexts"] = receipt["contexts"]
+            for field in ("current_before", "current_after"):
+                receipt[field] = renamed.get(receipt[field], receipt[field])
+        if isinstance(args.get("command_restore"), dict) and context_names_by_uid:
+            args = copy.deepcopy(args)
+            restore_record = args["command_restore"]
+            restore_record["contexts"] = [
+                {
+                    "uid": item["uid"],
+                    "name": context_names_by_uid.get(item["uid"], item["name"]),
+                }
+                for item in restore_record["contexts"]
+            ]
+            entry = {**entry, "command_details": args}
         snapshot = records[uid]
         owned = _owned_snapshot(
             entry.get("snapshot"),
@@ -434,15 +472,17 @@ def _context_parts(
             context_name=context.name,
         )
 
-        if "sync_agreement" in args:
-            effective = snapshot
-            continue
-
-        if (isinstance(args.get("sync_operation"), dict) and args["sync_operation"].get("version") == 2) or "sync_restore" in args:
+        if "sync_operation" in args or "sync_restore" in args:
             # Lifecycle receipts retain exact names, absent states and their
             # shared operation outside any one live/archived Context owner.
             effective = snapshot
             continue
+
+        if "context_creation_batch" in args or "command_restore" in args:
+            owned = (
+                isinstance(entry.get("snapshot"), dict)
+                and entry["snapshot"].get("uid") == context.uid
+            )
 
         restore = _restore_part(
             entry,
@@ -485,56 +525,6 @@ def _context_parts(
             effective = snapshot
             continue
 
-        if command == "revert":
-            target_uid = args.get("target_uid")
-            revert_unit = _revert_unit(args)
-            recorded_restoration = entry.get("restored_snapshot")
-            target = (
-                _normalized_record(
-                    recorded_restoration,
-                    context_uid=context.uid,
-                    context_name=context.name,
-                )
-                if isinstance(recorded_restoration, dict)
-                else (records.get(target_uid) if isinstance(target_uid, str) else None)
-            )
-            if target is None:
-                raise CommandHistoryError(
-                    f"Revert checkpoint [{uid[:8]}] does not retain its target."
-                )
-            before = snapshot
-            if owned and before != target and uid not in grouped_sync_children:
-                unit_uid = (
-                    f"revert:{revert_unit[0]}"
-                    if revert_unit is not None
-                    else f"revert:{uid}"
-                )
-                originals.append(
-                    _OriginalPart(
-                        unit_uid=unit_uid,
-                        command="revert",
-                        description=(
-                            f"Reverted checkpoint unit [{revert_unit[1][:8]}]"
-                            if revert_unit is not None
-                            else f"Reverted to checkpoint [{target_uid[:8]}]"
-                        ),
-                        timestamp=timestamp,
-                        expected_contexts=(
-                            revert_unit[2] if revert_unit is not None else None
-                        ),
-                        command_details=args,
-                        change=CommandContextChange(
-                            context_uid=context.uid,
-                            context_name=context.name,
-                            before=before,
-                            after=target,
-                            checkpoint_uid=uid,
-                        ),
-                    )
-                )
-            effective = target
-            continue
-
         recorded_before = entry.get("command_before")
         normalized_before = (
             _normalized_record(
@@ -545,6 +535,32 @@ def _context_parts(
             if isinstance(recorded_before, dict)
             else None
         )
+        creation_batch = args.get("context_creation_batch")
+        if isinstance(creation_batch, dict) and owned and auto:
+            membership = _command_contexts(creation_batch.get("contexts"))
+            if membership is None or (context.uid, context.name) not in membership:
+                raise CommandHistoryError("Context creation membership is invalid.")
+            originals.append(
+                _OriginalPart(
+                    unit_uid=command_unit_uid(
+                        checkpoint_uid=uid, command=command, args=args
+                    ),
+                    command=command,
+                    description=description,
+                    timestamp=timestamp,
+                    expected_contexts=membership,
+                    command_details=args,
+                    change=CommandContextChange(
+                        context_uid=context.uid,
+                        context_name=context.name,
+                        before=None,
+                        after=snapshot,
+                        checkpoint_uid=uid,
+                    ),
+                )
+            )
+            effective = snapshot
+            continue
         branch_receipt = (
             branch_tree_receipt(args)
             if command == "branch" and "branch_tree" in args
@@ -766,7 +782,9 @@ def _group_originals(parts: list[_OriginalPart]) -> dict[str, ContextCommandUnit
             started_at=min(member.timestamp for member in members),
             completed_at=max(member.timestamp for member in members),
             changes=tuple(member.change for member in ordered),
-            checkpoint_command_details=tuple(member.command_details for member in ordered),
+            checkpoint_command_details=tuple(
+                member.command_details for member in ordered
+            ),
         )
     return units
 
@@ -814,38 +832,60 @@ def _restore_events(
     return events
 
 
-def build_command_stacks(store: MemoryStore) -> CommandStacks:
+def build_command_stacks(store: ProfileStore) -> CommandStacks:
     """Reconstruct global LIFO stacks from retained direct checkpoints."""
     original_parts: list[_OriginalPart] = []
     restore_parts: list[_RestorePart] = []
+    deleted_context_events = store.list_context_lifecycle_events()
+    deleted_context_uids = {event.context_uid for event in deleted_context_events}
     try:
         names = store.list_context_names()
-    except (OSError, ValueError) as error:
+        archives = store.list_command_context_archives()
+        context_names_by_uid = {store.load_direct(name).uid: name for name in names}
+        context_names_by_uid.update(
+            {context.uid: context.name for context, _ in archives}
+        )
+    except (OSError, RuntimeError, ValueError) as error:
         raise CommandHistoryError(str(error)) from error
     for name in names:
         try:
-            originals, restorations = _context_parts(store, name)
+            originals, restorations = _context_parts(
+                store, name, context_names_by_uid=context_names_by_uid
+            )
         except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
             raise CommandHistoryError(str(error)) from error
         original_parts.extend(originals)
         restore_parts.extend(restorations)
 
-    try:
-        archives = store.list_command_context_archives()
-    except (OSError, RuntimeError, ValueError) as error:
-        raise CommandHistoryError(str(error)) from error
     for context, entries in archives:
         try:
             originals, restorations = _context_parts(
                 store,
                 context.name,
                 archived=(context, entries),
+                context_names_by_uid=context_names_by_uid,
             )
         except (OSError, RuntimeError, ValueError) as error:
             raise CommandHistoryError(str(error)) from error
         original_parts.extend(originals)
         restore_parts.extend(restorations)
 
+    # A permanently deleted member makes its old whole-command unit unavailable;
+    # replaying only the surviving members would change the original action.
+    retired_units = {
+        part.unit_uid
+        for part in original_parts
+        if part.change.context_uid in deleted_context_uids
+        or any(
+            uid in deleted_context_uids for uid, _name in (part.expected_contexts or ())
+        )
+    }
+    original_parts = [
+        part for part in original_parts if part.unit_uid not in retired_units
+    ]
+    restore_parts = [
+        part for part in restore_parts if part.source_unit_uid not in retired_units
+    ]
     units = _group_originals(original_parts)
     events = [
         _StackEvent(
@@ -860,7 +900,16 @@ def build_command_stacks(store: MemoryStore) -> CommandStacks:
     events.extend(_restore_events(restore_parts, units))
     from .sync import sync_command_events
 
-    events.extend(sync_command_events(store))
+    events.extend(
+        sync_command_events(
+            store,
+            deleted_checkpoint_uids={
+                uid
+                for event in deleted_context_events
+                for uid in event.deleted_checkpoint_uids
+            },
+        )
+    )
     events.sort(
         key=lambda event: (
             event.completed_at,

@@ -8,15 +8,12 @@ import typer
 
 from memcommit.operation_catalog import OperationDescriptor
 from memcommit.adapters.console.commands.help import study_commands
-from memcommit.adapters.console.commands.help.study_copy_guard import (
+from memcommit.adapters.console.commands.help.study_commands import (
     active_profile_is_study,
 )
 from memcommit.application.operations.help.application import (
     list_operation_help,
     list_operation_help_groups,
-)
-from memcommit.adapters.console.commands.help.localized_copy import (
-    validate_help_translation_coverage,
 )
 
 COMMAND_ANNOTATIONS = {
@@ -27,7 +24,6 @@ COMMAND_ANNOTATIONS = {
 # operation's discovery row. Conditional compatibility commands such as
 # checkout do not belong here because they route to more than one operation.
 COMMAND_DISPLAY_ALIASES = {
-    "delete": ("remove",),
 }
 
 # Related spellings can live under another command group while remaining
@@ -46,8 +42,9 @@ HELP_CORE_CONCEPTS = (
         "A named hierarchical workspace that contains only Memories and uses names to organize "
         "separate Contexts. The / separator expresses hierarchy in names such as "
         "task-1/participant; operations with descendant scope can treat a "
-        "Context and its descendant Contexts as one subtree. Commands use the "
-        "current Context when none is specified.",
+        "Context and its descendant Contexts as one subtree. The current Context "
+        "is the working location for Context-editing commands; Find and Query "
+        "read all Contexts in the active Profile.",
     ),
     (
         "PROFILE",
@@ -58,12 +55,6 @@ HELP_CORE_CONCEPTS = (
         "OPERATION",
         "A reusable action that reads, analyzes, or changes selected Memories "
         "or Contexts through defined inputs and behavior.",
-    ),
-    (
-        "SESSION",
-        "Stores an analysis or review workflow so it can be reopened and "
-        "continued. Apply results and checkpoint history separately show "
-        "whether Context changes were made.",
     ),
     (
         "CHECKPOINT",
@@ -118,13 +109,13 @@ HELP_COMMON_KEYS = (
     ("↑/↓", "Move by row or Form; hold to accelerate through long lists."),
     (
         "←/→",
-        "Change Language or View, or expand and collapse command Forms.",
+        "Change View, or expand and collapse command Forms.",
     ),
     ("PgUp / PgDn", "Jump 10 rows backward or forward in the scrolling Help list."),
-    ("Home / End", "Move to the first Help row or the final command."),
+    ("Home / End", "Move to the first or final command."),
     (
         "Tab / Shift-Tab",
-        "Move focus across Language, View, and visible operation groups.",
+        "Move focus across View, and visible operation groups.",
     ),
     ("Enter", "Open command Forms, then select or inspect the focused Form."),
     (
@@ -146,11 +137,7 @@ HELP_CATEGORY_GROUPS = tuple(
     for group in _HELP_APPLICATION_GROUPS
 )
 HELP_CATEGORY_DESCRIPTIONS = {
-    group.family.title: (
-        group.family.execution_label,
-        group.family.description,
-    )
-    for group in _HELP_APPLICATION_GROUPS
+    group.family.title: group.family.description for group in _HELP_APPLICATION_GROUPS
 }
 HELP_CATEGORY_SECTIONS = {
     group.family.title: tuple(
@@ -191,11 +178,11 @@ COMMAND_FORMS = {
     "copy": (
         "mem copy (show the required Memory locator error)",
         "mem copy [UID] (copy one globally unique direct Memory into current)",
-        "mem copy [source_context]:[UID] --into [target_context] (copy one exact Memory)",
+        "mem copy [source_context]:[UID] --to [target_context] (copy one exact Memory)",
         "mem copy [UID_A] [UID_B] --from [source_context] --to [target_context] (ordered batch)",
-        "mem copy --memory [context]:[UID] --memory [context]:[UID] --into [target_context] (repeatable batch)",
-        "mem copy [UID] --into [target_context] --before [item] (insert before an exact Target item)",
-        "mem copy [UID] --into [target_context] --after [item] (insert after an exact Target item)",
+        "mem copy --memory [context]:[UID] --memory [context]:[UID] --to [target_context] (repeatable batch)",
+        "mem copy [UID] --to [target_context] --before [item] (insert before an exact Target item)",
+        "mem copy [UID] --to [target_context] --after [item] (insert after an exact Target item)",
     ),
     "audit": (
         "mem audit (audit the current Context and save a reviewable receipt)",
@@ -221,8 +208,6 @@ COMMAND_FORMS = {
     ),
     "resolve": (
         "mem resolve (review conflicts across the complete current Context, then Apply)",
-        "mem resolve --no-create (allow existing-Memory edits only)",
-        'mem resolve --allow-delete --guidance "[grounds]" (permit grounded retirement)',
     ),
     "dedup": (
         "mem dedup (immediately remove exact plus semantic duplicates from the current Context)",
@@ -241,16 +226,12 @@ COMMAND_FORMS = {
         "mem atomize [target] --refresh (reanalyze the exact target before applying)",
     ),
     "branch": (
-        "mem branch (choose a local Source, parent location, and fresh target)",
         "mem branch [new_context] (branch the current Context and switch)",
-        "mem branch [new_context] --from [source_context] (branch an exact local Source)",
-        "mem branch [new_context] -d (explicit Source root; default)",
         "mem branch [new_context] -r (branch the current Context subtree)",
     ),
     "checkout": (
         "mem checkout (enter the Git-style interactive Context picker)",
         "mem checkout [context] (switch using Git-style syntax)",
-        "mem checkout -b (choose, create, and switch to a Context branch)",
         "mem checkout -b [new_context] (create and switch to a Context branch)",
     ),
     "checkpoint": (
@@ -295,9 +276,8 @@ COMMAND_FORMS = {
     ),
     "contexts": ("mem contexts (list local Contexts)",),
     "delete": (
-        "mem delete [UID]... (delete Memories only in the current Context)",
-        "mem delete (select a Memory in the current Context)",
-        "mem delete --context (confirm deletion of the current Context itself)",
+        "mem delete [UID] (delete one Memory in the current Context)",
+        "mem delete --context (confirm deletion of the current Context and all descendants; -c is the same option)",
     ),
     "diff": (
         "mem diff (open the current Context's latest checkpoint in a read-only Viewer)",
@@ -349,8 +329,6 @@ COMMAND_FORMS = {
     ),
     "edit": (
         'mem edit [UID] "[new_content]" (replace a Memory in the current Context)',
-        "mem edit (choose a Memory in the current Context and review its replacement)",
-        "mem edit --input [batch_file] (current-Context UID<TAB>CONTENT records)",
     ),
     "replace": (
         "mem replace (enter text and local scope in a compact direct-execution form)",
@@ -364,21 +342,7 @@ COMMAND_FORMS = {
         "mem dev-eval [scenario] (run the scenario and verify its results)",
     ),
     "find": (
-        "mem find (interactive semantic search with checked COPY Save)",
-        'mem find "[query]" (semantic search in the direct current Context)',
-        'mem find --limit [1-20] "[query]" (rank at most this many semantic matches)',
-        'mem find -r "[query]" (lexical descendants)',
-        'mem find --context [context1] --context [context2] --descendants "[query]" (multiple roots and lexical subtrees)',
-        'mem find -d "[query]" (direct preset: selected roots only)',
-        'mem find -a "[query]" (all readable Contexts in the active Profile)',
-        "mem find --literal (interactive provider-free exact-text Find)",
-        'mem find --literal "[text]" (complete exact matches in the direct current Context)',
-        'mem find --literal -i "[text]" (case-insensitive exact text)',
-        'mem find --literal --regex "[expression]" (explicit regular-expression matching)',
-        'mem find --literal --all-results "[text]" (print every matching row)',
-        'mem find --literal --copy "[text]" (copy the complete exact-match result)',
-        'mem find --literal -r "[text]" (exact matching across lexical descendants)',
-        'mem find --literal -a "[text]" (exact matching across all readable Contexts)',
+        'mem find "[search description]" (semantic search across the active Profile; up to 5 matches)',
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",
@@ -408,9 +372,7 @@ COMMAND_FORMS = {
         "mem find-redundancies -r (inspect each readable lexical Context independently)",
     ),
     "forget": (
-        "mem forget (enter interactive instruction and direct-Source setup)",
-        'mem forget "[instruction]" (decide and atomically apply selective forgetting)',
-        'mem forget "[instruction]" --context [context] (explicit direct Source)',
+        'mem forget "KEYWORDS OR CONTENT TO FORGET" (apply edits and removals in the current Context)',
     ),
     "ground": (
         "mem ground (enter the interactive Ground workspace launcher)",
@@ -427,73 +389,24 @@ COMMAND_FORMS = {
         "mem impact atomize --context [context] (compatibility alias)",
         "mem impact atomize --sessions (browse saved Atomize analyses)",
         "mem impact atomize --session [uid] (reopen one exact saved Atomize analysis)",
-        'mem impact forget "[instruction]" (preview complete in-place decisions)',
-        'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
         "mem impact distill --from [source] --to [target] (preview the Rules Distill would add)",
         "mem impact elaborate [UID_or_CONTEXT:UID] (preview one append-only same-UID revision)",
         "mem impact makemore --from [source] --to [target] "
         "(preview transient Distill Rules and the Cases Makemore would add)",
         "mem impact sever (inspect a saved Sever Impact; APPLY? opens its Apply flow)",
         "mem impact sever --session [uid] (inspect an exact saved Sever Impact; APPLY? opens its Apply flow)",
-        "mem impact update (inspect the saved Update Impact; APPLY? opens its Apply flow)",
-        "mem impact update [source_context] [target_context] (new directional preview)",
-        "mem impact update --session [uid] (inspect the exact saved Update Impact; APPLY? opens its Apply flow)",
-        "mem impact --from [source_context] --to [target_context] (directional preview)",
-        "mem impact -r --from [source_context] --to [target_context] (recursive endpoints)",
-        "mem impact -r --from [source_context] --to [target_context] --target-root-only (Source subtree, target root)",
-        "mem impact --from [source_context] (current Context is target)",
-        "mem impact --to [target_context] (current Context is source)",
-    ),
-    "import": (
-        "mem import (choose a non-active source and import Profile, Context, or Memory)",
-        "mem import profile [profile_name] --from [store] (clean baseline from an external store)",
-        "mem import profile [profile_name] --from-profile [source_profile] (clean baseline from a registered Profile)",
-        "mem import context [source_context] --from-profile [source_profile] (one Context root)",
-        "mem import context [source_context] --from-profile [source_profile] --as [new_root] (renamed Context root)",
-        "mem import context [source_context] --from-profile [source_profile] -r (Context tree)",
-        "mem import memory [memory_selector] --from-profile [source_profile] --context [source_context] (into current Context)",
-        "mem import memory [memory_selector] --from-profile [source_profile] --context [source_context] --into [target_context]",
-        "mem import context --from [context.json] (native Context JSON)",
-        "mem import context [source_context] --from [directory] -r --as [new_root] (native Context tree)",
-        "mem import context --from [directory] -r (all native Context documents)",
-        "mem import memory --from [memory.json] --into [target_context] (native Memory JSON)",
-        "mem import [profile_name] --from [store] (legacy clean-baseline Profile spelling)",
     ),
     "sync": (
-        "mem sync (discover and synchronize this Profile’s project documents)",
-        "mem sync [context] -r (Context and lexical descendants)",
-        "mem sync -a (every owned Context in the current Profile)",
-        "mem sync [context] --to [directory] (explicitly connect or reconnect below this base)",
-        "mem profile config set root_dir [directory] (move this Profile and reconnect Sync)",
+        "mem sync (discover and synchronize all documents and Contexts in the active Profile’s project folder)",
     ),
     "init": (
-        "mem init (edit a suggested fresh Context name, create, and switch)",
-        "mem init [context] (create and switch to one Context)",
-        "mem init --parents (edit a suggested name and ensure its hierarchy)",
-        "mem init [context] --parents (ensure its lexical hierarchy and switch)",
+        "mem init [context] (create missing Contexts in its hierarchy and switch)",
     ),
     "init-study": (
         "mem init-study (initialize coffee with an edited or generated Profile name)",
         "mem init-study [profile_name] (initialize coffee with an explicit Profile name)",
-        "mem init-study --scenario legacy (reproduce the preserved debugging fixture)",
-        "mem init-study [profile_name] --scenario legacy (name a legacy debugging run)",
     ),
-    "list": (
-        "mem list (list the current Context)",
-    ),
-    "lock": (
-        "mem lock (lock the current Context)",
-        "mem lock --recursive (lock the current Context namespace)",
-        "mem lock [context] (auto-classify and lock an explicit Context)",
-        "mem lock [context] --recursive (lock an explicit Context namespace)",
-        "mem lock [UID] (auto-classify one unique direct local Memory)",
-        "mem lock [context]:[UID] (lock a Memory through its exact owner)",
-        "mem lock --memory [short_prefix] --context [context] (explicit Memory)",
-        "mem lock --profile (lock the active Profile)",
-        "mem lock context [context] (compatibility explicit Context)",
-        "mem lock memory [UID] --context [context] (compatibility direct Memory)",
-        "mem lock profile (compatibility active Profile)",
-    ),
+    "list": ("mem list (list the current Context)",),
     "log": (
         "mem log (print the current Context's checkpoints)",
         'mem log "[query]" (print semantic history matches)',
@@ -508,7 +421,7 @@ COMMAND_FORMS = {
         "mem merge [source_context] (semantic Merge into the current Context)",
         "mem merge [source_context] [target_context] (semantic Merge of two exact Contexts)",
         "mem merge --from [source_context] --to [target_context] (explicit Source and Target)",
-        "mem merge --into [target_context] (open Setup with this Target)",
+        "mem merge --to [target_context] (open Setup with this Target)",
         "mem merge --literal (open the same Setup with Literal selected)",
         "mem merge --literal [source_context] [target_context] (merge direct stored items)",
         "mem merge --literal [source_context] --keep-target-all (retain Target for every structural conflict)",
@@ -518,13 +431,13 @@ COMMAND_FORMS = {
     "move": (
         "mem move (show the required Memory locator error)",
         "mem move [UID] (move one globally unique direct Memory into current)",
-        "mem move [source_context]:[UID] --into [target_context] (move one exact Memory)",
+        "mem move [source_context]:[UID] --to [target_context] (move one exact Memory)",
         "mem move [UID_A] [UID_B] --from [source_context] --to [target_context] (ordered atomic batch)",
-        "mem move --memory [context]:[UID] --memory [context]:[UID] --into [target_context] (repeatable batch)",
-        "mem move [UID] --into [target_context] --before [item] (insert before an exact Target item)",
-        "mem move [UID] --into [target_context] --after [item] (insert after an exact Target item)",
-        "mem move [UID] --into [target_context] --retarget-links (atomically update local live Embeds)",
-        "mem move [UID] --into [target_context] --break-links (explicitly leave live Embeds dangling)",
+        "mem move --memory [context]:[UID] --memory [context]:[UID] --to [target_context] (repeatable batch)",
+        "mem move [UID] --to [target_context] --before [item] (insert before an exact Target item)",
+        "mem move [UID] --to [target_context] --after [item] (insert after an exact Target item)",
+        "mem move [UID] --to [target_context] --retarget-links (atomically update local live Embeds)",
+        "mem move [UID] --to [target_context] --break-links (explicitly leave live Embeds dangling)",
     ),
     "profile": (
         "mem profile (enter the interactive Profile selector in a TTY; list otherwise)",
@@ -537,7 +450,6 @@ COMMAND_FORMS = {
         "mem profile rename-study [study_name] [new_name] (rename a Study heading)",
         "mem profile remove [profile_name] (permanently delete one Profile store)",
         "mem profile remove-study [study_name] (permanently delete Study stores)",
-        "mem profile import [profile_name] --from [store] (copy a complete store)",
     ),
     "provider": (
         "mem provider (print the active Profile route overview without editing)",
@@ -549,13 +461,7 @@ COMMAND_FORMS = {
         "mem provider probe (test the current selection)",
     ),
     "query": (
-        "mem query (open the compact one-shot Scope, Question, and Answer workbench)",
-        'mem query "[question]" (ask the direct current ordinary Context)',
-        'mem query -r "[question]" (include lexical descendants)',
-        "mem query [context] (open the workbench with an accessible Context selected)",
-        'mem query [context] "[question]" (ask an accessible Context)',
-        'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
-        'mem query -a "[question]" (ask all readable Contexts in the active Profile)',
+        'mem query "[question]" (ask all Contexts in the active Profile)',
     ),
     "rationale": (
         "mem rationale (select one exact Context or Memory from the current readable subtree)",
@@ -565,8 +471,7 @@ COMMAND_FORMS = {
         "mem rationale [context]:[memory_selector] (explicit Context and Memory)",
     ),
     "rename": (
-        "mem rename [old_context] [new_context] (review and rename a Context namespace)",
-        "mem rename [old_context] [new_context] --force (skip confirmation; retain all safety checks)",
+        "mem rename [OLD_CONTEXT_NAME] [NEW_CONTEXT_NAME] (rename a Context and its descendants)",
     ),
     "redo": ("mem redo (redo the most recently undone Context command)",),
     "revert": (
@@ -583,12 +488,11 @@ COMMAND_FORMS = {
         "mem review audit (planned Audit receipt review; not implemented)",
         "mem review compare (open a saved Compare report)",
         "mem review sever (open terminal evidence for an applied Sever)",
-        "mem review update (open terminal evidence for an applied Update)",
-        "mem review [kind] --session [uid] (exact Audit, Atomize, Compare, Sever, or Update artifact)",
+        "mem review [kind] --session [uid] (exact Audit, Atomize, Compare, or Sever artifact)",
         "mem review atomize (open the current Context's applied Atomize evidence)",
         "mem review atomize --context [context] (Context-bound applied Atomize evidence)",
         "mem review atomize --session [analysis_uid] (open one current or retained applied Atomize run)",
-        "mem review dedun|distill|makemore|forget|resolve --receipt [uid] (open exact applied checkpoint evidence)",
+        "mem review dedun|distill|makemore|resolve --receipt [uid] (open exact applied checkpoint evidence)",
         "mem review ambiguities (analyze current-Context ambiguities)",
         "mem review ambiguities --context [context] (Context-bound Ambiguity review)",
     ),
@@ -627,22 +531,6 @@ COMMAND_FORMS = {
     "switch": (
         "mem switch (enter the interactive Context picker)",
         "mem switch [context] (explicit Context)",
-        "mem switch --previous (move backward in Context navigation history)",
-        "mem switch --next (move forward after moving backward)",
-    ),
-    "translate": (
-        "mem translate (show/save a default-English view of the current Context)",
-        "mem translate [target] (auto-type one Context or direct Memory)",
-        "mem translate --to [language] (show/save a current-Context view)",
-        "mem translate [target] --to [language] (show/save one Context or Memory view)",
-        "mem translate --save-as [result_context] (default-English new Context and switch)",
-        "mem translate [memory_selector] --save-as [result_context] (new Context replacing one Memory; switch)",
-        "mem translate --to [language] --save-as [result_context] (new translated Context and switch)",
-        "mem translate [memory_selector] --to [language] --save-as [result_context] (new Context replacing one Memory; switch)",
-        "mem translate --in-place (add default-English sibling Memories)",
-        "mem translate [memory_selector] --in-place (add one default-English sibling Memory)",
-        "mem translate --to [language] --in-place (add translated sibling Memories)",
-        "mem translate [memory_selector] --to [language] --in-place (add one translated sibling Memory)",
     ),
     "trace": (
         "mem trace (select one exact Context or Memory from the current local subtree)",
@@ -652,22 +540,9 @@ COMMAND_FORMS = {
         "mem trace [context]:[memory_selector] (explicit Context and Memory)",
     ),
     "undo": ("mem undo (undo the latest recorded Context command)",),
-    "unlock": (
-        "mem unlock (unlock the current Context)",
-        "mem unlock --recursive (unlock the current Context namespace)",
-        "mem unlock [context] (auto-classify and unlock an explicit Context)",
-        "mem unlock [context] --recursive (unlock an explicit Context namespace)",
-        "mem unlock [UID] (auto-classify one unique direct local Memory)",
-        "mem unlock [context]:[UID] (unlock a Memory through its exact owner)",
-        "mem unlock --memory [short_prefix] --context [context] (explicit Memory)",
-        "mem unlock --profile (unlock the active Profile)",
-        "mem unlock context [context] (compatibility explicit Context)",
-        "mem unlock memory [UID] --context [context] (compatibility direct Memory)",
-        "mem unlock profile (compatibility active Profile)",
-    ),
     "update": (
-        'mem update "Set the closing time to 19:00." (apply to the current Context)',
-        'mem update "Set the closing time to 19:00." -r (include the current Context\'s lexical descendants)',
+        'mem update "Instruction" (apply to the current Context)',
+        'mem update "Instruction" -r (include the current Context\'s lexical descendants)',
     ),
 }
 
@@ -825,7 +700,6 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
             err=True,
         )
         raise typer.Exit(1)
-    validate_help_translation_coverage(visible_names)
 
     description_mismatches = sorted(
         name

@@ -18,7 +18,6 @@ class ImpactLifecycle(str, Enum):
     PLACEHOLDER = "PLACEHOLDER"
     PREPARE_PROCESS_LOCAL = "PREPARE_PROCESS_LOCAL"
     PREPARE_DURABLE = "PREPARE_DURABLE"
-    PREPARE_OR_OPEN = "PREPARE_OR_OPEN"
     OPEN_SAVED = "OPEN_SAVED"
 
 
@@ -111,11 +110,6 @@ IMPACT_ROUTES = ImpactRouteCatalog(
             "Preview or reopen one Context's saved Atomize analysis.",
         ),
         ImpactRoute(
-            "forget",
-            ImpactLifecycle.PREPARE_PROCESS_LOCAL,
-            "Preview complete in-place Forget decisions without applying them.",
-        ),
-        ImpactRoute(
             "distill",
             ImpactLifecycle.PREPARE_PROCESS_LOCAL,
             "Preview the Rules Distill would add to an existing Target.",
@@ -140,11 +134,6 @@ IMPACT_ROUTES = ImpactRouteCatalog(
             ImpactLifecycle.OPEN_SAVED,
             "Inspect one saved Sever result.",
         ),
-        ImpactRoute(
-            "update",
-            ImpactLifecycle.PREPARE_OR_OPEN,
-            "Preview a directional Update or inspect one saved Update plan.",
-        ),
     ),
     deferred=(
         DeferredImpactRoute(
@@ -154,6 +143,16 @@ IMPACT_ROUTES = ImpactRouteCatalog(
         ),
     ),
     excluded=(
+        ExcludedImpactOperation(
+            "update",
+            "Update executes one instruction directly and prints its changes; "
+            "it has no separate preview or workbench lifecycle.",
+        ),
+        ExcludedImpactOperation(
+            "forget",
+            "Forget is a direct Update prompt wrapper without a separate "
+            "preview or review lifecycle.",
+        ),
         ExcludedImpactOperation(
             "resolve",
             "Resolve requires explicit issue decisions; issue inspection and "

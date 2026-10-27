@@ -11,7 +11,6 @@ from ...store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
-from ...store.infrastructure.protection import _profile_write_guarded
 
 
 class _ReviewStateStoreMixin:
@@ -165,7 +164,6 @@ class _ReviewStateStoreMixin:
             return active
         return self.load_review_session_history(session_uid)
 
-    @_profile_write_guarded
     def save_review_session(self, session) -> None:
         """Atomically save one validated semantic review session."""
         from memcommit.application.operations.review.model import (

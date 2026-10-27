@@ -14,7 +14,9 @@ from memcommit.operation_catalog.model import ExecutionKind, OperationDescriptor
 
 # Canonical identities remain available to the research evidence ledger.
 # Current Help and CLI expose only operations with an implementation.
-RETIRED_OPERATION_NAMES = frozenset({"embed", "reference", "share"})
+RETIRED_OPERATION_NAMES = frozenset(
+    {"embed", "reference", "share", "translate", "import", "export", "lock", "unlock"}
+)
 
 
 def _operation(
@@ -60,19 +62,19 @@ _OPERATIONS = (
     ),
     _operation(
         "sync",
-        "Discover and synchronize Profile project documents and owned Contexts.",
+        "Discover and synchronize all project documents and owned Contexts in the active Profile.",
         "Profile documents + retained agreement -> Context/file changes + Sync receipt",
         ExecutionKind.DETERMINISTIC,
         "Manually accepts supported edits, additions, renames and deletions as checkpoints; honors .memignore",
-        "Omit the operand to discover the Profile; an explicit Context stays exact, with -r for descendants",
+        "All Markdown (.md) documents and owned Contexts in the active Profile; no arguments",
     ),
     _operation(
         "add",
-        "Add one or more Memories to the current or explicit Context.",
-        "Text or file -> Context Memories",
+        "Add one or more Memories to the current Context.",
+        "Text values -> new Memories in the current Context",
         ExecutionKind.DETERMINISTIC,
-        "Changes the selected Context",
-        "One exact target Context",
+        "Adds one Memory per positional value",
+        "Current Context only",
     ),
     _operation(
         "atomize",
@@ -95,11 +97,11 @@ _OPERATIONS = (
     ),
     _operation(
         "branch",
-        "Copy a Context or subtree into a new branch and switch to it.",
-        "Context -> new Context branch",
+        "Copy the current Context or its subtree into a new branch and switch to it.",
+        "Current Context -> new Context branch",
         ExecutionKind.DETERMINISTIC,
         "Creates a Context and switches to it",
-        "Source exact or lexical descendants",
+        "Current Context only by default; -r includes all lexical descendants",
     ),
     _operation(
         "checkout",
@@ -107,7 +109,7 @@ _OPERATIONS = (
         "Context locator -> current Context or new branch",
         ExecutionKind.DETERMINISTIC,
         "Switches Context; -b also creates one",
-        "One selected Context; -b NAME branches the Source root; bare -b uses Branch setup",
+        "One selected Context; -b NAME branches the current Context and requires NAME",
     ),
     _operation(
         "checkpoint",
@@ -174,19 +176,19 @@ _OPERATIONS = (
     ),
     _operation(
         "contexts",
-        "List local Contexts and readable cross-Profile Context views.",
-        "Profile access -> readable Context catalog",
+        "List Context names in the active Profile and mark the current Context.",
+        "Active Profile -> ordered Context names + current selection",
         ExecutionKind.DETERMINISTIC,
         "Read-only; current Context is unchanged",
-        "All readable Context names",
+        "All Context names in the active Profile",
     ),
     _operation(
         "delete",
-        "Delete current-Context Memories by UID, or explicitly delete the current Context with --context.",
-        "Current Memory UID prefixes or explicit current-Context deletion -> receipt",
+        "Delete one Memory by UID, or use --context to delete the current Context and all descendants after confirmation.",
+        "Memory UID or --context -> deletion receipt",
         ExecutionKind.DETERMINISTIC,
-        "Destructive change after confirmation",
-        "Current Context itself or its directly owned Memories",
+        "Memory deletion is Undoable; confirmed Context subtree deletion removes its checkpoint histories permanently",
+        "One current-Context Memory, or the current Context and all lexical descendants",
     ),
     _operation(
         "diff",
@@ -226,10 +228,10 @@ _OPERATIONS = (
     _operation(
         "edit",
         "Replace current-Context Memory content using a UID or unique prefix.",
-        "Memory or Memory batch -> replacement content",
+        "One current-Context Memory UID + exact replacement content -> receipt",
         ExecutionKind.DETERMINISTIC,
-        "Changes only the selected directly owned Memories",
-        "One or more direct Memories in the current Context",
+        "Replaces one Memory; unchanged content creates no checkpoint",
+        "One directly owned Memory in the current Context",
     ),
     _operation(
         "replace",
@@ -257,17 +259,11 @@ _OPERATIONS = (
     ),
     _operation(
         "find",
-        "Find relevant Memories semantically; --literal finds exact text or explicit regex matches without a semantic provider.",
-        "Context scope + query -> ranked Memories; --literal -> complete exact Memory spans",
-        ExecutionKind.MIXED,
-        (
-            "Returns ranked or complete exact results; optional reviewed Save As creates a "
-            "new local Context"
-        ),
-        (
-            "One or more local roots; lexical descendants "
-            "Context reach are independently selectable"
-        ),
+        "Find relevant Memories semantically across the active Profile.",
+        "Search description -> ranked Memories",
+        ExecutionKind.SEMANTIC,
+        "Returns up to 5 matches without changing stored Memories",
+        "All Contexts in the active Profile",
     ),
     _operation(
         "fit",
@@ -284,17 +280,17 @@ _OPERATIONS = (
         "result for conflicts before applying it.",
         "Direct Context -> conflict check -> decisions and proposed changes -> conflict recheck -> Apply",
         ExecutionKind.SEMANTIC,
-        "Decisions are process-local; an accepted UpdatePlan applies as one Resolve checkpoint",
+        "Reviewed additions, edits and removals apply as one Resolve checkpoint",
         "The complete current Context; no Memory-level input filter or recursive target",
     ),
     _operation(
         "dedup",
         "Remove exact plus semantic duplicates immediately; --literal removes "
         "only same-role exact copies without semantic inference.",
-        "Direct Context frames -> exact plus semantic groups (exact only with --literal) -> atomic removal",
+        "Current Context (+ descendants with -r) -> combined duplicate groups -> atomic removal",
         ExecutionKind.MIXED,
         "Retains the first existing UID per group and publishes one atomic command unit; no TUI",
-        "Exact root or local lexical subtree; only directly owned Memories are deduplicated",
+        "Current Context only by default; -r compares the entire subtree and keeps the first by depth, name, then Memory order",
     ),
     _operation(
         "find-ambiguities",
@@ -330,11 +326,11 @@ _OPERATIONS = (
     ),
     _operation(
         "forget",
-        "Apply one complete keep/edit/delete decision batch for an instruction.",
-        "Context + instruction -> decisions -> atomic curation -> receipt",
+        "Forget keywords or described content through planned edits and removals.",
+        "Keywords/content -> forgetting instruction -> ordinary Update -> receipt",
         ExecutionKind.SEMANTIC,
-        "An explicit invocation expresses Apply intent; Source changes only after complete decisions",
-        "One exact direct Source frame",
+        "A prompt wrapper invokes ordinary Update directly; no separate Forget execution mode",
+        "Current Context only; forgetting intent is expressed in the Update instruction",
     ),
     _operation(
         "ground",
@@ -374,16 +370,16 @@ _OPERATIONS = (
     ),
     _operation(
         "init",
-        "Create a new empty Context and make it the current working Context.",
-        "New Context name -> Context",
+        "Create missing Contexts in a named hierarchy and switch to its leaf.",
+        "Context name -> missing ancestor and leaf Contexts",
         ExecutionKind.DETERMINISTIC,
-        "Creates a Context and switches to it",
-        "One fresh exact portable non-UID-shaped name; optional lexical parents",
+        "Creates missing Contexts and selects the requested Context",
+        "One Context name, including its lexical ancestors; existing Contexts are reused",
     ),
     _operation(
         "init-study",
-        "Initialize the Coffee Study by default, or explicitly reproduce the preserved legacy debugging fixture.",
-        "Versioned Study scenario -> isolated Study Profiles",
+        "Initialize the Coffee Study with ready session projects and research records.",
+        "Coffee Study inputs -> isolated Study Profiles",
         ExecutionKind.DETERMINISTIC,
         "Creates isolated Profile stores and switches Profile",
     ),
@@ -433,7 +429,7 @@ _OPERATIONS = (
     ),
     _operation(
         "profile",
-        "Create, select, and manage local MemoryStore Profiles. Profiles "
+        "Create, select, and manage local Profiles. Profiles "
         "can be renamed or permanently removed, and Study headings can be renamed "
         "through the picker or explicit profile subcommands.",
         "Profile registry <-> Profile administration",
@@ -462,7 +458,7 @@ _OPERATIONS = (
         "Readable source + question -> answer with references",
         ExecutionKind.SEMANTIC,
         "Returns one process-local answer without retaining a transcript",
-        ("Local exact or lexical descendant Context scope"),
+        ("All Contexts in the active Profile; one question"),
     ),
     _operation(
         "rationale",
@@ -621,11 +617,11 @@ _OPERATIONS = (
     ),
     _operation(
         "update",
-        "Apply one literal instruction to the current Context; -r includes lexical descendants.",
-        "Instruction -> Target changes -> Apply -> receipt",
+        "Apply one instruction to the current Context; -r includes lexical descendants.",
+        "Instruction + current Context -> saved changes + receipt",
         ExecutionKind.SEMANTIC,
-        "Changes only the authorized Target",
-        "One literal instruction; current Context and optionally its lexical descendants",
+        "Changes the current Context; -r also changes its descendants",
+        "Current Context; -r includes lexical descendants",
     ),
 )
 

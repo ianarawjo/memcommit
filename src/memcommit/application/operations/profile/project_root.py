@@ -4,23 +4,34 @@ from dataclasses import replace
 import json
 from pathlib import Path
 
-from .config import ProfileConfigError, profile_root_dir
+from .config import ProfileConfigError, profile_root_dir, study_run_identity
 
 
-def prepare_profile_root(profile, requested_root, registry):
+def validate_profile_root(profile, requested_root, registry):
+    """Resolve and check a project location without creating directories."""
     root = Path(requested_root).expanduser().resolve() if requested_root is not None else profile_root_dir(profile).resolve()
     if root.exists() and not root.is_dir():
         raise ProfileConfigError(f"Project folder is not a directory: {root}")
     if any(part in {".mem", ".git"} for part in root.parts):
         raise ProfileConfigError("A project cannot be inside internal .mem or .git state.")
     for other in registry.visible_profiles:
+        identity = study_run_identity(other)
+        if identity is not None and identity.records_root is not None:
+            records_root = Path(identity.records_root)
+            if root == records_root or root.is_relative_to(records_root) or records_root.is_relative_to(root):
+                raise ProfileConfigError("Project folder overlaps retained Study records.")
         existing = profile_root_dir(other).resolve()
         if root == existing or root.is_relative_to(existing) or existing.is_relative_to(root):
             raise ProfileConfigError(f"Project folder overlaps Profile {other.name!r}: {existing}")
     if (root / ".mem").exists() or (root / ".mem").is_symlink():
         raise ProfileConfigError(f"Project folder already contains .mem: {root}")
-    root.mkdir(parents=True, exist_ok=True)
     return replace(profile, root_dir=str(root))
+
+
+def prepare_profile_root(profile, requested_root, registry):
+    profile = validate_profile_root(profile, requested_root, registry)
+    Path(profile.root_dir).mkdir(parents=True, exist_ok=True)
+    return profile
 
 
 def write_profile_marker(store_root, uid):

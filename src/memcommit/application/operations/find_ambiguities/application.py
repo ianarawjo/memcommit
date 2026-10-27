@@ -20,7 +20,7 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -66,7 +66,7 @@ def analyze_find_ambiguities(
 
 
 def prepare_find_ambiguities(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindAmbiguitiesRequest,
     *,
     current_name: str | None,
@@ -82,7 +82,7 @@ def prepare_find_ambiguities(
 
 
 def find_ambiguities(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindAmbiguitiesRequest,
     provider_factory: Callable[[], FindingsProvider],
     *,

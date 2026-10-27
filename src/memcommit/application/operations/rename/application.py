@@ -40,7 +40,6 @@ class RenamePlan:
     new_name: str
     bindings: tuple[RenameBinding, ...]
     changed_owner_count: int
-    translation_artifact_count: int
     current_before: str | None
     current_after: str | None
     graph_digest: str
@@ -58,7 +57,6 @@ class RenameResult:
     new_name: str
     renamed_context_count: int
     changed_owner_count: int
-    translation_artifact_count: int
     current_context: str | None
 
 

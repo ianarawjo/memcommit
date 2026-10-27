@@ -31,30 +31,29 @@ class _CheckpointRepositoryMixin:
         auto: bool = False,
     ) -> Checkpoint:
         """Save a persisted Context snapshot under its cooperative write lock."""
-        with self._command_write_lock():
-            with self._context_write_lock(ctx.name):
-                if not self.context_exists(ctx.name):
-                    raise FileNotFoundError(
-                        f"Context '{ctx.name}' must be saved before checkpointing."
-                    )
-                current = self.load_direct(ctx.name)
-                current_digest = context_record_digest(current)
-                if current.uid != ctx.uid:
-                    raise ValueError(
-                        f"Context '{ctx.name}' has a different saved identity."
-                    )
-                if context_record_digest(ctx) != current_digest:
-                    raise ValueError(
-                        f"Context '{ctx.name}' has unsaved changes; save it "
-                        "before checkpointing."
-                    )
-                return self._checkpoint_locked(
-                    ctx,
-                    checkpoint_message=checkpoint_message,
-                    command=command,
-                    command_details=command_details,
-                    auto=auto,
+        with self._context_write_lock(ctx.name):
+            if not self.context_exists(ctx.name):
+                raise FileNotFoundError(
+                    f"Context '{ctx.name}' must be saved before checkpointing."
                 )
+            current = self.load_direct(ctx.name)
+            current_digest = context_record_digest(current)
+            if current.uid != ctx.uid:
+                raise ValueError(
+                    f"Context '{ctx.name}' has a different saved identity."
+                )
+            if context_record_digest(ctx) != current_digest:
+                raise ValueError(
+                    f"Context '{ctx.name}' has unsaved changes; save it "
+                    "before checkpointing."
+                )
+            return self._checkpoint_locked(
+                ctx,
+                checkpoint_message=checkpoint_message,
+                command=command,
+                command_details=command_details,
+                auto=auto,
+            )
 
     def checkpoint_context_batch(
         self,
@@ -112,71 +111,69 @@ class _CheckpointRepositoryMixin:
         ):
             raise ValueError("Expected Context checkpoint catalog is invalid.")
 
-        with self._command_write_lock():
-            with self._context_graph_lock(exclusive=expected_catalog is not None):
-                if (
-                    expected_catalog is not None
-                    and tuple(self.list_context_names()) != expected_catalog
-                ):
-                    raise ConcurrentContextUpdateError(
-                        "The Context namespace changed after the checkpoint "
-                        "scope was selected."
-                    )
-                with self._context_write_locks(names):
-                    self._assert_profile_write_allowed()
-                    for context in records:
-                        try:
-                            current = self.load_direct(context.name)
-                        except FileNotFoundError as error:
-                            raise ConcurrentContextUpdateError(
-                                f"Context '{context.name}' no longer exists."
-                            ) from error
-                        current_digest = context_record_digest(current)
-                        if (
-                            current.uid != context.uid
-                        ):
-                            raise ConcurrentContextUpdateError(
-                                f"Context '{context.name}' changed before it "
-                                "could be checkpointed."
-                            )
-                        if context_record_digest(context) != current_digest:
-                            raise ValueError(
-                                f"Context '{context.name}' has unsaved changes; "
-                                "save it before checkpointing."
-                            )
-
-                    created: list[tuple[str, Checkpoint]] = []
+        with self._context_graph_lock(exclusive=expected_catalog is not None):
+            if (
+                expected_catalog is not None
+                and tuple(self.list_context_names()) != expected_catalog
+            ):
+                raise ConcurrentContextUpdateError(
+                    "The Context namespace changed after the checkpoint "
+                    "scope was selected."
+                )
+            with self._context_write_locks(names):
+                for context in records:
                     try:
-                        for index, context in enumerate(records):
-                            checkpoint = self._checkpoint_locked(
-                                context,
-                                checkpoint_message=checkpoint_message,
-                                command=command,
-                                command_details=command_details,
-                                auto=auto,
-                                checkpoint_uid=(
-                                    None
-                                    if planned_uids is None
-                                    else planned_uids[index]
-                                ),
+                        current = self.load_direct(context.name)
+                    except FileNotFoundError as error:
+                        raise ConcurrentContextUpdateError(
+                            f"Context '{context.name}' no longer exists."
+                        ) from error
+                    current_digest = context_record_digest(current)
+                    if (
+                        current.uid != context.uid
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            f"Context '{context.name}' changed before it "
+                            "could be checkpointed."
+                        )
+                    if context_record_digest(context) != current_digest:
+                        raise ValueError(
+                            f"Context '{context.name}' has unsaved changes; "
+                            "save it before checkpointing."
+                        )
+
+                created: list[tuple[str, Checkpoint]] = []
+                try:
+                    for index, context in enumerate(records):
+                        checkpoint = self._checkpoint_locked(
+                            context,
+                            checkpoint_message=checkpoint_message,
+                            command=command,
+                            command_details=command_details,
+                            auto=auto,
+                            checkpoint_uid=(
+                                None
+                                if planned_uids is None
+                                else planned_uids[index]
+                            ),
+                        )
+                        created.append((context.name, checkpoint))
+                except Exception:
+                    rollback_error: Exception | None = None
+                    for name, checkpoint in created:
+                        try:
+                            self._remove_checkpoint_uid_locked(
+                                name,
+                                checkpoint.uid,
                             )
-                            created.append((context.name, checkpoint))
-                    except Exception:
-                        rollback_error: Exception | None = None
-                        for name, checkpoint in created:
-                            try:
-                                self._remove_checkpoint_uid_locked(
-                                    name,
-                                    checkpoint.uid,
-                                )
-                            except Exception as candidate:
-                                rollback_error = rollback_error or candidate
-                        if rollback_error is not None:
-                            raise RuntimeError(
-                                "Context checkpoint batch failed and could not "
-                                "be fully rolled back."
-                            ) from rollback_error
-                        raise
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Context checkpoint batch failed and could not "
+                            "be fully rolled back."
+                        ) from rollback_error
+                    raise
         return tuple(checkpoint for _name, checkpoint in created)
 
     def _checkpoint_locked(
@@ -227,7 +224,6 @@ class _CheckpointRepositoryMixin:
         checkpoint_uid=None,
     ) -> tuple[Checkpoint, dict]:
         """Allocate a durable checkpoint value without publishing its file yet."""
-        self._assert_profile_write_allowed()
         if checkpoint_uid is None:
             checkpoint_uid = str(uuid.uuid4())
         else:

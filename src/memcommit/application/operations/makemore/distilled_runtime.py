@@ -48,7 +48,7 @@ from memcommit.application.operations.makemore.model import (
 from memcommit.application.operations.makemore.target_context import (
     revalidated_makemore_target,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 DISTILLED_MAKEMORE_PIPELINE_CONTRACT_VERSION = 1
@@ -143,7 +143,7 @@ def _distillation_checkpoint_payload(result: DistillResult) -> dict[str, object]
 
 def prepare_distilled_makemore_add(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     source_name: str,
     target_name: str,
     provider_factory: DistilledMakemoreProviderFactory,
@@ -210,7 +210,7 @@ def prepare_distilled_makemore_add(
 def apply_prepared_distilled_makemore_add(
     prepared: PreparedDistilledMakemoreAdd,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SemanticResultMemorizationReceipt:
     """Publish only final Cases and retain the transient Distill evidence."""
 

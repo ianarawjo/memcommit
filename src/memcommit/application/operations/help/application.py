@@ -80,6 +80,7 @@ def list_operation_help_groups() -> tuple[OperationHelpFamilyGroup, ...]:
             ),
         )
         for family in OPERATION_FAMILIES
+        if any(name not in RETIRED_OPERATION_NAMES for name in family.operation_names)
     )
 
 

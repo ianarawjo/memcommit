@@ -31,7 +31,7 @@ if TYPE_CHECKING:
         ContextCommandUnit,
     )
     from memcommit.application.operations.atomize.records import AtomizeReviewRecord
-    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -42,7 +42,7 @@ class PreparedAtomizeRestore:
     workbench_after: AtomizeReviewRecord | None
 
 
-def load_undo_context(store: MemoryStore, change: CommandContextChange) -> Context:
+def load_undo_context(store: ProfileStore, change: CommandContextChange) -> Context:
     try:
         current = store.load_direct(change.context_name)
     except FileNotFoundError as error:
@@ -56,12 +56,11 @@ def load_undo_context(store: MemoryStore, change: CommandContextChange) -> Conte
             f"Affected Context '{change.context_name}' changed after the "
             "Atomize Save As selected for undo."
         )
-    store._assert_context_deletion_allowed(current)
     return current
 
 
 def prepare_undo(
-    store: MemoryStore,
+    store: ProfileStore,
     unit: ContextCommandUnit,
     current: Context,
     receipt: AtomizeCreationReceipt,
@@ -123,7 +122,7 @@ def prepare_undo(
 
 
 def prepare_redo(
-    store: MemoryStore,
+    store: ProfileStore,
     unit: ContextCommandUnit,
     archive: Path,
     archived_context: Context,

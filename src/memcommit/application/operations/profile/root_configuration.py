@@ -7,14 +7,12 @@ from pathlib import Path
 import shutil
 import uuid
 
-from memcommit.configuration.config import external_document_locator
 from memcommit.configuration.workspace import workspace_lock
 from memcommit.persistence.import_export.source import read_output_files
-from memcommit.persistence.store import MemoryStore
-from memcommit.persistence.operations.mem_sync.settings_repository import SyncSettingsRepository
-from memcommit.persistence.operations.mem_sync.checkpoint_agreement import SyncCheckpointAgreementRepository
+from memcommit.persistence.store import ProfileStore
+from memcommit.persistence.operations.mem_sync.checkpoints import load_last_sync_baselines
 from .config import load_profile_registry, profile_root_dir, profile_store_dir
-from .model._storage import _registry_lock, _write_registry, _copy_store, _fsync_directory, _assert_plain_tree
+from .model._storage import _write_registry, _copy_store, _fsync_directory, _assert_plain_tree
 from .project_root import prepare_profile_root, validate_profile_marker
 
 
@@ -25,7 +23,7 @@ def _read_store_file_digests(root):
 
 
 def relocate_profile_root(requested_root):
-    with workspace_lock(exclusive=True), _registry_lock():
+    with workspace_lock(exclusive=True):
         registry = load_profile_registry()
         profile = registry.active
         old_root = profile_root_dir(profile)
@@ -35,10 +33,8 @@ def relocate_profile_root(requested_root):
         moved = prepare_profile_root(profile, requested_root, registry)
         source = profile_store_dir(profile)
         target = profile_store_dir(moved)
-        store = MemoryStore(root=source, create=False)
-        repository = SyncSettingsRepository(store)
-        settings = repository.load()
-        baselines = SyncCheckpointAgreementRepository(store).load()
+        store = ProfileStore(root=source, create=False)
+        baselines = load_last_sync_baselines(store)
         managed = dict(pair for baseline in baselines.values() for pair in baseline.files)
         current = read_output_files(old_root, managed)
         if current != managed:
@@ -55,11 +51,6 @@ def relocate_profile_root(requested_root):
             _copy_store(source, staging)
             if initial != _read_store_file_digests(source) or initial != _read_store_file_digests(staging):
                 raise ValueError("Profile Store changed during relocation.")
-            copied = SyncSettingsRepository(MemoryStore(root=staging, create=False))
-            copied.save({**settings, "connections": [
-                {**c, "base": external_document_locator(profile_root_dir(moved))}
-                for c in settings["connections"]
-            ]}, expected_revision=settings["revision"])
             # Existing equal files are adopted; conflicting files were rejected
             # before copying. Rollback removes only files created by this move.
             for path, data in managed.items():

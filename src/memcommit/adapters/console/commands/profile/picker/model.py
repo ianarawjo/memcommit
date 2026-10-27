@@ -23,6 +23,7 @@ class ProfilePickerEntry:
     removal_block: str | None = None
     rename_block: str | None = None
     root_dir: str | None = None
+    study_session: str | None = None
 
 
 @dataclass(frozen=True)

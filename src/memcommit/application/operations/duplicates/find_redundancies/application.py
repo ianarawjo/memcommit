@@ -27,7 +27,7 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -72,7 +72,7 @@ def analyze_combined_find_redundancies(
 
 
 def prepare_find_redundancies(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindRedundanciesRequest,
     *,
     current_name: str | None,
@@ -105,7 +105,7 @@ def analyze_find_redundancies(
 
 
 def find_redundancies(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindRedundanciesRequest,
     provider_factory: Callable[[], FindingsProvider],
     *,

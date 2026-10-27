@@ -38,7 +38,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_context,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -200,7 +200,7 @@ def freeze_ground_workspace_fit(
 
 
 def workspace_fit_report_is_current(
-    store: MemoryStore,
+    store: ProfileStore,
     report: FitReport,
 ) -> bool:
     """Check one receipt against only the physical Memories it consumed."""
@@ -223,7 +223,7 @@ def workspace_fit_report_is_current(
 
 def execute_ground_workspace_fit(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     ground_name: str,
     provider_factory: Callable[[], FitProvider],
 ) -> FitReport:
@@ -273,7 +273,7 @@ def execute_ground_workspace_fit(
 
 
 def load_ground_workspace_fit_contexts(
-    store: MemoryStore,
+    store: ProfileStore,
     workspace: GroundWorkspace,
 ) -> tuple[Context, ...]:
     """Load the explicit `/contexts` lane and its local lexical descendants."""

@@ -34,7 +34,7 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     freeze_memorization_target,
     memorize_semantic_result,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 MakemoreContextRole = Literal["goal", "rules"]
@@ -63,7 +63,7 @@ class PreparedMakemoreAdd:
 
 
 def freeze_makemore_context_source(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_name: str,
     role: MakemoreContextRole,
@@ -114,7 +114,7 @@ def freeze_makemore_context_source(
 
 
 def _revalidate_source(
-    store: MemoryStore,
+    store: ProfileStore,
     source: FrozenMakemoreSource,
 ) -> None:
     current = store.load_direct(source.context_name)
@@ -130,7 +130,7 @@ def _revalidate_source(
 
 def prepare_makemore_add(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     request: MakemoreRequest,
     target_name: str,
     provider_factory: MakemoreProviderFactory,
@@ -152,7 +152,7 @@ def prepare_makemore_add(
 
 def prepare_makemore_add_to_frozen_target(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     request: MakemoreRequest,
     target: FrozenMemorizationTarget,
     provider_factory: MakemoreProviderFactory,
@@ -298,7 +298,7 @@ def makemore_checkpoint_payload(result: MakemoreResult) -> dict[str, object]:
 def apply_prepared_makemore_add(
     prepared: PreparedMakemoreAdd,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SemanticResultMemorizationReceipt:
     """Append the complete generated proposal set as one Context checkpoint."""
 

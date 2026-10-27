@@ -20,9 +20,6 @@ from memcommit.adapters.console.commands.compare.review import (
 from memcommit.adapters.console.commands.sever.review import (
     open_sever_review as _run_sever_report,
 )
-from memcommit.adapters.console.commands.update.review import (
-    open_update_review as _run_update_report,
-)
 from memcommit.application.operations.review.applied_checkpoint import (
     CHECKPOINT_REVIEW_OPERATIONS,
     list_applied_checkpoint_reviews,
@@ -72,7 +69,7 @@ from memcommit.application.operations.review.model import (
     create_ambiguity_review,
     review_matches_context,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.core.context_targeting.uid_locator import (
     UidLocatorError,
     resolve_exact_or_unique_uid,
@@ -84,7 +81,7 @@ def _interactive_terminal() -> bool:
 
 
 def _load_saved_review_by_selector(
-    store: MemoryStore,
+    store: ProfileStore,
     selector: str,
 ):
     """Resolve one active or terminal-history ReviewSession UID/prefix."""
@@ -101,7 +98,7 @@ def _load_saved_review_by_selector(
 
 
 def _checkpoint_report_entries(
-    store: MemoryStore,
+    store: ProfileStore,
     operation: str,
 ) -> tuple[SessionPickerEntry, ...]:
     """Project immutable application checkpoints through the common picker."""
@@ -137,7 +134,7 @@ def _checkpoint_report_entries(
 
 
 def _run_checkpoint_report(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     operation: str,
     receipt_uid: str | None,
@@ -167,7 +164,7 @@ def _run_checkpoint_report(
 
 
 def _load_direct_context(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str | None,
     *,
     current_name: str | None,
@@ -211,8 +208,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Open a review report (compare, sever, update, "
-                "atomize, dedun, distill, makemore, forget, resolve, or "
+                "Open a review report (compare, sever, "
+                "atomize, dedun, distill, makemore, resolve, or "
                 "ambiguities); audit and merge show their planned receipt-review scope; "
                 "omit to enter the interactive Review session"
             )
@@ -299,7 +296,7 @@ def cmd(
         else:
             _show_merge_review_scope()
         return
-    store = MemoryStore()
+    store = ProfileStore()
     retained_review_source = False
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -360,7 +357,7 @@ def cmd(
                 snapshot=snapshot,
             )
             return
-        if normalized_kind in {"compare", "sever", "update"}:
+        if normalized_kind in {"compare", "sever"}:
             if replace_review or respond_to is not None or response is not None:
                 raise ReviewError(
                     "Adaptive operation reports do not use --replace-review or "
@@ -369,7 +366,6 @@ def cmd(
             runners = {
                 "compare": _run_compare_report,
                 "sever": _run_sever_report,
-                "update": _run_update_report,
             }
             runners[normalized_kind](
                 store,
@@ -454,7 +450,7 @@ def cmd(
                     "Unsupported review adapter. "
                     "Implemented adapters are 'ambiguities', 'atomize', "
                     "'audit', 'compare', 'dedun', 'distill', 'makemore', "
-                    "'forget', 'resolve', 'sever', and 'update'."
+                    "'resolve', and 'sever'."
                 )
             if session_uid is not None:
                 if replace_review:

@@ -3,7 +3,7 @@
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 __all__ = [
@@ -11,5 +11,5 @@ __all__ = [
     "Context",
     "Memory",
     "Memory",
-    "MemoryStore",
+    "ProfileStore",
 ]

@@ -1,4 +1,4 @@
-"""MemoryStore implementation of Context namespace Rename."""
+"""ProfileStore implementation of Context namespace Rename."""
 
 from __future__ import annotations
 
@@ -15,12 +15,12 @@ from memcommit.application.operations.rename.application import (
     apply_rename,
     plan_rename,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.persistence.store.context_memory.models import ContextRenamePlan
 
 
 class MemoryStoreRenamePort:
-    def __init__(self, store: MemoryStore) -> None:
+    def __init__(self, store: ProfileStore) -> None:
         self._store = store
 
     def freeze(self, request: RenameRequest) -> RenamePlan:
@@ -46,7 +46,6 @@ class MemoryStoreRenamePort:
                 for binding in token.bindings
             ),
             changed_owner_count=len(token.changed_owner_names),
-            translation_artifact_count=token.translation_artifact_count,
             current_before=token.current_before,
             current_after=token.current_after,
             graph_digest=token.graph_digest,
@@ -64,16 +63,15 @@ class MemoryStoreRenamePort:
             new_name=plan.new_name,
             renamed_context_count=result.renamed_context_count,
             changed_owner_count=result.changed_owner_count,
-            translation_artifact_count=result.translation_artifact_count,
             current_context=result.current_context,
         )
 
 
-def prepare_rename(store: MemoryStore, request: RenameRequest) -> RenamePlan:
+def prepare_rename(store: ProfileStore, request: RenameRequest) -> RenamePlan:
     return plan_rename(request, port=MemoryStoreRenamePort(store))
 
 
-def execute_rename(store: MemoryStore, plan: RenamePlan) -> RenameResult:
+def execute_rename(store: ProfileStore, plan: RenamePlan) -> RenameResult:
     return apply_rename(plan, port=MemoryStoreRenamePort(store))
 
 

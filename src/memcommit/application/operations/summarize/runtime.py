@@ -18,7 +18,7 @@ from memcommit.models.context import Context
 from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
     SummarizeProvider,
@@ -58,7 +58,7 @@ class _LoadedSummaryScope:
 
 
 def _load_frame(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     access,
     *,
     include_descendants: bool,
@@ -100,16 +100,16 @@ def _load_frame(
 
 
 class MemoryStoreSummarySourcePort(SummarySourcePort):
-    """Freeze and revalidate one local MemoryStore source scope."""
+    """Freeze and revalidate one local ProfileStore source scope."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(self, store: ProfileStore, *, current_name: str | None):
         self._store = store
         # The active Context is process-global mutable state. Capture it once
         # so every relative lookup in this request has one stable base.
         self._current_name = current_name
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "MemoryStoreSummarySourcePort":
+    def capture(cls, store: ProfileStore) -> "MemoryStoreSummarySourcePort":
         """Create a source adapter from one current-Context snapshot."""
 
         return cls(store, current_name=store.current_context_name())
@@ -157,7 +157,7 @@ class MemoryStoreSummarySourcePort(SummarySourcePort):
 def run_summarize_with_store(
     request: SummarizeRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     current_context_name: str | None,
     provider_session_factory: SummaryProviderSessionFactory,
 ) -> SummarizeResult:
@@ -176,7 +176,7 @@ def run_summarize_with_store(
 def execute_summarize(
     request: SummarizeRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: SummaryProviderFactory,
 ) -> SummarizeResult:
     """Execute against a real Store with no CLI, TUI, or terminal output."""

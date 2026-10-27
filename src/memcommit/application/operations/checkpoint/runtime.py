@@ -1,4 +1,4 @@
-"""MemoryStore implementation of the manual Checkpoint operation."""
+"""ProfileStore implementation of the manual Checkpoint operation."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ from memcommit.models.context import Context
 from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True, slots=True)
@@ -33,7 +33,7 @@ class _CheckpointToken:
 class MemoryStoreCheckpointPort:
     """Freeze and publish manual checkpoints in one Profile store."""
 
-    def __init__(self, store: MemoryStore) -> None:
+    def __init__(self, store: ProfileStore) -> None:
         self._store = store
         self._owner = object()
 
@@ -147,7 +147,7 @@ class MemoryStoreCheckpointPort:
 
 
 def execute_checkpoint(
-    store: MemoryStore,
+    store: ProfileStore,
     request: CheckpointRequest,
 ) -> CheckpointResult:
     """Freeze and publish one manual Checkpoint through the same Store port."""

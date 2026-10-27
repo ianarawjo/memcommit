@@ -65,7 +65,7 @@ from memcommit.application.capabilities.history.verification import (
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.config import load_profile_registry
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
     StudyActionEvent,
@@ -393,7 +393,7 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         try:
             current_uid = current_command_attempt_uid()
             profile = load_profile_registry().active
@@ -439,7 +439,7 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         try:
             result = execute_log(
                 store,
@@ -458,7 +458,7 @@ def cmd(
         _render_operation_attempts(result.entries)
         return
 
-    store = MemoryStore()
+    store = ProfileStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         name = (

@@ -1,1 +1,1 @@
-"""External file reads and writes for document transfer."""
+"""External project-document reads, writes and restoration filesystem helpers."""

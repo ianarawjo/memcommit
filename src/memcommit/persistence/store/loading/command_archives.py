@@ -69,7 +69,16 @@ class _CommandArchiveLoadingMixin:
             raise ValueError("Command Context archive manifest is invalid.")
         command = manifest.get("command")
         unit_uid = manifest.get("unit_uid")
-        if command == "sever":
+        generic_creation = (
+            set(manifest) == lifecycle_manifest_fields | {"creation_batch"}
+            and manifest.get("creation_batch") is True
+            and isinstance(command, str)
+            and isinstance(unit_uid, str)
+            and unit_uid.startswith(f"{command}:")
+        )
+        if generic_creation:
+            pass
+        elif command == "sever":
             if (
                 set(manifest) != sever_manifest_fields
                 or unit_uid != f"checkpoint:{checkpoint_uid}"
@@ -102,7 +111,7 @@ class _CommandArchiveLoadingMixin:
             or not context_uid
         ):
             raise ValueError("Command Context archive manifest is invalid.")
-        if command == "sever":
+        if command == "sever" and not generic_creation:
             session_uid = manifest.get("session_uid")
             reviewing_digest = manifest.get("reviewing_session_digest")
             if (

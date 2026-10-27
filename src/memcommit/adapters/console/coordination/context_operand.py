@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def choose_context_operand(
@@ -37,7 +37,7 @@ class ContextOperandSnapshot:
     current_name: str | None
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "ContextOperandSnapshot":
+    def capture(cls, store: ProfileStore) -> "ContextOperandSnapshot":
         """Read the active Context exactly once for this command invocation."""
         return cls(current_name=store.current_context_name())
 

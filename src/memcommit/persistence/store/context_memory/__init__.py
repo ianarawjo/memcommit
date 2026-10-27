@@ -1,4 +1,4 @@
-"""Persist the current Context and Memory graph and its lifecycle."""
+"""Persist Context creation, selection, renaming, and deletion."""
 
 from __future__ import annotations
 
@@ -30,14 +30,14 @@ _IMPLEMENTATION_MODULES = (
 )
 
 
-class ContextMemoryStoreMixin(
+class ContextStoreMixin(
     _CurrentContextStoreMixin,
     _ContextCreationAvailabilityMixin,
     _ContextRenameMixin,
     _ContextCreationMixin,
     _ContextLifecycleMixin,
 ):
-    """Compatibility surface assembled from focused persistence mixins."""
+    """Compose Context creation, selection, renaming, and deletion."""
 
 
 class _ContextMemoryCompatibilityModule(ModuleType):
@@ -56,9 +56,9 @@ class _ContextMemoryCompatibilityModule(ModuleType):
                 setattr(module, name, value)
 
 
-__all__ = ["ContextMemoryStoreMixin"]
+__all__ = ["ContextStoreMixin"]
 
 # The root Store compatibility module historically monkeypatches atomic-write
 # helpers on this import path. Keep that behavior while the combined
-# MemoryStore façade exists, but do not add new state to this adapter.
+# ProfileStore façade exists, but do not add new state to this adapter.
 sys.modules[__name__].__class__ = _ContextMemoryCompatibilityModule

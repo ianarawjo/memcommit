@@ -10,16 +10,12 @@ from memcommit.models.profile import Profile
 
 @dataclass(frozen=True)
 class StudyRunProfileGroup:
-    """The local Profile registered for one ``init-study`` run."""
+    """The registered sessions of one Study, including partially removed runs."""
 
     uid: str
     name: str
     created_at: str
-    participant: Profile
-
-    @property
-    def profiles(self) -> tuple[Profile, ...]:
-        return (self.participant,)
+    profiles: tuple[Profile, ...]
 
 
 @dataclass(frozen=True)

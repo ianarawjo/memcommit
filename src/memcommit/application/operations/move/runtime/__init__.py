@@ -1,4 +1,4 @@
-"""MemoryStore integration for Move."""
+"""ProfileStore integration for Move."""
 
 from memcommit.application.operations.move.runtime.store_port import (
     MemoryStoreMovePort,

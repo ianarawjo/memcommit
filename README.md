@@ -204,7 +204,9 @@ Use `mem --help` for the command list and `mem COMMAND --help` for exact options
 
 ## Study scenarios
 
-The built-in Coffee Study includes its task Contexts and Memories:
+The built-in Study copies four prepared projects into independent Profiles:
+Practice, Task 1, Task 2, and Task 3. Each project includes editable Markdown,
+its native Memories and identities, and initial document Sync checkpoints:
 
 ```sh
 mem init-study demo-study
@@ -212,26 +214,29 @@ mem profile list
 mem contexts
 ```
 
-`init-study` creates one isolated Study Profile containing the task Contexts and
-switches to it. An interactive terminal can also enter its Study shell. The older
-fixture is available explicitly with `mem init-study NAME --scenario legacy`.
-Both scenarios and their required data are included in the installed package.
-New runs default to `~/.memcommit/studies/<Study UID>/participant/`, with their
-own `.mem/`. The participant shell starts in its registered project folder.
-To choose the parent for future runs:
+`init-study` selects the Practice Profile. Switch between the session Profiles
+with `mem profile`. Each run has separate project folders and Stores under
+`~/.memcommit/studies/<Study UID>/`; the participant shell starts in the selected
+Profile's project folder. Practice begins in the empty `you/AGENTS` Context,
+alongside `your-friend/AGENTS` and `cafe-selection-for-us/AGENTS`.
+
+All four prepared projects are included in the installed package. The former
+`--scenario` and language options are removed. To choose the parent for future
+runs:
 
 ```sh
 mem config set study_root_dir /path/to/studies
 ```
 
-Study `mem help` shows these 20 commands to reduce the number of commands a
+Study `mem help` shows these 21 commands to reduce the number of commands a
 participant needs to learn:
 
 ```text
-add       audit     branch    contexts  delete
-edit      find      help      init      list
-merge     profile   pwd       query     redo
-resolve   switch    sync      undo      update
+add       branch    contexts  dedup     delete
+edit      find      forget    help      init
+list      merge     profile   pwd       query
+redo      resolve   switch    sync      undo
+update
 ```
 
 This list controls Study Help visibility. Contexts directly contain Memories;
@@ -303,12 +308,12 @@ mem update "Set the cafe opening time to ten."
 Update considers the current Context's direct contents. Use `-r` or `--recursive`
 to update the current Context and its lexical descendants together.
 Submitting the command plans and applies the changes, then prints their diff
-and completed receipt. Checkpoints,
-Review, Undo and Redo retain the completed evidence.
+and completed receipt. Checkpoints, Undo and Redo retain the completed evidence.
 
 The earlier Context-source syntax, endpoint setup screen, Apply confirmation,
 and resumable Update sessions are removed. Repeating the command plans afresh.
-`mem impact` remains a separate read-only preview operation.
+Direct Update has no dedicated Impact or Review route. `mem impact` remains a
+read-only preview for the operations listed in its Help.
 
 ## Merge and Resolve
 
@@ -358,7 +363,8 @@ adapters/console/ CLI commands and terminal components
 providers/        Language-model provider integrations
 persistence/      Stores, checkpoints, and saved sessions
 configuration/    Global configuration
-study_scenarios/  Built-in scenarios and their data
+application/operations/init_study/study_scenarios/
+                  Prepared Study project folders and native data
 ```
 
 

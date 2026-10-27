@@ -24,13 +24,13 @@ from memcommit.application.operations.copy.contracts import (
     CopyMemoriesRequest,
     FrozenCopyMemoriesPlan,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def freeze_copy(
     request: CopyMemoriesRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     current_name: str | None,
     owner: object,
 ) -> FrozenCopyMemoriesPlan:

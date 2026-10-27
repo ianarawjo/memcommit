@@ -11,7 +11,6 @@ from memcommit.adapters.console.commands.copy.receipt import render_copy_receipt
 from memcommit.adapters.console.commands.copy.setup import choose_copy_setup
 from memcommit.adapters.console.coordination.copy_and_move.arguments import (
     selected_memory_locators,
-    target_context_option,
 )
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
 from memcommit.adapters.console.terminal.core.capabilities import (
@@ -27,10 +26,7 @@ from memcommit.application.operations.copy.contracts import (
 from memcommit.application.operations.copy.runtime.store_port import MemoryStoreCopyPort
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.persistence.store.infrastructure.write_protection import (
-    WriteProtectionError,
-)
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 
 
 def cmd(
@@ -61,20 +57,12 @@ def cmd(
             help="One Source owner applied to every unqualified Memory selector",
         ),
     ] = None,
-    into: Annotated[
-        Optional[str],
-        typer.Option(
-            "--into",
-            metavar="TARGET_CONTEXT",
-            help="Existing local Target Context (defaults to current)",
-        ),
-    ] = None,
     to: Annotated[
         Optional[str],
         typer.Option(
             "--to",
             metavar="TARGET_CONTEXT",
-            help="Compatibility alias for --into",
+            help="Existing local Target Context (defaults to current)",
         ),
     ] = None,
     before: Annotated[
@@ -95,7 +83,7 @@ def cmd(
     """Copy direct Memories while preserving every Source."""
 
     try:
-        store = MemoryStore()
+        store = ProfileStore()
         port = MemoryStoreCopyPort.capture(
             store,
         )
@@ -105,7 +93,6 @@ def cmd(
                 memory_locators,
                 memory_options,
                 source,
-                into,
                 to,
                 before,
                 after,
@@ -115,7 +102,7 @@ def cmd(
             if not is_interactive_terminal():
                 raise MemoryTransferError(
                     "Memory locators are required outside a terminal; for example: "
-                    "mem copy CONTEXT:MEMORY --into TARGET."
+                    "mem copy CONTEXT:MEMORY --to TARGET."
                 )
             frozen_plan = choose_copy_setup(port)
             if frozen_plan is None:
@@ -130,7 +117,7 @@ def cmd(
                     memory_options,
                 ),
                 source_locator=source,
-                into_locator=target_context_option(into, to),
+                into_locator=to,
                 before=before,
                 after=after,
             )
@@ -150,7 +137,6 @@ def cmd(
         RuntimeError,
         TypeError,
         ValueError,
-        WriteProtectionError,
     ) as error:
         render_cli_error(error)
         raise typer.Exit(1)

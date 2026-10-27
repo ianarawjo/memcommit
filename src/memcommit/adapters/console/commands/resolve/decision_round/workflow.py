@@ -33,7 +33,7 @@ from memcommit.application.operations.resolve.model import ResolveAnalysis, Reso
 RESOLVE_PRESENTATION = CompactScreenPresentation(
     response_title="YOUR INTENT",
     continue_label="Review changes",
-    activation_hint="select/review",
+    activation_hint="select/continue",
     show_item_navigation=True,
     require_all_decisions=False,
 )

@@ -21,7 +21,7 @@ def cmd(
         typer.Argument(
             help=(
                 "Context to switch to; omit to enter the switch picker, or "
-                "with -b omit to choose a branch Source and name"
+                "with -b provide a new branch name"
             )
         ),
     ] = None,
@@ -30,7 +30,7 @@ def cmd(
         typer.Option(
             "-b",
             "--branch",
-            help="Create a branch; without NAME choose its local Source and name",
+            help="Create a branch of the current Context; requires NAME",
         ),
     ] = False,
 ) -> None:
@@ -38,7 +38,7 @@ def cmd(
 
     plan = plan_checkout(CheckoutRequest(name=name, create_branch=b))
     if plan.action is CheckoutAction.BRANCH:
-        # Branch owns its default range and the no-name setup's visible range.
+        # Branch owns current-Context input validation and its default range.
         branch.cmd(plan.name)
         return
     switch.cmd(plan.name)

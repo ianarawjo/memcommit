@@ -28,7 +28,7 @@ from memcommit.application.operations.review.model import (
 )
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _target_state(trace: MemoryHistory) -> MemoryState:
@@ -59,7 +59,7 @@ def _recorded_reason_events(trace: MemoryHistory) -> tuple[MemoryHistoryRecord, 
 
 
 def _saved_analysis(
-    store: MemoryStore,
+    store: ProfileStore,
     ctx: Context,
     trace: MemoryHistory,
 ) -> tuple[SavedAnalysis | None, bool, list[str]]:
@@ -139,7 +139,7 @@ def _saved_analysis(
 
 
 def _proposal_evidence(
-    store: MemoryStore,
+    store: ProfileStore,
     ctx: Context,
     trace: MemoryHistory,
 ) -> tuple[tuple[UpdateProposalEvidence, ...], list[str]]:

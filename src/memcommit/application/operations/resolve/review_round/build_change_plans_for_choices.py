@@ -26,15 +26,6 @@ from .in_round_change_review.choose_change_for_memory import (
 )
 
 
-def allowed_update_effects(analysis):
-    mapping = {
-        "CREATE": "CREATE",
-        "UPDATE": "EDIT",
-        "DELETE": "DELETE",
-    }
-    return frozenset(mapping[value] for value in analysis.frame.allowed_effects)
-
-
 @dataclass(frozen=True, slots=True)
 class ResolveChoicePlan:
     revision: str
@@ -81,7 +72,6 @@ def prepare_resolve_choice(analysis, decision, *, provider_factory):
             (before,),
             provider_factory,
             instruction=UpdateInstruction(next(iter(source.memories.values())).content),
-            allowed_update_effects=allowed_update_effects(analysis),
         )
     result = apply_update_to_working_contexts(plan=plan, target_contexts=(before,))
     after = result.post_image_for(context_uid=before.uid)
@@ -158,16 +148,6 @@ def reviewed_choice_plans(analysis, decisions, choices, target):
             after = target
         if after.to_dict() != choice.after().to_dict():
             raise ResolveError("The reviewed diff no longer matches its frozen plan.")
-        if any(
-            (
-                {"add": "CREATE", "edit": "UPDATE", "remove": "DELETE"}[
-                    operation.operation
-                ]
-                not in analysis.frame.allowed_effects
-                for operation in choice.plan.operations
-            )
-        ):
-            raise ResolveError("The reviewed change exceeds this frame's authority.")
         if issue.kind == "REDUNDANCY":
             if choice.plan != duplicate_choice_plan(
                 analysis,

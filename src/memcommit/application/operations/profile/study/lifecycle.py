@@ -1,4 +1,4 @@
-"""Atomic rename and permanent removal of current Study Profile pairs."""
+"""Atomic rename and permanent removal of Study session groups."""
 
 from __future__ import annotations
 
@@ -16,7 +16,6 @@ from memcommit.application.operations.profile.errors import ProfileError
 from memcommit.application.operations.profile.model._storage import (
     _prepare_profile_deletion_batch,
     _publish_permanent_removal,
-    _registry_lock,
     _write_registry,
     inspect_store,
 )
@@ -43,99 +42,98 @@ def rename_study(
     except (ProfileConfigError, ValueError) as error:
         raise ProfileError("Study rename name is invalid.") from error
 
-    with _registry_lock():
-        registry = load_profile_registry()
-        if (
-            expected_generation is not None
-            and registry.generation != expected_generation
-        ):
-            raise ProfileError(
-                "Profile registry changed after Study rename selection; review "
-                "the current Profile list and try again."
-            )
-        study_uid, study_name, members = _study_target(
-            registry=registry, name=canonical_old
+    registry = load_profile_registry()
+    if (
+        expected_generation is not None
+        and registry.generation != expected_generation
+    ):
+        raise ProfileError(
+            "Profile registry changed after Study rename selection; review "
+            "the current Profile list and try again."
         )
-        if expected_uid is not None and study_uid != expected_uid:
-            raise ProfileError(
-                f"Study {study_name!r} identity changed after rename selection; "
-                "nothing was renamed."
-            )
-        if study_name == canonical_new:
-            return StudyRenameResult(
-                uid=study_uid,
-                previous_name=study_name,
-                name=study_name,
-                profiles=members,
-                active_profile_name=registry.active.name,
-                changed=False,
-            )
-
-        studies = group_study_run_profiles(registry.profiles)
-        collision = next(
-            (
-                study
-                for study in studies
-                if study.uid != study_uid
-                and study.name.casefold() == canonical_new.casefold()
-            ),
-            None,
+    study_uid, study_name, members = _study_target(
+        registry=registry, name=canonical_old
+    )
+    if expected_uid is not None and study_uid != expected_uid:
+        raise ProfileError(
+            f"Study {study_name!r} identity changed after rename selection; "
+            "nothing was renamed."
         )
-        if collision is not None:
-            raise ProfileError(f"Study {collision.name!r} already exists.")
-
-        renamed_by_uid: dict[str, Profile] = {}
-        for profile in members:
-            source = profile.source
-            if not isinstance(source, dict):
-                raise ProfileError("Study Profile provenance is invalid.")
-            renamed_source = dict(source)
-            renamed_source["study_name"] = canonical_new
-            renamed_by_uid[profile.uid] = replace(
-                profile,
-                source=renamed_source,
-            )
-
-        updated_profiles = tuple(
-            renamed_by_uid.get(profile.uid, profile) for profile in registry.profiles
-        )
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=updated_profiles,
-        )
-        try:
-            _write_registry(updated)
-        except Exception as error:
-            try:
-                visible = load_profile_registry()
-            except (OSError, ProfileConfigError, ValueError) as read_error:
-                raise ProfileError(
-                    "Study rename registry state could not be confirmed; inspect "
-                    "it with 'mem profile list'."
-                ) from read_error
-            if visible == updated:
-                raise ProfileError(
-                    f"Study {study_name!r} was renamed to {canonical_new!r}, but "
-                    "registry durability could not be confirmed; it remains "
-                    "renamed."
-                ) from error
-            if visible != registry:
-                raise ProfileError(
-                    "Study rename registry changed unexpectedly; inspect it "
-                    "with 'mem profile list'."
-                ) from error
-            raise
-
-        renamed_members = tuple(renamed_by_uid[profile.uid] for profile in members)
+    if study_name == canonical_new:
         return StudyRenameResult(
             uid=study_uid,
             previous_name=study_name,
-            name=canonical_new,
-            profiles=renamed_members,
-            active_profile_name=updated.active.name,
-            changed=True,
+            name=study_name,
+            profiles=members,
+            active_profile_name=registry.active.name,
+            changed=False,
         )
+
+    studies = group_study_run_profiles(registry.profiles)
+    collision = next(
+        (
+            study
+            for study in studies
+            if study.uid != study_uid
+            and study.name.casefold() == canonical_new.casefold()
+        ),
+        None,
+    )
+    if collision is not None:
+        raise ProfileError(f"Study {collision.name!r} already exists.")
+
+    renamed_by_uid: dict[str, Profile] = {}
+    for profile in members:
+        source = profile.source
+        if not isinstance(source, dict):
+            raise ProfileError("Study Profile provenance is invalid.")
+        renamed_source = dict(source)
+        renamed_source["study_name"] = canonical_new
+        renamed_by_uid[profile.uid] = replace(
+            profile,
+            source=renamed_source,
+        )
+
+    updated_profiles = tuple(
+        renamed_by_uid.get(profile.uid, profile) for profile in registry.profiles
+    )
+    updated = ProfileRegistry(
+        generation=max(1, registry.generation + 1),
+        active_uid=registry.active_uid,
+        profiles=updated_profiles,
+    )
+    try:
+        _write_registry(updated)
+    except Exception as error:
+        try:
+            visible = load_profile_registry()
+        except (OSError, ProfileConfigError, ValueError) as read_error:
+            raise ProfileError(
+                "Study rename registry state could not be confirmed; inspect "
+                "it with 'mem profile list'."
+            ) from read_error
+        if visible == updated:
+            raise ProfileError(
+                f"Study {study_name!r} was renamed to {canonical_new!r}, but "
+                "registry durability could not be confirmed; it remains "
+                "renamed."
+            ) from error
+        if visible != registry:
+            raise ProfileError(
+                "Study rename registry changed unexpectedly; inspect it "
+                "with 'mem profile list'."
+            ) from error
+        raise
+
+    renamed_members = tuple(renamed_by_uid[profile.uid] for profile in members)
+    return StudyRenameResult(
+        uid=study_uid,
+        previous_name=study_name,
+        name=canonical_new,
+        profiles=renamed_members,
+        active_profile_name=updated.active.name,
+        changed=True,
+    )
 
 
 def remove_study(
@@ -146,51 +144,50 @@ def remove_study(
 ) -> StudyRemovalResult:
     """Permanently delete every Profile store in one Study."""
 
-    with _registry_lock():
-        registry = load_profile_registry()
-        if (
-            expected_generation is not None
-            and registry.generation != expected_generation
-        ):
-            raise ProfileError("Profile registry changed after removal review.")
-        study_uid, study_name, profiles = _study_target(registry=registry, name=name)
-        if expected_uid is not None and study_uid != expected_uid:
-            raise ProfileError("Study identity changed after removal review.")
-        member_uids = {profile.uid for profile in profiles}
-        if registry.active_uid in member_uids:
-            raise ProfileError(
-                f"Study {study_name!r} contains the active Profile; select "
-                "another Profile before removing it."
-            )
-        stores_to_delete = profiles
-        for profile in stores_to_delete:
-            inspect_store(
-                profile_store_dir(profile),
-            )
-        updated = ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=tuple(
-                profile
-                for profile in registry.profiles
-                if profile.uid not in member_uids
-            ),
+    registry = load_profile_registry()
+    if (
+        expected_generation is not None
+        and registry.generation != expected_generation
+    ):
+        raise ProfileError("Profile registry changed after removal review.")
+    study_uid, study_name, profiles = _study_target(registry=registry, name=name)
+    if expected_uid is not None and study_uid != expected_uid:
+        raise ProfileError("Study identity changed after removal review.")
+    member_uids = {profile.uid for profile in profiles}
+    if registry.active_uid in member_uids:
+        raise ProfileError(
+            f"Study {study_name!r} contains the active Profile; select "
+            "another Profile before removing it."
         )
-        batch = _prepare_profile_deletion_batch(stores_to_delete)
-        _publish_permanent_removal(
-            previous=registry,
-            updated=updated,
-            batch=batch,
-            profiles=stores_to_delete,
-            label=f"Study {study_name!r}",
+    stores_to_delete = profiles
+    for profile in stores_to_delete:
+        inspect_store(
+            profile_store_dir(profile),
         )
-        return StudyRemovalResult(
-            uid=study_uid,
-            name=study_name,
-            profiles=profiles,
-            newly_removed_count=len(stores_to_delete),
-            deleted_stores=tuple(
-                profile_store_dir(profile) for profile in stores_to_delete
-            ),
-            active_profile_name=registry.active.name,
-        )
+    updated = ProfileRegistry(
+        generation=max(1, registry.generation + 1),
+        active_uid=registry.active_uid,
+        profiles=tuple(
+            profile
+            for profile in registry.profiles
+            if profile.uid not in member_uids
+        ),
+    )
+    batch = _prepare_profile_deletion_batch(stores_to_delete)
+    _publish_permanent_removal(
+        previous=registry,
+        updated=updated,
+        batch=batch,
+        profiles=stores_to_delete,
+        label=f"Study {study_name!r}",
+    )
+    return StudyRemovalResult(
+        uid=study_uid,
+        name=study_name,
+        profiles=profiles,
+        newly_removed_count=len(stores_to_delete),
+        deleted_stores=tuple(
+            profile_store_dir(profile) for profile in stores_to_delete
+        ),
+        active_profile_name=registry.active.name,
+    )

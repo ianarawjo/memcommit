@@ -21,12 +21,12 @@ from memcommit.application.operations.compare.provider_contract import (
     summarize_comparison,
 )
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def run_comparison_summary(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     reference_access: ContextAccess,
     compared_access: ContextAccess,
     reference: Context,

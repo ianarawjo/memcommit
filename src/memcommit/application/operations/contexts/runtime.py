@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
-def load_contexts_catalog(store: MemoryStore) -> tuple[tuple[str, ...], str | None]:
+def load_contexts_catalog(store: ProfileStore) -> tuple[tuple[str, ...], str | None]:
     """Read the ordered Context names and current Context name."""
 
     current_context_name = store.current_context_name()

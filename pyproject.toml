@@ -30,7 +30,13 @@ package-dir = {"" = "src"}
 where = ["src"]
 include = ["memcommit*"]
 # README-only future interfaces are not distributable Python packages.
-exclude = ["memcommit.adapters.python_api", "memcommit.adapters.python_api.*", "memcommit.adapters.agent", "memcommit.adapters.agent.*"]
+exclude = [
+  "memcommit.adapters.python_api", "memcommit.adapters.python_api.*",
+  "memcommit.adapters.agent", "memcommit.adapters.agent.*",
+  # Prepared projects are package resources, not Python packages.
+  "memcommit.application.operations.init_study.study_scenarios",
+  "memcommit.application.operations.init_study.study_scenarios.*",
+]
 
 [tool.setuptools.package-data]
 "memcommit.installation" = ["*.sh"]
@@ -41,5 +47,4 @@ exclude = ["memcommit.adapters.python_api", "memcommit.adapters.python_api.*", "
 "memcommit.application.operations.rationale.skills.memory_rationale" = ["**/context.json", "**/bindings.json"]
 "memcommit.application.operations.rationale.skills.context_rationale" = ["**/context.json", "**/bindings.json"]
 "memcommit.application.operations.resolve" = ["fixtures/*.json"]
-"memcommit.study_scenarios.legacy" = ["data/en/*", "data/ko/*", "data/native/**/*.json", "data/native/metadata/*.tsv"]
-"memcommit.study_scenarios.coffee" = ["data/composition.json", "data/**/context.json"]
+"memcommit.application.operations.init_study" = ["study_scenarios/**/*.md", "study_scenarios/**/.mem/**/*.json"]

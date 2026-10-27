@@ -14,11 +14,11 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def operation_launcher_orientation(
-    store: MemoryStore | None = None,
+    store: ProfileStore | None = None,
 ) -> LauncherOrientation:
     """Describe the frozen Store without coupling a launcher to Ground.
 
@@ -52,7 +52,7 @@ def operation_launcher_orientation(
 
 
 def session_picker_location(
-    store: MemoryStore | None = None,
+    store: ProfileStore | None = None,
 ) -> SessionPickerLocation:
     """Project the shared launcher orientation into the session adapter."""
 

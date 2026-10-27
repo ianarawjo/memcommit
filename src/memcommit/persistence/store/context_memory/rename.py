@@ -10,9 +10,12 @@ from pathlib import Path, PurePosixPath
 
 from memcommit.models.context import Context
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.core.context_navigation import (
-    rewrite_context_navigation_names,
+
+from ..context_hierarchy import (
+    prepare_missing_ancestor_contexts,
+    validate_context_hierarchy,
 )
+from ..checkpoint.requests import AutoCheckpointRequest
 
 from ..infrastructure.atomic_io import (
     _canonical_json_digest,
@@ -32,7 +35,6 @@ from .records import (
     validate_checkpoint_context_frames,
     _validate_context_header,
     canonical_context_record,
-    context_record_digest,
 )
 
 
@@ -160,8 +162,6 @@ class _ContextRenameMixin:
         records: dict[str, dict[str, object]],
         checkpoints: dict[str, dict[str, dict[str, object]]],
         state: dict[str, object],
-        *,
-        translation_records: dict[str, dict[str, object]],
     ) -> str:
         return _canonical_json_digest(
             {
@@ -179,60 +179,8 @@ class _ContextRenameMixin:
                     for name in sorted(records)
                 ],
                 "state": state,
-                "translations": [
-                    {"file": name, "record": record}
-                    for name, record in sorted(translation_records.items())
-                ],
             }
         )
-
-    @staticmethod
-    def _read_translation_records_for_rename() -> dict[str, dict[str, object]]:
-        from memcommit.core.memory_translation import TranslationCatalogError
-        from memcommit.persistence.store.translation_catalog import (
-            decode_translation_catalog_record,
-            translation_catalog_path,
-            translation_catalogs_dir,
-        )
-
-        root = translation_catalogs_dir()
-        if not root.exists():
-            if root.is_symlink():
-                raise ValueError("Translation catalog storage is invalid.")
-            return {}
-        if not root.is_dir() or root.is_symlink():
-            raise ValueError("Translation catalog storage is invalid.")
-        records: dict[str, dict[str, object]] = {}
-        for path in sorted(root.iterdir()):
-            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
-                raise ValueError("Translation catalog storage is invalid.")
-            try:
-                with open(path, encoding="utf-8") as file:
-                    raw = json.load(
-                        file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
-                    )
-                if not isinstance(raw, dict):
-                    raise ValueError("Translation catalog must be an object.")
-                catalog = decode_translation_catalog_record(raw)
-                expected_path = translation_catalog_path(
-                    catalog.context_uid,
-                    catalog.target_language,
-                )
-                if expected_path != path:
-                    raise ValueError(
-                        "Translation catalog does not match its storage key."
-                    )
-            except (
-                json.JSONDecodeError,
-                TranslationCatalogError,
-                ValueError,
-            ) as error:
-                raise ValueError(
-                    f"Saved translation catalog '{path.name}' is invalid."
-                ) from error
-            records[path.name] = raw
-        return records
 
     def _prepare_context_rename_locked(
         self,
@@ -271,7 +219,7 @@ class _ContextRenameMixin:
             if moved is not None:
                 post["name"] = moved[1]
             document = post.get("document")
-            if document and document.get("path_scope") == "PROFILE":
+            if document:
                 path = document["path"]
                 mapped_path = _mapped_context_name(path, old_name, new_name)
                 suffix = PurePosixPath(path).suffix
@@ -280,9 +228,7 @@ class _ContextRenameMixin:
                     and document["role"] == "document"
                     and path in {owner_name, owner_name + suffix}
                 ):
-                    mapped_path = post["name"]
-                    if suffix and not mapped_path.lower().endswith(suffix.lower()):
-                        mapped_path += suffix
+                    mapped_path = post["name"] + suffix
                 if mapped_path is not None:
                     document["path"] = mapped_path
             post_name = (
@@ -332,74 +278,17 @@ class _ContextRenameMixin:
                 current_after = mapped_current
         post_state = copy.deepcopy(raw_state)
         post_state["current"] = current_after
-        rewrite_context_navigation_names(
-            post_state,
-            lambda candidate: (
-                _mapped_context_name(candidate, old_name, new_name) or candidate
-            ),
-        )
-
-        pre_digest_by_uid = {
-            str(record["uid"]): context_record_digest(record)
-            for record in records.values()
-        }
-        post_record_by_uid = {
-            str(record["uid"]): record for record in post_records.values()
-        }
-        post_digest_by_uid = {
-            uid: context_record_digest(record)
-            for uid, record in post_record_by_uid.items()
-        }
-        post_name_by_uid = {
-            str(record["uid"]): str(record["name"]) for record in post_records.values()
-        }
-        # Freeze write protection while all moved Context locks are held so
-        # publication cannot bypass a policy change during rename.
-        protection = self.write_protection_state()
-        for owner_name in changed_owner_names:
-            self._assert_context_record_change_allowed(
-                records[owner_name],
-                post_records[owner_name],
-                state=protection,
-            )
-
-        translation_records = self._read_translation_records_for_rename()
-        post_translation_records: dict[str, dict[str, object]] = {}
-        translation_artifact_count = 0
-        from memcommit.core.memory_translation import TranslationCatalogError
-
-        from memcommit.persistence.store.translation_catalog.record_format import (
-            rewrite_translation_context_binding,
-        )
-
-        for filename, record in translation_records.items():
-            try:
-                post = rewrite_translation_context_binding(
-                    record,
-                    context_names=post_name_by_uid,
-                    before_digests=pre_digest_by_uid,
-                    after_digests=post_digest_by_uid,
-                )
-            except TranslationCatalogError as error:
-                raise ValueError(
-                    f"Saved translation catalog '{filename}' cannot follow this rename."
-                ) from error
-            if post != record:
-                translation_artifact_count += 1
-            post_translation_records[filename] = post
 
         graph_digest = self._context_graph_digest_for_rename(
             records,
             checkpoints,
             raw_state,
-            translation_records=translation_records,
         )
         plan = ContextRenamePlan(
             old_name=old_name,
             new_name=new_name,
             bindings=bindings,
             changed_owner_names=tuple(sorted(changed_owner_names)),
-            translation_artifact_count=translation_artifact_count,
             current_before=current_before,
             current_after=current_after,
             graph_digest=graph_digest,
@@ -412,8 +301,6 @@ class _ContextRenameMixin:
             post_checkpoints=post_checkpoints,
             state=raw_state,
             post_state=post_state,
-            translation_records=translation_records,
-            post_translation_records=post_translation_records,
         )
 
     @staticmethod
@@ -474,10 +361,22 @@ class _ContextRenameMixin:
         def live_name(owner_name: str) -> str:
             return name_mapping.get(owner_name, owner_name)
 
+        post_names = {record["name"] for record in prepared.post_records.values()}
+        parents = prepare_missing_ancestor_contexts(
+            (
+                Context(uid=binding.context_uid, name=binding.new_name)
+                for binding in plan.bindings
+            ),
+            post_names,
+        )
+        validate_context_hierarchy((*post_names, *(parent.name for parent in parents)))
+        for parent in parents:
+            self._assert_context_storage_available(parent.name)
+        created_parents = []
+
         restore_files: dict[Path, bytes] = {}
         changed_context_paths: list[tuple[Path, dict[str, object]]] = []
         changed_checkpoint_paths: list[tuple[Path, dict[str, object]]] = []
-        changed_translation_paths: list[tuple[Path, dict[str, object]]] = []
 
         for owner_name in plan.changed_owner_names:
             before_path = self._context_file(owner_name)
@@ -495,19 +394,6 @@ class _ContextRenameMixin:
                 after_path = self._checkpoints_dir(live_name(owner_name)) / filename
                 restore_files[after_path] = before_path.read_bytes()
                 changed_checkpoint_paths.append((after_path, after))
-        if prepared.translation_records:
-            from memcommit.persistence.store.translation_catalog import (
-                translation_catalogs_dir,
-            )
-
-            translation_root = translation_catalogs_dir()
-            for filename, before in prepared.translation_records.items():
-                after = prepared.post_translation_records[filename]
-                if after == before:
-                    continue
-                path = translation_root / filename
-                restore_files[path] = path.read_bytes()
-                changed_translation_paths.append((path, after))
         if prepared.post_state != prepared.state:
             restore_files[self.state_file] = self.state_file.read_bytes()
 
@@ -542,6 +428,20 @@ class _ContextRenameMixin:
 
         source_moved = False
         try:
+            for parent in parents:
+                self._save_locked(
+                    parent,
+                    AutoCheckpointRequest(
+                        command="rename",
+                        command_details={
+                            "old_name": plan.old_name,
+                            "new_name": plan.new_name,
+                            "ancestor_created": True,
+                        },
+                    ),
+                    require_new=True,
+                )
+                created_parents.append(parent)
             destination_parent.mkdir(parents=True, exist_ok=True)
             # Recheck immediately before publication. Cooperative Context
             # creators are excluded by the graph lock; this explicit check
@@ -558,9 +458,6 @@ class _ContextRenameMixin:
             for path, record in changed_context_paths:
                 _write_json_atomic(path, record)
             for path, record in changed_checkpoint_paths:
-                _write_json_atomic(path, record)
-            for path, record in changed_translation_paths:
-                _write_json_atomic(path, record)
                 _write_json_atomic(path, record)
             for path, record in checkpoint_writes:
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -620,6 +517,12 @@ class _ContextRenameMixin:
                 except Exception as candidate:
                     rollback_error = rollback_error or candidate
             self._prune_empty_namespace_dirs(destination_parent)
+            for parent in reversed(created_parents):
+                try:
+                    # Rename already owns and restores the current-state file.
+                    self._delete_locked(parent.name, clear_current=False)
+                except Exception as candidate:
+                    rollback_error = rollback_error or candidate
             if rollback_error is not None:
                 raise RuntimeError(
                     "Context rename failed and could not be fully rolled back."
@@ -630,20 +533,10 @@ class _ContextRenameMixin:
         return ContextRenameResult(
             renamed_context_count=len(plan.bindings),
             changed_owner_count=len(plan.changed_owner_names),
-            translation_artifact_count=plan.translation_artifact_count,
             current_context=plan.current_after,
         )
 
     def rename_contexts(
-        self,
-        plan: ContextRenamePlan,
-    ) -> ContextRenameResult:
-        """Apply one namespace rename outside concurrent command restores."""
-        with self._command_write_lock():
-            self._assert_profile_write_allowed()
-            return self._rename_contexts_command_locked(plan)
-
-    def _rename_contexts_command_locked(
         self,
         plan: ContextRenamePlan,
     ) -> ContextRenameResult:

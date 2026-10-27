@@ -1,0 +1,109 @@
+{
+  "uid": "92281af0-9844-45e1-8780-daef5e8c4ec8",
+  "name": "cafe-selection-for-us/AGENTS",
+  "memories": {
+    "d5a6a960-8f8f-431a-956d-86b19f009c16": {
+      "type": "memory",
+      "uid": "d5a6a960-8f8f-431a-956d-86b19f009c16",
+      "content": "# Help Us Choose a Cafe\n"
+    },
+    "91fc81de-10fc-4143-9d47-7ba852442854": {
+      "type": "memory",
+      "uid": "91fc81de-10fc-4143-9d47-7ba852442854",
+      "content": "This record is used when the users are choosing a cafe to visit together, mainly after meals. Apply it according to the day's activities, such as conversation during regular meetups or collaborative work. When someone new joins, check that person's essential requirements and review the existing criteria together.\n"
+    },
+    "562bc448-ff5c-4927-a3c7-5c62fd6b56a4": {
+      "type": "memory",
+      "uid": "562bc448-ff5c-4927-a3c7-5c62fd6b56a4",
+      "content": "This agent can retrieve and compare the users' cafe visit histories, but it does not make reservations or make the final choice of where to visit on their behalf.\n"
+    },
+    "0bcba1a2-ebae-4f89-a234-7ac51e98390d": {
+      "type": "memory",
+      "uid": "0bcba1a2-ebae-4f89-a234-7ac51e98390d",
+      "content": "This agent can consider both the users' preferences and a companion's shared preferences about food, seating, and noise.\n"
+    },
+    "85f744af-a5a0-479e-8cf2-5cd9a180ea85": {
+      "type": "memory",
+      "uid": "85f744af-a5a0-479e-8cf2-5cd9a180ea85",
+      "content": "Apply the contents of this record by default, but give priority to the users' direct requests in each specific situation.\n"
+    },
+    "f2250dcb-11da-4d72-ad24-8032e0381eba": {
+      "type": "memory",
+      "uid": "f2250dcb-11da-4d72-ad24-8032e0381eba",
+      "content": "When the users visit with another companion, first account for that person's essential requirements and present the remaining preferences as differences among the options.\n"
+    },
+    "208096d5-3cf4-4683-91ca-a8f44a933c1b": {
+      "type": "memory",
+      "uid": "208096d5-3cf4-4683-91ca-a8f44a933c1b",
+      "content": "This agent respects a companion's explicit dealbreakers first. However, if the other agent also assumes that its own users should not compromise, this agent likewise prioritizes the preferences of the users it assists.\n"
+    },
+    "741d4cb6-cb6a-46d8-9c39-79ca21e2e33f": {
+      "type": "memory",
+      "uid": "741d4cb6-cb6a-46d8-9c39-79ca21e2e33f",
+      "content": "When recommending a cafe to the users for a stay of two hours or longer, also check its closing time.\n"
+    },
+    "cd020d13-c345-46eb-acc9-6f26cf926d20": {
+      "type": "memory",
+      "uid": "cd020d13-c345-46eb-acc9-6f26cf926d20",
+      "content": "The users avoid visiting near closing time because even a short stay can feel rushed.\n"
+    },
+    "ba3d9535-cecf-4408-b345-daffbfe956f8": {
+      "type": "memory",
+      "uid": "ba3d9535-cecf-4408-b345-daffbfe956f8",
+      "content": "Some users cannot drink caffeinated beverages and feel uncomfortable when no decaffeinated or non-coffee drink is available.\n"
+    },
+    "8ea07f93-7269-42e7-9843-c90c8ff1b61c": {
+      "type": "memory",
+      "uid": "8ea07f93-7269-42e7-9843-c90c8ff1b61c",
+      "content": "The users prefer sofas or wide bench seats that make it easy to turn toward a companion over desk-style seating.\n"
+    },
+    "985161fb-5135-4cc3-b7c8-9f3147b225b8": {
+      "type": "memory",
+      "uid": "985161fb-5135-4cc3-b7c8-9f3147b225b8",
+      "content": "The users prefer large tables with room for extra chairs over tables that seat exactly the number of people in the group, because they appreciate having space for bags and other belongings.\n"
+    },
+    "600a774f-5e18-4848-be58-670001a252f0": {
+      "type": "memory",
+      "uid": "600a774f-5e18-4848-be58-670001a252f0",
+      "content": "Design-focused tables and sofas may be uncomfortable to use, but they can strengthen a cafe's visual distinctiveness, making it a good place to take photos.\n"
+    },
+    "12fbe717-b5d4-47b2-87c9-9fc85afcc620": {
+      "type": "memory",
+      "uid": "12fbe717-b5d4-47b2-87c9-9fc85afcc620",
+      "content": "Give lower priority to cafes that strongly expect customers to maintain a quiet atmosphere.\n"
+    },
+    "0d8acfcb-736d-4cf8-816f-340c9d0fd12f": {
+      "type": "memory",
+      "uid": "0d8acfcb-736d-4cf8-816f-340c9d0fd12f",
+      "content": "The users expect that customers working or studying alone may find the users' conversation disruptive.\n"
+    },
+    "be475d40-d2f1-4ea2-8b5f-de174b87b053": {
+      "type": "memory",
+      "uid": "be475d40-d2f1-4ea2-8b5f-de174b87b053",
+      "content": "The users expect that an owner may view a long stay more positively when companions order both drinks and dessert.\n"
+    }
+  },
+  "order": [
+    "d5a6a960-8f8f-431a-956d-86b19f009c16",
+    "91fc81de-10fc-4143-9d47-7ba852442854",
+    "562bc448-ff5c-4927-a3c7-5c62fd6b56a4",
+    "0bcba1a2-ebae-4f89-a234-7ac51e98390d",
+    "85f744af-a5a0-479e-8cf2-5cd9a180ea85",
+    "f2250dcb-11da-4d72-ad24-8032e0381eba",
+    "208096d5-3cf4-4683-91ca-a8f44a933c1b",
+    "741d4cb6-cb6a-46d8-9c39-79ca21e2e33f",
+    "cd020d13-c345-46eb-acc9-6f26cf926d20",
+    "ba3d9535-cecf-4408-b345-daffbfe956f8",
+    "8ea07f93-7269-42e7-9843-c90c8ff1b61c",
+    "985161fb-5135-4cc3-b7c8-9f3147b225b8",
+    "600a774f-5e18-4848-be58-670001a252f0",
+    "12fbe717-b5d4-47b2-87c9-9fc85afcc620",
+    "0d8acfcb-736d-4cf8-816f-340c9d0fd12f",
+    "be475d40-d2f1-4ea2-8b5f-de174b87b053"
+  ],
+  "document": {
+    "path": "cafe-selection-for-us/AGENTS.md",
+    "format": "md",
+    "role": "document"
+  }
+}

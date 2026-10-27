@@ -21,7 +21,7 @@ from memcommit.application.operations.elaborate.runtime import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -74,7 +74,7 @@ def elaborate_cmd(
     """Preview one continuation without changing or checkpointing its Memory."""
 
     try:
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         with CommandProgress(
             "IMPACT · ELABORATE",
             "preparing exact Memory context",

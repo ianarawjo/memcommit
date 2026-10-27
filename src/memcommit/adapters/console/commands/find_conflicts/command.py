@@ -16,9 +16,6 @@ from memcommit.adapters.console.terminal.components.quality_find.rendering impor
     render_reason,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.terminal.components.quality_find.workbench import (
-    annotate_quality_find_attempt,
-)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
@@ -33,7 +30,7 @@ from memcommit.application.capabilities.memory_issue_analysis.report import (
 )
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.find_conflicts.application import (
@@ -88,7 +85,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     if all_contexts and context_name is not None:
         typer.secho(
             "Find conflicts error: --all/-a cannot be combined with an "
@@ -145,8 +142,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-
-    annotate_quality_find_attempt("conflicts", source)
 
     involved_uids = {
         memory.uid

@@ -70,7 +70,6 @@ class ContextRenamePlan:
     new_name: str
     bindings: tuple[ContextRenameBinding, ...]
     changed_owner_names: tuple[str, ...]
-    translation_artifact_count: int
     current_before: str | None
     current_after: str | None
     graph_digest: str
@@ -82,11 +81,10 @@ class ContextRenamePlan:
 
 @dataclass(frozen=True)
 class ContextRenameResult:
-    """Committed counts returned by :meth:`MemoryStore.rename_contexts`."""
+    """Committed counts returned by :meth:`ProfileStore.rename_contexts`."""
 
     renamed_context_count: int
     changed_owner_count: int
-    translation_artifact_count: int
     current_context: str | None
 
 
@@ -101,8 +99,6 @@ class _PreparedContextRename:
     post_checkpoints: dict[str, dict[str, dict[str, object]]]
     state: dict[str, object]
     post_state: dict[str, object]
-    translation_records: dict[str, dict[str, object]]
-    post_translation_records: dict[str, dict[str, object]]
 
 
 _NO_CURRENT_CONTEXT_EXPECTATION = object()

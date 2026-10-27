@@ -14,7 +14,6 @@ from ...verification.validators.branch import (
     branch_source_states,
 )
 from ...verification.validators.chunk import ChunkEvidence
-from ...verification.validators.translate import TranslationEvidence
 from .model import EffectDerivation
 
 
@@ -34,33 +33,6 @@ def chunk_events(
             reason=f"{'Context' if evidence.recorded else 'Legacy'} structural split using method '{evidence.method}'.",
         )
         for source_uid, children in evidence.splits
-    ]
-    return EffectDerivation(relations=events)
-
-
-def translation_events(
-    evidence: TranslationEvidence, *, before: _Frame, after: _Frame, entry: dict
-) -> EffectDerivation:
-    checkpoint_uid, timestamp, command, description, _ = _checkpoint_fields(entry)
-    events = [
-        MemoryHistoryRelation(
-            kind="DERIVED_FROM",
-            timestamp=timestamp,
-            checkpoint_uid=checkpoint_uid,
-            command=command,
-            description=description,
-            before=(before.memories[source],),
-            after=(after.memories[result],),
-            reason=(
-                f"Created a translated copy in {evidence.target_language}."
-                if evidence.schema_version == 1
-                else "Replaced the source occurrence in this derived "
-                f"Context with a translation in {evidence.target_language}."
-            ),
-            reason_codes=("TRANSLATION",),
-            operation_id=evidence.operation_uid,
-        )
-        for source, result in evidence.pairs
     ]
     return EffectDerivation(relations=events)
 

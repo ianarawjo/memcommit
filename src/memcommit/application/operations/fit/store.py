@@ -17,7 +17,7 @@ from memcommit.application.operations.ground.workspace_fit import (
 from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -31,7 +31,7 @@ class GroundFitReceipt:
 class FitStore:
     """Create-only Fit reports; Ground mutation makes a receipt stale, not mutable."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self.store = store
         self.directory = store.store_dir / "ground-fit-receipts"
 
@@ -66,16 +66,15 @@ class FitStore:
                 *(context.name for context in context_scope),
             )
             with self.store._context_write_locks(lock_names):  # noqa: SLF001
-                with self.store.profile_write_guard():
-                    if not workspace_fit_report_is_current(
-                        self.store,
-                        restored,
-                    ):
-                        raise FitError(
-                            "The consumed Ground workspace Memories changed "
-                            "before its Fit receipt could be saved."
-                        )
-                    self._write_new_report(restored, path)
+                if not workspace_fit_report_is_current(
+                    self.store,
+                    restored,
+                ):
+                    raise FitError(
+                        "The consumed Ground workspace Memories changed "
+                        "before its Fit receipt could be saved."
+                    )
+                self._write_new_report(restored, path)
 
     def _write_new_report(self, report: FitReport, path: Path) -> None:
         """Create one immutable report while the caller owns freshness locks."""

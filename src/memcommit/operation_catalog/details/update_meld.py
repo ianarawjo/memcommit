@@ -8,11 +8,9 @@ from memcommit.operation_catalog.model import (
 
 
 _BODY = (
-    "Update is revision-oriented: it treats a Source as verified change evidence "
-    "and semantically patches an existing Target. Merge is merge-oriented: it "
-    "semantically combines two inputs while reconciling their relationships and "
-    "conflicts in an existing Target. Merge takes two exact Contexts; "
-    "individual Memory selection and inline input are available in Update."
+    "Update applies one instruction to revise Memories in the current Context; "
+    "-r includes its lexical descendants. Merge combines two exact Contexts "
+    "and reconciles their relationships and conflicts in an existing Target."
 )
 
 
@@ -21,7 +19,7 @@ UPDATE_MELD_DETAILS = tuple(
         id="update-vs-merge",
         operation=operation,
         title="UPDATE VS. MERGE",
-        use_when="Choosing between Update and Merge for an input-to-Target operation.",
+        use_when="Choosing between revising Memories with an instruction and combining two Contexts.",
         discovery=DetailDiscovery.ON_DEMAND,
         detail_kind=HelpDetailKind.SEMANTIC_BOUNDARY,
         body=_BODY,

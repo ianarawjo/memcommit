@@ -105,7 +105,7 @@ def run_merge_conflicts(
             },
         ),
         header_label="MERGE · LITERAL",
-        activation_hint="select/finalize",
+        activation_hint="select/continue",
         app_input=app_input,
         app_output=app_output,
     )

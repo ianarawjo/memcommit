@@ -8,7 +8,7 @@ from memcommit.application.operations.dev_eval.duplicates_coffee import data as 
 from memcommit.application.operations.dev_eval.merge_visitor_notices import (
     data as notices,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.types import SemanticProvider
 
 
@@ -20,7 +20,7 @@ class ScenarioEntry:
     def run(
         self,
         *,
-        store: MemoryStore,
+        store: ProfileStore,
         provider_factory: Callable[[], SemanticProvider],
     ) -> list[tuple[str, bool]]:
         module, function = self.entrypoint.split(":", 1)

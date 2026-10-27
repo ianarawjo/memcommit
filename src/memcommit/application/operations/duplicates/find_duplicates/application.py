@@ -20,7 +20,7 @@ from memcommit.models.memory import Memory
 from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 @dataclass(frozen=True)
@@ -98,14 +98,14 @@ def analyze_exact_duplicates(context: Context) -> ExactDuplicateReport:
 
 
 def analyze_exact_duplicate_scope(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     access: ContextAccess,
     *,
     include_descendants: bool,
 ) -> ExactDuplicateScopeReport:
     """Freeze and analyze each readable Context exactly once."""
 
-    if not isinstance(active_store, MemoryStore) or not isinstance(
+    if not isinstance(active_store, ProfileStore) or not isinstance(
         access,
         ContextAccess,
     ):
@@ -157,7 +157,7 @@ def analyze_exact_duplicate_scope(
 
 
 def find_duplicates(
-    store: MemoryStore,
+    store: ProfileStore,
     request: FindDuplicatesRequest,
     *,
     current_name: str | None,

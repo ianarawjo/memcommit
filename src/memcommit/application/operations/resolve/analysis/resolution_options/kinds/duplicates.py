@@ -8,7 +8,7 @@ from memcommit.application.operations.audit.findings import audit_redundancies
 from memcommit.application.capabilities.resolution.workbench import ResolutionOption
 from memcommit.application.operations.merge.analysis.candidate import digest
 from memcommit.application.operations.update.model import RemoveOperation, UpdatePlan
-from ....model import AuditResolutionIssue, ResolveError
+from ....model import AuditResolutionIssue
 
 if TYPE_CHECKING:
     from ....model import ResolveAnalysis, ResolveIssue
@@ -44,9 +44,7 @@ def build_fixed_suggestion(item: AuditResolutionIssue) -> str:
 def build_resolution_choices(
     analysis: ResolveAnalysis, issue: ResolveIssue
 ) -> tuple[ResolutionOption, ...]:
-    choices = []
-    if "DELETE" in analysis.frame.allowed_effects:
-        choices.append(("CONFIRM", "KEEP ONE", issue.proposed_direction))
+    choices = [("CONFIRM", "KEEP ONE", issue.proposed_direction)]
     choices.append(
         (
             "KEEP_BOTH" if len(issue.item_uids) > 1 else "KEEP_AS_IS",
@@ -69,8 +67,6 @@ def duplicate_choice_plan(analysis, decisions, target) -> UpdatePlan:
         issue = issues[decision.issue_uid]
         if issue.kind != "REDUNDANCY" or decision.kind != "CONFIRM":
             continue
-        if "DELETE" not in analysis.frame.allowed_effects:
-            raise ResolveError("Keeping one duplicate requires DELETE authority.")
         for uid in issue.item_uids[1:]:
             removed[uid] = RemoveOperation(
                 owner_context_uid=target.uid,

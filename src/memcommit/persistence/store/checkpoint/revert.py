@@ -61,17 +61,15 @@ class _CheckpointRevertMixin:
         expected_history_digest: str | None = None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert one Context while holding its cooperative write lock."""
-        with self._command_write_lock():
-            self._assert_profile_write_allowed()
-            with self._context_write_lock(ctx_name):
-                return self._revert_locked(
-                    ctx_name,
-                    uid_prefix,
-                    keep_history=keep_history,
-                    expected_context_uid=expected_context_uid,
-                    expected_history_digest=expected_history_digest,
-                    revert_unit=None,
-                )
+        with self._context_write_lock(ctx_name):
+            return self._revert_locked(
+                ctx_name,
+                uid_prefix,
+                keep_history=keep_history,
+                expected_context_uid=expected_context_uid,
+                expected_history_digest=expected_history_digest,
+                revert_unit=None,
+            )
 
     def revert_checkpoint_unit(
         self,
@@ -116,104 +114,102 @@ class _CheckpointRevertMixin:
             "contexts": command_contexts,
         }
 
-        with self._command_write_lock():
-            self._assert_profile_write_allowed()
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_locks(names):
-                    original_context_bytes: dict[str, bytes] = {}
-                    original_checkpoint_bytes: dict[str, dict[str, bytes]] = {}
-                    for member in unit.members:
-                        current = self.load_direct(member.context_name)
-                        entries = self.list_checkpoints(member.context_name)
-                        if (
-                            current.uid != member.context_uid
-                            or checkpoint_history_digest(entries)
-                            != member.expected_history_digest
-                        ):
-                            raise ConcurrentContextUpdateError(
-                                "A recursive checkpoint member changed after "
-                                "the recovery unit was selected."
-                            )
-                        matches = [
-                            entry
-                            for entry in entries
-                            if entry.get("uid") == member.checkpoint_uid
-                        ]
-                        if len(matches) != 1 or matches[0] != member.checkpoint:
-                            raise ConcurrentContextUpdateError(
-                                "A recursive checkpoint member changed after "
-                                "the recovery unit was selected."
-                            )
-                        context_path = self._context_file(member.context_name)
-                        checkpoint_dir = self._checkpoints_dir(member.context_name)
-                        checkpoint_paths = tuple(sorted(checkpoint_dir.glob("*.json")))
-                        if any(
-                            path.is_symlink() or not path.is_file()
-                            for path in checkpoint_paths
-                        ):
-                            raise ValueError(
-                                f"Checkpoint history for '{member.context_name}' "
-                                "is unsafe."
-                            )
-                        original_context_bytes[member.context_name] = (
-                            context_path.read_bytes()
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks(names):
+                original_context_bytes: dict[str, bytes] = {}
+                original_checkpoint_bytes: dict[str, dict[str, bytes]] = {}
+                for member in unit.members:
+                    current = self.load_direct(member.context_name)
+                    entries = self.list_checkpoints(member.context_name)
+                    if (
+                        current.uid != member.context_uid
+                        or checkpoint_history_digest(entries)
+                        != member.expected_history_digest
+                    ):
+                        raise ConcurrentContextUpdateError(
+                            "A recursive checkpoint member changed after "
+                            "the recovery unit was selected."
                         )
-                        original_checkpoint_bytes[member.context_name] = {
-                            path.name: path.read_bytes() for path in checkpoint_paths
-                        }
+                    matches = [
+                        entry
+                        for entry in entries
+                        if entry.get("uid") == member.checkpoint_uid
+                    ]
+                    if len(matches) != 1 or matches[0] != member.checkpoint:
+                        raise ConcurrentContextUpdateError(
+                            "A recursive checkpoint member changed after "
+                            "the recovery unit was selected."
+                        )
+                    context_path = self._context_file(member.context_name)
+                    checkpoint_dir = self._checkpoints_dir(member.context_name)
+                    checkpoint_paths = tuple(sorted(checkpoint_dir.glob("*.json")))
+                    if any(
+                        path.is_symlink() or not path.is_file()
+                        for path in checkpoint_paths
+                    ):
+                        raise ValueError(
+                            f"Checkpoint history for '{member.context_name}' "
+                            "is unsafe."
+                        )
+                    original_context_bytes[member.context_name] = (
+                        context_path.read_bytes()
+                    )
+                    original_checkpoint_bytes[member.context_name] = {
+                        path.name: path.read_bytes() for path in checkpoint_paths
+                    }
 
-                    published: list[CheckpointUnitRevertMember] = []
-                    try:
-                        for member in unit.members:
-                            recovery, target = self._revert_locked(
-                                member.context_name,
-                                member.checkpoint_uid,
-                                keep_history=keep_history,
-                                expected_context_uid=member.context_uid,
-                                expected_history_digest=(
-                                    member.expected_history_digest
-                                ),
-                                revert_unit=revert_unit,
+                published: list[CheckpointUnitRevertMember] = []
+                try:
+                    for member in unit.members:
+                        recovery, target = self._revert_locked(
+                            member.context_name,
+                            member.checkpoint_uid,
+                            keep_history=keep_history,
+                            expected_context_uid=member.context_uid,
+                            expected_history_digest=(
+                                member.expected_history_digest
+                            ),
+                            revert_unit=revert_unit,
+                        )
+                        published.append(
+                            CheckpointUnitRevertMember(
+                                context_name=member.context_name,
+                                target=target,
+                                recovery=recovery,
                             )
-                            published.append(
-                                CheckpointUnitRevertMember(
-                                    context_name=member.context_name,
-                                    target=target,
-                                    recovery=recovery,
-                                )
-                            )
-                    except Exception as error:
-                        rollback_error: Exception | None = None
-                        for member in unit.members:
-                            name = member.context_name
-                            checkpoint_dir = self._checkpoints_dir(name)
-                            originals = original_checkpoint_bytes[name]
-                            try:
-                                for path in checkpoint_dir.glob("*.json"):
-                                    if path.is_symlink() or not path.is_file():
-                                        raise ValueError(
-                                            f"Checkpoint rollback for '{name}' "
-                                            "encountered an unsafe path."
-                                        )
-                                    if path.name not in originals:
-                                        path.unlink()
-                                for filename, content in originals.items():
-                                    _write_bytes_atomic(
-                                        checkpoint_dir / filename,
-                                        content,
+                        )
+                except Exception as error:
+                    rollback_error: Exception | None = None
+                    for member in unit.members:
+                        name = member.context_name
+                        checkpoint_dir = self._checkpoints_dir(name)
+                        originals = original_checkpoint_bytes[name]
+                        try:
+                            for path in checkpoint_dir.glob("*.json"):
+                                if path.is_symlink() or not path.is_file():
+                                    raise ValueError(
+                                        f"Checkpoint rollback for '{name}' "
+                                        "encountered an unsafe path."
                                     )
+                                if path.name not in originals:
+                                    path.unlink()
+                            for filename, content in originals.items():
                                 _write_bytes_atomic(
-                                    self._context_file(name),
-                                    original_context_bytes[name],
+                                    checkpoint_dir / filename,
+                                    content,
                                 )
-                            except Exception as candidate:
-                                rollback_error = rollback_error or candidate
-                        if rollback_error is not None:
-                            raise RuntimeError(
-                                "Recursive Revert failed and its complete "
-                                "Context/history unit could not be restored."
-                            ) from rollback_error
-                        raise error
+                            _write_bytes_atomic(
+                                self._context_file(name),
+                                original_context_bytes[name],
+                            )
+                        except Exception as candidate:
+                            rollback_error = rollback_error or candidate
+                    if rollback_error is not None:
+                        raise RuntimeError(
+                            "Recursive Revert failed and its complete "
+                            "Context/history unit could not be restored."
+                        ) from rollback_error
+                    raise error
 
         return CheckpointUnitRevertResult(
             unit=unit,
@@ -223,7 +219,6 @@ class _CheckpointRevertMixin:
 
     def _prepare_revert_checkpoint_record(
         self,
-        ctx,
         target_data,
         entries,
         restored_snapshot,
@@ -231,7 +226,7 @@ class _CheckpointRevertMixin:
         keep_history=True,
         revert_unit=None,
     ):
-        """Prepare the same Revert preimage/target contract for one transaction."""
+        """Prepare a Revert checkpoint containing the restored Context."""
         # Strip nested log snapshots so the recovery frame remains bounded.
         thin_entries: list[dict] = []
         for entry in entries:
@@ -247,26 +242,23 @@ class _CheckpointRevertMixin:
                 }
             thin_entries.append(entry)
 
-        pre_args: dict[str, object] = {
+        command_details: dict[str, object] = {
             "target_uid": target_data["uid"],
             "keep_history": keep_history,
             "log_snapshot": thin_entries,
         }
         if revert_unit is not None:
-            pre_args["revert_unit"] = copy.deepcopy(revert_unit)
+            command_details["revert_unit"] = copy.deepcopy(revert_unit)
             contexts = revert_unit.get("contexts")
             if not isinstance(contexts, list):
                 raise ValueError("Recursive Revert membership is invalid.")
-            pre_args["command_contexts"] = copy.deepcopy(contexts)
-        pre_cp, pre_record = self._prepare_checkpoint_record(
-            ctx,
+            command_details["command_contexts"] = copy.deepcopy(contexts)
+        return self._prepare_checkpoint_record(
+            Context.from_dict(restored_snapshot),
             command="revert",
-            command_details=pre_args,
+            command_details=command_details,
             auto=True,
         )
-        if restored_snapshot != target_data["snapshot"]:
-            pre_record["restored_snapshot"] = restored_snapshot
-        return pre_cp, pre_record
 
     def _revert_locked(
         self,
@@ -278,12 +270,12 @@ class _CheckpointRevertMixin:
         expected_history_digest: str | None,
         revert_unit: dict[str, object] | None,
     ) -> tuple[Checkpoint, Checkpoint]:
-        """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp).
+        """Revert context to a checkpoint. Returns (revert_cp, target_cp).
 
-        By default, all checkpoint files remain active and the pre-revert
+        By default, all checkpoint files remain active and the restored
         snapshot is appended as the new head. Pass ``keep_history=False`` to
         remove checkpoints newer than the target. If that target is itself a
-        pre-revert checkpoint carrying a log_snapshot, discard mode rebuilds
+        Revert checkpoint carrying a log_snapshot, discard mode rebuilds
         the full original log from that snapshot instead of just truncating.
         """
         entries = self.list_checkpoints(ctx_name)  # captured before any mutations
@@ -347,16 +339,15 @@ class _CheckpointRevertMixin:
         )
         restored_snapshot = restored.to_dict()
 
-        pre_cp, pre_record = self._prepare_revert_checkpoint_record(
-            ctx,
+        revert_checkpoint, revert_record = self._prepare_revert_checkpoint_record(
             target_data,
             entries,
             restored_snapshot,
             keep_history=keep_history,
             revert_unit=revert_unit,
         )
-        pre_name = (
-            f"{pre_cp.timestamp.strftime('%Y%m%dT%H%M%S')}-revert-{pre_cp.uid[:8]}.json"
+        revert_filename = (
+            f"{revert_checkpoint.timestamp.strftime('%Y%m%dT%H%M%S')}-revert-{revert_checkpoint.uid[:8]}.json"
         )
 
         desired_records: dict[str, dict[str, object]]
@@ -392,17 +383,16 @@ class _CheckpointRevertMixin:
                     for filename, record in physical_records.items()
                     if record["timestamp"] <= target_ts
                 }
-        if pre_name in desired_records:
+        if revert_filename in desired_records:
             raise ValueError("Recovery checkpoint filename collided with history.")
-        desired_records[pre_name] = pre_record
+        desired_records[revert_filename] = revert_record
 
         context_path = self._context_file(ctx_name)
         original_context_bytes = context_path.read_bytes()
         written_names: set[str] = set()
         try:
             # Prepare every replacement with the normal atomic writer before
-            # removing obsolete history. The command lock keeps other history
-            # operations outside this exception-rollback boundary.
+            # removing obsolete history; retain originals for exception rollback.
             for filename, record in desired_records.items():
                 destination = cp_dir / filename
                 if destination.is_symlink():
@@ -455,4 +445,4 @@ class _CheckpointRevertMixin:
             command_details=target_data.get("command_details"),
             auto=target_data.get("auto", False),
         )
-        return pre_cp, target_cp
+        return revert_checkpoint, target_cp

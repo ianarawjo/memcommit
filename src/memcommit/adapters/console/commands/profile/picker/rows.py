@@ -35,6 +35,7 @@ def _validate_entries(
                     entry.study_name,
                     entry.study_created_at,
                     entry.study_role,
+                    entry.study_session,
                 )
             )
             and not (
@@ -44,8 +45,12 @@ def _validate_entries(
                 and bool(entry.study_name)
                 and isinstance(entry.study_created_at, str)
                 and bool(entry.study_created_at)
-                and entry.study_profile_count == 1
+                and entry.study_profile_count >= 1
                 and entry.study_role in {"PARTICIPANT"}
+                and (
+                    (isinstance(entry.study_session, str) and bool(entry.study_session))
+                    or (entry.study_session is None and entry.study_profile_count == 1)
+                )
             )
         )
         or (entry.study_name is None and entry.study_profile_count != 0)
@@ -74,7 +79,7 @@ def _validate_entries(
         assert isinstance(created_at, str)
         assert isinstance(study_uid, str)
         assert entry.study_role is not None
-        member = entry.study_role
+        member = entry.study_session or entry.study_role
         existing = study_metadata.get(study_name)
         metadata = (
             study_uid,

@@ -29,19 +29,13 @@ def prepare_semantic_review(
     if prepared.request.method != "SEMANTIC":
         raise ValueError("Literal Merge does not run semantic Resolve.")
     source = AuditTarget.from_context(literal_result.post_image)
-    request = ResolveRequest(
-        source.context_name,
-        allow_create=True,
-        allow_delete=True,
-        guidance="Retire a Memory only when an explicitly accepted resolution justifies its removal.",
-    )
+    request = ResolveRequest(source.context_name)
     frame = ResolveTarget(
         request=request,
         display_name=source.context_name,
         source=source,
         revision=literal_result.digest,
         actionable_uids=tuple(item.uid for item in source.items),
-        allowed_effects=request.requested_effects,
     )
     analysis = run_resolve(
         frame,

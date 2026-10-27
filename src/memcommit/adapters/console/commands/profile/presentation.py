@@ -16,6 +16,7 @@ from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     profile_root_dir,
     profile_store_dir,
+    study_run_identity,
 )
 
 if TYPE_CHECKING:
@@ -48,7 +49,7 @@ def _styled_profile_inventory_action(action: str) -> str:
 
 def _study_role_label(membership: _ProfileStudyMembership) -> str:
     if membership.role == "PARTICIPANT":
-        return "Participant"
+        return membership.session or "Participant"
     raise ValueError(f"Unknown Study role: {membership.role!r}")
 
 
@@ -108,6 +109,9 @@ def _print_profile_removal(result) -> None:
     )
     typer.echo("Project folders and document files kept.")
     if result.study_name is not None:
+        identity = study_run_identity(result.profile)
+        if identity is not None and identity.records_root is not None:
+            echo_text("Study records kept: {path}", path=identity.records_root)
         typer.echo(
             "Study "
             + display_escape_text(result.study_name)
@@ -137,6 +141,11 @@ def _print_study_removal(result) -> None:
         "Study and Profile registrations removed. Internal content and history cannot be recovered."
     )
     typer.echo("Project folders and document files kept.")
+    for profile in result.profiles:
+        identity = study_run_identity(profile)
+        if identity is not None and identity.records_root is not None:
+            echo_text("Study records kept: {path}", path=identity.records_root)
+            break
     typer.echo(
         "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )

@@ -65,7 +65,7 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 if TYPE_CHECKING:
     from memcommit.adapters.console.terminal.components.resolution import (
@@ -461,7 +461,7 @@ def run_atomize_impact_shell(
 
 
 def open_saved_atomize_impact(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     session_uid: str | None,
     show_all: bool = False,
@@ -503,7 +503,7 @@ def open_saved_atomize_impact(
 
 def run_atomize_impact(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
     show_all: bool,
     refresh: bool,

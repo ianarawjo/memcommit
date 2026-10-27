@@ -12,7 +12,7 @@ from memcommit.application.capabilities.history.query.memory_history_slicing imp
     MemoryHistory,
     reconstruct_memory_history,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -25,7 +25,7 @@ class RetainedHistoryContext:
 
 
 def load_retained_history_context(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_locator: str | None,
     current_name: str | None,
@@ -45,7 +45,7 @@ def load_retained_history_context(
 
 
 def load_retained_history_scope(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_locator: str | None,
     current_name: str | None,
@@ -77,7 +77,7 @@ def load_retained_history_scope(
 
 
 def build_memory_history(
-    store: MemoryStore,
+    store: ProfileStore,
     target: RetainedHistoryContext,
     selector: str,
 ) -> MemoryHistory:

@@ -55,7 +55,7 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_existing_memorization_target,
     resolve_existing_semantic_result_endpoints,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 _DISTINCT_RULES_ERROR = "Makemore Rules must be distinct."
@@ -178,10 +178,10 @@ def cmd(
     try:
         frozen_ground: FrozenGroundMakemore | None = None
         ground_result: GroundMakemoreResult | None = None
-        ground_store: MemoryStore | None = None
+        ground_store: ProfileStore | None = None
         prepared: PreparedMakemoreAdd | None = None
         distilled_prepared: PreparedDistilledMakemoreAdd | None = None
-        ordinary_store: MemoryStore | None = None
+        ordinary_store: ProfileStore | None = None
         ordinary_source: FrozenMakemoreSource | None = None
         distilled_source_name: str | None = None
         goal_focus = None
@@ -200,7 +200,7 @@ def cmd(
                 raise MakemoreError(
                     "With --ground, choose exactly one of --from-goal or --from-rules."
                 )
-            ground_store = MemoryStore(create=False)
+            ground_store = ProfileStore(create=False)
             frozen_ground = freeze_ground_makemore(
                 ground_store,
                 ground_name=ground,
@@ -214,7 +214,7 @@ def cmd(
                 raise MakemoreError("--adopt requires --ground.")
             if from_goal or from_rules:
                 raise MakemoreError("--from-goal/--from-rules require --ground.")
-            ordinary_store = MemoryStore(create=False)
+            ordinary_store = ProfileStore(create=False)
             snapshot = ContextOperandSnapshot.capture(ordinary_store)
             goal_focus = (
                 freeze_goal_focus_operand(

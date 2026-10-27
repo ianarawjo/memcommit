@@ -28,7 +28,7 @@ from memcommit.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
 from memcommit.providers.clients.codex import CodexChatGPTProvider
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS = int(
@@ -83,7 +83,7 @@ def load_memory_relation_context(
 
 def ensure_memory_relation_analysis(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     reference_access: ContextAccess,
     compared_access: ContextAccess,
     reference: Context,

@@ -30,12 +30,12 @@ from memcommit.application.operations.rationale.skills.context_inference import 
     _parse_inference,
 )
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 from memcommit.providers.errors import QueryProviderError
 
 
 def load_context_rationale_history(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
     *,
     current_context_name: str | None,
@@ -52,7 +52,7 @@ def load_context_rationale_history(
 
 
 def run_context_inference(
-    store: MemoryStore,
+    store: ProfileStore,
     ctx: Context,
     target: MemoryState,
     candidates: list[ContextEvidence],

@@ -16,7 +16,7 @@ from memcommit.application.operations.elaborate.application import (
 from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -44,7 +44,7 @@ def cmd(
     """Append supported detail after one Memory without rewriting its original."""
 
     try:
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         with CommandProgress(
             "ELABORATE",
             "preparing exact Memory context",

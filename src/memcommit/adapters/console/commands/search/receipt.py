@@ -1,4 +1,4 @@
-"""Static Find receipts: ranked results, references, and completed saves."""
+"""Static Find receipts: ranked results and references."""
 
 from __future__ import annotations
 
@@ -12,9 +12,6 @@ from memcommit.application.operations.search.application import SearchResponse
 from memcommit.application.operations.search.ranking import SearchMatch
 from memcommit.application.capabilities.retrieval_corpus.candidates import (
     RetrievalArtifact,
-)
-from memcommit.application.capabilities.save_context_from_selection.application import (
-    SaveContextFromSelectionResult,
 )
 from memcommit.models.memory import Memory
 from memcommit.source_projection.model import (
@@ -186,15 +183,3 @@ def render_search_receipt(
     if response.related_query:
         typer.echo()
         typer.echo("Related results may not satisfy the original query.")
-
-
-def render_save_receipt(saved: SaveContextFromSelectionResult) -> None:
-    """Report the existing save capability's committed result."""
-
-    typer.secho(
-        f"Saved {len(saved.item_uids)} checked Find result(s) as "
-        f"{saved.mode} in new Context "
-        f"'{display_escape_text(saved.context_name)}' "
-        f"[{saved.context_uid[:8]}]; sources unchanged.",
-        fg=typer.colors.GREEN,
-    )

@@ -66,7 +66,7 @@ def build_compact_application(
     intent: IntentEditor | None = None,
     choice_previews: Mapping[str, tuple[tuple[str, str], ...]] | None = None,
     header_label: str | None = None,
-    activation_hint: str = "select/apply",
+    activation_hint: str = "select/continue",
     app_input: Input | None = None,
     app_output: Output | None = None,
 ) -> Application[ResolutionWorkbenchAction]:

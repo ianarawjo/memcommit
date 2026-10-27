@@ -59,7 +59,7 @@ from memcommit.application.operations.trace.runtime import (
     execute_trace,
     load_trace_target_catalog,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 
@@ -109,7 +109,7 @@ def _present_context_trace(
 
 
 def _execute_context_trace(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_name: str,
     current_context_name: str | None,
@@ -200,7 +200,7 @@ def cmd(
         )
         raise typer.Exit(2)
     operation_limit = None if all_operations else limit
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is not None and context_name is not None:

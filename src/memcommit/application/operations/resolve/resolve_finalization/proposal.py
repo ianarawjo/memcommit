@@ -26,7 +26,6 @@ from ..application import ResolveApplyPort
 from ..model import ResolveAnalysis, ResolveError, ResolveReceipt
 from ..review_round.build_change_plans_for_choices import (
     combine_choice_plans,
-    allowed_update_effects,
     selected_choice_changes,
 )
 from ..analysis.resolution_options.kinds.duplicates import duplicate_choice_plan
@@ -191,7 +190,6 @@ def prepare_resolve_proposal(
             (source,),
             (working_target,),
             update_provider_factory,
-            allowed_update_effects=allowed_update_effects(analysis),
         )
     else:
         plan = UpdatePlan(

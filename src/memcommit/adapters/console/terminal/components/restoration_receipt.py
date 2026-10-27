@@ -337,7 +337,7 @@ def _meld_command(args: Mapping[str, object]) -> str | None:
         )
         return (
             f"mem merge {_command_arg(incoming)} "
-            f"--into {_command_arg(target_name)} --accept"
+            f"--to {_command_arg(target_name)} --accept"
         )
     if len(source_names) >= 2:
         return (
@@ -408,10 +408,8 @@ def _branch_command(args: Mapping[str, object]) -> str | None:
     if not isinstance(target, str) or not isinstance(source, str):
         return None
     command = f"mem branch {_command_arg(target)}"
-    command += f" --from {_command_arg(source)}"
-    command += (
-        " --recursive" if record.get("include_descendants") is True else " --direct"
-    )
+    if record.get("include_descendants") is True:
+        command += " --recursive"
     return command
 
 
@@ -447,13 +445,10 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             )
         if isinstance(args.get("uid"), str) and isinstance(args.get("content"), str):
             selector = _compact_direct_item_selector(unit, args["uid"])
-            return _with_context(
-                f"mem edit {_command_arg(selector)} <CONTENT>",
-                operand_context,
-            )
+            return f"mem edit {_command_arg(selector)} <CONTENT>"
     if unit.command == "remove" and isinstance(args.get("uid"), str):
         selector = _compact_direct_item_selector(unit, args["uid"])
-        return _with_context(f"mem remove {_command_arg(selector)}", operand_context)
+        return f"mem delete {_command_arg(selector)}"
     if unit.command == "chunk" and isinstance(args.get("uid"), str):
         selector = _compact_direct_item_selector(unit, args["uid"])
         command = f"mem chunk {_command_arg(selector)}"
@@ -513,7 +508,7 @@ def _restored_command(unit: ContextCommandUnit) -> str:
     if unit.command == "merge" and isinstance(args.get("source"), str):
         return f"mem merge --literal {_command_arg(args['source'])}"
     if unit.command == "forget" and isinstance(args.get("query"), str):
-        return "mem forget <INSTRUCTION>"
+        return "mem forget <KEYWORDS OR CONTENT TO FORGET>"
     if unit.command == "integrate" and isinstance(args.get("info"), str):
         return "mem integrate <INFO>"
     if unit.command == "meld":

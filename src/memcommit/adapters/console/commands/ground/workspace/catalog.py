@@ -23,7 +23,7 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionPickerEntry,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 @dataclass(frozen=True)
@@ -42,7 +42,7 @@ class GroundWorkspaceDraftCatalogEntry:
     draft_digest: str
 
 
-def _latest_timestamp(store: MemoryStore, workspace: GroundWorkspace) -> float:
+def _latest_timestamp(store: ProfileStore, workspace: GroundWorkspace) -> float:
     timestamps = [
         checkpoint.get("timestamp")
         for context in workspace.all_contexts
@@ -77,7 +77,7 @@ def _entry_evidence(
 
 
 def list_ground_workspace_catalog(
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[GroundWorkspaceCatalogEntry, ...]:
     entries: list[GroundWorkspaceCatalogEntry] = []
     for name in list_ground_workspace_names(store):
@@ -122,7 +122,7 @@ def list_ground_workspace_catalog(
 
 
 def list_ground_workspace_draft_catalog(
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[GroundWorkspaceDraftCatalogEntry, ...]:
     """Project hidden resume receipts without treating them as workspaces."""
 
@@ -170,7 +170,7 @@ def list_ground_workspace_draft_catalog(
 
 
 def reload_selected_ground_workspace(
-    store: MemoryStore,
+    store: ProfileStore,
     entry: GroundWorkspaceCatalogEntry,
 ) -> GroundWorkspace:
     workspace = load_ground_workspace(store, entry.picker_entry.key)
@@ -187,7 +187,7 @@ def reload_selected_ground_workspace(
 
 
 def reload_selected_ground_workspace_draft(
-    store: MemoryStore,
+    store: ProfileStore,
     entry: GroundWorkspaceDraftCatalogEntry,
 ) -> GroundWorkspaceDraft:
     draft = GroundWorkspaceDraftStore(store).load(entry.draft_uid)

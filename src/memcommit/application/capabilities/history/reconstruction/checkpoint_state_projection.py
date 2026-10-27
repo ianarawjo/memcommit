@@ -161,7 +161,7 @@ def _validate_entry(value: object) -> dict[str, Any]:
 def _entry_identity_digest(entry: dict[str, Any]) -> str:
     """Compare duplicate records without recursively embedded log history.
 
-    ``MemoryStore.revert`` deliberately strips a nested ``log_snapshot`` when
+    ``ProfileStore.revert`` deliberately strips a nested ``log_snapshot`` when
     one pre-revert checkpoint is copied into a later receipt. Those two
     records are the same checkpoint even though only one retains the older
     nested log.
@@ -507,13 +507,13 @@ def reconstruct_checkpoint_timeline(
             command=command,
             description=description,
             selectable=uid in physical_uids,
+            restored=command == "revert",
         )
         states.append(snapshot_state)
-        args = entry.get("command_details")
         known_input = (
             preimage_record is not None or bool(checkpoints) or command == "init"
         )
-        if command != "revert" and known_input:
+        if known_input:
             transitions.extend(
                 _memory_changes(
                     before_state,
@@ -535,47 +535,6 @@ def reconstruct_checkpoint_timeline(
                 state_index=snapshot_state.index,
                 record_digest=snapshot_state.record_digest,
                 selectable=uid in physical_uids,
-            )
-        )
-
-        if command != "revert":
-            continue
-        target_uid = args.get("target_uid") if isinstance(args, dict) else None
-        recorded_restoration = entry.get("restored_snapshot")
-        target_record = (
-            recorded_restoration
-            if isinstance(recorded_restoration, dict)
-            else (
-                records_by_uid.get(target_uid) if isinstance(target_uid, str) else None
-            )
-        )
-        if target_record is None:
-            warnings.append(
-                f"Revert checkpoint [{uid[:8]}] does not retain its target state."
-            )
-            continue
-        restored_state = _state(
-            len(states),
-            target_record,
-            context_uid=context_uid,
-            context_name=context_name,
-            checkpoint_uid=target_uid,
-            timestamp=entry["timestamp"],
-            command="revert",
-            description=description,
-            selectable=target_uid in physical_uids,
-            restored=True,
-        )
-        states.append(restored_state)
-        transitions.extend(
-            _memory_changes(
-                snapshot_state,
-                restored_state,
-                checkpoint_uid=uid,
-                timestamp=entry["timestamp"],
-                command="revert",
-                description=description,
-                transition_offset=len(transitions),
             )
         )
 

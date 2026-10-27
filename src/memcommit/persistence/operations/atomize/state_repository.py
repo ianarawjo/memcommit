@@ -10,7 +10,6 @@ from ...store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
-from ...store.infrastructure.protection import _profile_write_guarded
 
 
 class _AtomizeStateStoreMixin:
@@ -64,7 +63,6 @@ class _AtomizeStateStoreMixin:
         ) as error:
             raise ValueError("Saved atomize analysis is invalid.") from error
 
-    @_profile_write_guarded
     def save_atomize_analysis(self, session) -> None:
         """Atomically persist a validated, non-applying atomize preview."""
 
@@ -86,7 +84,6 @@ class _AtomizeStateStoreMixin:
             AtomizeImpactError,
         )
 
-        self._assert_profile_write_allowed()
         if not isinstance(session, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
         path = self._atomize_analysis_path(session.context_uid)
@@ -105,7 +102,6 @@ class _AtomizeStateStoreMixin:
             raise ValueError("Atomize analysis is invalid.") from error
         _write_json_atomic(path, data)
 
-    @_profile_write_guarded
     def delete_atomize_analysis(self, context_uid: str) -> None:
         """Remove one derived analysis artifact during failed save-as cleanup."""
         with self._atomize_session_write_lock(context_uid):
@@ -187,7 +183,6 @@ class _AtomizeStateStoreMixin:
         ) as error:
             raise ValueError("Saved atomize workbench is invalid.") from error
 
-    @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
         from memcommit.application.operations.atomize.records import (
@@ -207,7 +202,6 @@ class _AtomizeStateStoreMixin:
             atomize_review_issue_projection,
         )
 
-        self._assert_profile_write_allowed()
         if not isinstance(session, AtomizeReviewRecord):
             raise TypeError("Expected an AtomizeReviewRecord.")
         path = self._atomize_workbench_path(session.context_uid)
@@ -238,7 +232,6 @@ class _AtomizeStateStoreMixin:
             raise ValueError("Atomize workbench does not match the saved analysis.")
         _write_json_atomic(path, data)
 
-    @_profile_write_guarded
     def delete_atomize_workbench(self, context_uid: str) -> None:
         """Remove derived UI state during failed save-as cleanup."""
         with self._atomize_session_write_lock(context_uid):
@@ -266,7 +259,6 @@ class _AtomizeStateStoreMixin:
             / f"{canonical_analysis}.json"
         )
 
-    @_profile_write_guarded
     def archive_atomize_session(self, analysis, workbench) -> bool:
         """Retain one displaced analysis/workbench pair under its analysis UID."""
 
@@ -340,7 +332,6 @@ class _AtomizeStateStoreMixin:
         _write_json_atomic(path, data)
         return True
 
-    @_profile_write_guarded
     def delete_atomize_session_history(
         self,
         context_uid: str,

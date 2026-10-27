@@ -32,7 +32,7 @@ from memcommit.application.context_access.readable_contexts import (
 from memcommit.models.context import Context
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 ResolvedContextAccess = ResolvedExistingContextOperand[ContextAccess]
@@ -47,7 +47,7 @@ def _access_uid(
 
 
 def freeze_profile_context_access_candidates(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     *,
     current_name: str | None,
 ) -> tuple[ContextOperandCandidate[ContextAccess], ...]:
@@ -84,7 +84,7 @@ def freeze_profile_context_access_candidates(
 
 
 def try_resolve_existing_context_access(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     operand: str,
     *,
     current_name: str | None,
@@ -145,7 +145,7 @@ def try_resolve_existing_context_access(
 
 
 def resolve_existing_context_access(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     operand: str | None,
     *,
     current_name: str | None,
@@ -176,7 +176,7 @@ def resolve_existing_context_access(
 
 
 def try_resolve_context_access_or_local_memory(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     operand: str,
     *,
     current_name: str | None,
@@ -221,7 +221,7 @@ def try_resolve_context_access_or_local_memory(
                 return None
         return None
 
-    local_graph = active_store.load_direct_context_graph_strict()
+    local_graph = active_store.load_all_contexts()
     durable_candidates: tuple[
         DurableUidCandidate[
             ContextOperandCandidate[ContextAccess] | tuple[Context, Memory]

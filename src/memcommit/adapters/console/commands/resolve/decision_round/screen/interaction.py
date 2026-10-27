@@ -70,6 +70,7 @@ class CompactInteraction:
             build_continue_action,
             stage_bulk_choice,
         )
+        self.continue_after_response_preview = False
         self.pending = Condition(
             lambda: self.intent is not None and self.intent.pending
         )
@@ -191,6 +192,28 @@ class CompactInteraction:
             return
         get_app().exit(result=action)
 
+    def continue_from_submitted_response(self) -> None:
+        if self.intent is None or not self.intent.current_response_is_submitted():
+            return
+        self.continue_to_next_unanswered_issue()
+
+    def continue_to_next_unanswered_issue(self) -> None:
+        for offset in range(1, len(self.state.items)):
+            index = (self.state.current_issue_index + offset) % len(self.state.items)
+            item = self.state.items[index]
+            if (
+                self.state.selected_for(item) is None
+                or (self.intent is not None and self.intent.response_needs_refresh(item))
+            ):
+                self.move_item(offset)
+                return
+        self.finish()
+
+    def continue_after_queued_enter(self) -> None:
+        if self.continue_after_response_preview:
+            self.continue_after_response_preview = False
+            self.continue_from_submitted_response()
+
     def select_choice(self, index: int) -> None:
         item = self.state.current_issue()
         if item is None or not 0 <= index < len(item.options):
@@ -206,6 +229,8 @@ class CompactInteraction:
             and option.uid == self.intent.option_uid(item.uid)
         ):
             self.intent.open_response()
+            return
+        self.continue_to_next_unanswered_issue()
 
     def activate(self) -> None:
         item = self.state.current_issue()
@@ -217,7 +242,7 @@ class CompactInteraction:
         if action_value.startswith("bulk:"):
             assert self.stage_bulk_choice is not None
             self.stage_bulk_choice(action_value.removeprefix("bulk:"))
-            self.state.status_message = "Bulk choices staged; finalize to continue."
+            self.finish()
         elif action_value == "action:CONTINUE":
             self.finish()
         elif action_value == "action:BACK":
@@ -327,10 +352,16 @@ class CompactInteraction:
 
         @bindings.add("enter", filter=self.response_keys_active, eager=True)
         def _response_submit(event) -> None:
+            if self.intent.current_response_is_submitted():
+                self.continue_from_submitted_response()
+                event.app.invalidate()
+                return
+            self.continue_after_response_preview = False
             self.intent.submit_response(
                 0 if self.intent.option_uid is not None else 1,
                 self.move_row,
                 commit_unchanged=self.intent.option_uid is not None,
+                on_submitted=self.continue_after_queued_enter,
             )
             event.app.invalidate()
 
@@ -349,6 +380,12 @@ class CompactInteraction:
         @bindings.add(Keys.Any, filter=self.pending, eager=True)
         def _pending_input(event) -> None:
             pass
+
+        @bindings.add("enter", filter=self.pending, eager=True)
+        def _continue_when_ready(event) -> None:
+            # Preserve an explicit second Enter, but never advance a failed
+            # preview or change the input while its provider turn is pending.
+            self.continue_after_response_preview = True
 
         @bindings.add("escape", filter=self.pending, eager=True)
         def _cancel_pending(event) -> None:

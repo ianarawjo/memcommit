@@ -261,6 +261,7 @@ def render_vertical_choice_rows(
     numbered: bool = True,
     anchor_cursor: bool = True,
     blank_between: bool = True,
+    inline_notes: Mapping[str, tuple[tuple[str, str], ...]] | None = None,
 ) -> list[tuple[str, str]]:
     """Render stacked choices as highlighted text rows without card chrome.
 
@@ -291,7 +292,13 @@ def render_vertical_choice_rows(
         label_lines = tuple(
             wrap_terminal_text(safe_terminal_text(option.label), label_width)
         )
-        fragments.append((label_style, prefix + label_lines[0] + "\n"))
+        if inline_notes and option.value in inline_notes:
+            fragments.append((label_style, prefix + label_lines[0]))
+            fragments.append(("", "  "))
+            fragments.extend((style, safe_terminal_text(text)) for style, text in inline_notes[option.value])
+            fragments.append(("", "\n"))
+        else:
+            fragments.append((label_style, prefix + label_lines[0] + "\n"))
         continuation = " " * terminal_cell_width(prefix)
         fragments.extend(
             (label_style, continuation + line + "\n") for line in label_lines[1:]

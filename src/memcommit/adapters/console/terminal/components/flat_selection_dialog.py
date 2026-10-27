@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.input import Input
@@ -41,7 +41,8 @@ def choose_flat_option(
     options: Sequence[SelectionOption],
     *,
     title: str,
-    detail: str,
+    detail: str = "",
+    inline_notes: Mapping[str, tuple[tuple[str, str], ...]] | None = None,
     footer_note: str = "",
     initial_uid: str | None = None,
     app_input: Input | None = None,
@@ -58,8 +59,8 @@ def choose_flat_option(
         raise TypeError("Selection received an invalid option.")
     if not isinstance(title, str) or not title.strip():
         raise ValueError("Selection title must be nonempty text.")
-    if not isinstance(detail, str) or not detail.strip():
-        raise ValueError("Selection detail must be nonempty text.")
+    if not isinstance(detail, str):
+        raise TypeError("Selection detail must be text.")
     if not isinstance(footer_note, str):
         raise TypeError("Selection footer note must be text.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
@@ -81,7 +82,11 @@ def choose_flat_option(
             focused=get_app().layout.has_focus(control),
             content_width=width,
             numbered=False,
+            # Compact choices all fit; an anchor after the final newline would
+            # scroll the first option out of the fixed-height window.
+            anchor_cursor=not compact,
             blank_between=not compact,
+            inline_notes=inline_notes,
         )
 
     control = FormattedTextControl(

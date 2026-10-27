@@ -28,11 +28,11 @@ from memcommit.application.operations.rationale.skills.context_inference import 
     _inference_character_budget,
 )
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def build_rationale(
-    store: MemoryStore,
+    store: ProfileStore,
     ctx: Context,
     trace: MemoryHistory,
     provider_factory: Callable[[], RationaleProvider] | None,

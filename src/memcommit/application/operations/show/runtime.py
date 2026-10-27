@@ -1,4 +1,4 @@
-"""Operation-owned MemoryStore composition for read-only Show."""
+"""Operation-owned ProfileStore composition for read-only Show."""
 
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ from memcommit.source_projection.model import (
     SourceForm,
     SourceReach,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _snapshot_context(
@@ -72,7 +72,7 @@ def _snapshot_context(
 class MemoryStoreShowPort:
     """Load selected independent local Context owners for read-only inspection."""
 
-    def __init__(self, store: MemoryStore, *, loaded_context: Context | None = None):
+    def __init__(self, store: ProfileStore, *, loaded_context: Context | None = None):
         self._store = store
         self._loaded_context = loaded_context
 
@@ -111,7 +111,7 @@ class MemoryStoreShowPort:
 def execute_show(
     request: ShowRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     loaded_context: Context | None = None,
 ) -> ShowResult:
     """Capture current once and inspect through one explicit Store boundary."""
@@ -132,7 +132,7 @@ def execute_show_cli_operand(
     *,
     context_name: str | None,
     include_descendants: bool,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> ShowResult:
     """Resolve Show's positional Context/direct-item grammar once.
 

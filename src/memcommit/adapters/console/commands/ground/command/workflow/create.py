@@ -56,7 +56,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace_navigation_contexts,
 )
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.connection import connect_semantic_provider
 
 from . import apply as approved_apply
@@ -73,7 +73,7 @@ def _validated_start_request(value: str) -> str:
     return text
 
 
-def _current_context_name_for_ground(store: MemoryStore) -> str | None:
+def _current_context_name_for_ground(store: ProfileStore) -> str | None:
     """Snapshot the local current pointer without opening its Context record."""
     try:
         value = store.current_context_name()
@@ -83,7 +83,7 @@ def _current_context_name_for_ground(store: MemoryStore) -> str | None:
 
 
 def _validate_ground_workspace_save_location(
-    store: MemoryStore,
+    store: ProfileStore,
     name: str,
     *,
     exclude_draft_uid: str | None = None,
@@ -105,7 +105,7 @@ def _validate_ground_workspace_save_location(
 
 
 def _suggest_ground_workspace_save_location(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     current_context_name: str | None,
 ) -> str:
@@ -127,7 +127,7 @@ def _suggest_ground_workspace_save_location(
 
 
 def _choose_ground_workspace_save_location(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     initial_name: str | None = None,
     exclude_draft_uid: str | None = None,
@@ -169,7 +169,7 @@ def _interpret_new_ground_turn(
     if ground_name is not None:
         context_names = ()
     if context_names is None:
-        locators = discover_ground_context_locators(MemoryStore(create=False))
+        locators = discover_ground_context_locators(ProfileStore(create=False))
         context_names = tuple(
             locator.name for locator in select_ground_context_locators(text, locators)
         )
@@ -179,7 +179,7 @@ def _interpret_new_ground_turn(
         context_names=context_names,
         ground_name=ground_name,
     )
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     for suggestion in turn.new_context_suggestions:
         try:
             # This is a read-only early check. A future approved `mem init`
@@ -203,7 +203,7 @@ def _apply_new_ground_proposal(
     proposal: GroundShellProposal,
 ) -> str:
     """Run the exact creation argv frozen by the approval screen."""
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     if ground_workspace_exists(store, proposal.ground_name):
         raise GroundError(
             f"Ground '{proposal.ground_name}' was created before approval; "
@@ -324,7 +324,7 @@ def _workspace_draft_from_proposal(
 
 
 def _retain_ground_workspace_draft(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     proposal: GroundShellProposal,
     submitted_turns: tuple[str, ...],
@@ -352,7 +352,7 @@ def _run_new_ground_shell(
     ground_name: str | None = None,
     draft: GroundWorkspaceDraft | None = None,
 ) -> Literal["CLOSED", "BACK_TO_PICKER"]:
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     if draft is not None:
         if ground_name is not None and ground_name != draft.workspace_name:
             raise GroundWorkspaceDraftError(
@@ -424,7 +424,7 @@ def _run_new_ground_shell(
         proposal = result.proposal
         if proposal is None:
             raise GroundError("The approved Ground was not available for continuation.")
-        workspace_store = MemoryStore(create=False)
+        workspace_store = ProfileStore(create=False)
         try:
             workspace = load_ground_workspace(
                 workspace_store,

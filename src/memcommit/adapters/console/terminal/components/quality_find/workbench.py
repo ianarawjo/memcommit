@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal
@@ -17,17 +16,6 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
-from memcommit.adapters.console.terminal.components.operation_launcher.location import (
-    operation_launcher_orientation,
-)
-from memcommit.application.context_access.access import (
-    resolve_context_access,
-)
-from memcommit.application.context_access.readable_contexts import (
-    freeze_profile_readable_context_catalog,
-)
 from memcommit.adapters.console.terminal.components.focus.controller import (
     FocusSurface,
     SurfaceFocusController,
@@ -52,10 +40,6 @@ from memcommit.adapters.console.terminal.core.capabilities import (
 from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.terminal.components.read_report import (
-    ReadReportSelectTarget,
-    choose_read_report_recent,
-)
 from memcommit.adapters.console.terminal.components.findings import (
     run_quality_find_browser,
 )
@@ -78,10 +62,8 @@ from memcommit.application.capabilities.memory_issue_analysis.source import (
 )
 from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindKind,
-    QualityFindReport,
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
-    create_quality_find_workbench,
     quality_find_report_view,
 )
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
@@ -92,16 +74,6 @@ from memcommit.application.operations.duplicates.dedun.application import (
     DEDUN_ELIGIBLE_RELATIONS,
 )
 from memcommit.source_projection.presentation import SourceDisplayValue
-from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.reviewing.read_report import (
-    ReadReportError,
-    ReadReportOperation,
-    ReadReportTarget,
-)
-from memcommit.application.capabilities.reviewing.read_report_recents import (
-    read_report_recents,
-    revalidate_read_report_recent,
-)
 
 
 @dataclass(frozen=True)
@@ -144,69 +116,15 @@ class QualityFindSetupReceipt:
         return self.context_names[0]
 
 
-QualityFindAnalyzer = Callable[[QualityFindSourceFrame], QualityFindReport]
 QualitySetupKind = QualityFindKind | Literal["audit"]
 
 
-def interactive_quality_find_available() -> bool:
-    """Return whether a flagless command can open its terminal workbench."""
-
-    return sys.stdin.isatty() and sys.stdout.isatty()
-
-
-def _read_report_operation(
-    kind: QualityFindKind,
-    operation_name: ReadReportOperation | None = None,
-) -> ReadReportOperation:
-    if kind == "duplicates":
-        default: ReadReportOperation = "dedun"
-    elif kind == "ambiguities":
-        default = "find-ambiguities"
-    else:
-        default = "find-conflicts"
-    operation = default if operation_name is None else operation_name
-    expected = (
-        {"dedun", "find-redundancies"} if kind == "duplicates" else {f"find-{kind}"}
-    )
-    if operation not in expected:
-        raise ValueError(
-            f"Quality finder {kind!r} cannot publish {operation!r} report identity."
-        )
-    return operation
-
-
-def _operation_label(
-    kind: QualitySetupKind,
-    operation_name: ReadReportOperation | None = None,
-) -> str:
+def _operation_label(kind: QualitySetupKind) -> str:
     if kind == "audit":
-        if operation_name is not None:
-            raise ValueError("Audit does not accept a quality-finder operation name.")
         return "AUDIT"
     if kind == "duplicates":
-        operation = _read_report_operation(kind, operation_name)
-        return "DEDUN" if operation == "dedun" else "FIND REDUNDANCIES"
+        return "DEDUN"
     return f"FIND {kind.upper()}"
-
-
-def annotate_quality_find_attempt(
-    kind: QualityFindKind,
-    source: QualityFindSourceFrame,
-    *,
-    operation_name: ReadReportOperation | None = None,
-) -> None:
-    """Record only the reviewed target/range identity, never report content."""
-
-    annotate_read_report_attempt(
-        ReadReportTarget(
-            operation=_read_report_operation(kind, operation_name),
-            context_names=source.context_names,
-            target_names=source.target_names,
-            selection_mode=source.selection_mode,
-            ranges=("RECURSIVE",) if source.include_descendants else ("DIRECT",),
-            profile_selected=source.profile_selected,
-        )
-    )
 
 
 def choose_quality_find_setup(
@@ -214,7 +132,6 @@ def choose_quality_find_setup(
     *,
     current: str,
     kind: QualitySetupKind,
-    operation_name: ReadReportOperation | None = None,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -235,11 +152,11 @@ def choose_quality_find_setup(
         raise ValueError("Unsupported quality finder kind.")
     if require_tty:
         require_interactive_terminal(
-            f"Interactive {_operation_label(kind, operation_name).title()}",
+            f"Interactive {_operation_label(kind).title()}",
             snapshot_hint="Pass --context NAME for one-shot terminal output.",
         )
 
-    operation = _operation_label(kind, operation_name)
+    operation = _operation_label(kind)
     error_message = {"value": ""}
     bindings = KeyBindings()
     labels = dict(annotations or {})
@@ -616,7 +533,6 @@ def run_quality_find_resolution_workbench(
     duplicate_handoff_handler: (
         Callable[[tuple[QualityFindingHandoff, ...]], None] | None
     ) = None,
-    operation_name: ReadReportOperation | None = None,
 ) -> QualityFindWorkbenchSession:
     """Inspect one process-local report without creating answer state."""
 
@@ -637,7 +553,7 @@ def run_quality_find_resolution_workbench(
         quality_find_report_view(
             session,
             source,
-            operation_label=_operation_label(session.kind, operation_name),
+            operation_label=_operation_label(session.kind),
             handoff_available=duplicate_handoff_available,
         ),
         app_input=app_input,
@@ -656,107 +572,3 @@ def run_quality_find_resolution_workbench(
     raise QualityFindWorkbenchError(
         "Quality finding handoff is unavailable in this adapter."
     )
-
-
-def run_interactive_quality_find(
-    store: MemoryStore,
-    *,
-    current_name: str | None,
-    kind: QualityFindKind,
-    analyze: QualityFindAnalyzer,
-    duplicate_handoff_handler: (
-        Callable[[tuple[QualityFindingHandoff, ...]], None] | None
-    ) = None,
-    operation_name: ReadReportOperation | None = None,
-) -> bool:
-    """Select, analyze, and inspect one flagless quality-finder invocation."""
-
-    access = resolve_context_access(
-        store,
-        None,
-        current_name=current_name,
-    )
-    catalog = freeze_profile_readable_context_catalog(
-        store,
-        access,
-    )
-    names = tuple(catalog.list_context_names())
-    initial = access.access_name
-    if initial not in names:
-        raise RuntimeError("The current Context is outside the readable catalog.")
-    annotations = {}
-    operation = _read_report_operation(kind, operation_name)
-    recents = read_report_recents(store, operation=operation)
-    launch = choose_read_report_recent(
-        recents,
-        operation=operation,
-        orientation=operation_launcher_orientation(store),
-    )
-    if isinstance(launch, ReadReportTarget):
-        matching = next(
-            (recent for recent in recents if recent.target == launch),
-            None,
-        )
-        if matching is None:
-            raise ReadReportError(
-                "Quality Find launcher returned an unknown recent target."
-            )
-        target = revalidate_read_report_recent(store, matching)
-        # A Profile recent records what was readable during the old run for
-        # provenance only. PROFILE itself means all readable Contexts at this
-        # invocation, so expand it against the newly frozen catalog. Ordinary
-        # checked ranges remain exact and must not acquire new descendants.
-        replay_context_names = (
-            names if target.profile_selected else target.context_names
-        )
-        receipt = QualityFindSetupReceipt(
-            target_names=target.target_names,
-            context_names=replay_context_names,
-            selection_mode=target.selection_mode,
-            include_descendants=target.include_descendants,
-            profile_selected=target.profile_selected,
-        )
-    elif isinstance(launch, ReadReportSelectTarget):
-        receipt = choose_quality_find_setup(
-            names,
-            current=initial,
-            kind=kind,
-            operation_name=operation,
-            annotations=annotations,
-        )
-    elif launch is None:
-        return False
-    else:
-        raise ReadReportError("Quality Find launcher returned an invalid action.")
-    if receipt is None:
-        return False
-    # Resolve every effective checked row through the same frozen catalog used
-    # by setup. Descendant projection has already happened in the visible tree,
-    # so execution must not apply a second hidden expansion.
-    contexts = tuple(catalog.load_direct(name) for name in receipt.context_names)
-    source = QualityFindSourceFrame.create(
-        contexts,
-        context_names=receipt.context_names,
-        target_names=receipt.target_names,
-        selection_mode=receipt.selection_mode,
-        include_descendants=receipt.include_descendants,
-        profile_selected=receipt.profile_selected,
-    )
-    with CommandProgress(
-        _operation_label(kind, operation),
-        (
-            f"analyzing {source.memory_count} direct memories across "
-            f"{len(source.contexts)} contexts"
-        ),
-        total=1,
-    ):
-        report = analyze(source)
-    annotate_quality_find_attempt(kind, source, operation_name=operation)
-    session = create_quality_find_workbench(kind, source, report)
-    run_quality_find_resolution_workbench(
-        session,
-        source,
-        duplicate_handoff_handler=duplicate_handoff_handler,
-        operation_name=operation,
-    )
-    return True

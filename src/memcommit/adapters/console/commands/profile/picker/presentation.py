@@ -52,7 +52,7 @@ def _entry_name_label(entry: ProfilePickerEntry) -> str:
     if entry.study_name is None:
         return display_escape_text(entry.name)
     if entry.study_role == "PARTICIPANT":
-        role = "Participant"
+        role = entry.study_session or "Participant"
     else:
         raise ValueError(f"Unknown Study role: {entry.study_role!r}")
     return f"{role} · {display_escape_text(entry.name)}"

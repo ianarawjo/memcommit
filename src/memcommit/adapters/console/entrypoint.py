@@ -17,13 +17,10 @@ from memcommit.adapters.console.commands import (
     branch,
     copy,
     init,
-    mem_import,
-    mem_export,
     mem_sync,
 )
 from memcommit.adapters.console.commands import ground
 from memcommit.adapters.console.commands import profile
-from memcommit.adapters.console.commands import lock, unlock
 from memcommit.adapters.console.commands import (
     config,
     dev_eval,
@@ -38,7 +35,6 @@ from memcommit.adapters.console.commands import (
     edit,
     merge,
     move,
-    remove,
     replace,
 )
 from memcommit.adapters.console.commands import (
@@ -88,7 +84,6 @@ from memcommit.adapters.console.commands import (
     makemore,
 )
 from memcommit.adapters.console.commands import update
-from memcommit.adapters.console.commands import translate
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
 from memcommit.operation_catalog import operation_summary
 from memcommit.operation_catalog.details.init_study import (
@@ -113,14 +108,8 @@ app.command(
     "init",
     help=operation_summary("init"),
 )(init.cmd)
-app.command(
-    "import",
-    help=operation_summary("import"),
-)(mem_import.cmd)
-app.command(
-    "export",
-    help=operation_summary("export"),
-)(mem_export.cmd)
+
+
 app.command(
     "sync",
     help=operation_summary("sync"),
@@ -168,16 +157,6 @@ app.command(
     "contexts",
     help=operation_summary("contexts"),
 )(contexts.cmd)
-app.add_typer(
-    lock.app,
-    name="lock",
-    help=operation_summary("lock"),
-)
-app.add_typer(
-    unlock.app,
-    name="unlock",
-    help=operation_summary("unlock"),
-)
 app.command(
     "clear",
     help=operation_summary("clear"),
@@ -241,11 +220,6 @@ app.command(
     "replace",
     help=operation_summary("replace"),
 )(replace.cmd)
-app.command(
-    "remove",
-    help=operation_summary("delete"),
-    hidden=True,
-)(remove.cmd)
 app.command(
     "chunk",
     help=operation_summary("chunk"),
@@ -315,10 +289,7 @@ app.command(
     "rationale",
     help=operation_summary("rationale"),
 )(rationale.cmd)
-app.command(
-    "translate",
-    help=operation_summary("translate"),
-)(translate.cmd)
+
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
 app.command(
@@ -391,9 +362,8 @@ app.command(
     "update",
     help=operation_summary("update"),
     epilog=(
-        "Pass one quoted instruction, or --memory/-m UID or CONTEXT:UID to use "
-        "one stored Memory outside the Target. --to chooses the Target; otherwise "
-        "the current Context is used. Changes apply immediately and print a receipt."
+        "Pass one quoted instruction to update the current Context. Add -r to "
+        "include its lexical descendants. Changes apply immediately and print a receipt."
     ),
 )(update.cmd)
 

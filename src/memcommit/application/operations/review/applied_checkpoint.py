@@ -13,12 +13,12 @@ import hashlib
 import json
 from typing import Iterable
 
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
 
 
 CHECKPOINT_REVIEW_OPERATIONS = frozenset(
-    {"dedun", "distill", "makemore", "forget", "resolve"}
+    {"dedun", "distill", "makemore", "resolve"}
 )
 
 # Makemore is the new public name for the former Elaborate operation.  Keep the
@@ -88,7 +88,7 @@ def _checkpoint_payload(stored_operation: str, checkpoint: dict) -> dict[str, ob
 
 
 def list_applied_checkpoint_reviews(
-    store: MemoryStore,
+    store: ProfileStore,
     operation: str,
 ) -> tuple[AppliedCheckpointReview, ...]:
     """List local terminal evidence newest-first without opening providers."""

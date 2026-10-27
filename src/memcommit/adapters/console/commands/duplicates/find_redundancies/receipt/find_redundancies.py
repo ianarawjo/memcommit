@@ -6,9 +6,10 @@ import typer
 
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     plural as _count,
-    render_cleanup_member,
+    render_cleanup_memory_change,
     render_heading,
 )
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.core.uid_prefixes import (
     extend_uid_prefixes_until_unique,
 )
@@ -59,10 +60,9 @@ def render_find_redundancies_receipt(
 
     frame = analysis.contexts[0]
     report = frame.report
-    ctx = frame.source.contexts[0]
     render_heading(
         operation_label="Find Redundancies",
-        context_name=display_escape_text(ctx.name),
+        context_name=display_escape_text(frame.context_name),
         facts=(
             _count(report.memory_count, "direct memory", "direct memories")
             + " checked",
@@ -72,7 +72,7 @@ def render_find_redundancies_receipt(
     )
     if not report.findings:
         return
-    _render_redundancy_groups(report)
+    _render_redundancy_groups(report, context_name=frame.context_name)
 
 
 def _connected_redundancy_groups(
@@ -102,7 +102,7 @@ def _connected_redundancy_groups(
 
 
 def _render_redundancy_groups(
-    report: DuplicateReport,
+    report: DuplicateReport, *, context_name: str,
 ) -> None:
     groups = _connected_redundancy_groups(report.findings)
     for group_index, (members, evidence) in enumerate(groups, start=1):
@@ -119,14 +119,20 @@ def _render_redundancy_groups(
             f"{_count(len(members), 'Memory', 'Memories')} · {layer}",
             bold=True,
         )
-        typer.echo("    CLEANUP MAP · READY FOR REVIEW")
+        typer.echo("    PROPOSED CLEANUP · KEEP / REMOVE")
         uid_prefixes = extend_uid_prefixes_until_unique(memory.uid for memory in members)
         for member_index, memory in enumerate(members):
-            role = "SURVIVOR" if member_index == 0 else "ABSORB"
-            render_cleanup_member(
-                role,
-                uid_prefixes[memory.uid],
-                content=memory.content,
+            keep_memory = member_index == 0
+            render_cleanup_memory_change(
+                MemoryChange(
+                    marker="=" if keep_memory else "-",
+                    treatment="KEEP" if keep_memory else "REMOVE",
+                    location=context_name,
+                    memory_uid=memory.uid,
+                    before=memory.content,
+                    after=memory.content if keep_memory else None,
+                ),
+                uid_prefix=uid_prefixes[memory.uid],
             )
         for evidence_index, finding in enumerate(evidence, start=1):
             typer.echo(f"    EVIDENCE {evidence_index} · ", nl=False)
@@ -170,6 +176,6 @@ def _render_redundancy_scope(analysis: RedundancyScopeAnalysis) -> None:
             + _count(frame.report.redundancy_count, "proposed absorption")
         )
         if frame.report.findings:
-            _render_redundancy_groups(frame.report)
+            _render_redundancy_groups(frame.report, context_name=frame.context_name)
         else:
             typer.echo("  No redundancies.")

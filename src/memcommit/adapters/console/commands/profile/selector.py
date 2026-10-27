@@ -83,6 +83,7 @@ def _pick_profile(
                 if profile.uid in memberships
                 else 0
             ),
+            study_session=memberships[profile.uid].session if profile.uid in memberships else None,
             removal_block=(
                 "The fixed authoring Profile cannot be removed"
                 if profile.kind == "AUTHORING"

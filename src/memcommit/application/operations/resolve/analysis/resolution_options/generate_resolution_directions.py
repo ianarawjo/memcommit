@@ -73,7 +73,6 @@ def _payload(
     actionable = set(frame.actionable_uids)
     return {
         "context": frame.display_name,
-        "guidance": frame.request.guidance,
         "audit": {
             "uid": audit.uid,
             "snapshot_digest": audit.snapshot_digest,

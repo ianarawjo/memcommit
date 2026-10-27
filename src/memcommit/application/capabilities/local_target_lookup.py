@@ -33,7 +33,7 @@ class LocalDirectMemoryLocatorStore(Protocol):
 
     def load_direct(self, name: str) -> Context: ...
 
-    def load_direct_context_graph_strict(self) -> tuple[Context, ...]: ...
+    def load_all_contexts(self) -> tuple[Context, ...]: ...
 
 
 class DirectItemLocatorError(ValueError):
@@ -149,7 +149,7 @@ def resolve_local_direct_memory_locator(
 
     matches = tuple(
         (context, memory)
-        for context in store.load_direct_context_graph_strict()
+        for context in store.load_all_contexts()
         for memory in _direct_memory_matches(context, locator.memory_selector)
     )
     return _resolved_direct_memory_target(
@@ -239,7 +239,7 @@ def resolve_local_direct_item_locator(
 
     matches = tuple(
         (context, item)
-        for context in store.load_direct_context_graph_strict()
+        for context in store.load_all_contexts()
         for item in context.iter_memories()
         if item.uid.startswith(locator.memory_selector)
     )
@@ -271,7 +271,7 @@ def resolve_local_context_memory_target(
         )
 
     assert isinstance(operand, str)
-    graph = store.load_direct_context_graph_strict()
+    graph = store.load_all_contexts()
     context_name = resolve_context_locator(operand, current=current)
     named = tuple(context for context in graph if context.name == context_name)
     if len(named) == 1:

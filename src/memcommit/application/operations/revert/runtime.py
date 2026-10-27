@@ -1,4 +1,4 @@
-"""MemoryStore binding for the Revert application boundary."""
+"""ProfileStore binding for the Revert application boundary."""
 
 from __future__ import annotations
 
@@ -17,13 +17,13 @@ from memcommit.application.operations.revert.application import (
     RevertRequest,
     run_revert,
 )
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 
 
 class MemoryStoreRevertPort:
     """Adapt retained-history restoration to one concrete Profile store."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def restore(self, request: RevertRequest) -> CheckpointRestoration:
@@ -35,7 +35,7 @@ class MemoryStoreRevertPort:
 
 
 def resolve_revert_unit(
-    store: MemoryStore,
+    store: ProfileStore,
     selector: str,
     *,
     context_name: str | None = None,
@@ -81,7 +81,7 @@ def resolve_revert_unit(
 
 
 def execute_revert(
-    store: MemoryStore,
+    store: ProfileStore,
     request: RevertRequest,
 ) -> CheckpointRestoration:
     """Execute one Revert through its application port."""

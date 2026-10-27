@@ -16,11 +16,11 @@ from memcommit.adapters.console.commands.sever.sessions import (
     reload_selected_sever_session,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def open_saved_sever_impact(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     session_uid: str | None,
 ) -> None:

@@ -17,10 +17,6 @@ from memcommit.operation_catalog import (
     OperationComparisonDetail,
     OperationTextDetail,
 )
-from memcommit.operation_catalog.localization import (
-    localized_operation_copy,
-    localized_operation_detail_body,
-)
 from memcommit.application.operations.help.composer import compose_operation_help
 from memcommit.adapters.console.commands.help.inventory import (
     HELP_CATEGORY_BY_COMMAND,
@@ -34,13 +30,7 @@ from memcommit.adapters.console.commands.help.inventory import (
     HELP_CORE_CONCEPT_STYLES,
     CommandEntry,
 )
-from memcommit.adapters.console.commands.help.localized_copy import (
-    HelpLanguage,
-    category_description,
-    common_key_description,
-    common_locator_description,
-    core_concept_description,
-)
+
 
 def _entry_label(entry: CommandEntry) -> str:
     label = entry.name
@@ -111,7 +101,6 @@ def _help_command_rows(
     *,
     command_prefixes: tuple[str, ...],
     content_width: int,
-    language: HelpLanguage = "EN",
 ) -> list[tuple[str, str, str, int | None]]:
     """Project one command as a connected Description/When record."""
 
@@ -123,26 +112,21 @@ def _help_command_rows(
     # description, and use case read as one connected unit.
     connector_width = 2
     body_width = max(1, content_width - prefix_width - connector_width)
-    if entry.operation_help is None:
-        localized_summary = entry.description
-        localized_best_for = ""
-    else:
-        localized = localized_operation_copy(language, entry.name)
-        localized_summary = localized.summary
-        localized_best_for = localized.best_for
+    summary = entry.description
+    best_for = entry.operation_help.best_for if entry.operation_help is not None else ""
     summary_lines = wrap_terminal_text(
-        display_escape_text(localized_summary),
+        display_escape_text(summary),
         body_width,
     )
     body_rows: list[tuple[str, int | None, bool]] = [
         (pad_terminal_text(line, body_width), None, False) for line in summary_lines
     ]
-    if not localized_best_for:
+    if not best_for:
         best_for_lines: list[str] = []
     else:
         best_for_lines = _wrap_prefixed_terminal_text(
             _HELP_USE_WHEN_PREFIX,
-            localized_best_for,
+            best_for,
             width=body_width,
         )
         body_rows.extend(
@@ -204,7 +188,6 @@ def render_help_lookup_entries(
     entries: list[CommandEntry],
     *,
     content_width: int = 100,
-    language: HelpLanguage = "EN",
 ) -> str:
     """Render only matched operations as their existing collapsed Help rows."""
 
@@ -217,7 +200,6 @@ def render_help_lookup_entries(
             entry,
             command_prefixes=(f"mem {entry.name} ",),
             content_width=width,
-            language=language,
         )
         rendered.append(
             "\n".join(
@@ -238,7 +220,7 @@ def _help_group_fragments(
     expanded_index: int | None,
     selected_form: int | None,
     viewport_height: int | None = None,
-    language: HelpLanguage = "EN",
+    show_category_guidance: bool = True,
 ) -> list[tuple[str, str]]:
     """Render one discovery kind and its command records in a single box."""
     if not entries:
@@ -261,17 +243,8 @@ def _help_group_fragments(
     ]
     vertical = "┃" if focused else "│"
     category_copy = HELP_CATEGORY_DESCRIPTIONS.get(title)
-    if category_copy is not None:
-        classification, _description = category_copy
-        prefix = f"{classification} · " if classification is not None else ""
-        lines = _wrap_prefixed_terminal_text(
-            prefix,
-            category_description(
-                language,
-                title,
-            ),
-            width=content_width,
-        )
+    if show_category_guidance and category_copy is not None:
+        lines = wrap_terminal_text(display_escape_text(category_copy), content_width)
         for line in lines:
             fragments.extend([(border_style, vertical), ("", " ")])
             fragments.append(("class:help-category-description bold", line))
@@ -294,7 +267,11 @@ def _help_group_fragments(
         section_title = (
             section[1] if section is not None and section[0] == title else None
         )
-        if section_title is not None and section_title != active_section:
+        if (
+            show_category_guidance
+            and section_title is not None
+            and section_title != active_section
+        ):
             label = elide_terminal_text(
                 display_escape_text(section_title),
                 max(1, content_width - terminal_cell_width("──  ")),
@@ -347,7 +324,6 @@ def _help_group_fragments(
             entry,
             command_prefixes=command_prefixes,
             content_width=content_width,
-            language=language,
         ):
             fragments.append((border_style, vertical))
             body_style = "class:help-command.selected" if command_focused else ""
@@ -449,7 +425,7 @@ def _help_group_fragments(
                         ) or ["  -"]:
                             detail_lines.append(("", line))
                 elif isinstance(detail, OperationTextDetail):
-                    body = localized_operation_detail_body(language, detail)
+                    body = detail.body
                     # Korean glyphs occupy multiple terminal cells.
                     for line in wrap_terminal_text(
                         display_escape_text(body),
@@ -536,9 +512,9 @@ def _help_information_box_fragments(
     by_kind: bool,
     focused_concept_index: int | None = None,
     focused: bool = False,
-    language: HelpLanguage = "EN",
+    viewport_height: int | None = None,
 ) -> list[tuple[str, str]]:
-    """Render the BY KIND primer as focusable concepts plus key reference."""
+    """Render the trailing BY KIND concepts, locators, and key reference."""
     if not by_kind:
         return []
     width = max(36, width)
@@ -629,7 +605,7 @@ def _help_information_box_fragments(
         tuple(
             (
                 label,
-                core_concept_description(language, label, description),
+                description,
             )
             for label, description in HELP_CORE_CONCEPTS
         ),
@@ -641,7 +617,7 @@ def _help_information_box_fragments(
         tuple(
             (
                 locator,
-                common_locator_description(language, locator, description),
+                description,
             )
             for locator, description in HELP_COMMON_LOCATORS
         ),
@@ -652,7 +628,7 @@ def _help_information_box_fragments(
         tuple(
             (
                 key,
-                common_key_description(language, key, description),
+                description,
             )
             for key, description in HELP_COMMON_KEYS
         ),
@@ -667,6 +643,15 @@ def _help_information_box_fragments(
             + "\n",
         )
     )
+    # The reference follows commands now. Anchor its closing border when the
+    # whole box fits, so entering Memory does not reveal only the first row.
+    if (
+        guide_focused
+        and viewport_height is not None
+        and sum(text.count("\n") for _style, text in fragments) <= viewport_height
+    ):
+        fragments = [item for item in fragments if item[0] != "[SetCursorPosition]"]
+        fragments.insert(-1, ("[SetCursorPosition]", ""))
     return fragments
 
 

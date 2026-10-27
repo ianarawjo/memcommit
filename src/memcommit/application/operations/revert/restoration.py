@@ -9,7 +9,7 @@ from memcommit.application.capabilities.checkpoint_catalog import (
     ResolvedCheckpointUnit,
 )
 from memcommit.models.checkpoint import Checkpoint
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -32,7 +32,7 @@ CheckpointRestoration = SingleCheckpointRestoration | RecursiveCheckpointRestora
 
 
 def restore_checkpoint_unit(
-    store: MemoryStore,
+    store: ProfileStore,
     unit: ResolvedCheckpointUnit,
     *,
     keep_history: bool,

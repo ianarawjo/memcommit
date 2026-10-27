@@ -35,7 +35,7 @@ BEST_FOR_BY_OPERATION = {
         "low-level interface."
     ),
     "contexts": "Exploring every Context currently available to the Profile.",
-    "delete": "Removing a specific Context or item that is no longer needed.",
+    "delete": "Removing one Memory, or permanently deleting the current Context and its descendants.",
     "dedup": (
         "Removing exact and semantic duplicates while preserving the first "
         "existing UID; use --literal for provider-free same-role exact cleanup."
@@ -62,9 +62,8 @@ BEST_FOR_BY_OPERATION = {
     ),
     "dev-eval": "Creating reusable test data and checking operations with repeatable scenarios.",
     "find": (
-        "Finding relevant Memories through meaning and context, including related "
-        "content without obvious keyword overlap; --literal locates exact words, "
-        "identifiers or text patterns."
+        "Finding relevant Memories through meaning and context across the active "
+        "Profile, including content without obvious keyword overlap."
     ),
     "find-ambiguities": (
         "Finding Memories that permit unclear or multiple interpretations."
@@ -84,8 +83,8 @@ BEST_FOR_BY_OPERATION = {
         "Deciding how to repair semantic conflicts within a bounded Context frame."
     ),
     "forget": (
-        "Removing or rewriting Memories according to a natural-language "
-        "instruction whose meaning must be interpreted."
+        "Removing information described by keywords or content while preserving "
+        "unrelated facts in the current Context."
     ),
     "ground": (
         "Working out how an abstract goal should operate in practice through "
@@ -96,7 +95,7 @@ BEST_FOR_BY_OPERATION = {
         "Verifying an operation's proposed effects before its separate Apply action."
     ),
     "export": "Write edited memory documents for use outside mem, preserving their current format and attached files.",
-    "sync": "Manually synchronize Profile documents. One version choice applies to all selected conflicts in the Profile; both versions remain as checkpoints and Undo/Redo restores the whole Sync action.",
+    "sync": "Manually synchronize all supported documents and owned Contexts in the active Profile's project folder, including subfolders. One version choice applies to all conflicts in the Profile.",
     "import": ("Bringing externally supplied material into a locally managed store."),
     "init": (
         "Starting a separate workspace for a new topic, task, or group of Memories."
@@ -154,5 +153,5 @@ BEST_FOR_BY_OPERATION = {
     ),
     "undo": "Reversing the latest recorded mutation as one operation.",
     "unlock": "Reopening protected material for intentional revision.",
-    "update": "Updating an existing Context using newly verified Memories.",
+    "update": "Revising Memories in the current Context with one instruction.",
 }

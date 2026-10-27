@@ -26,13 +26,13 @@ from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     _write_json_atomic,
     context_record_digest,
 )
 
 
-def recover_self_save(store: MemoryStore, session: SeverSession) -> SeverSession | None:
+def recover_self_save(store: ProfileStore, session: SeverSession) -> SeverSession | None:
     """Adopt an exact self-save committed before its session receipt."""
 
     source_receipts = self_save_source_receipts(session)
@@ -107,7 +107,7 @@ def recover_self_save(store: MemoryStore, session: SeverSession) -> SeverSession
 
 
 def materialize_self_save(
-    store: MemoryStore,
+    store: ProfileStore,
     session: SeverSession,
     *,
     expected_context_catalog: tuple[str, ...],
@@ -182,7 +182,7 @@ def materialize_self_save(
     )
 
 
-def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
+def rollback_self_save(store: ProfileStore, applied: SeverSession) -> None:
     """Restore every exact Source-owner pre-image after failed persistence."""
 
     application = applied.application
@@ -218,106 +218,104 @@ def rollback_self_save(store: MemoryStore, applied: SeverSession) -> None:
         )
 
     names = tuple(name for name, _uid in source_receipts)
-    with store._command_write_lock():  # noqa: SLF001
-        with store._context_graph_lock(  # noqa: SLF001
-            exclusive=reviewed.source.include_descendants
-        ):
-            if reviewed.source.include_descendants:
-                live_lexical_names = list_context_and_descendant_names(
-                    (reviewed.source.root_name,),
-                    store.list_context_names(),
+    with store._context_graph_lock(  # noqa: SLF001
+        exclusive=reviewed.source.include_descendants
+    ):
+        if reviewed.source.include_descendants:
+            live_lexical_names = list_context_and_descendant_names(
+                (reviewed.source.root_name,),
+                store.list_context_names(),
+            )
+            if not set(live_lexical_names) <= set(names):
+                raise SeverApplicationError(
+                    "The Source subtree changed before rollback."
                 )
-                if not set(live_lexical_names) <= set(names):
+        with store._context_write_locks(names):  # noqa: SLF001
+            current: list[Context] = []
+            checkpoints: list[dict[str, object]] = []
+            originals: list[Context] = []
+            snapshots: list[Context] = []
+            for name in names:
+                live = store.load_direct(name)
+                receipt = receipt_by_name[name]
+                checkpoint = next(
+                    (
+                        item
+                        for item in store.list_checkpoints(name)
+                        if item.get("uid") == receipt.checkpoint_uid
+                    ),
+                    None,
+                )
+                before = (
+                    checkpoint.get("command_before")
+                    if isinstance(checkpoint, dict)
+                    else None
+                )
+                snapshot = (
+                    checkpoint.get("snapshot")
+                    if isinstance(checkpoint, dict)
+                    else None
+                )
+                if not isinstance(before, dict) or not isinstance(
+                    snapshot,
+                    dict,
+                ):
                     raise SeverApplicationError(
-                        "The Source subtree changed before rollback."
+                        "An in-place checkpoint cannot restore its owner."
                     )
-            with store._context_write_locks(names):  # noqa: SLF001
-                with store.profile_write_guard():
-                    current: list[Context] = []
-                    checkpoints: list[dict[str, object]] = []
-                    originals: list[Context] = []
-                    snapshots: list[Context] = []
-                    for name in names:
-                        live = store.load_direct(name)
-                        receipt = receipt_by_name[name]
-                        checkpoint = next(
-                            (
-                                item
-                                for item in store.list_checkpoints(name)
-                                if item.get("uid") == receipt.checkpoint_uid
-                            ),
-                            None,
-                        )
-                        before = (
-                            checkpoint.get("command_before")
-                            if isinstance(checkpoint, dict)
-                            else None
-                        )
-                        snapshot = (
-                            checkpoint.get("snapshot")
-                            if isinstance(checkpoint, dict)
-                            else None
-                        )
-                        if not isinstance(before, dict) or not isinstance(
-                            snapshot,
-                            dict,
-                        ):
-                            raise SeverApplicationError(
-                                "An in-place checkpoint cannot restore its owner."
-                            )
-                        current.append(live)
-                        checkpoints.append(checkpoint)
-                        originals.append(Context.from_dict(before))
-                        snapshots.append(Context.from_dict(snapshot))
+                current.append(live)
+                checkpoints.append(checkpoint)
+                originals.append(Context.from_dict(before))
+                snapshots.append(Context.from_dict(snapshot))
 
-                    expected, result_uids, sources = self_save_contexts(
-                        reviewed,
-                        tuple(originals),
-                    )
-                    expected_args = build_checkpoint_command_details(
-                        reviewed,
-                        expected[0],
-                        sources,
-                    )
-                    if application.result_memory_uids != result_uids or any(
-                        live.uid != output.uid
-                        or snapshot.uid != output.uid
-                        or context_record_digest(live) != context_record_digest(output)
-                        or context_record_digest(snapshot)
-                        != context_record_digest(output)
-                        or not checkpoint_command_details_match(
-                            checkpoint.get("command_details"),
-                            expected_args,
-                            save_mode=reviewed.save_mode,
-                        )
-                        for live, snapshot, output, checkpoint in zip(
-                            current,
-                            snapshots,
-                            expected,
-                            checkpoints,
-                        )
-                    ):
-                        raise SeverApplicationError(
-                            "The in-place Sever result changed before rollback."
-                        )
+            expected, result_uids, sources = self_save_contexts(
+                reviewed,
+                tuple(originals),
+            )
+            expected_args = build_checkpoint_command_details(
+                reviewed,
+                expected[0],
+                sources,
+            )
+            if application.result_memory_uids != result_uids or any(
+                live.uid != output.uid
+                or snapshot.uid != output.uid
+                or context_record_digest(live) != context_record_digest(output)
+                or context_record_digest(snapshot)
+                != context_record_digest(output)
+                or not checkpoint_command_details_match(
+                    checkpoint.get("command_details"),
+                    expected_args,
+                    save_mode=reviewed.save_mode,
+                )
+                for live, snapshot, output, checkpoint in zip(
+                    current,
+                    snapshots,
+                    expected,
+                    checkpoints,
+                )
+            ):
+                raise SeverApplicationError(
+                    "The in-place Sever result changed before rollback."
+                )
 
-                    written: list[Context] = []
-                    try:
-                        for original in originals:
-                            _write_json_atomic(
-                                store._context_file(original.name),  # noqa: SLF001
-                                original.to_dict(),
-                            )
-                            written.append(original)
-                        for name in names:
-                            store._remove_checkpoint_uid_locked(  # noqa: SLF001
-                                name,
-                                receipt_by_name[name].checkpoint_uid,
-                            )
-                    except Exception:
-                        for output in expected[: len(written)]:
-                            _write_json_atomic(
-                                store._context_file(output.name),  # noqa: SLF001
-                                output.to_dict(),
-                            )
-                        raise
+            written: list[Context] = []
+            try:
+                for original in originals:
+                    _write_json_atomic(
+                        store._context_file(original.name),  # noqa: SLF001
+                        original.to_dict(),
+                    )
+                    written.append(original)
+                for name in names:
+                    store._remove_checkpoint_uid_locked(  # noqa: SLF001
+                        name,
+                        receipt_by_name[name].checkpoint_uid,
+                    )
+            except Exception:
+                for output in expected[: len(written)]:
+                    _write_json_atomic(
+                        store._context_file(output.name),  # noqa: SLF001
+                        output.to_dict(),
+                    )
+                raise

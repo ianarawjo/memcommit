@@ -34,7 +34,6 @@ def compose_operation_help(
 
     rows = [
         HelpRow("FLOW", operation.flow),
-        HelpRow("EXECUTION", operation.execution.value),
         HelpRow("EFFECT", operation.effect),
     ]
     if operation.range is not None:

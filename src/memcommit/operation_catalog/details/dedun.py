@@ -26,7 +26,11 @@ DEDUN_DETAILS = (
             "not split or remove it. If only one claim inside a multi-claim Memory "
             "is redundant, run Atomize first, then run Dedup on the separately "
             "reviewable Memories. Use --literal to remove only same-role exact "
-            "copies without semantic inference."
+            "copies without semantic inference. With -r, compare Memories across "
+            "the current Context and all descendants together. Keep the first "
+            "Memory by Context depth (shallower first), Context name, then "
+            "Memory order; preserve its UID, content, and original Context. "
+            "The complete subtree is one Undo unit."
         ),
     ),
 )

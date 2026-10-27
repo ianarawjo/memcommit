@@ -42,6 +42,7 @@ def _candidate_to_evidence(
         kind=kind,
         uid=item.uid,
         content=content,
+        memory_position_in_context=candidate.memory_position_in_context,
     )
 
 

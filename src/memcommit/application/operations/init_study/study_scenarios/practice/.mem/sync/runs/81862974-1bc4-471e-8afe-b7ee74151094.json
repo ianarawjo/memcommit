@@ -1,0 +1,64 @@
+{
+  "uid": "81862974-1bc4-471e-8afe-b7ee74151094",
+  "created_at": "2026-10-26T16:43:34.419694+00:00",
+  "command": "init-study",
+  "direction": "outbound",
+  "trigger": "STUDY_SETUP",
+  "checkpoint_uids": [
+    [
+      "cafe-selection-for-us",
+      "89b6d36f-2357-4f3e-93ba-d7d204c3a435"
+    ],
+    [
+      "cafe-selection-for-us/AGENTS",
+      "15c3679c-574a-4c7b-bc3e-4a464634d9f8"
+    ],
+    [
+      "you",
+      "a803c987-0dc3-4dde-a3c5-14a88ca21d37"
+    ],
+    [
+      "you/AGENTS",
+      "8f91af53-13f8-4aab-b4cc-fc71f498fe2b"
+    ],
+    [
+      "your-friend",
+      "9fa60196-9e6b-42f4-aa26-8197aa73bac3"
+    ],
+    [
+      "your-friend/AGENTS",
+      "dd56b937-af63-4f08-9aaf-7bd694b7e5f7"
+    ]
+  ],
+  "memory_effects": [],
+  "context_names": [
+    "cafe-selection-for-us",
+    "cafe-selection-for-us/AGENTS",
+    "you",
+    "you/AGENTS",
+    "your-friend",
+    "your-friend/AGENTS"
+  ],
+  "causing_command": "init-study",
+  "effects": [
+    {
+      "path": "cafe-selection-for-us/AGENTS.md",
+      "action": "UNCHANGED",
+      "attached": false
+    },
+    {
+      "path": "you/AGENTS.md",
+      "action": "UNCHANGED",
+      "attached": false
+    },
+    {
+      "path": "your-friend/AGENTS.md",
+      "action": "UNCHANGED",
+      "attached": false
+    }
+  ],
+  "profile": {
+    "undoable": false,
+    "root": "."
+  }
+}

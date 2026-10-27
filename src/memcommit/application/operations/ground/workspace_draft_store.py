@@ -19,13 +19,13 @@ from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 
 
 class GroundWorkspaceDraftStore:
     """Store hidden resume receipts without creating ordinary Contexts."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self.store = store
         self.directory = store.store_dir / "ground-workspace-drafts"
 
@@ -141,53 +141,51 @@ class GroundWorkspaceDraftStore:
 
         restored = GroundWorkspaceDraft.from_dict(draft.to_dict())
         path = self._path(restored.uid)
-        with self.store.profile_write_guard():
-            with self._catalog_write_lock():
-                existing_by_name = tuple(
-                    item
-                    for item in self.list()
-                    if item.workspace_name == restored.workspace_name
-                    and item.uid != restored.uid
+        with self._catalog_write_lock():
+            existing_by_name = tuple(
+                item
+                for item in self.list()
+                if item.workspace_name == restored.workspace_name
+                and item.uid != restored.uid
+            )
+            if existing_by_name:
+                raise ConcurrentContextUpdateError(
+                    "A Ground draft already uses this Save Location."
                 )
-                if existing_by_name:
+            if path.exists() and (
+                not path.is_file() or path.is_symlink()
+            ):
+                raise GroundWorkspaceDraftError(
+                    "Ground draft storage is invalid."
+                )
+            if path.exists():
+                current = self.load(restored.uid)
+                if expected_digest is None:
                     raise ConcurrentContextUpdateError(
-                        "A Ground draft already uses this Save Location."
+                        "The Ground draft already exists."
                     )
-                if path.exists() and (
-                    not path.is_file() or path.is_symlink()
-                ):
-                    raise GroundWorkspaceDraftError(
-                        "Ground draft storage is invalid."
-                    )
-                if path.exists():
-                    current = self.load(restored.uid)
-                    if expected_digest is None:
-                        raise ConcurrentContextUpdateError(
-                            "The Ground draft already exists."
-                        )
-                    if ground_workspace_draft_digest(current) != expected_digest:
-                        raise ConcurrentContextUpdateError(
-                            "The Ground draft changed before it could be saved."
-                        )
-                elif expected_digest is not None:
+                if ground_workspace_draft_digest(current) != expected_digest:
                     raise ConcurrentContextUpdateError(
-                        "The Ground draft no longer exists."
+                        "The Ground draft changed before it could be saved."
                     )
-                self._write(path, restored)
+            elif expected_digest is not None:
+                raise ConcurrentContextUpdateError(
+                    "The Ground draft no longer exists."
+                )
+            self._write(path, restored)
 
     def delete(self, uid: str, *, expected_digest: str) -> None:
         """Delete only the exact draft consumed by successful creation."""
 
-        with self.store.profile_write_guard():
-            with self._catalog_write_lock():
-                current = self.load(uid)
-                if ground_workspace_draft_digest(current) != expected_digest:
-                    raise ConcurrentContextUpdateError(
-                        "The Ground draft changed before it could be removed."
-                    )
-                path = self._path(uid)
-                path.unlink()
-                _fsync_directory(self.directory)
+        with self._catalog_write_lock():
+            current = self.load(uid)
+            if ground_workspace_draft_digest(current) != expected_digest:
+                raise ConcurrentContextUpdateError(
+                    "The Ground draft changed before it could be removed."
+                )
+            path = self._path(uid)
+            path.unlink()
+            _fsync_directory(self.directory)
 
     def _write(self, path: Path, draft: GroundWorkspaceDraft) -> None:
         temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"

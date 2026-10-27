@@ -33,7 +33,7 @@ class SourceReferenceRow:
     """Operation-neutral facts for one compact, numbered Source row.
 
     The displayed ordinal is presentation identity; ``alias`` is an optional
-    operation-owned identity such as Query's temporary ``m5``.
+    operation-owned display label such as Query's ``Memory 5``.
     """
 
     number: int

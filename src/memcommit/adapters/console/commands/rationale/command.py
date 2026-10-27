@@ -81,7 +81,7 @@ from memcommit.application.operations.rationale.skills.memory_rationale.response
     RationaleNarrativeProjection,
 )
 
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -151,7 +151,7 @@ def render_context_rationale(
 
 
 def _execute_context_rationale(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_name: str,
     current_context_name: str | None,
@@ -259,7 +259,7 @@ def cmd(
     except RationaleRulesError as error:
         typer.secho(str(error), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         include_descendants = False
         context_snapshot = ContextOperandSnapshot.capture(store)

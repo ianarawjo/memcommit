@@ -23,17 +23,15 @@ from memcommit.application.operations.update.model import (
     UpdateContextInputs,
     UpdatePlan,
     UpdateReceipt,
-    collect_update_inputs,
     inline_update_source,
     operation_digest,
-    update_inputs_match,
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
-    MemoryStore,
+    ProfileStore,
     _write_json_atomic,
 )
 
@@ -56,6 +54,14 @@ def _apply_operations_to_direct(
 
     post_image = Context.from_dict(direct.to_dict())
     for operation in operations:
+        # A receipt's before/after diff must describe its actual checkpoint;
+        # this checks only the changed Memory, never a whole-Context version.
+        if isinstance(operation, (EditOperation, RemoveOperation)):
+            memory = direct.memories.get(operation.memory_uid)
+            if memory is None or memory.content != operation.old_content:
+                raise UpdateError(
+                    "Update Memory does not match its recorded before content."
+                )
         if isinstance(operation, EditOperation):
             post_image.replace_memory(
                 Memory(uid=operation.memory_uid, content=operation.new_content)
@@ -70,7 +76,7 @@ def _apply_operations_to_direct(
 
 
 def _apply_locked(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     inputs: UpdateContextInputs,
     plan: UpdatePlan,
 ) -> UpdateReceipt:
@@ -102,24 +108,35 @@ def _apply_locked(
         include_descendants=inputs.target_include_descendants,
         direct=inputs.instruction is not None and not inputs.target_include_descendants,
     )
-    if not update_inputs_match(inputs, source_contexts, target_contexts):
+    if (source_contexts[0].uid, source_contexts[0].name) != (
+        inputs.source_uid,
+        inputs.source_name,
+    ) or (target_contexts[0].uid, target_contexts[0].name) != (
+        inputs.target_uid,
+        inputs.target_name,
+    ):
         raise ConcurrentContextUpdateError(
-            "The Update Source or Target changed before application."
+            "The Update Source or Target identity changed before application."
         )
+
+    target_identities = set(inputs.target_contexts)
+    current_target_identities = {
+        (context.uid, context.name) for context in target_contexts
+    }
+    for operation in plan.operations:
+        owner = (operation.owner_context_uid, operation.owner_context_name)
+        if owner not in target_identities:
+            raise UpdateError("Update owner is outside the recorded Target.")
+        if owner not in current_target_identities:
+            raise ConcurrentContextUpdateError(
+                "An Update Target Context identity changed before application."
+            )
 
     result = apply_update_to_working_contexts(plan, target_contexts)
     target_store = active_store
-    base_by_identity = {
-        (context.uid, context.name): context for context in inputs.target_contexts
-    }
     originals: dict[str, dict[str, object]] = {}
     post_images: dict[str, Context] = {}
     for updated_context in result.updated_contexts:
-        base = base_by_identity.get(
-            (updated_context.context_uid, updated_context.context_name)
-        )
-        if base is None:
-            raise UpdateError("Update owner is outside the recorded Target.")
         physical_name = updated_context.context_name
         direct = target_store.load_direct(physical_name)
         if direct.uid != updated_context.context_uid:
@@ -169,30 +186,6 @@ def _apply_locked(
             written_names.append(physical_name)
             created_checkpoints.append((physical_name, public_name, checkpoint.uid))
 
-        source_contexts_after = (
-            (inline_source,)
-            if inline_source is not None
-            else _load_endpoint(
-                active_store,
-                inputs.source_name,
-                include_descendants=inputs.source_include_descendants,
-                direct=inputs.instruction is not None,
-            )
-        )
-        target_contexts_after = _load_endpoint(
-            active_store,
-            inputs.target_name,
-            include_descendants=inputs.target_include_descendants,
-            direct=inputs.instruction is not None
-            and not inputs.target_include_descendants,
-        )
-        inputs_after = collect_update_inputs(
-            source_contexts_after,
-            target_contexts_after,
-            source_memory_selector=inputs.source_memory_uid,
-            instruction=inputs.instruction,
-            target_include_descendants=inputs.target_include_descendants,
-        )
         checkpoint_by_public = {
             public_name: checkpoint_uid
             for _physical, public_name, checkpoint_uid in created_checkpoints
@@ -200,8 +193,6 @@ def _apply_locked(
         receipt = UpdateApplicationReceipt(
             applied_at=datetime.now().astimezone().isoformat(),
             operation_digest=operation_hash,
-            target_digest=inputs_after.target_digest,
-            target_contexts=inputs_after.target_context_fingerprints,
             checkpoints=tuple(
                 UpdateCheckpointReceipt(
                     context_uid=updated_context.context_uid,
@@ -247,7 +238,7 @@ def _apply_locked(
 def _source_lock_names(inputs: UpdateContextInputs, plan: UpdatePlan) -> set[str]:
     if inline_update_source(inputs) is not None:
         return set()
-    public_names = {context.name for context in inputs.source_contexts}
+    public_names = {name for _uid, name in inputs.source_contexts}
     public_names.add(inputs.source_name)
     public_names.update(
         source.context_name
@@ -258,13 +249,13 @@ def _source_lock_names(inputs: UpdateContextInputs, plan: UpdatePlan) -> set[str
 
 
 def _target_lock_names(inputs: UpdateContextInputs) -> set[str]:
-    public_names = {context.name for context in inputs.target_contexts}
+    public_names = {name for _uid, name in inputs.target_contexts}
     public_names.add(inputs.target_name)
     return public_names
 
 
 def publish_update_transaction(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     inputs: UpdateContextInputs,
     plan: UpdatePlan,
 ) -> UpdateReceipt:
@@ -278,12 +269,8 @@ def publish_update_transaction(
     if inputs.goal_focus is not None and inputs.goal_focus.kind != "INLINE":
         assert inputs.goal_focus.context_name is not None
         goal_locks.add(inputs.goal_focus.context_name)
-    with active_store._command_write_lock():
-        active_store._assert_profile_write_allowed()
-        with active_store._context_write_locks(
-            source_locks | target_locks | goal_locks
-        ):
-            return _apply_locked(active_store, inputs, plan)
+    with active_store._context_write_locks(source_locks | target_locks | goal_locks):
+        return _apply_locked(active_store, inputs, plan)
 
 
 __all__ = ["publish_update_transaction"]

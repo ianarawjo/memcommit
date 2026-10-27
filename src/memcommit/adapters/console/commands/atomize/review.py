@@ -30,7 +30,7 @@ from memcommit.application.operations.atomize.runtime import (
     atomize_application_checkpoint_uid,
 )
 from memcommit.application.operations.review.model import ReviewError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def atomize_review_report(
@@ -71,7 +71,7 @@ def atomize_review_report(
 
 
 def _load_direct_context(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str | None,
     *,
     current_name: str | None,
@@ -86,7 +86,7 @@ def _load_direct_context(
 
 def open_atomize_review(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str | None,
     current_name: str | None,
     snapshot: bool,

@@ -1,4 +1,4 @@
-"""MemoryStore entry point for the Copy operation."""
+"""ProfileStore entry point for the Copy operation."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from memcommit.application.operations.copy.contracts import (
 from memcommit.application.operations.copy.runtime.apply import apply_copy
 from memcommit.application.operations.copy.runtime.prepare import freeze_copy
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class MemoryStoreCopyPort:
@@ -19,7 +19,7 @@ class MemoryStoreCopyPort:
 
     def __init__(
         self,
-        store: MemoryStore,
+        store: ProfileStore,
         *,
         current_name: str | None,
     ):
@@ -28,7 +28,7 @@ class MemoryStoreCopyPort:
         self._owner = object()
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> MemoryStoreCopyPort:
+    def capture(cls, store: ProfileStore) -> MemoryStoreCopyPort:
         return cls(
             store,
             current_name=store.current_context_name(),
@@ -39,7 +39,7 @@ class MemoryStoreCopyPort:
         return tuple(self._store.list_context_names())
 
     @property
-    def store(self) -> MemoryStore:
+    def store(self) -> ProfileStore:
         return self._store
 
     @property
@@ -62,6 +62,6 @@ class MemoryStoreCopyPort:
 
 
 def execute_copy(
-    request: CopyMemoriesRequest, *, store: MemoryStore
+    request: CopyMemoriesRequest, *, store: ProfileStore
 ) -> CopyMemoriesResult:
     return run_copy(request, port=MemoryStoreCopyPort.capture(store))

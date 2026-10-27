@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     study_run_identity,
@@ -16,26 +18,39 @@ from .model import StudyRunProfileGroup
 def group_study_run_profiles(
     profiles: tuple[Profile, ...],
 ) -> tuple[StudyRunProfileGroup, ...]:
-    """Group each current Study label with its one registered local Profile."""
-    result = []
-    seen_uids: set[str] = set()
-    seen_names: set[str] = set()
+    """Group by durable Study identity, with one Profile per named session."""
+    identities = {}
+    members: dict[str, list[Profile]] = {}
+    sessions: dict[str, set[str | None]] = {}
+    names: dict[str, str] = {}
     for profile in profiles:
         identity = study_run_identity(profile)
         if identity is None:
             continue
-        if identity.uid in seen_uids:
-            raise ProfileError("Study run Profile roles must be unique.")
-        if identity.name.casefold() in seen_names:
+        if (
+            identity.name.casefold() in names
+            and names[identity.name.casefold()] != identity.uid
+        ):
             raise ProfileError("Study run names must be unique.")
-        seen_uids.add(identity.uid)
-        seen_names.add(identity.name.casefold())
-        result.append(
-            StudyRunProfileGroup(
-                identity.uid, identity.name, identity.created_at, profile
-            )
+        names[identity.name.casefold()] = identity.uid
+        if identity.uid in identities and replace(identity, session=None) != replace(
+            identities[identity.uid], session=None
+        ):
+            raise ProfileError("Study session provenance is inconsistent.")
+        seen_sessions = sessions.setdefault(identity.uid, set())
+        if identity.session in seen_sessions or (
+            seen_sessions and (identity.session is None or None in seen_sessions)
+        ):
+            raise ProfileError("Study run Profile roles must be unique.")
+        seen_sessions.add(identity.session)
+        identities[identity.uid] = identity
+        members.setdefault(identity.uid, []).append(profile)
+    return tuple(
+        StudyRunProfileGroup(
+            uid, identities[uid].name, identities[uid].created_at, tuple(profiles)
         )
-    return tuple(result)
+        for uid, profiles in members.items()
+    )
 
 
 def _study_target(

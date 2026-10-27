@@ -1,1 +1,1 @@
-"""Init-study application, composition, and publication boundaries."""
+"""Initialize Study runs from prepared projects."""

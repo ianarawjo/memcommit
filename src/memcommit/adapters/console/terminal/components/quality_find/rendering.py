@@ -8,10 +8,10 @@ import typer
 
 from memcommit.models.memory import Memory
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.core.theme import (
-    SemanticColorRole,
-    semantic_color_rgb,
+from memcommit.adapters.console.terminal.components.inline_diff import (
+    render_inline_memory_change_text,
 )
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 
 
 def plural(count: int, singular: str, plural_form: str | None = None) -> str:
@@ -50,30 +50,19 @@ def render_reason(reason: str) -> None:
     typer.secho(f"  Reason: {display_escape_text(reason)}", dim=True)
 
 
-def render_cleanup_member(
-    role: str,
-    uid_prefix: str,
+def render_cleanup_memory_change(
+    change: MemoryChange,
     *,
-    content: str | None = None,
+    uid_prefix: str,
 ) -> None:
-    """Render one proposed cleanup disposition using the shared action palette."""
-
-    if role not in {"SURVIVOR", "ABSORB"}:
-        raise ValueError("Cleanup members require SURVIVOR or ABSORB.")
-    color_role = (
-        SemanticColorRole.ADD if role == "SURVIVOR" else SemanticColorRole.REMOVE
+    """Indent one proposed located diff while preserving unambiguous UID prefixes."""
+    typer.echo(
+        "    " + render_inline_memory_change_text(
+            change,
+            identity=f"[{change.location}:{uid_prefix}]",
+            color=True,
+        )
     )
-    typer.echo("    ", nl=False)
-    typer.secho(
-        role,
-        fg=semantic_color_rgb(color_role),
-        bold=True,
-        nl=False,
-    )
-    suffix = f"  [memory {display_escape_text(uid_prefix)}]"
-    if content is not None:
-        suffix += "  " + display_escape_text(content)
-    typer.echo(" " * (8 - len(role)) + suffix)
 
 
 def render_question(question: str | None) -> None:

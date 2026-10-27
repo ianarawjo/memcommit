@@ -1,4 +1,4 @@
-"""Operation-owned MemoryStore and provider composition for Distill."""
+"""Operation-owned ProfileStore and provider composition for Distill."""
 
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     freeze_memorization_target,
     memorize_semantic_result,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
@@ -69,11 +69,11 @@ class _LocalDistillSourceToken:
 class LocalMemoryStoreDistillSourcePort:
     """Keep the first Distill slice inside one locally owned Store."""
 
-    store: MemoryStore
+    store: ProfileStore
     delegate: MemoryStoreSummarySourcePort
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "LocalMemoryStoreDistillSourcePort":
+    def capture(cls, store: ProfileStore) -> "LocalMemoryStoreDistillSourcePort":
         return cls(store=store, delegate=MemoryStoreSummarySourcePort.capture(store))
 
     def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
@@ -161,7 +161,7 @@ def _goal_fit_record(analysis: DistillAnalysis) -> dict[str, object] | None:
 def prepare_distill_add(
     request: DistillRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     target_name: str,
     provider_factory: DistillProviderFactory,
     config: DistillSemanticConfig = DEFAULT_DISTILL_SEMANTIC_CONFIG,
@@ -200,7 +200,7 @@ def prepare_distill_add(
 def apply_prepared_distill_add(
     prepared: PreparedDistillAdd,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SemanticResultMemorizationReceipt:
     """Append the complete supported Rule set to one existing Context."""
 
@@ -278,7 +278,7 @@ def apply_prepared_distill_add(
 def execute_distill(
     request: DistillRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: DistillProviderFactory,
     config: DistillSemanticConfig = DEFAULT_DISTILL_SEMANTIC_CONFIG,
     prepared_lookup: DistillPreparedLookup | None = None,
@@ -313,7 +313,7 @@ def _rule_result_uid(rule_uid: str, analysis_digest: str) -> str:
 class MemoryStoreDistillOutputPort:
     """Create one local Result while the exact local Source frame stays valid."""
 
-    store: MemoryStore
+    store: ProfileStore
 
     def materialize(
         self,
@@ -435,7 +435,7 @@ class MemoryStoreDistillOutputPort:
 def execute_distill_apply(
     request: DistillApplyRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> DistillApplyReceipt:
     """Apply one exact Distill result through the require-new Store path."""
 

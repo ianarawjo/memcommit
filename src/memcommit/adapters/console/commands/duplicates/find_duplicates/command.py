@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
@@ -25,8 +24,7 @@ from memcommit.application.operations.duplicates.find_duplicates.application imp
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
@@ -84,7 +82,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         snapshot = ContextOperandSnapshot.capture(store)
         scope = find_duplicates(
@@ -94,15 +92,6 @@ def cmd(
                 include_descendants=preset is ContextScopePreset.RECURSIVE,
             ),
             current_name=snapshot.current_name,
-        )
-        annotate_read_report_attempt(
-            ReadReportTarget(
-                operation="find-duplicates",
-                context_names=tuple(frame.context_name for frame in scope.contexts),
-                target_names=(scope.root_name,),
-                selection_mode="SINGLE",
-                ranges=("RECURSIVE" if scope.include_descendants else "DIRECT",),
-            )
         )
     except (
         FileNotFoundError,

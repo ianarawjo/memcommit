@@ -1,0 +1,49 @@
+{
+  "uid": "abe63a69-7fc5-42cd-8e34-c094924e597f",
+  "created_at": "2026-10-26T13:39:05.287183+00:00",
+  "command": "init-study",
+  "direction": "outbound",
+  "trigger": "STUDY_SETUP",
+  "checkpoint_uids": [
+    [
+      "task-3",
+      "1a8612a5-9c61-4f95-948a-f74cf6c40f80"
+    ],
+    [
+      "task-3/friend-cafe",
+      "0c35cb33-99cb-4701-b144-63dbcc68f4c8"
+    ],
+    [
+      "task-3/friend-cafe/conditions",
+      "70b2b97c-a3a4-4e8d-bc36-d977646ba4e6"
+    ]
+  ],
+  "memory_effects": [],
+  "context_names": [
+    "task-3",
+    "task-3/friend-cafe",
+    "task-3/friend-cafe/conditions"
+  ],
+  "causing_command": "init-study",
+  "effects": [
+    {
+      "path": "task-3.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-3/friend-cafe.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-3/friend-cafe/conditions.md",
+      "action": "ADD",
+      "attached": false
+    }
+  ],
+  "profile": {
+    "undoable": false,
+    "root": "."
+  }
+}

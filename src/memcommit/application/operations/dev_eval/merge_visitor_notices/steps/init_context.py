@@ -3,10 +3,10 @@
 from memcommit.application.operations.dev_eval.terminal import ScenarioTerminal
 from memcommit.application.operations.pwd.application import NoCurrentContextError
 from memcommit.application.operations.pwd.runtime import read_current_context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
-def run(terminal: ScenarioTerminal, *, store: MemoryStore, context_name: str) -> bool:
+def run(terminal: ScenarioTerminal, *, store: ProfileStore, context_name: str) -> bool:
     init_result = terminal.run("init", context_name)
     if init_result.returncode != 0:
         return False

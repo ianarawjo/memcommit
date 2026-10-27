@@ -50,7 +50,7 @@ from memcommit.application.operations.makemore.model import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -298,7 +298,7 @@ def makemore_cmd(
     """Inspect the Memories Makemore would add without saving them."""
 
     try:
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
         goal_focus = (
             freeze_goal_focus_operand(store, goal, current_name=snapshot.current_name)

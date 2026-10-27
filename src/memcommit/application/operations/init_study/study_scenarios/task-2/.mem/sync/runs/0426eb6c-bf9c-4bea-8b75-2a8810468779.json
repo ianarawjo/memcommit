@@ -1,0 +1,69 @@
+{
+  "uid": "0426eb6c-bf9c-4bea-8b75-2a8810468779",
+  "created_at": "2026-10-26T13:39:05.272633+00:00",
+  "command": "init-study",
+  "direction": "outbound",
+  "trigger": "STUDY_SETUP",
+  "checkpoint_uids": [
+    [
+      "task-2",
+      "95382bb7-5c4e-471c-8751-2039f1b8d980"
+    ],
+    [
+      "task-2/operational-perspectives",
+      "c9d6a60d-f8b6-438b-9958-0c67c0fce2fd"
+    ],
+    [
+      "task-2/operational-perspectives/coffeewithtaylor",
+      "18f58a7e-8107-4726-a3cf-298e602d565d"
+    ],
+    [
+      "task-2/operational-perspectives/consulting-newwavecafeculture",
+      "64a9bcb1-21db-4ffe-b4aa-072aa7f006ae"
+    ],
+    [
+      "task-2/operational-perspectives/morrowcoffee-official",
+      "e2aa4da0-fb5f-4393-b3f5-1802d328b03b"
+    ]
+  ],
+  "memory_effects": [],
+  "context_names": [
+    "task-2",
+    "task-2/operational-perspectives",
+    "task-2/operational-perspectives/coffeewithtaylor",
+    "task-2/operational-perspectives/consulting-newwavecafeculture",
+    "task-2/operational-perspectives/morrowcoffee-official"
+  ],
+  "causing_command": "init-study",
+  "effects": [
+    {
+      "path": "task-2.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-2/operational-perspectives.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-2/operational-perspectives/coffeewithtaylor.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-2/operational-perspectives/consulting-newwavecafeculture.md",
+      "action": "ADD",
+      "attached": false
+    },
+    {
+      "path": "task-2/operational-perspectives/morrowcoffee-official.md",
+      "action": "ADD",
+      "attached": false
+    }
+  ],
+  "profile": {
+    "undoable": false,
+    "root": "."
+  }
+}

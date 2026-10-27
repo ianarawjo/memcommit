@@ -1,4 +1,4 @@
-"""MemoryStore adapter for the operation-owned Fit application."""
+"""ProfileStore adapter for the operation-owned Fit application."""
 
 from __future__ import annotations
 
@@ -64,7 +64,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
 )
 from memcommit.application.operations.fit.store import FitStore
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     context_record_digest,
 )
 
@@ -146,7 +146,7 @@ def _memory_digest(memory: Memory) -> str:
 def _revalidate_fit_sources(
     frozen: tuple[_FrozenFitSource, ...],
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> None:
     """Recheck local identities and content before publication."""
 
@@ -192,7 +192,7 @@ def _revalidate_fit_sources(
 def run_stored_source_fit(
     request: FitStoredSourcesRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: FitProviderFactory,
 ) -> FitPropositionsResult:
     """Resolve stored Memories into one exact, read-only general Fit frame."""
@@ -388,7 +388,7 @@ def run_stored_source_fit(
 
 def execute_ground_fit(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     ground_name: str,
     provider_factory: FitProviderFactory,
 ) -> FitReport:
@@ -403,7 +403,7 @@ def execute_ground_fit(
 
 def execute_and_save_ground_fit(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     ground_name: str,
     provider_factory: FitProviderFactory,
 ) -> FitReport:
@@ -421,7 +421,7 @@ def execute_and_save_ground_fit(
 def run_fit_with_store(
     request: FitRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: FitProviderFactory,
 ) -> FitResult:
     """Execute or reopen Fit behind one interface-independent runtime port."""

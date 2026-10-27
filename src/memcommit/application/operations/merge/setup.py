@@ -14,7 +14,7 @@ from memcommit.application.operations.merge.inputs import (
     MergeMethod,
     MergeRequest,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 
@@ -89,7 +89,7 @@ class MergeSetup:
 
 
 def build_merge_setup(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     current_name: str | None,
     method: MergeMethod = "SEMANTIC",

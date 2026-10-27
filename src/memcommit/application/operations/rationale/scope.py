@@ -21,7 +21,7 @@ from memcommit.application.capabilities.history.query.memory_history_slicing imp
     collect_memory_history_candidates,
 )
 from memcommit.application.operations.rationale.model import RationaleError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -58,7 +58,7 @@ class RationaleTarget:
 
 
 def load_rationale_scope(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     operand: str | None,
     *,
     current_name: str | None,
@@ -86,7 +86,7 @@ def load_rationale_scope(
 
 
 def freeze_rationale_profile_catalog(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     operand: str | None,
     *,
     current_name: str | None,

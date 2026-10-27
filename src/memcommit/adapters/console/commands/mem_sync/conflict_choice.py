@@ -9,11 +9,28 @@ from memcommit.adapters.console.terminal.components.selection import SelectionOp
 def choose_sync_conflict_version(_conflicts):
     choice = choose_flat_option(
         (
-            SelectionOption("external", "Use external files"),
+            SelectionOption("external", "Use workspace files"),
             SelectionOption("mem", "Use mem"),
         ),
         title="Choose a version for all conflicts in this profile.",
-        detail="Both versions will be saved as checkpoints.",
+        inline_notes={
+            "external": (
+                (
+                    "class:report-neutral",
+                    "(Overwrite mem with workspace files; create checkpoints)",
+                ),
+            ),
+            "mem": (
+                (
+                    "class:report-neutral",
+                    "(Overwrite workspace files with mem) ",
+                ),
+                (
+                    "class:memcommit.error",
+                    "(Warning: memcommit cannot restore overwritten workspace files)",
+                ),
+            ),
+        },
         compact=True,
     )
     return choice.value if choice else None

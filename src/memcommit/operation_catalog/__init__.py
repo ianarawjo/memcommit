@@ -21,10 +21,6 @@ from memcommit.operation_catalog.families import (
     operation_family,
     operation_family_section,
 )
-from memcommit.operation_catalog.family_localization import (
-    localized_family_description,
-    validate_family_translation_coverage,
-)
 from memcommit.operation_catalog.model import (
     DetailDiscovery,
     ExecutionKind,
@@ -64,6 +60,4 @@ __all__ = [
     "operation_family_section",
     "operation_help",
     "operation_summary",
-    "localized_family_description",
-    "validate_family_translation_coverage",
 ]

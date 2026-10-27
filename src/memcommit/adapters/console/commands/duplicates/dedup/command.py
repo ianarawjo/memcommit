@@ -1,8 +1,6 @@
-"""Remove exact and semantic duplicates, or only exact copies with --literal."""
+"""Deduplicate the current Context, optionally including its descendants."""
 
-from __future__ import annotations
-
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
@@ -12,54 +10,29 @@ from memcommit.adapters.console.commands.duplicates.find_redundancies import (
 from memcommit.adapters.console.commands.duplicates.find_redundancies.receipt.dedup import (
     render_dedup_receipt,
 )
-from memcommit.application.context_access.operand_resolution import (
-    resolve_existing_context_access,
+from memcommit.adapters.console.commands.duplicates.find_redundancies.receipt.dedun import (
+    render_recursive_dedup_receipt,
 )
-from memcommit.adapters.console.coordination.context_operand import (
-    ContextOperandSnapshot,
-    choose_context_operand,
-)
-from memcommit.adapters.console.coordination.context_scope_options import (
-    ContextScopePreset,
-    resolve_scope_preset,
-)
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.operations.duplicates.dedup.application import (
-    ExactDedupError,
     apply_exact_dedup_scope,
+)
+from memcommit.application.operations.duplicates.dedup.recursive import (
+    run_recursive_dedup,
 )
 from memcommit.application.operations.duplicates.find_duplicates.application import (
     analyze_exact_duplicate_scope,
 )
-from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
-    context_operand: Annotated[
-        Optional[str],
-        typer.Argument(help="Context to deduplicate (defaults to current)"),
-    ] = None,
-    context_name: Annotated[
-        Optional[str],
-        typer.Option(
-            "--context", "-c", help="Context to deduplicate (defaults to current)"
-        ),
-    ] = None,
     literal: Annotated[
         bool,
         typer.Option(
-            "--literal",
-            help="Remove only same-role exact copies without semantic inference",
-        ),
-    ] = False,
-    direct: Annotated[
-        bool,
-        typer.Option(
-            "--direct",
-            "-d",
-            help="Deduplicate the exact Context root only (default)",
+            "--literal", help="Remove only identical stored text without LLM inference"
         ),
     ] = False,
     recursive: Annotated[
@@ -68,84 +41,52 @@ def cmd(
             "--recursive",
             "-r",
             help=(
-                "Deduplicate each local lexical descendant independently and "
-                "publish the subtree as one Undoable command"
+                "Compare Memories across the current Context and all descendants; "
+                "keep the first by Context depth, Context name, then Memory order"
             ),
         ),
     ] = False,
 ) -> None:
-    """Remove duplicate items, retaining the first existing UID in each group."""
-
+    """Remove duplicate Memories while preserving the first existing UID and content."""
     try:
-        context_name = choose_context_operand(context_operand, option=context_name)
-        preset = resolve_scope_preset(
-            direct=direct,
-            recursive=recursive,
-            default=ContextScopePreset.DIRECT,
-        )
-    except (TypeError, ValueError) as error:
-        typer.secho(
-            "Dedup error: " + display_escape_text(str(error)),
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-
-    if not literal:
-        try:
-            # Keep the existing semantic Apply and checkpoint contract intact.
+        if not literal:
             find_redundancies.run_dedun(
-                context_name=context_name,
-                include_descendants=preset is ContextScopePreset.RECURSIVE,
+                context_name=None, include_descendants=recursive
             )
-        except typer.Exit:
-            raise
-        except Exception as error:
-            typer.secho(
-                "Dedup error: " + display_escape_text(str(error)),
-                fg=typer.colors.RED,
-                err=True,
+            return
+        store = ProfileStore(create=False)
+        current_name = store.current_context_name()
+        if current_name is None:
+            raise ValueError(
+                "No current Context. Run 'mem switch' or 'mem init' first."
             )
-            raise typer.Exit(1)
-        return
-
-    active_store = MemoryStore(create=False)
-    try:
-        snapshot = ContextOperandSnapshot.capture(active_store)
-        access = resolve_existing_context_access(
-            active_store,
-            context_name,
-            current_name=snapshot.current_name,
-        ).value
+        if recursive:
+            with CommandProgress(
+                "DEDUP", "comparing combined subtree Memories", total=1
+            ):
+                _analysis, receipt = run_recursive_dedup(
+                    store,
+                    current_name,
+                    find_redundancies.connect_semantic_provider,
+                    literal=True,
+                )
+            render_recursive_dedup_receipt(receipt, literal=True)
+            return
+        access = resolve_context_access(store, current_name, current_name=current_name)
         analysis = analyze_exact_duplicate_scope(
-            active_store,
-            access,
-            include_descendants=preset is ContextScopePreset.RECURSIVE,
+            store, access, include_descendants=False
         )
-        receipt = apply_exact_dedup_scope(
-            active_store,
-            access,
-            analysis,
-        )
-    except (
-        ConcurrentContextUpdateError,
-        ExactDedupError,
-        FileNotFoundError,
-        OSError,
-        ProfileConfigError,
-        ProfileError,
-        RuntimeError,
-        TypeError,
-        ValueError,
-    ) as error:
+        receipt = apply_exact_dedup_scope(store, access, analysis)
+        render_dedup_receipt(receipt)
+    except typer.Exit:
+        raise
+    except Exception as error:
         typer.secho(
             "Dedup error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
-
-    render_dedup_receipt(receipt)
 
 
 __all__ = ["cmd"]

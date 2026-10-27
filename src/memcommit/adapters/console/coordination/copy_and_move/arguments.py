@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.coordination.endpoint_operand import (
-    choose_endpoint_operand,
-)
 from memcommit.application.capabilities.memory_transfer.contracts import (
     MemoryTransferError,
 )
@@ -30,17 +27,4 @@ def selected_memory_locators(
     return values
 
 
-def target_context_option(into: str | None, to: str | None) -> str | None:
-    """Resolve the canonical Target operand from its two public spellings."""
-
-    try:
-        return choose_endpoint_operand(
-            None,
-            role="Target",
-            options=(("--into", into), ("--to", to)),
-        )
-    except ValueError as error:
-        raise MemoryTransferError(str(error)) from error
-
-
-__all__ = ["selected_memory_locators", "target_context_option"]
+__all__ = ["selected_memory_locators"]

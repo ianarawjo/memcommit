@@ -15,38 +15,34 @@ from memcommit.application.operations.init.application import (
     CreatedContext,
     run_context_init,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
 class ContextInitSnapshot:
-    """Process-local setup state frozen before optional interactive name editing."""
+    """Current Context captured before one Init request."""
 
     expected_current: str | None
-    context_names: tuple[str, ...]
 
 
-def prepare_context_init(store: MemoryStore) -> ContextInitSnapshot:
-    """Capture the current pointer and local namespace once for one command turn."""
+def prepare_context_init(store: ProfileStore) -> ContextInitSnapshot:
+    """Capture the current pointer once for one command turn."""
 
     return ContextInitSnapshot(
         expected_current=store.current_context_name(),
-        context_names=tuple(store.list_context_names()),
     )
 
 
 class MemoryStoreContextInitPort:
     """Publish the application plan through Store locking and rollback."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def apply(self, plan: ContextInitPlan) -> tuple[CreatedContext, ...]:
         validate_context_name(plan.request.name)
         if plan.require_all_new and self._store.context_exists(plan.request.name):
-            raise ContextInitError(
-                f"context '{plan.request.name}' already exists."
-            )
+            raise ContextInitError(f"context '{plan.request.name}' already exists.")
         entries = tuple(
             (
                 Context.create(entry.name),
@@ -56,6 +52,7 @@ class MemoryStoreContextInitPort:
                 ),
             )
             for entry in plan.entries
+            if not plan.require_all_new or entry.is_leaf
         )
         created = self._store.create_missing_contexts(
             entries,
@@ -64,15 +61,14 @@ class MemoryStoreContextInitPort:
             expected_current=plan.request.expected_current,
         )
         return tuple(
-            CreatedContext(name=context.name, uid=context.uid)
-            for context in created
+            CreatedContext(name=context.name, uid=context.uid) for context in created
         )
 
 
 def execute_context_init(
     request: ContextInitRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> ContextInitResult:
     """Execute one ordinary Context initialization without terminal output."""
 

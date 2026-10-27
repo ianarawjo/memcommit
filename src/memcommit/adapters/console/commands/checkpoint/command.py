@@ -15,7 +15,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.checkpoint.application import CheckpointRequest
 from memcommit.application.operations.checkpoint.runtime import execute_checkpoint
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -139,7 +139,7 @@ def cmd(
         typer.secho(str(error), fg=typer.colors.RED, err=True)
         raise typer.Exit(2)
 
-    store = MemoryStore()
+    store = ProfileStore()
     try:
         snapshot = ContextOperandSnapshot.capture(store)
         result = execute_checkpoint(

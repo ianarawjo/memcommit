@@ -1,50 +1,45 @@
-"""MemoryStore adapter for one complete exact-Memory Edit request."""
+"""ProfileStore adapter for one exact Memory replacement."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-import memcommit.core.context_targeting.direct_items as direct_items
+from memcommit.core.context_targeting.direct_items import resolve_direct_memory
 from memcommit.application.context_access.access import ContextAccess
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
-from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.application.operations.edit.application import (
-    EditBatchRequest,
     MemEditError,
-    EditBatchResult,
-    EditMemoryChange,
     EditPort,
     EditRequest,
     EditResult,
-    FrozenEditBatchPlan,
     FrozenEditPlan,
-    planned_edits,
     run_edit,
     validate_edit_request,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
 class _StoreEditToken:
     owner: object
     access: ContextAccess
-    request: EditRequest | EditBatchRequest
+    request: EditRequest
     context_uid: str
-    edits: tuple[EditMemoryChange, ...]
+    memory_uid: str
+    original_content: str
 
 
 class MemoryStoreEditPort(EditPort):
-    """Freeze EDIT authority and every before value before any replacement."""
+    """Bind one current-Context Memory before replacing its content."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(self, store: ProfileStore, *, current_name: str | None):
         self.store = store
         self.current_context_name = current_name
         self._owner = object()
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> MemoryStoreEditPort:
+    def capture(cls, store: ProfileStore) -> MemoryStoreEditPort:
         return cls(store, current_name=store.current_context_name())
 
     def access(self, context_locator: str | None) -> ContextAccess:
@@ -62,70 +57,38 @@ class MemoryStoreEditPort(EditPort):
             access_name=self.current_context_name,
         )
 
-    def inspect_context(self, context_locator: str | None) -> Context:
-        access = self.access(context_locator)
-        return access.store.load_direct(access.context_name)
-
-    def freeze(
-        self,
-        request: EditRequest | EditBatchRequest,
-    ) -> FrozenEditPlan | FrozenEditBatchPlan:
+    def freeze(self, request: EditRequest) -> FrozenEditPlan:
         validate_edit_request(request)
         access = self.access(request.context_locator)
-        entries = (
-            request.edits
-            if isinstance(request, EditBatchRequest)
-            else ((request.memory_selector, request.content),)
-        )
         context = access.store.load_direct(access.context_name)
-        edits: list[EditMemoryChange] = []
-        seen_uids: set[str] = set()
-        for selector, content in entries:
-            item = direct_items.resolve_direct_memory(context, selector)
-            if item.uid in seen_uids:
-                raise ValueError(
-                    f"Memory [{item.uid[:8]}] appears more than once in the edit input."
-                )
-            seen_uids.add(item.uid)
-            edits.append(EditMemoryChange(item.uid, item.content, content))
-        token = _StoreEditToken(
-            self._owner,
-            access,
-            request,
-            context.uid,
-            tuple(edits),
-        )
-        identity = dict(
+        memory = resolve_direct_memory(context, request.memory_selector)
+        return FrozenEditPlan(
             request=request,
             context_name=access.access_name,
             context_uid=context.uid,
-            token=token,
-        )
-        if isinstance(request, EditBatchRequest):
-            return FrozenEditBatchPlan(**identity, edits=token.edits)
-        edit = edits[0]
-        return FrozenEditPlan(
-            **identity,
-            memory_uid=edit.memory_uid,
-            original_content=edit.original_content,
+            memory_uid=memory.uid,
+            original_content=memory.content,
+            token=_StoreEditToken(
+                self._owner,
+                access,
+                request,
+                context.uid,
+                memory.uid,
+                memory.content,
+            ),
         )
 
-    def apply(
-        self,
-        plan: FrozenEditPlan | FrozenEditBatchPlan,
-    ) -> EditResult | EditBatchResult:
+    def apply(self, plan: FrozenEditPlan) -> EditResult:
         token = plan.token
         if not isinstance(token, _StoreEditToken) or token.owner is not self._owner:
             raise ValueError("The frozen Edit plan belongs to another runtime.")
-        edits = planned_edits(plan)
         access = token.access
-        # Bind the complete request, including unchanged rows, to what was frozen.
-        # Dataclass reconstruction must not silently retarget an approved edit.
         if (
             plan.request != token.request
-            or edits != token.edits
+            or plan.memory_uid != token.memory_uid
+            or plan.original_content != token.original_content
             or plan.context_name != access.access_name
-            or (plan.context_uid != token.context_uid)
+            or plan.context_uid != token.context_uid
         ):
             raise ValueError(
                 "The frozen Edit plan no longer matches its runtime binding."
@@ -133,78 +96,40 @@ class MemoryStoreEditPort(EditPort):
         context = access.store.load_direct(access.context_name)
         if context.uid != plan.context_uid:
             raise RuntimeError(
-                f"Context '{plan.context_name}' changed while Edit was open; "
-                "no changes were made."
+                f"Context '{plan.context_name}' changed while Edit was open; no changes were made."
             )
-        for edit in edits:
-            item = context.memories.get(edit.memory_uid)
-            if not isinstance(item, Memory) or item.content != edit.original_content:
-                raise RuntimeError(
-                    "The selected Memory changed while Edit was open; no changes were made."
-                )
-        changes = tuple(edit for edit in edits if edit.changed)
+        memory = context.memories.get(plan.memory_uid)
+        if not isinstance(memory, Memory) or memory.content != plan.original_content:
+            raise RuntimeError(
+                "The selected Memory changed while Edit was open; no changes were made."
+            )
         checkpoint_uid = None
-        if changes:
-            # All rows are checked before mutation; the Store publishes the complete
-            # post-image through its single-checkpoint save boundary.
-            for edit in changes:
-                context.replace_memory(
-                    Memory(uid=edit.memory_uid, content=edit.content)
-                )
+        if memory.content != plan.request.content:
+            context.replace_memory(Memory(uid=memory.uid, content=plan.request.content))
             checkpoint = access.store.save(
                 context,
-                _edit_checkpoint(plan.request, changes, access),
+                AutoCheckpointRequest(
+                    command="edit",
+                    command_details={
+                        "uid": memory.uid,
+                        "content": plan.request.content,
+                    },
+                ),
             )
             if checkpoint is None:
                 raise RuntimeError("Edit saved no checkpoint.")
             checkpoint_uid = checkpoint.uid
-        if isinstance(plan, FrozenEditBatchPlan):
-            return EditBatchResult(
-                plan.context_name,
-                plan.context_uid,
-                edits,
-                checkpoint_uid,
-            )
-        edit = edits[0]
         return EditResult(
             context_name=plan.context_name,
             context_uid=plan.context_uid,
-            memory_uid=edit.memory_uid,
-            original_content=edit.original_content,
-            content=edit.content,
+            memory_uid=plan.memory_uid,
+            original_content=plan.original_content,
+            content=plan.request.content,
             checkpoint_uid=checkpoint_uid,
         )
 
 
-def _edit_checkpoint(
-    request: EditRequest | EditBatchRequest,
-    changes: tuple[EditMemoryChange, ...],
-    access: ContextAccess,
-) -> AutoCheckpointRequest:
-    if isinstance(request, EditBatchRequest):
-        args = {
-            "input": request.input_source,
-            "mode": "uid-tab-content",
-            "count": len(changes),
-            "uids": [edit.memory_uid for edit in changes],
-            "edits": [
-                {"uid": edit.memory_uid, "content": edit.content} for edit in changes
-            ],
-        }
-    else:
-        edit = changes[0]
-        args = {"uid": edit.memory_uid, "content": edit.content}
-    return AutoCheckpointRequest(
-        command="edit",
-        command_details={**args},
-    )
-
-
-def execute_edit(
-    request: EditRequest | EditBatchRequest,
-    *,
-    store: MemoryStore,
-) -> EditResult | EditBatchResult:
+def execute_edit(request: EditRequest, *, store: ProfileStore) -> EditResult:
     return run_edit(request, port=MemoryStoreEditPort.capture(store))
 
 

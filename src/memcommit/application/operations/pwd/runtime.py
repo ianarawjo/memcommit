@@ -1,4 +1,4 @@
-"""MemoryStore infrastructure adapter for current Context orientation."""
+"""ProfileStore infrastructure adapter for current Context orientation."""
 
 from __future__ import annotations
 
@@ -6,13 +6,13 @@ from memcommit.application.operations.pwd.application import (
     CurrentContextResult,
     get_current_context,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class MemoryStoreCurrentContextReader:
     """Read navigation state without creating or loading Store contents."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def current_context_name(self) -> str | None:
@@ -23,7 +23,7 @@ class MemoryStoreCurrentContextReader:
         return self._store.current_context_name()
 
 
-def read_current_context(store: MemoryStore) -> CurrentContextResult:
+def read_current_context(store: ProfileStore) -> CurrentContextResult:
     """Execute the current-Context use case against one explicit Store."""
 
     return get_current_context(MemoryStoreCurrentContextReader(store))

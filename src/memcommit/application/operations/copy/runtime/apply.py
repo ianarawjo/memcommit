@@ -25,13 +25,13 @@ from memcommit.application.operations.copy.contracts import (
 from memcommit.application.operations.copy.runtime.prepare import copy_plan_digest
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
 
 
 def apply_copy(
     plan: FrozenCopyMemoriesPlan,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     owner: object,
 ) -> CopyMemoriesResult:
     if not isinstance(plan, FrozenCopyMemoriesPlan):

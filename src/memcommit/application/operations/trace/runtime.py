@@ -1,4 +1,4 @@
-"""MemoryStore composition for the read-only Trace application."""
+"""ProfileStore composition for the read-only Trace application."""
 
 from __future__ import annotations
 
@@ -38,18 +38,18 @@ from memcommit.application.operations.trace.application import (
     run_trace,
 )
 from memcommit.models.context import Context
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True, slots=True)
 class _OwnedContextBinding:
-    store: MemoryStore
+    store: ProfileStore
     context: Context
 
 
 @dataclass(frozen=True, slots=True)
 class _OwnedMemoryBinding:
-    store: MemoryStore
+    store: ProfileStore
     context: Context
     target: ResolvedMemoryReportTarget
 
@@ -57,7 +57,7 @@ class _OwnedMemoryBinding:
 class MemoryStoreTraceSource:
     """Resolve Trace subjects while keeping Store details outside application.py."""
 
-    def __init__(self, store: MemoryStore) -> None:
+    def __init__(self, store: ProfileStore) -> None:
         self._store = store
 
     def _owned_context(
@@ -213,7 +213,7 @@ class MemoryStoreTraceSource:
 def load_trace_target_catalog(
     request: TraceTargetCatalogRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> TraceTargetCatalog:
     """List one Trace picker catalog through the application boundary."""
 
@@ -223,7 +223,7 @@ def load_trace_target_catalog(
 def execute_trace(
     request: TraceRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> TraceResult:
     """Execute one Store-backed Trace without CLI or TUI effects."""
 

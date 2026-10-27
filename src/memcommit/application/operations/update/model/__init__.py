@@ -17,7 +17,6 @@ from .inputs import (
     UpdateInputs,
     UpdateContextInputs,
     freeze_update_context_inputs,
-    update_inputs_match,
     inline_update_source,
     collect_update_inputs,
     inline_update_context,
@@ -31,7 +30,6 @@ from .planning import (
     UpdateProvider,
     plan_update,
 )
-from .fingerprints import ContextFingerprint
 from .receipt import (
     UpdateReceipt,
     UpdateApplicationReceipt,
@@ -50,7 +48,6 @@ __all__ = (
     "INLINE_UPDATE_CONTEXT_NAME",
     "AddOperation",
     "UpdatedContext",
-    "ContextFingerprint",
     "EditOperation",
     "RemoveOperation",
     "SourceCandidate",
@@ -64,7 +61,6 @@ __all__ = (
     "UpdateContextInputs",
     "UpdateReceipt",
     "freeze_update_context_inputs",
-    "update_inputs_match",
     "inline_update_source",
     "UpdateOperation",
     "UpdatePlan",

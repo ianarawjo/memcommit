@@ -6,13 +6,13 @@ from memcommit.application.operations.dev_eval.terminal import ScenarioTerminal
 from memcommit.application.operations.list.runtime import (
     prepare_memory_and_child_context_lists,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def run(
     terminal: ScenarioTerminal,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
     contents: tuple[str, ...],
 ) -> bool:

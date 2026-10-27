@@ -1,21 +1,49 @@
-"""Human-readable receipts for the unified Delete operation."""
+"""Render the receipt for one removed Memory."""
 
-from __future__ import annotations
+import os
 
 import typer
-
-from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.delete.application import (
+    ContextDeletePlan,
     ContextDeleteResult,
-    DeletedDirectItem,
     DirectItemDeleteResult,
+)
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.adapters.console.terminal.core.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
 )
 
 
-def removed_item_description(item: DeletedDirectItem) -> str:
-    """Return the compact TUI receipt for one removed Memory."""
+def render_context_delete_warning(plan: ContextDeletePlan) -> None:
+    typer.echo(
+        "This will "
+        + typer.style(
+            "delete", fg=semantic_color_rgb(SemanticColorRole.REMOVE), bold=True
+        )
+        + f" Context '{display_escape_text(plan.context_name)}' and all its descendants.\n"
+        + "All Memories and checkpoint histories in this subtree will be deleted.\n"
+        + typer.style(
+            "This cannot be undone with memcommit.",
+            fg=semantic_color_rgb(SemanticColorRole.IRREVERSIBLE_WARNING),
+        ),
+        color=False if "NO_COLOR" in os.environ else None,
+    )
 
-    return f'memory [{item.uid[:8]}]: "{item.content[:80]}"'
+
+def render_context_delete_result(result: ContextDeleteResult) -> None:
+    typer.echo(
+        typer.style("Deleted", fg=semantic_color_rgb(SemanticColorRole.REMOVE))
+        + f" Context '{display_escape_text(result.context_name)}' and "
+        + f"{result.deleted_context_count - 1} descendant Context(s).",
+        color=False if "NO_COLOR" in os.environ else None,
+    )
+    if result.cleanup_warning:
+        typer.echo(
+            "Deletion committed, but cleanup was incomplete: "
+            + display_escape_text(result.cleanup_warning),
+            err=True,
+        )
 
 
 def render_removed_item(result: DirectItemDeleteResult) -> None:
@@ -27,30 +55,3 @@ def render_removed_item(result: DirectItemDeleteResult) -> None:
         typer.style(f"Removed [{item.uid[:8]}] ", fg=typer.colors.GREEN)
         + typer.style(item.content, fg=typer.colors.RED)
     )
-
-
-def render_context_delete_result(result: ContextDeleteResult) -> None:
-    """Write a durable ledger receipt, including committed cleanup warnings."""
-
-    name = display_escape_text(result.context_name)
-    if result.status == "APPLIED_WITH_CLEANUP_WARNING":
-        assert result.cleanup_warning is not None
-        typer.secho(
-            f"Deleted context '{name}' · ledger [{result.event_uid[:8]}], but "
-            "post-delete cleanup was incomplete: "
-            f"{display_escape_text(result.cleanup_warning)}",
-            fg=typer.colors.YELLOW,
-            err=True,
-        )
-        return
-    typer.secho(
-        f"Deleted context '{name}' · ledger [{result.event_uid[:8]}].",
-        fg=typer.colors.GREEN,
-    )
-
-
-__all__ = [
-    "removed_item_description",
-    "render_context_delete_result",
-    "render_removed_item",
-]

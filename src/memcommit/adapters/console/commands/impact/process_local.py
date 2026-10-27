@@ -8,10 +8,6 @@ from memcommit.adapters.console.commands.makemore.impact import (
     makemore_cmd,
     makemore_impact_presentation,
 )
-from memcommit.adapters.console.commands.forget.impact import (
-    forget_cmd,
-    forget_impact_presentation,
-)
 
 
 __all__ = [
@@ -19,6 +15,4 @@ __all__ = [
     "distill_impact_presentation",
     "makemore_cmd",
     "makemore_impact_presentation",
-    "forget_cmd",
-    "forget_impact_presentation",
 ]

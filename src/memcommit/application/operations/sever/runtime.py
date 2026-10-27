@@ -44,7 +44,7 @@ from memcommit.application.operations.sever.session_store import SeverSessionSto
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
 )
 from memcommit.providers.errors import QueryProviderError, QueryProviderTimeoutError
 
@@ -55,7 +55,7 @@ SeverProgressCallback = SeverProgressObserver
 class MemoryStoreSeverSessionRepository:
     """Private Store-backed session persistence with opaque digest CAS tokens."""
 
-    store: MemoryStore
+    store: ProfileStore
 
     @property
     def sessions(self) -> SeverSessionStore:
@@ -89,7 +89,7 @@ class MemoryStoreSeverSessionRepository:
 class MemoryStoreSeverDestinationPort:
     """Validate one local self- or other-save destination against the live Store."""
 
-    store: MemoryStore
+    store: ProfileStore
     source_name: str
 
     def validate(self, output_name: str, *, current_output_name: str) -> None:
@@ -126,7 +126,7 @@ def _provider_with_attempt_evidence(factory: SeverProviderFactory) -> object:
 def execute_sever_analysis(
     request: SeverAnalysisRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: SeverProviderFactory,
     progress_callback: SeverProgressCallback | None = None,
 ) -> SeverAnalysisResult:
@@ -164,7 +164,7 @@ def execute_sever_analysis(
 def execute_sever_apply(
     request: SeverApplyRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SeverApplyResult:
     """Apply one exact review through the production save-location port."""
 
@@ -177,7 +177,7 @@ def execute_sever_apply(
 def execute_sever_session_start(
     analysis: SeverAnalysisResult,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SeverStoredAnalysisResult:
     """Persist one newly analyzed review through the private session adapter."""
 
@@ -190,7 +190,7 @@ def execute_sever_session_start(
 def execute_sever_session_open(
     uid: str,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SeverSessionSnapshot:
     """Load one exact saved session without terminal or interface behavior."""
 
@@ -203,7 +203,7 @@ def execute_sever_session_open(
 def execute_sever_session_decision(
     request: SeverDecisionRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SeverSessionSnapshot:
     """Persist one reviewed candidate decision under session CAS."""
 
@@ -216,7 +216,7 @@ def execute_sever_session_decision(
 def execute_sever_session_destination_change(
     request: SeverDestinationRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SeverSessionSnapshot:
     """Validate and persist one self- or other-save destination revision."""
 
@@ -234,7 +234,7 @@ def execute_sever_session_destination_change(
 def execute_sever_session_apply(
     request: SeverPersistedApplyRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> SeverPersistedApplyResult:
     """Materialize and persist one saved review through the lifecycle boundary."""
 

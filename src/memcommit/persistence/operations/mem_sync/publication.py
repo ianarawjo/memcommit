@@ -6,6 +6,7 @@ from pathlib import PurePosixPath
 
 from memcommit.persistence.import_export.output import write_output_files
 from memcommit.persistence.import_export.source import require_regular_output_path
+from memcommit.persistence.store.context_hierarchy import validate_context_hierarchy
 from memcommit.persistence.store.infrastructure.atomic_io import _write_bytes_atomic
 
 
@@ -26,8 +27,7 @@ def sync_store_file_path(store, relative):
     ):
         raise ValueError("Invalid Sync publication path.")
     if (
-        path.parts[0]
-        not in {"contexts", "command-context-archives", "sync", "translation-views"}
+        path.parts[0] not in {"contexts", "command-context-archives", "sync"}
         and relative != "state.json"
     ):
         raise ValueError("Sync publication path is outside document state.")
@@ -49,6 +49,7 @@ def publish_sync_files(store, root, publication):
     written last; it belongs to this transaction and rolls back with its files.
     """
     observed = []
+    final_context_names = set(store.list_context_names())
     for relative, versions in publication["store_files"].items():
         path = sync_store_file_path(store, relative)
         before, after = map(decode_bytes, versions)
@@ -56,6 +57,18 @@ def publish_sync_files(store, root, publication):
         if actual != before:
             raise ValueError(f"Sync Store file changed before publication: {relative}")
         observed.append((path, actual, after, False))
+        relative_path = PurePosixPath(relative)
+        if (
+            relative_path.parts[0] == "contexts"
+            and relative_path.name == "context.json"
+        ):
+            name = "/".join(relative_path.parts[1:-1])
+            if after is None:
+                final_context_names.discard(name)
+            else:
+                final_context_names.add(name)
+    # Check the complete result, not the transient order of individual writes.
+    validate_context_hierarchy(final_context_names)
     for relative, versions in publication["external_files"].items():
         path = require_regular_output_path(root, relative)
         before, after = map(decode_bytes, versions)

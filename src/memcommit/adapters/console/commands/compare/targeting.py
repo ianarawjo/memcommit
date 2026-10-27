@@ -26,7 +26,7 @@ from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class CompareTargetingError(ValueError):
@@ -46,7 +46,7 @@ class CompareCliTargets:
 
 
 def _resolve_context_endpoint(
-    store: MemoryStore,
+    store: ProfileStore,
     operand: str | None,
     *,
     current_name: str | None,
@@ -113,7 +113,7 @@ def _resolve_qualified_memory(
 
 
 def _resolve_auto_memory_endpoint(
-    store: MemoryStore,
+    store: ProfileStore,
     operand: str,
     *,
     current_name: str | None,
@@ -159,7 +159,7 @@ def _resolve_auto_memory_endpoint(
 
 
 def _resolve_auto_typed_endpoint(
-    store: MemoryStore,
+    store: ProfileStore,
     operand: str,
     *,
     current_name: str | None,
@@ -207,7 +207,7 @@ def _resolve_auto_typed_endpoint(
 
 
 def resolve_compare_cli_targets(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     reference_operand: str | None,
     compared_operand: str,

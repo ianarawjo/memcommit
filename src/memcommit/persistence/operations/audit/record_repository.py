@@ -14,13 +14,13 @@ from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditSession,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class JsonAuditRecordRepository:
     """Store every completed Audit as one private UID-addressed JSON record."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self.store = store
         self.directory = store.store_dir / "quality-audits"
 
@@ -68,34 +68,33 @@ class JsonAuditRecordRepository:
 
         path = self._path(session.uid)
         data = session.to_dict()
-        with self.store.profile_write_guard():
-            if self.directory.exists() and (
-                not self.directory.is_dir() or self.directory.is_symlink()
-            ):
+        if self.directory.exists() and (
+            not self.directory.is_dir() or self.directory.is_symlink()
+        ):
+            raise QualityAuditError("Audit session storage is invalid.")
+        self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+        with self._write_lock(session.uid):
+            if path.exists() and (not path.is_file() or path.is_symlink()):
                 raise QualityAuditError("Audit session storage is invalid.")
-            self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
-            with self._write_lock(session.uid):
-                if path.exists() and (not path.is_file() or path.is_symlink()):
-                    raise QualityAuditError("Audit session storage is invalid.")
-                if path.exists():
-                    raise QualityAuditError(
-                        "An Audit record with this uid already exists."
-                    )
-                temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
-                try:
-                    descriptor = os.open(
-                        temporary,
-                        os.O_WRONLY | os.O_CREAT | os.O_EXCL,
-                        0o600,
-                    )
-                    with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-                        json.dump(data, handle, indent=2, ensure_ascii=False)
-                        handle.flush()
-                        os.fsync(handle.fileno())
-                    os.replace(temporary, path)
-                finally:
-                    if temporary.exists() and not temporary.is_symlink():
-                        temporary.unlink()
+            if path.exists():
+                raise QualityAuditError(
+                    "An Audit record with this uid already exists."
+                )
+            temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
+            try:
+                descriptor = os.open(
+                    temporary,
+                    os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+                    0o600,
+                )
+                with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+                    json.dump(data, handle, indent=2, ensure_ascii=False)
+                    handle.flush()
+                    os.fsync(handle.fileno())
+                os.replace(temporary, path)
+            finally:
+                if temporary.exists() and not temporary.is_symlink():
+                    temporary.unlink()
 
     def load(self, uid: str) -> QualityAuditSession:
         path = self._path(uid)

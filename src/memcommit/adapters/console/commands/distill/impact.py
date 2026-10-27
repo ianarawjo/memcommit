@@ -47,7 +47,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -229,7 +229,7 @@ def distill_cmd(
             default=ContextScopePreset.DIRECT,
         )
         traversal = resolve_context_traversal(preset=preset)
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
         if context_name is not None and source_name is not None:
             raise DistillError("Use either positional Context or --from, not both.")

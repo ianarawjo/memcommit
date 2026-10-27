@@ -4,6 +4,7 @@ import os
 import sys
 from typing import Annotated
 
+from click import UsageError
 import typer
 
 from memcommit.adapters.console.commands.update.receipt import render_update_receipt
@@ -11,15 +12,19 @@ from memcommit.adapters.console.terminal.components.command_wait import run_comm
 from memcommit.adapters.console.terminal.core.output import echo_text
 from memcommit.application.operations.update.instruction import run_instruction_update
 from memcommit.application.operations.update.model.instruction import UpdateRequest
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.connection import connect_semantic_provider
 
 
 def cmd(
     instruction: Annotated[
-        str,
-        typer.Argument(help="One instruction to apply to the current Context."),
-    ],
+        str | None,
+        typer.Argument(
+            metavar="INSTRUCTION",
+            show_default=False,
+            help="One instruction to apply to the current Context.",
+        ),
+    ] = None,
     recursive: Annotated[
         bool,
         typer.Option(
@@ -30,6 +35,8 @@ def cmd(
     ] = False,
 ) -> None:
     """Apply one instruction, then print the completed changes."""
+    if instruction is None or not instruction.strip():
+        raise UsageError('Missing required input. Example: mem update "Instruction".')
     try:
         request = UpdateRequest(instruction, recursive=recursive)
     except (ValueError, RuntimeError) as error:
@@ -43,7 +50,7 @@ def cmd(
                 progress.update("planning changes", step=1)
                 return connect_semantic_provider()
 
-            return run_instruction_update(MemoryStore(), request, connect)
+            return run_instruction_update(ProfileStore(), request, connect)
 
         receipt = run_command_wait(
             "UPDATE", "preparing instruction", total=2, work=execute

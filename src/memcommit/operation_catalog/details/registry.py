@@ -4,12 +4,13 @@ from types import MappingProxyType
 
 from memcommit.operation_catalog.details.add import ADD_DETAILS
 from memcommit.operation_catalog.details.atomize import ATOMIZE_DETAILS
-from memcommit.operation_catalog.details.check_conformance import CHECK_CONFORMANCE_DETAILS
+from memcommit.operation_catalog.details.check_conformance import (
+    CHECK_CONFORMANCE_DETAILS,
+)
 from memcommit.operation_catalog.details.dedun import DEDUN_DETAILS
 from memcommit.operation_catalog.details.distill import DISTILL_DETAILS
 from memcommit.operation_catalog.details.fit import FIT_DETAILS
 from memcommit.operation_catalog.details.impact import IMPACT_DETAILS
-from memcommit.operation_catalog.details.import_operation import IMPORT_DETAILS
 from memcommit.operation_catalog.details.init import INIT_DETAILS
 from memcommit.operation_catalog.details.init_study import INIT_STUDY_DETAILS
 from memcommit.operation_catalog.details.log import LOG_DETAILS
@@ -35,7 +36,6 @@ _DETAIL_GROUPS = (
     DISTILL_DETAILS,
     FIT_DETAILS,
     IMPACT_DETAILS,
-    IMPORT_DETAILS,
     INIT_DETAILS,
     INIT_STUDY_DETAILS,
     LOG_DETAILS,

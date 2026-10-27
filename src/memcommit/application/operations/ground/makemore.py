@@ -41,7 +41,7 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     freeze_memorization_target,
 )
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
 )
 
 
@@ -76,7 +76,7 @@ class GroundMakemoreResult:
 
 
 def freeze_ground_makemore(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     ground_name: str,
     direction: GroundMakemoreDirection,
@@ -215,7 +215,7 @@ def _request_from_ground_workspace(
 def execute_ground_makemore(
     frozen: FrozenGroundMakemore,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: GroundMakemoreProviderFactory,
 ) -> GroundMakemoreResult:
     """Use the standalone application and reject a concurrent Ground revision."""
@@ -270,7 +270,7 @@ def execute_ground_makemore(
 def apply_ground_makemore_result(
     result: GroundMakemoreResult,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> AdoptGroundWorkspaceMemoriesResult:
     """Explicitly adopt one unchanged physical-Ground Makemore proposal."""
 

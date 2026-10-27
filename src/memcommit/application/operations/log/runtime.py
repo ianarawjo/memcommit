@@ -13,13 +13,13 @@ from memcommit.persistence.command_ledger.attempts import (
     CommandAttemptError,
     CommandAttemptLedger,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class CommandAttemptLogSource:
     """Adapt one Profile's durable command-attempt ledger to Log entries."""
 
-    def __init__(self, store: MemoryStore) -> None:
+    def __init__(self, store: ProfileStore) -> None:
         self._ledger = CommandAttemptLedger(store.store_dir)
 
     def read(self, request: LogRequest) -> LogResult:
@@ -49,7 +49,7 @@ class CommandAttemptLogSource:
         )
 
 
-def execute_log(store: MemoryStore, request: LogRequest) -> LogResult:
+def execute_log(store: ProfileStore, request: LogRequest) -> LogResult:
     """Read the Profile-wide operation Log through its application port."""
 
     return run_log(request, source=CommandAttemptLogSource(store))

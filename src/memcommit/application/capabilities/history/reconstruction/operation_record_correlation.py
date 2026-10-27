@@ -55,12 +55,12 @@ def operation_record_identity(
     """
 
     if command == "sync" and "sync_operation" in args:
-        from memcommit.application.operations.mem_sync.external_change_checkpoint import (
-            validate_external_change_identity,
+        from memcommit.application.operations.import_export_sync.mem_sync.checkpoint_identity import (
+            validate_sync_checkpoint_identity,
         )
 
         try:
-            return "sync:" + validate_external_change_identity(args)
+            return "sync:" + validate_sync_checkpoint_identity(args)
         except ValueError as error:
             raise OperationRecordCorrelationError(str(error)) from error
     if command == "checkpoint":

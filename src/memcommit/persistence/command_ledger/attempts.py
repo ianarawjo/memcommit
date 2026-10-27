@@ -21,8 +21,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
-from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
-
 AttemptStatus = Literal["RUNNING", "COMPLETED", "FAILED", "INTERRUPTED"]
 CommandOutcome = Literal["NO_CHANGE", "CANCELLED"]
 _FINAL_STATUSES = frozenset({"COMPLETED", "FAILED", "INTERRUPTED"})
@@ -198,36 +196,13 @@ class CommandAttempt:
 
 
 def _validated_details(value: object) -> None:
+    # Retired report-navigation details stay opaque so old attempts remain readable.
     if not isinstance(value, dict) or set(value) - {
         "sever",
         "memory_report",
         "read_report",
     }:
         raise CommandAttemptError("Command attempt details are invalid.")
-    read_report = value.get("read_report")
-    if read_report is not None:
-        try:
-            ReadReportTarget.from_metadata(read_report)
-        except ValueError as error:
-            raise CommandAttemptError(
-                "Read Report attempt details are invalid."
-            ) from error
-    memory_report = value.get("memory_report")
-    if memory_report is not None:
-        required = {"operation", "context_name", "memory_uid"}
-        if (
-            not isinstance(memory_report, dict)
-            or not required <= set(memory_report)
-            or set(memory_report) - {*required, "include_descendants"}
-        ):
-            raise CommandAttemptError("Memory report attempt details are invalid.")
-        if memory_report.get("operation") not in {"trace", "rationale"}:
-            raise CommandAttemptError("Memory report operation is invalid.")
-        _safe_nonempty(memory_report.get("context_name"), field="Context name")
-        _safe_nonempty(memory_report.get("memory_uid"), field="Memory UID")
-        include_descendants = memory_report.get("include_descendants")
-        if include_descendants is not None and type(include_descendants) is not bool:
-            raise CommandAttemptError("Memory report scope is invalid.")
     sever = value.get("sever")
     if sever is None:
         return
@@ -301,9 +276,21 @@ class CommandAttemptLedger:
 
     def __init__(self, store_dir: Path):
         self.store_dir = Path(store_dir)
-        self.directory = self.store_dir / "ledger" / "command-attempts"
+        from .study_records import registered_profile_for_store, study_record_directory
+
+        self.profile = registered_profile_for_store(self.store_dir)
+        external = study_record_directory(self.profile, "commands") if self.profile is not None else None
+        self.external_records = external is not None
+        self.directory = external or self.store_dir / "ledger" / "command-attempts"
 
     def _validated_directory(self, *, create: bool) -> Path:
+        if self.external_records:
+            from .study_records import validate_study_record_directory
+
+            try:
+                return validate_study_record_directory(self.profile, self.directory, create=create)
+            except (OSError, ValueError, RuntimeError) as error:
+                raise CommandAttemptError(str(error)) from error
         ledger = self.directory.parent
         for path, label in (
             (ledger, "Profile ledger"),
@@ -381,6 +368,8 @@ class CommandAttemptLedger:
             raise CommandAttemptError("Command attempt is not valid JSON.") from error
 
     def list(self) -> tuple[CommandAttempt, ...]:
+        if self.external_records:
+            self._validated_directory(create=False)
         if not self.directory.exists():
             return ()
         self._validated_directory(create=False)
@@ -488,23 +477,6 @@ def annotate_sever_attempt(**updates: object) -> None:
     active.record = updated
 
 
-def annotate_read_report_attempt(target: ReadReportTarget) -> None:
-    """Persist one content-free report identity on the active CLI attempt."""
-
-    if not isinstance(target, ReadReportTarget):
-        raise TypeError("Read Report annotation requires a typed target.")
-    active = _ACTIVE_ATTEMPT.get()
-    if active is None:
-        return
-    if active.record.operation != target.operation:
-        raise CommandAttemptError(
-            "Read Report metadata does not match the active operation."
-        )
-    details = dict(active.record.details)
-    details["read_report"] = target.to_metadata()
-    updated = replace(active.record, details=details)
-    active.ledger.replace(updated)
-    active.record = updated
 
 
 def finish_command_attempt(

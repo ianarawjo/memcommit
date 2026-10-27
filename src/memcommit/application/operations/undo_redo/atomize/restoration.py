@@ -26,7 +26,7 @@ if TYPE_CHECKING:
         CommandRestoreResult,
         ContextCommandUnit,
     )
-    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.store import ProfileStore
 
 
 def restore_atomize_context_creation(
@@ -62,7 +62,7 @@ def restore_atomize_context_creation(
         },
     )
     restore = _undo_locked if direction == "undo" else _redo_locked
-    with store._context_graph_lock(exclusive=False):
+    with store._context_graph_lock(exclusive=True):
         with store._context_write_lock(unit.changes[0].context_name):
             checkpoint = restore(store, unit, auto_checkpoint)
     return CommandRestoreResult(
@@ -75,7 +75,7 @@ def restore_atomize_context_creation(
 
 @contextmanager
 def _session_locks(
-    store: MemoryStore, source_uid: str, output_uid: str
+    store: ProfileStore, source_uid: str, output_uid: str
 ) -> Iterator[None]:
     with ExitStack() as locks:
         for uid in sorted({source_uid, output_uid}):
@@ -84,7 +84,7 @@ def _session_locks(
 
 
 def _undo_locked(
-    store: MemoryStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpointRequest
+    store: ProfileStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpointRequest
 ) -> Checkpoint:
     change = unit.changes[0]
     current = load_undo_context(store, change)
@@ -102,7 +102,7 @@ def _undo_locked(
 
 
 def _redo_locked(
-    store: MemoryStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpointRequest
+    store: ProfileStore, unit: ContextCommandUnit, auto_checkpoint: AutoCheckpointRequest
 ) -> Checkpoint:
     change = unit.changes[0]
     if store.context_exists(change.context_name):

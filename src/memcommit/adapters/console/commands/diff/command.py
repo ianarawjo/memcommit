@@ -29,7 +29,7 @@ from memcommit.application.operations.diff.context_checkpoint_lookup import (
 )
 from memcommit.core.context_targeting.model import CheckpointTarget
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
@@ -98,7 +98,7 @@ def cmd(
         )
         raise typer.Exit(2)
 
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     try:
         current_context = store.current_context_name()
     except FileNotFoundError:

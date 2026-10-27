@@ -1,0 +1,23 @@
+{
+  "uid": "8f91af53-13f8-4aab-b4cc-fc71f498fe2b",
+  "timestamp": "2026-10-26T12:43:34.417279",
+  "snapshot": {
+    "uid": "bd4d63e6-8bf7-4df9-90c7-9e1fe8fb42a6",
+    "name": "you/AGENTS",
+    "memories": {},
+    "order": [],
+    "document": {
+      "path": "you/AGENTS.md",
+      "format": "md",
+      "role": "document"
+    }
+  },
+  "command": "sync",
+  "command_details": {
+    "sync_operation": {
+      "uid": "81862974-1bc4-471e-8afe-b7ee74151094",
+      "action": "UNCHANGED"
+    }
+  },
+  "auto": true
+}

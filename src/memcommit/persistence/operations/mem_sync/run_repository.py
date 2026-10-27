@@ -1,9 +1,26 @@
 """Small publication manifests and immutable Sync execution receipts."""
 
+import json
 from datetime import datetime, timezone
 from uuid import UUID
 
-from .settings_repository import read_sync_record, sync_record_path
+from memcommit.persistence.store.infrastructure.atomic_io import (
+    _reject_duplicate_json_keys,
+)
+
+
+def sync_record_path(store, *segments):
+    path = store.store_dir / "sync"
+    for segment in segments:
+        path = path / segment
+    for parent in (store.store_dir / "sync", *path.parents):
+        if parent == store.store_dir:
+            break
+        if parent.is_symlink():
+            raise ValueError(f"Invalid Sync record directory: {parent}")
+    if path.is_symlink():
+        raise ValueError(f"Invalid Sync record: {path}")
+    return path
 
 
 class SyncRunRepository:
@@ -13,7 +30,6 @@ class SyncRunRepository:
     def receipt_record(self, result, causing_command=None):
         uid = str(UUID(result.run_uid))
         return {
-            "schema_version": 1,
             "uid": uid,
             "created_at": datetime.now(timezone.utc).isoformat(),
             "command": "sync",
@@ -48,7 +64,10 @@ class SyncRunRepository:
         for path in sorted(root.glob("*.json")):
             if path.is_symlink() or str(UUID(path.stem)) != path.stem:
                 raise ValueError("Invalid Sync execution receipt path.")
-            record = read_sync_record(path, None)
+            with path.open(encoding="utf-8") as stream:
+                record = json.load(stream, object_pairs_hook=_reject_duplicate_json_keys)
+            if not isinstance(record, dict):
+                raise ValueError("Invalid Sync execution receipt.")
             if record.get("uid") != path.stem:
                 raise ValueError(
                     "Sync execution receipt identity differs from its path."
@@ -61,6 +80,5 @@ class SyncRunRepository:
             record
             for record in self.history()
             if record.get("profile", {}).get("undoable")
-            or record.get("profile", {}).get("lifecycle")
             or record.get("profile", {}).get("restoration")
         )

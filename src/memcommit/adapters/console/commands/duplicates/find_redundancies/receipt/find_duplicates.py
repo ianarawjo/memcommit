@@ -6,9 +6,10 @@ import typer
 
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     plural,
-    render_cleanup_member,
+    render_cleanup_memory_change,
     render_heading,
 )
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.core.uid_prefixes import (
     extend_uid_prefixes_until_unique,
 )
@@ -77,14 +78,17 @@ def _render_context_report(frame: ExactDuplicateContextReport) -> None:
         )
         member_uids = (group.survivor_uid, *group.absorbed_uids)
         uid_prefixes = extend_uid_prefixes_until_unique(member_uids)
-        render_cleanup_member(
-            "SURVIVOR",
-            uid_prefixes[group.survivor_uid],
-            content=group.content if group.content is not None else group.summary,
-        )
-        for uid in group.absorbed_uids:
-            render_cleanup_member(
-                "ABSORB",
-                uid_prefixes[uid],
-                content=group.content if group.content is not None else group.summary,
+        for memory_uid in member_uids:
+            keep_memory = memory_uid == group.survivor_uid
+            content = group.content if group.content is not None else group.summary
+            render_cleanup_memory_change(
+                MemoryChange(
+                    marker="=" if keep_memory else "-",
+                    treatment="KEEP" if keep_memory else "REMOVE",
+                    location=frame.context_name,
+                    memory_uid=memory_uid,
+                    before=content,
+                    after=content if keep_memory else None,
+                ),
+                uid_prefix=uid_prefixes[memory_uid],
             )

@@ -15,7 +15,7 @@ from memcommit.models.memory import Memory
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 QualityFindSelectionMode = Literal["SINGLE", "MULTIPLE"]
@@ -193,7 +193,7 @@ class QualityFindSourceFrame:
 
 
 def freeze_quality_find_source(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str | None,
     *,
     current_name: str | None,

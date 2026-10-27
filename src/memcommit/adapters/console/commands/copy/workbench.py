@@ -100,7 +100,7 @@ def run_copy_and_move_workbench(
         require_interactive_terminal(
             f"Interactive {operation.title()} setup",
             snapshot_hint=(
-                "Pass one or more MEMORY locators and --into TARGET outside a terminal."
+                "Pass one or more MEMORY locators and --to TARGET outside a terminal."
             ),
         )
 

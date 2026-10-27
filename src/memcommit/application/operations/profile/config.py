@@ -1,4 +1,4 @@
-"""Read the process-local MemoryStore profile selection.
+"""Read the process-local ProfileStore profile selection.
 
 This module deliberately does not import :mod:`memcommit.persistence.store`.  The store
 imports it while establishing its immutable process-local root, so importing
@@ -39,11 +39,10 @@ class StudyRunIdentity:
     name: str
     created_at: str
     role: str
-    baseline_profile_uid: str
-    baseline_profile_name: str
-    baseline_sha256: str
     provider_policy_version: str | None = None
     provider_policy_digest: str | None = None
+    session: str | None = None
+    records_root: str | None = None
 
 
 def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
@@ -52,7 +51,7 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
     Profile display names may change independently from the Study label. The
     stable Study UID and role in this source record are therefore the durable
     discriminators used by logging and presentation; ``name`` is editable
-    display metadata shared by both members.
+    display metadata shared by all sessions.
     """
 
     source = profile.source
@@ -60,25 +59,28 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
         STUDY_RUN_PARTICIPANT_SOURCE_KIND,
     }:
         return None
-    legacy_fields = {
+    identity_fields = {
         "kind",
         "study_uid",
         "study_name",
         "created_at",
-        "baseline_sha256",
-        "baseline_profile_uid",
-        "baseline_profile_name",
     }
-    pinned_fields = legacy_fields | {
+    pinned_fields = identity_fields | {
         "provider_policy_version",
         "provider_policy_digest",
     }
-    source_fields = frozenset(source)
+    session_fields = pinned_fields | {"study_session", "study_records_root"}
+    # Retired baseline metadata stays in historical sources without affecting
+    # current Study identity or requiring a registry rewrite.
+    source_fields = frozenset(source) - {
+        "baseline_sha256", "baseline_profile_uid", "baseline_profile_name",
+    }
     if (
         source_fields
         not in {
-            frozenset(legacy_fields),
+            frozenset(identity_fields),
             frozenset(pinned_fields),
+            frozenset(session_fields),
         }
         or profile.kind != "MANAGED"
     ):
@@ -92,20 +94,9 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
         raise ProfileConfigError("Study creation timestamp is invalid.") from error
     if parsed_created_at.tzinfo is None or parsed_created_at.utcoffset() is None:
         raise ProfileConfigError("Study creation timestamp must include a timezone.")
-    baseline_sha256 = source.get("baseline_sha256")
-    if (
-        not isinstance(baseline_sha256, str)
-        or _SHA256.fullmatch(baseline_sha256) is None
-    ):
-        raise ProfileConfigError("Study baseline digest is invalid.")
-    baseline_profile_uid = _canonical_uid(
-        source.get("baseline_profile_uid"),
-        field="Study baseline Profile uid",
-    )
-    baseline_profile_name = validate_profile_name(source.get("baseline_profile_name"))
     provider_policy_version = source.get("provider_policy_version")
     provider_policy_digest = source.get("provider_policy_digest")
-    if source_fields == pinned_fields:
+    if source_fields in (pinned_fields, session_fields):
         if (
             not isinstance(provider_policy_version, str)
             or not provider_policy_version
@@ -121,22 +112,33 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
         provider_policy_version = None
         provider_policy_digest = None
     role = "PARTICIPANT"
+    session = source.get("study_session")
+    records_root = source.get("study_records_root")
+    if source_fields == session_fields:
+        validate_profile_name(session)
+        if (
+            not isinstance(records_root, str)
+            or not Path(records_root).is_absolute()
+            or str(Path(records_root).resolve()) != records_root
+            or Path(records_root).name != "study-records"
+            or any(part in {".mem", ".git"} for part in Path(records_root).parts)
+        ):
+            raise ProfileConfigError("Study records location is invalid.")
     return StudyRunIdentity(
         uid=study_uid,
         name=study_name,
         created_at=created_at,  # type: ignore[arg-type]
         role=role,
-        baseline_profile_uid=baseline_profile_uid,
-        baseline_profile_name=baseline_profile_name,
-        baseline_sha256=baseline_sha256,
         provider_policy_version=provider_policy_version,
         provider_policy_digest=provider_policy_digest,
+        session=session,
+        records_root=records_root,
     )
 
 
 @dataclass(frozen=True)
 class ProfileRegistry:
-    """Validated selector state kept outside every MemoryStore."""
+    """Validated selector state kept outside every ProfileStore."""
 
     generation: int
     active_uid: str
@@ -200,10 +202,6 @@ def profile_stores_dir() -> Path:
 
 def profile_registry_file() -> Path:
     return profile_control_dir() / "registry.json"
-
-
-def profile_registry_lock_file() -> Path:
-    return profile_control_dir() / "registry.lock"
 
 
 def validate_profile_name(value: object) -> str:
@@ -360,6 +358,17 @@ def load_profile_registry() -> ProfileRegistry:
     profile_uids = {profile.uid for profile in profiles}
     for index, profile in enumerate(profiles):
         root = profile_root_dir(profile)
+        identity = study_run_identity(profile)
+        if identity is not None and identity.records_root is not None:
+            records_root = Path(identity.records_root)
+            for other in profiles:
+                other_root = profile_root_dir(other)
+                if (
+                    records_root == other_root
+                    or records_root.is_relative_to(other_root)
+                    or other_root.is_relative_to(records_root)
+                ):
+                    raise ProfileConfigError("Study records overlap a Profile project.")
         for other in profiles[index + 1 :]:
             other_root = profile_root_dir(other)
             if (
@@ -381,11 +390,16 @@ def profile_root_dir(profile: Profile) -> Path:
         return Path(profile.root_dir)
     if profile.kind == "AUTHORING":
         return default_store_dir().parent
-    return workspace_paths().workspace_dir / "projects" / profile.uid
+    # Registration freezes this initial location; renaming must not move a project.
+    return (
+        workspace_paths().workspace_dir
+        / "projects"
+        / validate_profile_name(profile.name)
+    )
 
 
 def profile_store_dir(profile: Profile) -> Path:
-    """An explicit internal Store root, always below the Profile project."""
+    """Return the Store path: <Profile root>/.mem."""
     return profile_root_dir(profile) / ".mem"
 
 

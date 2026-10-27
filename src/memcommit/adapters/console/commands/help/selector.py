@@ -46,10 +46,6 @@ from memcommit.adapters.console.commands.help.inventory import (
     HelpSelection,
     _selectable_form_line,
 )
-from memcommit.adapters.console.commands.help.localized_copy import (
-    HELP_LANGUAGES,
-    HelpLanguage,
-)
 from memcommit.adapters.console.commands.help.rendering import (
     _help_group_fragments,
     _help_group_width,
@@ -58,6 +54,10 @@ from memcommit.adapters.console.commands.help.rendering import (
     _help_section_heading_fragments,
     _ordered_help_entries,
 )
+from memcommit.adapters.console.commands.help.study_commands import (
+    active_profile_is_study,
+)
+
 
 def run_help_selector(
     entries: list[CommandEntry],
@@ -81,12 +81,8 @@ def run_help_selector(
         raise ValueError("Help exploration labels must be nonblank.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive help requires a terminal.")
-    language_state = HorizontalChoiceState(
-        tuple(
-            HorizontalChoiceOption(value=language, label=language) for language in HELP_LANGUAGES
-        ),
-        selected_value="EN",
-    )
+    # Freeze the Study presentation once; redraws must not reread Profile state.
+    show_category_guidance = not active_profile_is_study()
     view_state = HorizontalChoiceState(
         (
             HorizontalChoiceOption(value="CATEGORY", label="BY KIND"),
@@ -114,15 +110,6 @@ def run_help_selector(
     def emit_explore_action(action: str, command_name: str | None = None) -> None:
         if mode == "EXPLORE" and on_explore_action is not None:
             on_explore_action(action, command_name)
-
-    def selected_language() -> HelpLanguage:
-        return language_state.selected_value  # type: ignore[return-value]
-
-    def select_language(delta: int) -> None:
-        """Change only process-local Help prose; never mutate study data."""
-
-        if language_state.move(delta):
-            emit_explore_action("LANGUAGE", language_state.selected_value)
 
     def select_view(delta: int) -> None:
         selected_name = visible_entries["value"][selected_index["value"]].name
@@ -196,17 +183,10 @@ def run_help_selector(
             return
 
         groups = visible_groups()
-        if event.app.layout.has_focus(language_control):
-            if direction > 0:
-                event.app.layout.focus(view_control)
-            else:
-                focus_group(groups[-1])
-                event.app.layout.focus(list_control)
-            event.app.invalidate()
-            return
         if event.app.layout.has_focus(view_control):
             if direction < 0:
-                event.app.layout.focus(language_control)
+                focus_group(groups[-1])
+                event.app.layout.focus(list_control)
             else:
                 focus_group(groups[0])
                 event.app.layout.focus(list_control)
@@ -218,11 +198,11 @@ def run_help_selector(
             title, _rows = groups[group_index]
             category_cursors[title] = selected_index["value"]
         target_index = (
-            0
+            len(groups)
             if group_index is None and direction > 0
             else group_index + direction
             if group_index is not None
-            else -1
+            else len(groups) - 1
         )
         if 0 <= target_index < len(groups):
             focus_group(groups[target_index])
@@ -248,17 +228,6 @@ def run_help_selector(
         card_width = _help_group_width(terminal_columns)
         by_kind = view_state.selected_value == "CATEGORY"
         fragments.extend(
-            _help_information_box_fragments(
-                width=card_width,
-                by_kind=by_kind,
-                focused_concept_index=selected_concept_index["value"],
-                focused=list_focused,
-                language=selected_language(),
-            )
-        )
-        if fragments:
-            fragments.append(("", "\n"))
-        fragments.extend(
             _help_section_heading_fragments(
                 title="OPERATIONS",
                 width=card_width,
@@ -282,31 +251,29 @@ def run_help_selector(
                     selected_index=selected_index["value"],
                     expanded_index=expanded_index["value"],
                     selected_form=selected_form["value"],
+                    show_category_guidance=show_category_guidance,
                     viewport_height=(
                         None if by_kind else _help_list_viewport_height(terminal_rows)
                     ),
-                    language=selected_language(),
                 )
             )
             if group_index < len(groups) - 1:
                 fragments.append(("", "\n"))
+        if by_kind:
+            fragments.append(("", "\n"))
+            fragments.extend(
+                _help_information_box_fragments(
+                    width=card_width,
+                    by_kind=True,
+                    focused_concept_index=selected_concept_index["value"],
+                    focused=list_focused,
+                    viewport_height=_help_list_viewport_height(terminal_rows),
+                )
+            )
         return fragments
 
     list_control = FormattedTextControl(
         text=render_entries,
-        focusable=True,
-        show_cursor=False,
-    )
-    language_control = FormattedTextControl(
-        lambda: render_horizontal_choice(
-            language_state,
-            title="LANGUAGE",
-            focused=(
-                app_ref.get("app") is not None
-                and app_ref["app"].layout.has_focus(language_control)
-            ),
-            inline_boxed=True,
-        ),
         focusable=True,
         show_cursor=False,
     )
@@ -325,21 +292,33 @@ def run_help_selector(
     )
     surface_focus = SurfaceFocusController(
         (
-            FocusSurface("language", language_control),
             FocusSurface("view", view_control),
             FocusSurface("commands", list_control),
         )
     )
 
-    def move_one(direction: int) -> None:
+    def focused_help_row_index() -> int:
         concept_index = selected_concept_index["value"]
         if concept_focus_active() and concept_index is not None:
-            candidate = concept_index + direction
-            if candidate >= len(HELP_CORE_CONCEPTS):
-                selected_concept_index["value"] = None
-                selected_index["value"] = 0
-            else:
-                selected_concept_index["value"] = max(0, candidate)
+            return len(visible_entries["value"]) + concept_index
+        return selected_index["value"]
+
+    def focus_help_row(row_index: int) -> None:
+        command_count = len(visible_entries["value"])
+        concept_count = (
+            len(HELP_CORE_CONCEPTS) if view_state.selected_value == "CATEGORY" else 0
+        )
+        row_index = max(0, min(row_index, command_count + concept_count - 1))
+        if row_index < command_count:
+            selected_index["value"] = row_index
+            selected_concept_index["value"] = None
+        else:
+            selected_index["value"] = command_count - 1
+            selected_concept_index["value"] = row_index - command_count
+
+    def move_one(direction: int) -> None:
+        if concept_focus_active():
+            focus_help_row(focused_help_row_index() + direction)
             return
         form_index = selected_form["value"]
         if form_index is not None:
@@ -352,28 +331,11 @@ def run_help_selector(
             else:
                 selected_form["value"] = None
                 expanded_index["value"] = None
-                selected_index["value"] = min(
-                    selected_index["value"] + 1,
-                    len(visible_entries["value"]) - 1,
-                )
-            return
-        if (
-            direction < 0
-            and selected_index["value"] == 0
-            and view_state.selected_value == "CATEGORY"
-        ):
-            expanded_index["value"] = None
-            selected_concept_index["value"] = len(HELP_CORE_CONCEPTS) - 1
+                focus_help_row(selected_index["value"] + 1)
             return
         previous = selected_index["value"]
-        selected_index["value"] = max(
-            0,
-            min(
-                selected_index["value"] + direction,
-                len(visible_entries["value"]) - 1,
-            ),
-        )
-        if selected_index["value"] != previous:
+        focus_help_row(previous + direction)
+        if selected_index["value"] != previous or concept_focus_active():
             expanded_index["value"] = None
 
     @bindings.add("down", filter=has_focus(list_control))
@@ -386,19 +348,10 @@ def run_help_selector(
 
     @bindings.add("up", filter=has_focus(list_control))
     def _previous_command(event) -> None:
-        if concept_focus_active() and selected_concept_index["value"] == 0:
-            navigation_accelerator.reset()
-            surface_focus.focus_relative(
-                event.app,
-                -1,
-                wrap=False,
-            )
-            event.app.invalidate()
-            return
         if (
-            selected_index["value"] == 0
+            not concept_focus_active()
+            and selected_index["value"] == 0
             and selected_form["value"] is None
-            and view_state.selected_value != "CATEGORY"
         ):
             navigation_accelerator.reset()
             surface_focus.focus_relative(
@@ -419,23 +372,7 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        concept_count = (
-            len(HELP_CORE_CONCEPTS) if view_state.selected_value == "CATEGORY" else 0
-        )
-        position = (
-            selected_concept_index["value"]
-            if concept_focus_active()
-            else concept_count + selected_index["value"]
-        )
-        target = min(
-            int(position) + 10,
-            concept_count + len(visible_entries["value"]) - 1,
-        )
-        if target < concept_count:
-            selected_concept_index["value"] = target
-        else:
-            selected_concept_index["value"] = None
-            selected_index["value"] = target - concept_count
+        focus_help_row(focused_help_row_index() + 10)
         event.app.invalidate()
 
     @bindings.add("pageup", filter=has_focus(list_control))
@@ -443,20 +380,7 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        concept_count = (
-            len(HELP_CORE_CONCEPTS) if view_state.selected_value == "CATEGORY" else 0
-        )
-        position = (
-            selected_concept_index["value"]
-            if concept_focus_active()
-            else concept_count + selected_index["value"]
-        )
-        target = max(int(position) - 10, 0)
-        if target < concept_count:
-            selected_concept_index["value"] = target
-        else:
-            selected_concept_index["value"] = None
-            selected_index["value"] = target - concept_count
+        focus_help_row(focused_help_row_index() - 10)
         event.app.invalidate()
 
     @bindings.add("home", filter=has_focus(list_control))
@@ -464,10 +388,9 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        if view_state.selected_value == "CATEGORY":
-            selected_concept_index["value"] = 0
-        else:
-            selected_index["value"] = 0
+        focus_help_row(0)
+        # Record anchors sit after their text; Home must also reveal the top.
+        body.vertical_scroll = 0
         event.app.invalidate()
 
     @bindings.add("end", filter=has_focus(list_control))
@@ -581,36 +504,6 @@ def run_help_selector(
         select_view(-1)
         event.app.invalidate()
 
-    @bindings.add("left", filter=has_focus(language_control), eager=True)
-    def _previous_language(event) -> None:
-        navigation_accelerator.reset()
-        select_language(-1)
-        event.app.invalidate()
-
-    @bindings.add("right", filter=has_focus(language_control), eager=True)
-    def _next_language(event) -> None:
-        navigation_accelerator.reset()
-        select_language(1)
-        event.app.invalidate()
-
-    @bindings.add("down", filter=has_focus(language_control), eager=True)
-    def _leave_language(event) -> None:
-        surface_focus.focus_relative(
-            event.app,
-            1,
-            wrap=False,
-        )
-        event.app.invalidate()
-
-    @bindings.add("up", filter=has_focus(view_control), eager=True)
-    def _enter_language(event) -> None:
-        surface_focus.focus_relative(
-            event.app,
-            -1,
-            wrap=False,
-        )
-        event.app.invalidate()
-
     @bindings.add("right", filter=has_focus(view_control), eager=True)
     def _next_view(event) -> None:
         navigation_accelerator.reset()
@@ -667,19 +560,6 @@ def run_help_selector(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    language = Window(
-        language_control,
-        height=Dimension.exact(1),
-        dont_extend_height=True,
-    )
-    language_frame = Frame(language, title="HELP LANGUAGE")
-    bind_focused_frame_style(
-        language_frame,
-        is_focused=lambda: (
-            app_ref.get("app") is not None
-            and app_ref["app"].layout.has_focus(language_control)
-        ),
-    )
     view_frame = Frame(view, title="INVENTORY VIEW")
     bind_focused_frame_style(
         view_frame,
@@ -693,10 +573,6 @@ def run_help_selector(
         return_label = (
             f"return to {explore_return_label}" if mode == "EXPLORE" else "cancel"
         )
-        if app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
-            language_control
-        ):
-            return " LANGUAGE: ←/→ choose · ↓ view · Tab next · Q " + return_label
         if app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
             view_control
         ):
@@ -713,7 +589,7 @@ def run_help_selector(
                 if mode == "EXPLORE"
                 else ""
             )
-            return f" ↑/↓ move (hold accelerates)  Tab first kind {toggle}"
+            return f" ↑/↓ move (hold accelerates)  Tab view · Shift-Tab last kind {toggle}"
         enter_action = (
             "Enter open forms"
             if selected_form["value"] is None
@@ -725,7 +601,9 @@ def run_help_selector(
             else "H full help  Q/Esc close"
         )
         tab_hint = (
-            "Tab next kind" if view_state.selected_value == "CATEGORY" else "Tab surface"
+            "Tab next kind"
+            if view_state.selected_value == "CATEGORY"
+            else "Tab surface"
         )
         return (
             " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
@@ -742,7 +620,6 @@ def run_help_selector(
             HSplit(
                 [
                     header,
-                    language_frame,
                     view_frame,
                     body,
                     horizontal_rule(right_gutter=1),

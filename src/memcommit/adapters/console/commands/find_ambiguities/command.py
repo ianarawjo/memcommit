@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
@@ -19,11 +18,6 @@ from memcommit.adapters.console.terminal.components.quality_find.rendering impor
     render_reason,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.terminal.components.quality_find.workbench import (
-    annotate_quality_find_attempt,
-    interactive_quality_find_available,
-    run_interactive_quality_find,
-)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
@@ -39,7 +33,7 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
 )
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.find_ambiguities.application import (
@@ -73,13 +67,6 @@ def cmd(
             help="Inspect all readable Contexts in the active Profile",
         ),
     ] = False,
-    select_targets: Annotated[
-        bool,
-        typer.Option(
-            "--select",
-            help="Choose readable Context targets and lexical reach interactively",
-        ),
-    ] = False,
 ) -> None:
     """Report per-Memory ambiguity; never edit or checkpoint the Context."""
     try:
@@ -94,7 +81,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    store = MemoryStore(create=False)
+    store = ProfileStore(create=False)
     if all_contexts and context_name is not None:
         typer.secho(
             "Find ambiguities error: --all/-a cannot be combined with an "
@@ -103,53 +90,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if select_targets:
-        if context_name is not None or all_contexts:
-            typer.secho(
-                "Find ambiguities error: --select cannot be combined with an "
-                "explicit Context or --all/-a.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if not interactive_quality_find_available():
-            typer.secho(
-                "Find ambiguities error: --select requires an interactive terminal.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        try:
-            context_snapshot = ContextOperandSnapshot.capture(store)
-            completed = run_interactive_quality_find(
-                store,
-                current_name=context_snapshot.current_name,
-                kind="ambiguities",
-                analyze=lambda source: analyze_find_ambiguities(
-                    source,
-                    connect_semantic_provider,
-                ).report,
-            )
-        except (
-            FileNotFoundError,
-            OSError,
-            ProfileConfigError,
-            ProfileError,
-            RuntimeError,
-            ValueError,
-            FindingsError,
-            QueryProviderError,
-        ) as error:
-            typer.secho(
-                "Find ambiguities error: " + display_escape_text(str(error)),
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if not completed:
-            annotate_command_outcome("CANCELLED")
-            typer.echo("Find ambiguities cancelled.")
-        return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         source = prepare_find_ambiguities(
@@ -198,11 +138,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-
-    annotate_quality_find_attempt(
-        "ambiguities",
-        source,
-    )
 
     render_heading(
         operation_label="Find Ambiguities",

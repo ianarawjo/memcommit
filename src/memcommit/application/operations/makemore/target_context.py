@@ -14,7 +14,7 @@ from memcommit.application.operations.makemore.model import (
 from memcommit.application.capabilities.semantic_result_memorization import (
     FrozenMemorizationTarget,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 @dataclass(frozen=True)
@@ -37,7 +37,7 @@ class FrozenMakemoreTargetContext:
 
 
 def freeze_makemore_target_context(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     target: FrozenMemorizationTarget,
     excluded_root_memory_uids: tuple[str, ...] = (),
@@ -76,7 +76,7 @@ def freeze_makemore_target_context(
 
 
 def _assert_local_contexts_unchanged(
-    store: MemoryStore,
+    store: ProfileStore,
     frozen: FrozenMakemoreTargetContext,
 ) -> None:
     for binding in frozen.local_contexts:
@@ -93,7 +93,7 @@ def _assert_local_contexts_unchanged(
 
 @contextmanager
 def revalidated_makemore_target(
-    store: MemoryStore,
+    store: ProfileStore,
     frozen: FrozenMakemoreTargetContext,
     *,
     revalidate_after: bool = True,

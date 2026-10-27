@@ -8,6 +8,7 @@ from typing import Literal
 
 from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
 from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchView
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 
 
 ReviewReportKind = Literal[
@@ -22,11 +23,12 @@ ReviewReportKind = Literal[
 
 @dataclass(frozen=True)
 class ReviewTextFragment:
-    """One trusted semantic token or neutral span in a text-only Review."""
+    """One plain Review span with optional semantic-token or Memory-diff meaning."""
 
     text: str
     role: SemanticColorRole | None = None
     bold: bool = False
+    memory_change: MemoryChange | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.text, str):
@@ -35,6 +37,11 @@ class ReviewTextFragment:
             raise TypeError("Review text fragments require a semantic color role.")
         if not isinstance(self.bold, bool):
             raise TypeError("Review text fragment bold state must be boolean.")
+        if self.memory_change is not None:
+            if not isinstance(self.memory_change, MemoryChange):
+                raise TypeError("Review Memory fragments require a Memory change.")
+            if self.role is not None or self.bold:
+                raise ValueError("Review Memory styles belong to the shared diff renderer.")
 
 
 @dataclass(frozen=True)

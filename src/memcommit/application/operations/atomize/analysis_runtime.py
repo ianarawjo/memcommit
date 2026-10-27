@@ -31,14 +31,14 @@ from memcommit.providers.clients.codex import CodexChatGPTProvider
 from memcommit.application.capabilities.semantic.prompt_policy import (
     resolve_semantic_prompt_policy,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 ATOMIZE_AGGREGATE_TIMEOUT_SECONDS = 300
 
 
 def _archive_displaced_atomize_pair(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     existing: AtomizeAnalysisSession | None,
     review_record,
@@ -52,7 +52,7 @@ def _archive_displaced_atomize_pair(
 
 
 def _remove_failed_atomize_archive(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     existing: AtomizeAnalysisSession | None,
     created: bool,
@@ -106,7 +106,7 @@ def requested_atomize_memory_uids(
 class MemoryStoreAtomizeAnalysisOpenPort:
     """Open one exact saved or provider-backed Atomize session."""
 
-    store: MemoryStore
+    store: ProfileStore
     validate_before_save: Callable[[], None] | None = None
     expected_session: AtomizeExecutionSnapshot | None = None
 
@@ -327,7 +327,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
 def execute_atomize_analysis_open(
     request: AtomizeAnalysisOpenRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: AtomizeProviderFactory,
     validate_before_save: Callable[[], None] | None = None,
     expected_session: AtomizeExecutionSnapshot | None = None,

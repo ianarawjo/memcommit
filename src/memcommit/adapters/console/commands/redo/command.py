@@ -8,12 +8,12 @@ from memcommit.adapters.console.terminal.components.restoration_receipt import (
     render_command_restore_receipt,
 )
 from memcommit.application.operations.undo_redo.runtime import execute_redo
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd() -> None:
     """Redo one global checkpoint-producing command unit."""
-    store = MemoryStore()
+    store = ProfileStore()
     try:
         result = execute_redo(store)
     except (

@@ -118,12 +118,6 @@ def finalize_resolve_decisions(
     for issue in analysis.issues:
         if issue.uid not in by_uid:
             continue
-        if (
-            issue.kind == "REDUNDANCY"
-            and by_uid[issue.uid].kind == "CONFIRM"
-            and "DELETE" not in analysis.frame.allowed_effects
-        ):
-            raise ResolveError("Keeping one duplicate requires DELETE authority.")
         if issue.kind == "REDUNDANCY":
             allowed = {
                 choice.uid for choice in build_resolution_options(analysis, issue)

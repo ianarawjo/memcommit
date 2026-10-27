@@ -33,7 +33,7 @@ from memcommit.core.context_targeting.model import DirectMemoryLocator
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 
@@ -126,7 +126,7 @@ def cmd(
         raise typer.Exit(2)
 
     try:
-        store = MemoryStore(create=False)
+        store = ProfileStore(create=False)
         context_snapshot = ContextOperandSnapshot.capture(store)
         if context_operand is not None:
             target = resolve_local_context_memory_target(

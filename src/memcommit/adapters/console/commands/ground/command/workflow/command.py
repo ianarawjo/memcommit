@@ -26,7 +26,7 @@ from memcommit.application.operations.ground.workspace_model import GroundWorksp
 from memcommit.application.operations.ground.workspace_runtime import (
     ground_workspace_exists,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 from . import create as create_workflow
 from . import edit as edit_workflow
@@ -96,7 +96,7 @@ def run_ground_command(command_request: GroundCommandRequest) -> None:
         if not open_workflow._interactive_terminal():
             _fail("--resume-draft requires an interactive terminal.")
         try:
-            draft_store = GroundWorkspaceDraftStore(MemoryStore(create=False))
+            draft_store = GroundWorkspaceDraftStore(ProfileStore(create=False))
             draft = draft_store.load(command_request.resume_draft)
             if ground_workspace_exists(draft_store.store, draft.workspace_name):
                 raise GroundWorkspaceDraftError(
@@ -148,7 +148,7 @@ def run_ground_command(command_request: GroundCommandRequest) -> None:
         except GroundDialogueError as error:
             _fail(str(error))
         if open_workflow._interactive_terminal():
-            store = MemoryStore(create=False)
+            store = ProfileStore(create=False)
             outcome = create_workflow._run_new_ground_shell(initial_request)
             if outcome == "BACK_TO_PICKER":
                 open_workflow._run_ground_session_picker(store)
@@ -191,7 +191,7 @@ def run_ground_command(command_request: GroundCommandRequest) -> None:
         _fail("--sessions requires an interactive terminal.")
     if open_workflow._interactive_terminal():
         try:
-            open_workflow._run_ground_session_picker(MemoryStore(create=False))
+            open_workflow._run_ground_session_picker(ProfileStore(create=False))
         except (GroundError, OSError, TypeError, ValueError) as error:
             _fail(str(error))
     else:

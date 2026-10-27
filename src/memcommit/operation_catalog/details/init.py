@@ -2,34 +2,24 @@
 
 from memcommit.operation_catalog.model import (
     DetailDiscovery,
-    OperationComparisonDetail,
-    OperationComparisonOption,
+    HelpDetailKind,
+    OperationTextDetail,
 )
 
 
 INIT_DETAILS = (
-    OperationComparisonDetail(
+    OperationTextDetail(
         id="parent-contexts",
         operation="init",
         title="PARENT CONTEXTS",
-        use_when="Choosing whether Init should also create missing parent Contexts.",
+        use_when="Understanding which Contexts Init creates or reuses.",
         discovery=DetailDiscovery.ON_DEMAND,
-        explanation=(
-            "mem init NAME creates only that exact Context. Add -p when "
-            "missing parent Contexts should also exist."
-        ),
-        options=(
-            OperationComparisonOption(
-                label="DEFAULT",
-                guidance="Create only the exact requested Context.",
-            ),
-            OperationComparisonOption(
-                label="WITH -P",
-                guidance=(
-                    "Create missing parent Contexts and reuse parents that "
-                    "already exist; this does not embed children."
-                ),
-            ),
+        detail_kind=HelpDetailKind.LIMITATION,
+        body=(
+            "mem init CONTEXT_NAME creates missing parent Contexts and the "
+            "requested Context, reuses existing Contexts without changing their "
+            "Memories or history, and switches to the requested Context. "
+            "This does not embed children."
         ),
     ),
 )

@@ -19,7 +19,7 @@ from memcommit.persistence.store.lookup.context_names import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.store import ProfileStore
 
 
 class ReadableCorpusStore(Protocol):
@@ -66,7 +66,7 @@ def load_readable_corpus_roots(
 
 
 def collect_readable_corpus_candidates(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     roots: Sequence[Context],
     *,
     artifact_roots: Sequence[Context] = (),

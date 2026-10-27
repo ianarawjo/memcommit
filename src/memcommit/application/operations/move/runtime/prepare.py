@@ -25,13 +25,13 @@ from memcommit.application.operations.move.contracts import (
     FrozenMoveMemoriesPlan,
     MoveMemoriesRequest,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def freeze_move(
     request: MoveMemoriesRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     current_name: str | None,
     owner: object,
 ) -> FrozenMoveMemoriesPlan:

@@ -1,0 +1,91 @@
+{
+  "uid": "dd56b937-af63-4f08-9aaf-7bd694b7e5f7",
+  "timestamp": "2026-10-26T12:43:34.417305",
+  "snapshot": {
+    "uid": "d3bf8871-e963-4dbd-988c-7e678a5b9f3b",
+    "name": "your-friend/AGENTS",
+    "memories": {
+      "ad899cf1-0515-4bef-88a5-46e651f9e210": {
+        "type": "memory",
+        "uid": "ad899cf1-0515-4bef-88a5-46e651f9e210",
+        "content": "# Iced Americano, Even in Winter\n"
+      },
+      "332d4e6c-c83f-4189-9480-2dbdc71f4074": {
+        "type": "memory",
+        "uid": "332d4e6c-c83f-4189-9480-2dbdc71f4074",
+        "content": "Use this record when recommending coffee or a cafe to the user, including for studying, chatting, or visiting cafes while traveling.\n"
+      },
+      "81b3e686-b27e-4675-a833-9426f95fd646": {
+        "type": "memory",
+        "uid": "81b3e686-b27e-4675-a833-9426f95fd646",
+        "content": "The user dislikes flavored coffee, meaning coffee made from beans with added flavoring. It is fine for a cafe to offer it, but the user does not want to drink it, even for free. Clearly labeling it is fine; the user gets upset when served flavored coffee without being told.\n"
+      },
+      "e4f03c05-25b9-4831-8c43-be2e7e298fbd": {
+        "type": "memory",
+        "uid": "e4f03c05-25b9-4831-8c43-be2e7e298fbd",
+        "content": "The user likes iced Americanos and drip coffee.\n"
+      },
+      "3e5f7379-7a9e-4bdc-9452-2af023d69d4a": {
+        "type": "memory",
+        "uid": "3e5f7379-7a9e-4bdc-9452-2af023d69d4a",
+        "content": "The user dislikes sugar in iced Americanos and wants only coffee, water, and ice.\n"
+      },
+      "bb54dc51-f00d-4ab5-9a1b-9579f4cb2694": {
+        "type": "memory",
+        "uid": "bb54dc51-f00d-4ab5-9a1b-9579f4cb2694",
+        "content": "Lattes are also acceptable, but the user generally prefers iced Americanos.\n"
+      },
+      "50249cbf-6daa-4446-b9fc-9499fd70bc18": {
+        "type": "memory",
+        "uid": "50249cbf-6daa-4446-b9fc-9499fd70bc18",
+        "content": "For iced Americanos, the user prefers coffee described as \"medium to light\" and dislikes bitterness.\n"
+      },
+      "ae66b5bf-e85a-4c8c-9e22-cbcec4b8c924": {
+        "type": "memory",
+        "uid": "ae66b5bf-e85a-4c8c-9e22-cbcec4b8c924",
+        "content": "For lattes, the user likes slightly bitter coffee beans.\n"
+      },
+      "e07cc84f-c2f4-476e-b014-dd7997f961eb": {
+        "type": "memory",
+        "uid": "e07cc84f-c2f4-476e-b014-dd7997f961eb",
+        "content": "The user wants plenty of ice in an iced Americano. At least half the cup should still be filled with ice when the drink is served.\n"
+      },
+      "b75a09e8-fc7a-407f-abb1-f22703cba752": {
+        "type": "memory",
+        "uid": "b75a09e8-fc7a-407f-abb1-f22703cba752",
+        "content": "Some cafes, especially those accustomed to making hot coffee, underestimate how quickly hot espresso melts ice and serve a watery drink. The user dislikes this and wants ice to remain in the drink.\n"
+      },
+      "88ce32e2-10ba-4ae2-a092-1dcc7e5f3f81": {
+        "type": "memory",
+        "uid": "88ce32e2-10ba-4ae2-a092-1dcc7e5f3f81",
+        "content": "For lattes and similar drinks, the user likes plenty of sugar: about two to three sugar cubes for a drink with a double shot of espresso."
+      }
+    },
+    "order": [
+      "ad899cf1-0515-4bef-88a5-46e651f9e210",
+      "332d4e6c-c83f-4189-9480-2dbdc71f4074",
+      "81b3e686-b27e-4675-a833-9426f95fd646",
+      "e4f03c05-25b9-4831-8c43-be2e7e298fbd",
+      "3e5f7379-7a9e-4bdc-9452-2af023d69d4a",
+      "bb54dc51-f00d-4ab5-9a1b-9579f4cb2694",
+      "50249cbf-6daa-4446-b9fc-9499fd70bc18",
+      "ae66b5bf-e85a-4c8c-9e22-cbcec4b8c924",
+      "e07cc84f-c2f4-476e-b014-dd7997f961eb",
+      "b75a09e8-fc7a-407f-abb1-f22703cba752",
+      "88ce32e2-10ba-4ae2-a092-1dcc7e5f3f81"
+    ],
+    "document": {
+      "path": "your-friend/AGENTS.md",
+      "format": "md",
+      "role": "document"
+    }
+  },
+  "command": "sync",
+  "command_details": {
+    "sync_operation": {
+      "uid": "81862974-1bc4-471e-8afe-b7ee74151094",
+      "action": "UNCHANGED"
+    }
+  },
+  "auto": true
+}

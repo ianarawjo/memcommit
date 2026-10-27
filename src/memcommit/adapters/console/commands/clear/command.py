@@ -8,7 +8,7 @@ from memcommit.application.operations.clear.application import ClearRequest
 from memcommit.application.operations.clear.runtime import execute_clear
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
@@ -36,7 +36,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    active_store = MemoryStore()
+    active_store = ProfileStore()
     snapshot = ContextOperandSnapshot.capture(active_store)
     # ``--force`` remains accepted for scripts written against the former
     # prompt. Invocation is now the approval boundary because the operation is

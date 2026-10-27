@@ -9,7 +9,6 @@ import typer
 
 from memcommit.adapters.console.commands.profile._support import _fail
 from memcommit.adapters.console.commands.profile.presentation import (
-    _inventory_label,
     render_profile_create_receipt,
     _print_profile_removal,
     _print_profile_rename,
@@ -24,7 +23,6 @@ from memcommit.application.operations.profile.config import (
 from memcommit.application.operations.profile.model._storage import ProfileError
 from memcommit.application.operations.profile.model.lifecycle import (
     create_profile,
-    import_profile,
     remove_profile,
     rename_profile,
     use_profile,
@@ -65,7 +63,7 @@ def _use_profile(name: str) -> None:
             )
         except (OSError, ProfileConfigError, StudyActionError, ValueError) as error:
             typer.secho(
-                "Error: Profile selection changed, but its Study action ledger "
+                "Error: Profile selection changed, but its Study records "
                 "could not be written: " + display_escape_text(str(error)),
                 fg=typer.colors.RED,
                 err=True,
@@ -185,36 +183,3 @@ def rename_cmd(
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     _print_profile_rename(result)
-
-
-def import_cmd(
-    name: Annotated[str, typer.Argument(help="New managed profile name")],
-    source: Annotated[
-        Path,
-        typer.Option("--from", help="Complete .mem store or package directory"),
-    ],
-    root: Annotated[
-        Optional[Path],
-        typer.Option(
-            "--root",
-            help="Destination project folder; omitted uses the application default",
-        ),
-    ] = None,
-) -> None:
-    """Copy one complete store into a new editable managed profile."""
-
-    try:
-        profile, inspection = import_profile(name, source, root_dir=root)
-    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        _fail(error)
-    typer.secho(
-        f"Imported profile '{display_escape_text(profile.name)}'.",
-        fg=typer.colors.GREEN,
-    )
-    current_label = (
-        display_escape_text(inspection.current_context)
-        if inspection.current_context
-        else "(none)"
-    )
-    typer.echo(f"{_inventory_label(inspection)} · current={current_label}")
-    typer.echo("The source store was not modified.")

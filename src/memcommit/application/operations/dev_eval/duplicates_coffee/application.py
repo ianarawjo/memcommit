@@ -38,7 +38,7 @@ from memcommit.application.operations.init.runtime import (
 )
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def _groups(
@@ -74,7 +74,7 @@ def _memory_values(context: Context) -> tuple[tuple[str, str], ...]:
 
 def run_scenario(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], FindingsProvider],
 ) -> list[tuple[str, bool]]:
     """Always create, execute, and verify; retain the original and both results."""

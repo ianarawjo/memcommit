@@ -151,52 +151,17 @@ def derive_memory_history_events(
             if isinstance(raw_before, dict)
             else previous
         )
-        if command == "revert":
-            command_before = frame
         transition, transition_warnings = _transition_events(
             before=command_before,
             after=frame,
             entry=entry,
-            restoration=command_operation or False,
+            restoration=command_operation or command == "revert",
             source=store,
         )
         events.extend(transition)
         warnings.extend(transition_warnings)
         frames.extend((command_before, frame))
         previous = frame
-
-        if command == "revert":
-            target_uid = args.get("target_uid")
-            recorded_restoration = entry.get("restored_snapshot")
-            target = (
-                _frame_from_snapshot(
-                    recorded_restoration,
-                    label=f"Checkpoint [{entry['uid'][:8]}] restored post-image",
-                )
-                if isinstance(recorded_restoration, dict)
-                else (
-                    frames_by_checkpoint.get(target_uid)
-                    if isinstance(target_uid, str)
-                    else None
-                )
-            )
-            if target is None:
-                warnings.append(
-                    f"Revert checkpoint [{entry['uid'][:8]}] does not retain "
-                    "its target snapshot."
-                )
-                continue
-            restored_events, restored_warnings = _transition_events(
-                before=frame,
-                after=target,
-                entry=entry,
-                restoration=True,
-                source=store,
-            )
-            events.extend(restored_events)
-            warnings.extend(restored_warnings)
-            frames.append(target)
-            previous = target
 
     current = _frame_from_context(ctx)
     if previous is None:

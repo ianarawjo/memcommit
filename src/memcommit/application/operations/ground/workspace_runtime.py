@@ -1,4 +1,4 @@
-"""MemoryStore composition for physical Ground workspace creation and loading."""
+"""ProfileStore composition for physical Ground workspace creation and loading."""
 
 from __future__ import annotations
 
@@ -34,13 +34,13 @@ from memcommit.application.operations.ground.workspace_application import (
     replace_ground_workspace_memory,
 )
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
     """Publish the complete workspace under one Store command boundary."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def create(
@@ -85,8 +85,10 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
             make_current=None,
             require_all_new=True,
         )
-        if tuple(context.uid for context in created) != tuple(
-            context.uid for context in workspace.all_contexts
+        created_by_name = {context.name: context.uid for context in created}
+        if any(
+            created_by_name.get(context.name) != context.uid
+            for context in workspace.all_contexts
         ):
             raise GroundWorkspaceError(
                 "Ground workspace Store receipt did not contain every Context."
@@ -97,7 +99,7 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
 class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
     """Commit Ground edits as root-scoped, multi-Context command units."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def load(self, name: str) -> GroundWorkspace:
@@ -224,7 +226,7 @@ class MemoryStoreGroundWorkspaceEditingPort(GroundWorkspaceEditingPort):
         return committed, command_uid
 
 
-def load_ground_workspace(store: MemoryStore, name: str) -> GroundWorkspace:
+def load_ground_workspace(store: ProfileStore, name: str) -> GroundWorkspace:
     """Load one exact physical workspace without following embedded content."""
 
     names = ground_workspace_context_names(name)
@@ -237,7 +239,7 @@ def load_ground_workspace(store: MemoryStore, name: str) -> GroundWorkspace:
     )
 
 
-def ground_workspace_exists(store: MemoryStore, name: str) -> bool:
+def ground_workspace_exists(store: ProfileStore, name: str) -> bool:
     """Return whether the exact root is a valid complete Ground workspace."""
 
     try:
@@ -247,7 +249,7 @@ def ground_workspace_exists(store: MemoryStore, name: str) -> bool:
     return True
 
 
-def list_ground_workspace_names(store: MemoryStore) -> tuple[str, ...]:
+def list_ground_workspace_names(store: ProfileStore) -> tuple[str, ...]:
     """Discover local workspace roots by their first-class manifest Memory."""
 
     roots: list[str] = []
@@ -273,7 +275,7 @@ def list_ground_workspace_names(store: MemoryStore) -> tuple[str, ...]:
 
 
 def load_ground_workspace_navigation_contexts(
-    store: MemoryStore,
+    store: ProfileStore,
     workspace: GroundWorkspace,
 ) -> tuple[Context, ...]:
     """Load fixed lanes and separate local Contexts beneath the /contexts namespace."""
@@ -291,7 +293,7 @@ def load_ground_workspace_navigation_contexts(
 def execute_ground_workspace_creation(
     request: CreateGroundWorkspaceRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> CreateGroundWorkspaceResult:
     """Execute one Ground workspace creation without terminal dependencies."""
 
@@ -304,7 +306,7 @@ def execute_ground_workspace_creation(
 def execute_ground_workspace_memory_add(
     request: AddGroundWorkspaceMemoryRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> GroundWorkspaceEditResult:
     """Execute one root-plus-lane Ground Memory addition."""
 
@@ -317,7 +319,7 @@ def execute_ground_workspace_memory_add(
 def execute_ground_workspace_memory_replace(
     request: ReplaceGroundWorkspaceMemoryRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> GroundWorkspaceEditResult:
     """Execute one root-plus-lane Ground Memory replacement."""
 
@@ -330,7 +332,7 @@ def execute_ground_workspace_memory_replace(
 def execute_ground_workspace_memory_remove(
     request: RemoveGroundWorkspaceMemoryRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> GroundWorkspaceEditResult:
     """Execute one root-plus-lane Ground Memory removal."""
 
@@ -343,7 +345,7 @@ def execute_ground_workspace_memory_remove(
 def execute_ground_workspace_memories_adoption(
     request: AdoptGroundWorkspaceMemoriesRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> AdoptGroundWorkspaceMemoriesResult:
     """Execute one atomic, provenance-bearing semantic Ground adoption."""
 

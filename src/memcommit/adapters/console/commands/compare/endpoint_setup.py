@@ -33,7 +33,7 @@ from memcommit.application.context_access.access import (
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 
@@ -177,7 +177,7 @@ class CompareSetupReceipt:
 
 
 def choose_compare_setup(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     app_input: Input | None = None,
     app_output: Output | None = None,

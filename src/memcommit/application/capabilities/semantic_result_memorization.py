@@ -16,7 +16,7 @@ from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -52,7 +52,7 @@ class SemanticResultMemorizationReceipt:
 
 
 def resolve_existing_semantic_result_endpoints(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     source_locator: str | None,
     target_locator: str | None,
@@ -86,7 +86,7 @@ def resolve_existing_semantic_result_endpoints(
 
 
 def resolve_existing_memorization_target(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     target_locator: str | None,
     current: str | None,
@@ -103,7 +103,7 @@ def resolve_existing_memorization_target(
 
 
 def freeze_memorization_target(
-    store: MemoryStore,
+    store: ProfileStore,
     context_name: str,
 ) -> FrozenMemorizationTarget:
     """Freeze one existing local Target before provider construction."""
@@ -119,7 +119,7 @@ def freeze_memorization_target(
 
 def memorize_semantic_result(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     operation: str,
     source_name: str | None,
     target: FrozenMemorizationTarget,

@@ -1,4 +1,4 @@
-"""MemoryStore implementation for saving selected Memories as a Context."""
+"""ProfileStore implementation for saving selected Memories as a Context."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ from memcommit.persistence.store.checkpoint.requests import AutoCheckpointReques
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class SaveContextSelectionCatalog(Protocol):
@@ -85,7 +85,7 @@ class MemoryStoreSaveContextFromSelectionPort(SaveContextFromSelectionPort):
 
     def __init__(
         self,
-        store: MemoryStore,
+        store: ProfileStore,
         catalog: SaveContextSelectionCatalog,
     ) -> None:
         self._store = store
@@ -199,7 +199,7 @@ class MemoryStoreSaveContextFromSelectionPort(SaveContextFromSelectionPort):
 def execute_save_context_from_selection(
     request: SaveContextFromSelectionRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     catalog: SaveContextSelectionCatalog,
 ) -> SaveContextFromSelectionResult:
     """Execute the reviewed save without CLI, TUI, or provider bootstrap."""

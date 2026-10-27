@@ -13,7 +13,9 @@ def render_context_init_receipt(result: ContextInitResult) -> None:
     """Preserve the established successful ``mem init`` output."""
 
     name = display_escape_text(result.requested_name)
-    if not result.create_parents:
+    if not result.create_parents or (
+        result.created_names == (result.requested_name,) and not result.reused_names
+    ):
         typer.secho(f"Initialized context '{name}'.", fg=typer.colors.GREEN)
         return
 

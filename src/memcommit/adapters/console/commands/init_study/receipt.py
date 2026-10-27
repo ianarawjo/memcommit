@@ -14,14 +14,12 @@ from memcommit.providers.policy import (
 
 
 def render_study_init_receipt(result: StudyInitializationResult) -> None:
-    """Print the completed Profile pair and its initial Study state."""
+    """Print the prepared project folder and its initial Study state."""
 
     typer.secho(
-        f"Initialized Study run '{display_escape_text(result.profile.name)}'.",
+        f"Initialized Study run '{display_escape_text(result.study_name)}'.",
         fg=typer.colors.GREEN,
     )
-    echo_text("Scenario: {name}", name=result.scenario_id)
-    echo_text("Participant Profile: {name}", name=result.profile.name)
     echo_text(
         "Provider config: {version} · locked · sha256 {digest}",
         version=STUDY_PROVIDER_POLICY_VERSION,
@@ -29,14 +27,19 @@ def render_study_init_receipt(result: StudyInitializationResult) -> None:
     )
     echo_text(
         "Contexts {contexts} · Memories {memories} · current={current}",
-        contexts=len(result.inspection.context_names),
-        memories=result.inspection.ordinary_memory_count,
+        contexts=sum(len(inspection.context_names) for inspection in result.inspections),
+        memories=sum(inspection.ordinary_memory_count for inspection in result.inspections),
         current=result.inspection.current_context or "(none)",
     )
-    typer.echo("Task data was copied into one isolated local Profile.")
+    for profile, inspection in zip(result.profiles, result.inspections, strict=True):
+        echo_text("Profile: {name} · Contexts {count}", name=profile.name, count=len(inspection.context_names))
+        echo_text("  Project folder: {path}", path=profile.root_dir)
+        echo_text("  Select: mem profile use {name}", name=profile.name)
+    echo_text("Study records: {path}", path=result.records_root)
+    typer.echo("Markdown files and .mem are ready. Edit files, then run mem sync.")
+    typer.echo("Open any Project folder in your editor. All projects start in Sync.")
     typer.echo(
-        "Operational history starts empty. "
-        "Checkpoints, sessions, ad-hoc caches, locks, and run logs "
-        "were not imported."
+        "Initial Sync checkpoints are ready; participant Undo/Redo starts empty. "
+        "Earlier operation history, sessions, caches and locks were not imported."
     )
     echo_text("Active Profile: {name}", name=result.active_profile_name)

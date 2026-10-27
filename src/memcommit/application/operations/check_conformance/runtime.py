@@ -37,7 +37,7 @@ from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_context_memory_target,
 )
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     context_record_digest,
 )
 
@@ -127,7 +127,7 @@ def _literal_rule(content: str) -> ConformanceRule:
 
 
 def freeze_conformance_rules_operand(
-    store: MemoryStore,
+    store: ProfileStore,
     operand: str,
     *,
     current_name: str | None,
@@ -243,7 +243,7 @@ def freeze_context_conformance(
 
 def execute_context_conformance(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     target_name: str,
     rules_name: str,
     provider_factory: ConformanceProviderFactory,
@@ -266,7 +266,7 @@ def execute_context_conformance(
 
 def execute_context_conformance_with_rules_operand(
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     target_name: str,
     rules_operand: str,
     current_name: str | None,

@@ -21,7 +21,7 @@ from memcommit.persistence.store.checkpoint.requests import AutoCheckpointReques
 from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import ProfileStore, context_record_digest
 
 
 EXACT_DEDUP_CONTRACT_VERSION = "exact-dedup-v2"
@@ -101,51 +101,50 @@ def apply_exact_dedup(
 
     expected_digest = analysis.context_digest
     absorbed_uids = tuple(uid for group in groups for uid in group.absorbed_uids)
-    with access.store._command_write_lock():  # noqa: SLF001
-        current = access.store.load_for_update(access.context_name)
-        if (
-            current.uid != analysis.context_uid
-            or context_record_digest(current) != expected_digest
-        ):
-            raise ExactDedupConflictError(
-                "The exact Dedup Context changed after analysis; nothing was written."
-            )
-        for uid in absorbed_uids:
-            current.remove(uid)
-        checkpoint = access.store._save_command_locked(  # noqa: SLF001
-            current,
-            AutoCheckpointRequest(
-                command="dedup",
-                command_details={
-                    "contract": EXACT_DEDUP_CONTRACT_VERSION,
-                    "context": access.access_name,
-                    "groups": [
-                        {
-                            "item_kind": group.item_kind,
-                            "survivor_uid": group.survivor_uid,
-                            "absorbed_uids": list(group.absorbed_uids),
-                        }
-                        for group in groups
-                    ],
-                },
-            ),
+    current = access.store.load_for_update(access.context_name)
+    if (
+        current.uid != analysis.context_uid
+        or context_record_digest(current) != expected_digest
+    ):
+        raise ExactDedupConflictError(
+            "The exact Dedup Context changed after analysis; nothing was written."
         )
-        if checkpoint is None:
-            raise ExactDedupError(
-                "Exact Dedup removed items without recording a checkpoint."
-            )
+    for uid in absorbed_uids:
+        current.remove(uid)
+    checkpoint = access.store.save(
+        current,
+        AutoCheckpointRequest(
+            command="dedup",
+            command_details={
+                "contract": EXACT_DEDUP_CONTRACT_VERSION,
+                "context": access.access_name,
+                "groups": [
+                    {
+                        "item_kind": group.item_kind,
+                        "survivor_uid": group.survivor_uid,
+                        "absorbed_uids": list(group.absorbed_uids),
+                    }
+                    for group in groups
+                ],
+            },
+        ),
+    )
+    if checkpoint is None:
+        raise ExactDedupError(
+            "Exact Dedup removed items without recording a checkpoint."
+        )
     return ExactDedupReceipt(access.access_name, groups, checkpoint.uid)
 
 
 def apply_exact_dedup_scope(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     access: ContextAccess,
     analysis: ExactDuplicateScopeReport,
 ) -> ExactDedupScopeReceipt:
     """Apply one frozen Find Duplicates scope without rediscovering groups."""
 
     if (
-        not isinstance(active_store, MemoryStore)
+        not isinstance(active_store, ProfileStore)
         or not isinstance(
             access,
             ContextAccess,

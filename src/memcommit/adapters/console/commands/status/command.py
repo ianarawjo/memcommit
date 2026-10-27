@@ -19,7 +19,7 @@ from memcommit.application.operations.status.application import (
     StatusRequest,
 )
 from memcommit.application.operations.status.runtime import execute_status
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd(
@@ -71,7 +71,7 @@ def cmd(
             StatusRequest(
                 include_descendants=include_recursive,
             ),
-            store=MemoryStore(),
+            store=ProfileStore(),
         )
     except NoCurrentStatusContextError as error:
         # Preserve Status as a non-failing shell orientation probe when the

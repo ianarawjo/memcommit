@@ -62,7 +62,7 @@ from memcommit.application.capabilities.history.query.semantic_history_query imp
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
 from memcommit.persistence.store import (
-    MemoryStore,
+    ProfileStore,
     checkpoint_history_digest,
 )
 
@@ -98,7 +98,7 @@ def _looks_like_missing_uid(selector: str) -> bool:
 
 
 def _semantic_selection(
-    store: MemoryStore,
+    store: ProfileStore,
     name: str,
     entries: list[dict[str, Any]],
     query: str,
@@ -181,7 +181,7 @@ def _picker_selection(
 
 
 def _validate_reviewed_frame(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     context_name: str,
     context_uid: str,
@@ -213,7 +213,7 @@ def _validate_reviewed_frame(
 
 
 def _apply_resolved_checkpoint_unit(
-    store: MemoryStore,
+    store: ProfileStore,
     unit: ResolvedCheckpointUnit,
     *,
     keep: bool,
@@ -278,7 +278,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    store = MemoryStore()
+    store = ProfileStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         explicit_name = (

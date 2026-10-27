@@ -1,4 +1,4 @@
-"""MemoryStore composition for exact and lexical-subtree Branch."""
+"""ProfileStore composition for exact and lexical-subtree Branch."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from memcommit.application.operations.branch.application import (
 from memcommit.persistence.store import (
     ContextBranchBinding,
     ContextBranchMemoryBinding,
-    MemoryStore,
+    ProfileStore,
     checkpoint_history_digest,
 )
 
@@ -31,8 +31,8 @@ class BranchSetupSnapshot:
     local_context_names: tuple[str, ...]
 
 
-def prepare_branch(store: MemoryStore) -> BranchSetupSnapshot:
-    """Capture all state that determines interactive and relative Branch input."""
+def prepare_branch(store: ProfileStore) -> BranchSetupSnapshot:
+    """Capture the current pointer and local names once for one Branch request."""
 
     return BranchSetupSnapshot(
         expected_current=store.current_context_name(),
@@ -43,7 +43,7 @@ def prepare_branch(store: MemoryStore) -> BranchSetupSnapshot:
 class MemoryStoreBranchPort:
     """Build fresh identities and publish a Branch through the Store CAS."""
 
-    def __init__(self, store: MemoryStore):
+    def __init__(self, store: ProfileStore):
         self._store = store
 
     def apply(self, plan: BranchPlan) -> BranchResult:
@@ -138,7 +138,7 @@ class MemoryStoreBranchPort:
 def execute_branch(
     request: BranchRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> BranchResult:
     """Execute one Branch against an explicit Store without terminal output."""
 

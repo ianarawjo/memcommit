@@ -13,9 +13,12 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class StudyInitializationResult:
-    """One isolated local Profile built from a Study scenario."""
+    """Discovered ready projects with the first sorted project selected."""
 
     profile: Profile
     inspection: StoreInspection
     active_profile_name: str
-    scenario_id: str = "legacy"
+    study_name: str
+    profiles: tuple[Profile, ...]
+    inspections: tuple[StoreInspection, ...]
+    records_root: str

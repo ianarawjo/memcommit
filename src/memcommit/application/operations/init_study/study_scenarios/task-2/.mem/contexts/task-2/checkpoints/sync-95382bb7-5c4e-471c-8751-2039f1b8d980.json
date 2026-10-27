@@ -1,0 +1,18 @@
+{
+  "uid": "95382bb7-5c4e-471c-8751-2039f1b8d980",
+  "timestamp": "2026-10-26T09:39:05.270834",
+  "snapshot": {
+    "uid": "07b95259-f496-589e-ae9b-b2a6ac6691a6",
+    "name": "task-2",
+    "memories": {},
+    "order": []
+  },
+  "command": "sync",
+  "command_details": {
+    "sync_operation": {
+      "uid": "0426eb6c-bf9c-4bea-8b75-2a8810468779",
+      "action": "UNCHANGED"
+    }
+  },
+  "auto": true
+}

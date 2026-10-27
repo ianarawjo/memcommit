@@ -36,7 +36,7 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.connection import connect_semantic_provider
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def render_fit(report: FitReport, *, current: bool = True) -> str:
@@ -141,7 +141,7 @@ def cmd(
                 )
 
             def execute_ground(request: FitRequest) -> FitResult:
-                store = MemoryStore(create=False)
+                store = ProfileStore(create=False)
                 if request.receipt_uid is not None:
                     return run_fit_with_store(
                         request,
@@ -200,7 +200,7 @@ def cmd(
                 result = (
                     run_stored_source_fit(
                         next_request,
-                        store=MemoryStore(create=False),
+                        store=ProfileStore(create=False),
                         provider_factory=connect_semantic_provider,
                     )
                     if isinstance(next_request, FitStoredSourcesRequest)

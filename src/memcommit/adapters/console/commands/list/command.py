@@ -6,11 +6,11 @@ from memcommit.application.operations.list.runtime import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 def cmd() -> None:
-    store = MemoryStore()
+    store = ProfileStore()
     try:
         current_context_name = store.current_context_name()
         if current_context_name is None:

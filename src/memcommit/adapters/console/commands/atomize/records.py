@@ -19,7 +19,7 @@ from memcommit.models.context import Context
 from memcommit.application.operations.atomize.runtime import (
     atomize_analysis_was_applied,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 from memcommit.core.context_targeting.uid_locator import (
     UidLocatorUnavailableError,
     resolve_exact_or_unique_uid,
@@ -48,7 +48,7 @@ def _created_timestamp(value: str) -> float:
 
 
 def _artifact_timestamp(
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
     analysis_path: Path,
 ) -> float:
@@ -69,7 +69,7 @@ def _artifact_timestamp(
     return timestamp
 
 
-def _analysis_files(store: MemoryStore) -> tuple[tuple[str, Path], ...]:
+def _analysis_files(store: ProfileStore) -> tuple[tuple[str, Path], ...]:
     # Session discovery must follow the exact store boundary supplied by the
     # command. Using the process-global active path here could expose the
     # wrong profile when a caller is operating through an explicit store.
@@ -97,7 +97,7 @@ def _analysis_files(store: MemoryStore) -> tuple[tuple[str, Path], ...]:
 
 
 def iter_saved_atomize_analyses(
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[tuple[AtomizeAnalysisSession, Path], ...]:
     """Strictly load latest and UID-retained Atomize analyses."""
     records: list[tuple[AtomizeAnalysisSession, Path]] = []
@@ -116,7 +116,7 @@ def iter_saved_atomize_analyses(
 
 
 def _canonical_saved_atomize_analyses(
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[tuple[AtomizeAnalysisSession, Path], ...]:
     """Collapse an applied Output copy into its Input-owned shared session."""
 
@@ -174,7 +174,7 @@ def _canonical_saved_atomize_analyses(
 
 
 def load_saved_atomize_analysis(
-    store: MemoryStore,
+    store: ProfileStore,
     analysis_uid: str,
 ) -> AtomizeAnalysisSession:
     """Resolve one analysis UID/prefix without falling into create/refresh."""
@@ -197,7 +197,7 @@ def load_saved_atomize_analysis(
 
 
 def revalidate_saved_atomize_analysis(
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
 ) -> tuple[Context, bool]:
     """Return the current Context and whether this exact plan was applied."""
@@ -242,7 +242,7 @@ def revalidate_saved_atomize_analysis(
 
 
 def atomize_workbench_was_applied(
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
 ) -> bool:
     """Return the Source-owned terminal marker for one workbench session."""
@@ -252,7 +252,7 @@ def atomize_workbench_was_applied(
 
 
 def atomize_planned_output_was_applied(
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: AtomizeAnalysisSession,
     output_name: str,
 ) -> bool:
@@ -282,7 +282,7 @@ def atomize_planned_output_was_applied(
 
 
 def atomize_record_entries(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     show_all: bool = False,
 ) -> tuple[SessionPickerEntry, ...]:

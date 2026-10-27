@@ -10,7 +10,7 @@ from memcommit.models.context import Context
 from memcommit.persistence.store.lookup.context_names import (
     sort_context_names,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 @dataclass(frozen=True)
@@ -28,13 +28,15 @@ class ProfileContextNavigation:
 class ReadableContextCatalog:
     """A frozen local namespace bound to the operation's captured Store."""
 
-    def __init__(self, active_store: MemoryStore, root_access: ContextAccess):
+    def __init__(
+        self, active_store: ProfileStore, root_access: ContextAccess | None = None
+    ):
         self._active_store = active_store
         self._names = tuple(active_store.list_context_names())
         self._bindings = {
             name: ContextAccess(active_store, name, name) for name in self._names
         }
-        if root_access.access_name not in self._bindings:
+        if root_access is not None and root_access.access_name not in self._bindings:
             raise FileNotFoundError(
                 f"Context '{root_access.access_name}' is outside the captured namespace."
             )
@@ -66,7 +68,7 @@ class ReadableContextCatalog:
 
 
 def freeze_readable_context_catalog(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     root_access: ContextAccess,
 ) -> ReadableContextCatalog:
     """Capture the local namespace before constructing an operation request."""
@@ -74,15 +76,15 @@ def freeze_readable_context_catalog(
 
 
 def freeze_profile_readable_context_catalog(
-    active_store: MemoryStore,
-    selected_access: ContextAccess,
+    active_store: ProfileStore,
+    selected_access: ContextAccess | None = None,
 ) -> ReadableContextCatalog:
     """Capture the Profile namespace for an explicit Profile-wide selector."""
     return ReadableContextCatalog(active_store, selected_access)
 
 
 def freeze_profile_context_navigation(
-    active_store: MemoryStore,
+    active_store: ProfileStore,
     selected_access: ContextAccess,
 ) -> ProfileContextNavigation:
     catalog = freeze_profile_readable_context_catalog(active_store, selected_access)

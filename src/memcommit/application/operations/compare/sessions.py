@@ -19,7 +19,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
     load_comparison_analysis,
 )
 from memcommit.application.context_access.access import ContextAccess
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 _FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$")
@@ -72,12 +72,12 @@ def _version(value: str) -> str:
 
 
 def iter_saved_comparisons(
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[tuple[ComparisonAnalysis, Path], ...]:
     """Strictly load local retained latest-pair analyses."""
 
-    if not isinstance(store, MemoryStore):
-        raise TypeError("Compare session discovery requires a MemoryStore.")
+    if not isinstance(store, ProfileStore):
+        raise TypeError("Compare session discovery requires a ProfileStore.")
     root = comparison_analyses_dir(store)
     records: list[tuple[ComparisonAnalysis, Path]] = []
     if root.exists():
@@ -112,7 +112,7 @@ def iter_saved_comparisons(
 def load_saved_comparison(
     analysis_uid: str,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> ComparisonAnalysis:
     """Resolve an exact latest-slot analysis UID without refreshing its pair."""
 
@@ -134,7 +134,7 @@ def load_saved_comparison(
 
 
 def revalidate_saved_comparison(
-    store: MemoryStore,
+    store: ProfileStore,
     analysis: ComparisonAnalysis,
 ) -> None:
     """Fail closed unless the exact saved sources and ruleset remain current."""
@@ -171,7 +171,7 @@ def revalidate_saved_comparison(
 def open_comparison_session(
     analysis_uid: str,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> ComparisonSessionSnapshot:
     """Open and revalidate one exact durable read-only analysis."""
 
@@ -187,7 +187,7 @@ def prepare_comparison_refresh(
     analysis_uid: str,
     expected_version: str,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> ComparisonSessionSnapshot:
     """Bind Refresh to the exact reviewed slot without requiring fresh sources."""
 

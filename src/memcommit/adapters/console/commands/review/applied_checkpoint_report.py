@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
+from memcommit.adapters.console.terminal.components.inline_diff import (
+    render_inline_memory_change_text,
+)
+from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.reviewing.report import (
     ReviewReportController,
     ReviewTextFragment,
@@ -117,78 +120,66 @@ def _makemore_lines(payload: dict[str, object]) -> list[str]:
     return lines
 
 
-def _dedun_fragments(payload: dict[str, object]) -> tuple[ReviewTextFragment, ...]:
-    """Project typed cleanup tokens without reparsing rendered Review text."""
-
+def _render_dedup_review_fragments(
+    payload: dict[str, object],
+    *,
+    checkpoint_context_name: str,
+) -> tuple[ReviewTextFragment, ...]:
     fragments: list[ReviewTextFragment] = []
 
-    def line(*parts: ReviewTextFragment) -> None:
+    def append_line(fragment: ReviewTextFragment) -> None:
         if fragments:
             fragments.append(ReviewTextFragment("\n"))
-        fragments.extend(parts)
+        fragments.append(fragment)
 
-    components = payload.get("components")
-    component_count = len(components) if isinstance(components, list) else 0
-    if component_count:
-        line(ReviewTextFragment(f"RESOLVED GROUPS · {component_count}"))
-    if isinstance(components, list):
-        for index, component in enumerate(components, 1):
-            if not isinstance(component, dict):
-                continue
-            survivor_uid = str(component.get("survivor_uid", ""))
-            members = component.get("members")
-            survivor: dict[str, object] | None = None
-            if isinstance(members, list):
-                survivor = next(
-                    (
-                        member
-                        for member in members
-                        if isinstance(member, dict)
-                        and str(member.get("uid", "")) == survivor_uid
-                    ),
-                    None,
-                )
-                if survivor is None:
-                    survivor = next(
-                        (
-                            member
-                            for member in members
-                            if isinstance(member, dict) and member.get("selected")
-                        ),
-                        None,
-                    )
-            survivor_content = (
-                _line(survivor.get("content", "")) if survivor is not None else ""
+    duplicate_groups = payload.get("components")
+    if not isinstance(duplicate_groups, list):
+        return ()
+    append_line(ReviewTextFragment(f"RESOLVED GROUPS · {len(duplicate_groups)}"))
+    for group_index, duplicate_group in enumerate(duplicate_groups, 1):
+        if not isinstance(duplicate_group, dict):
+            continue
+        append_line(ReviewTextFragment(f"\nGROUP {group_index} · KEEP / REMOVE"))
+        kept_memory_uid = str(duplicate_group.get("survivor_uid", ""))
+        memory_records = duplicate_group.get("members")
+        if not isinstance(memory_records, list):
+            continue
+        memory_records = [record for record in memory_records if isinstance(record, dict)]
+        kept_memory_record = next(
+            (record for record in memory_records if str(record.get("uid", "")) == kept_memory_uid),
+            None,
+        )
+        if kept_memory_record is None:
+            kept_memory_record = next(
+                (record for record in memory_records if record.get("selected")),
+                None,
             )
-            survivor_suffix = f" {survivor_content}" if survivor_content else ""
-            line(
-                ReviewTextFragment(f"{index}. "),
-                ReviewTextFragment("SURVIVOR", SemanticColorRole.ADD, bold=True),
-                ReviewTextFragment(f" · [{_line(survivor_uid[:8])}]" + survivor_suffix),
+        kept_then_removed_memory_records = (
+            [kept_memory_record] if kept_memory_record is not None else []
+        ) + [record for record in memory_records if record is not kept_memory_record]
+        for memory_record in kept_then_removed_memory_records:
+            content = str(memory_record.get("content", ""))
+            keep_memory = memory_record is kept_memory_record
+            memory_change = MemoryChange(
+                marker="=" if keep_memory else "-",
+                treatment="KEEP" if keep_memory else "REMOVE",
+                location=str(memory_record.get("context_name") or checkpoint_context_name),
+                memory_uid=str(memory_record.get("uid") or "(unknown)"),
+                before=content,
+                after=content if keep_memory else None,
             )
-            if isinstance(members, list):
-                for member in members:
-                    if isinstance(member, dict) and member is not survivor:
-                        line(
-                            ReviewTextFragment("   "),
-                            ReviewTextFragment(
-                                "ABSORB", SemanticColorRole.REMOVE, bold=True
-                            ),
-                            ReviewTextFragment(
-                                f" · [{_line(str(member.get('uid', ''))[:8])}] "
-                                + _line(member.get("content", ""))
-                            ),
-                        )
-            evidence = component.get("evidence")
-            if isinstance(evidence, list):
-                for item in evidence:
-                    if isinstance(item, dict):
-                        line(
-                            ReviewTextFragment(
-                                f"   EVIDENCE · {_line(item.get('relation', ''))} · "
-                                f"{_line(item.get('reason', ''))}"
-                            )
-                        )
+            append_line(ReviewTextFragment(
+                render_inline_memory_change_text(memory_change),
+                memory_change=memory_change,
+            ))
+        duplicate_evidence = duplicate_group.get("evidence")
+        if isinstance(duplicate_evidence, list):
+            for evidence in duplicate_evidence:
+                if isinstance(evidence, dict):
+                    append_line(ReviewTextFragment(
+                        f"   EVIDENCE · {_line(evidence.get('relation', ''))} · "
+                        f"{_line(evidence.get('reason', ''))}"
+                    ))
     return tuple(fragments)
 
 
@@ -216,11 +207,13 @@ def applied_checkpoint_review_controller(
     elif record.operation == "makemore":
         lines.extend(("", *_makemore_lines(payload)))
     elif record.operation == "dedun":
-        dedun_fragments = _dedun_fragments(payload)
+        dedup_fragments = _render_dedup_review_fragments(
+            payload, checkpoint_context_name=record.context_name
+        )
         prefix = "\n".join(lines).rstrip()
         report_fragments = (
-            ReviewTextFragment(prefix + ("\n\n" if dedun_fragments else "")),
-            *dedun_fragments,
+            ReviewTextFragment(prefix + ("\n\n" if dedup_fragments else "")),
+            *dedup_fragments,
         )
     else:
         lines.extend(("", *_effect_lines(payload)))

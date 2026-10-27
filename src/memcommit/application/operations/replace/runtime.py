@@ -1,4 +1,4 @@
-"""MemoryStore adapter for frozen deterministic Replace plans."""
+"""ProfileStore adapter for frozen deterministic Replace plans."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ from memcommit.application.operations.replace.application import (
 )
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
-    MemoryStore,
+    ProfileStore,
 )
 
 
@@ -48,7 +48,7 @@ class _StoreReplaceToken:
 class MemoryStoreReplacePort(ReplacePort):
     """Freeze local direct owners and publish one multi-Context command unit."""
 
-    def __init__(self, store: MemoryStore) -> None:
+    def __init__(self, store: ProfileStore) -> None:
         self._store = store
         self._owner = object()
 
@@ -234,7 +234,7 @@ def _result(
 def plan_replace_with_store(
     request: ReplaceRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> tuple[FrozenReplacePlan, MemoryStoreReplacePort]:
     port = MemoryStoreReplacePort(store)
     return plan_replace(request, port=port), port
@@ -251,7 +251,7 @@ def execute_replace_plan(
 def execute_replace_with_store(
     request: ReplaceRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
 ) -> ReplaceApplyResult:
     """Freeze and atomically apply one deterministic request in one turn.
 

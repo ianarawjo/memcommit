@@ -121,13 +121,7 @@ _ACTION_FIELDS: dict[str, tuple[frozenset[str], frozenset[str]]] = {
         frozenset(),
     ),
     "STUDY_CREATED": (
-        frozenset(
-            {
-                "role",
-                "baseline_profile_uid",
-                "baseline_profile_name",
-            }
-        ),
+        frozenset({"role"}),
         frozenset(),
     ),
     "PROFILE_ENTERED": (
@@ -161,7 +155,7 @@ _FLOAT_FIELDS = frozenset({"elapsed_seconds"})
 _RETAINED_TEXT_FIELDS = frozenset({"command", "request"})
 _HELP_LOOKUP_REQUEST_LIMIT = 4_000
 _COMMAND_TEXT_LIMIT = 16 * 1024 * 1024
-_UUID_FIELDS = frozenset({"baseline_profile_uid", "other_profile_uid", "artifact_uid"})
+_UUID_FIELDS = frozenset({"other_profile_uid", "artifact_uid"})
 
 
 def _timestamp() -> str:
@@ -195,10 +189,18 @@ def _safe_token(value: object, *, field: str) -> str:
 def _validate_data(action: str, data: object) -> dict[str, object]:
     if action not in _ACTION_FIELDS or not isinstance(data, dict):
         raise StudyActionError("Study action data is invalid.")
+    current_data = data
+    if action == "STUDY_CREATED":
+        # Old creation events retain their original fields on read/roundtrip.
+        # Baseline metadata no longer identifies or validates a Study run.
+        current_data = {
+            key: value for key, value in data.items()
+            if key not in {"baseline_profile_uid", "baseline_profile_name"}
+        }
     required, optional = _ACTION_FIELDS[action]
-    if not required.issubset(data) or set(data) - required - optional:
+    if not required.issubset(current_data) or set(current_data) - required - optional:
         raise StudyActionError("Study action fields are invalid.")
-    for key, value in data.items():
+    for key, value in current_data.items():
         if key in _INT_FIELDS:
             if (
                 not isinstance(value, int)
@@ -361,9 +363,20 @@ class StudyActionLedger:
         self.store_dir = (
             Path(store_dir) if store_dir is not None else profile_store_dir(profile)
         )
-        self.directory = self.store_dir / "ledger" / "study-actions"
+        from .study_records import study_record_directory
+
+        external = study_record_directory(profile, "actions")
+        self.external_records = external is not None
+        self.directory = external or self.store_dir / "ledger" / "study-actions"
 
     def _validated_directory(self, *, create: bool) -> Path:
+        if self.external_records:
+            from .study_records import validate_study_record_directory
+
+            try:
+                return validate_study_record_directory(self.profile, self.directory, create=create)
+            except (OSError, ValueError, ProfileConfigError) as error:
+                raise StudyActionError(str(error)) from error
         ledger = self.directory.parent
         if self.store_dir.is_symlink() or not self.store_dir.is_dir():
             raise StudyActionError("Study Profile store is invalid.")
@@ -464,6 +477,8 @@ class StudyActionLedger:
         return tuple(events)
 
     def list(self) -> tuple[StudyActionEvent, ...]:
+        if self.external_records:
+            self._validated_directory(create=False)
         if not self.directory.exists():
             return ()
         self._validated_directory(create=False)

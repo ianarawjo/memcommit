@@ -9,13 +9,12 @@ from typing import TYPE_CHECKING
 
 from memcommit.models.context import Context
 from memcommit.models.checkpoint import Checkpoint
-from memcommit.core.context_navigation import record_current_context_transition
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
 from .compensation import CompensationStack
 
 if TYPE_CHECKING:
-    from memcommit.persistence.store import MemoryStore
+    from memcommit.persistence.store import ProfileStore
 
 
 def save_atomize_undo(store, change, prepared, archive, auto_checkpoint, receipt):
@@ -107,7 +106,7 @@ def save_atomize_redo(
 
 
 def _save_checkpoint(
-    store: MemoryStore,
+    store: ProfileStore,
     context: Context,
     auto_checkpoint: AutoCheckpointRequest,
     compensation: CompensationStack,
@@ -127,7 +126,7 @@ def _save_checkpoint(
 
 
 def _switch_current(
-    store: MemoryStore,
+    store: ProfileStore,
     locks: ExitStack,
     compensation: CompensationStack,
     *,
@@ -140,7 +139,7 @@ def _switch_current(
         # Register before writing: a writer may report an error after replacing
         # its file. The lock is still held while this inverse runs.
         compensation.defer(store._write_state, copy.deepcopy(state))
-        record_current_context_transition(state, target)
+        state["current"] = target
         store._write_state(state)
 
 

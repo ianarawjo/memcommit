@@ -31,10 +31,7 @@ from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.store import MemoryStore
-from memcommit.persistence.operations.update.receipt_repository import (
-    UpdateReceiptRepository,
-)
+from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.review.model import ReviewError
 from memcommit.core.context_targeting.uid_locator import (
     UidLocatorError,
@@ -120,55 +117,7 @@ def _review_entry(
     )
 
 
-def _artifact_timestamp(path, *, fallback: str) -> float:
-    """Use durable file activity as presentation time when it is available."""
-
-    timestamp = datetime.fromisoformat(fallback).timestamp()
-    try:
-        if path.is_file() and not path.is_symlink():
-            timestamp = max(timestamp, path.stat().st_mtime)
-    except FileNotFoundError:
-        # Selection reloads the authoritative record.  A concurrent deletion
-        # only makes this frozen row fail its normal post-picker validation.
-        pass
-    return timestamp
-
-
-def _retained_update_entries(
-    store: MemoryStore,
-) -> tuple[SessionPickerEntry, ...]:
-    """Project immutable completed receipts not already represented as active."""
-
-    receipts = UpdateReceiptRepository(store)
-    entries: list[SessionPickerEntry] = []
-    for session in receipts.list():
-        entry = SessionPickerEntry(
-            kind="update",
-            key=session.uid,
-            title=f"{session.inputs.source_name} → {session.inputs.target_name}",
-            status="APPLIED",
-            subtitle=(
-                f"{len(session.plan.operations)} retained "
-                f"{'change' if len(session.plan.operations) == 1 else 'changes'}"
-            ),
-            group=session.inputs.target_name,
-            sort_timestamp=_artifact_timestamp(
-                receipts.path(session.uid),
-                fallback=session.application.applied_at,
-            ),
-            detail=(
-                f"Receipt {session.uid}\n"
-                f"Source {session.inputs.source_name}\n"
-                f"Target {session.inputs.target_name}\n"
-                "Immutable completed Update evidence."
-            ),
-            reopen_argv=("mem", "review", "update", "--session", session.uid),
-        )
-        entries.append(_review_entry(entry))
-    return tuple(entries)
-
-
-def _checkpoint_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
+def _checkpoint_review_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...]:
     entries: list[SessionPickerEntry] = []
     for operation in sorted(CHECKPOINT_REVIEW_OPERATIONS):
         for record in list_applied_checkpoint_reviews(store, operation):
@@ -197,7 +146,7 @@ def _checkpoint_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, 
     return tuple(entries)
 
 
-def _saved_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
+def _saved_review_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...]:
     """Project the active ReviewSession and retained terminal histories."""
 
     active = store.load_review_session()
@@ -260,7 +209,7 @@ def _saved_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
     return tuple(entries)
 
 
-def _saved_review_entry(store: MemoryStore) -> SessionPickerEntry | None:
+def _saved_review_entry(store: ProfileStore) -> SessionPickerEntry | None:
     """Compatibility projection for the one active ReviewSession row."""
 
     active = store.load_review_session()
@@ -272,7 +221,7 @@ def _saved_review_entry(store: MemoryStore) -> SessionPickerEntry | None:
     )
 
 
-def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
+def review_session_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...]:
     """Return every saved session that the Review host can currently view."""
 
     entries: list[SessionPickerEntry] = []
@@ -291,12 +240,11 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
             if catalog_entry.picker_entry.status == "APPLIED"
         )
     )
-    entries.extend(_retained_update_entries(store))
     entries.extend(_saved_review_entries(store))
     return tuple(entries)
 
 
-def choose_review_session(store: MemoryStore) -> SessionOpenReceipt | None:
+def choose_review_session(store: ProfileStore) -> SessionOpenReceipt | None:
     """Choose one frozen saved review session without opening or mutating it."""
 
     entries = review_session_entries(store)

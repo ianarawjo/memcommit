@@ -47,6 +47,7 @@ class SemanticColorRole(str, Enum):
     EMBED = "embed"
     EDIT = "edit"
     REMOVE = "remove"
+    IRREVERSIBLE_WARNING = "irreversible-warning"
     UNDO = "undo"
     REDO = "redo"
     HISTORY = "history"
@@ -70,6 +71,7 @@ SEMANTIC_COLOR_HEX = {
     SemanticColorRole.EMBED: YELLOW_HEX,
     SemanticColorRole.EDIT: GREEN_HEX,
     SemanticColorRole.REMOVE: RED_HEX,
+    SemanticColorRole.IRREVERSIBLE_WARNING: RED_HEX,
     SemanticColorRole.UNDO: PEACH_HEX,
     SemanticColorRole.REDO: LAVENDER_HEX,
     SemanticColorRole.HISTORY: HISTORY_HEX,

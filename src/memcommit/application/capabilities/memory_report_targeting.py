@@ -25,7 +25,7 @@ from memcommit.core.context_targeting.resolution import parse_direct_memory_loca
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     collect_memory_history_candidates,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 MemoryReportTargetKind = Literal["MEMORY"]
@@ -73,7 +73,7 @@ def parse_memory_report_locator(
 
 
 def _context_targets(
-    store: MemoryStore,
+    store: ProfileStore,
     context: Context,
 ) -> tuple[ResolvedMemoryReportTarget, ...]:
     memories = tuple(
@@ -89,7 +89,7 @@ def _context_targets(
 
 
 def resolve_local_memory_report_target(
-    store: MemoryStore,
+    store: ProfileStore,
     selector: str,
     *,
     current: str | None,
@@ -103,7 +103,7 @@ def resolve_local_memory_report_target(
             raise FileNotFoundError(f"Context {context_name!r} does not exist locally.")
         contexts = (store.load_direct(context_name),)
     else:
-        contexts = store.load_direct_context_graph_strict()
+        contexts = store.load_all_contexts()
 
     matches = tuple(
         target
@@ -145,7 +145,7 @@ def resolve_local_memory_report_target(
 
 
 def freeze_memory_report_readable_catalog(
-    store: MemoryStore,
+    store: ProfileStore,
     *,
     current: str | None,
 ) -> ReadableContextCatalog | None:

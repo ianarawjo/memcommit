@@ -273,7 +273,7 @@ class DedunPort(Protocol):
     """Freeze and atomically apply one confirmed duplicate request."""
 
     def freeze(self, request: DedunRequest) -> FrozenDedunPlan:
-        """Revalidate the exact Source and local write protection."""
+        """Revalidate the exact Source for the confirmed duplicate request."""
 
     def apply(
         self,

@@ -71,8 +71,6 @@ def restore_merge_context_creation(store, unit, direction: str):
                             f"Affected Context '{change.context_name}' changed "
                             "after the Merge selected for undo."
                         )
-                    if change.before is None:
-                        store._assert_context_deletion_allowed(current)
                     current_by_name[change.context_name] = current
                     original_bytes[change.context_name] = (
                         store.load_context_record_bytes(change.context_name)

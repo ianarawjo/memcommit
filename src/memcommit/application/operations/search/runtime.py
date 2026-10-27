@@ -1,10 +1,13 @@
-"""Operation-owned MemoryStore composition for semantic Search."""
+"""Operation-owned ProfileStore composition for semantic Search."""
 
 from __future__ import annotations
 
 from typing import Protocol
 
 from memcommit.application.context_access.access import ContextAccess
+from memcommit.application.context_access.readable_contexts import (
+    freeze_profile_readable_context_catalog,
+)
 from memcommit.models.context import Context
 from memcommit.application.capabilities.retrieval_corpus.loading import (
     collect_readable_corpus_candidates,
@@ -19,7 +22,7 @@ from memcommit.application.operations.search.application import (
     FrozenSearchCurrentSource,
     run_search,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 
 class SearchReadableCatalog(Protocol):
@@ -39,7 +42,7 @@ class SearchReadableCatalog(Protocol):
 class MemoryStoreSearchSourcePort(SearchSourcePort):
     """Freeze current readable evidence from one catalog."""
 
-    def __init__(self, store: MemoryStore, catalog: SearchReadableCatalog):
+    def __init__(self, store: ProfileStore, catalog: SearchReadableCatalog):
         self._store = store
         self._catalog = catalog
 
@@ -72,7 +75,7 @@ class MemoryStoreSearchSourcePort(SearchSourcePort):
 def execute_search(
     request: SearchRequest,
     *,
-    store: MemoryStore,
+    store: ProfileStore,
     catalog: SearchReadableCatalog,
     provider_factory: SearchProviderFactory,
     observer: SearchObserver | None = None,
@@ -87,9 +90,37 @@ def execute_search(
     )
 
 
+def execute_profile_search(
+    search_description: str,
+    *,
+    store: ProfileStore,
+    provider_factory: SearchProviderFactory,
+    observer: SearchObserver | None = None,
+) -> SearchResponse:
+    """Find up to five relevant items across the active Profile's Contexts."""
+
+    catalog = freeze_profile_readable_context_catalog(store)
+    context_names = tuple(catalog.list_context_names())
+    if not context_names:
+        raise ValueError("No Contexts are available for Find in this Profile.")
+    return execute_search(
+        SearchRequest(
+            query=search_description,
+            target_names=context_names,
+            include_descendants=False,
+            limit=5,
+        ),
+        store=store,
+        catalog=catalog,
+        provider_factory=provider_factory,
+        observer=observer,
+    )
+
+
 __all__ = [
     "ContextAccess",
     "SearchReadableCatalog",
     "MemoryStoreSearchSourcePort",
     "execute_search",
+    "execute_profile_search",
 ]

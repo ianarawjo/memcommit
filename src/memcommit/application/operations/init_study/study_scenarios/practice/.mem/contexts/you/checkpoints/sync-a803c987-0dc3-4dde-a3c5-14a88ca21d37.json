@@ -1,0 +1,23 @@
+{
+  "uid": "a803c987-0dc3-4dde-a3c5-14a88ca21d37",
+  "timestamp": "2026-10-26T12:43:34.417268",
+  "snapshot": {
+    "uid": "ca53adda-a096-45f7-9a8a-f5b6b513fd60",
+    "name": "you",
+    "memories": {},
+    "order": [],
+    "document": {
+      "path": "you",
+      "format": "md",
+      "role": "directory"
+    }
+  },
+  "command": "sync",
+  "command_details": {
+    "sync_operation": {
+      "uid": "81862974-1bc4-471e-8afe-b7ee74151094",
+      "action": "UNCHANGED"
+    }
+  },
+  "auto": true
+}

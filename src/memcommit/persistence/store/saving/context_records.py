@@ -24,19 +24,9 @@ class _ContextSavingMixin:
         ctx: Context,
         auto_checkpoint: Optional[AutoCheckpointRequest] = None,
     ) -> Checkpoint | None:
-        """Persist one Context inside the global command-order boundary."""
-        with self._command_write_lock():
-            return self._save_command_locked(
-                ctx,
-                auto_checkpoint,
-            )
-
-    def _save_command_locked(
-        self,
-        ctx: Context,
-        auto_checkpoint: Optional[AutoCheckpointRequest] = None,
-    ) -> Checkpoint | None:
         """Persist a Context and its optional checkpoint."""
+        if not self.context_exists(ctx.name):
+            return self.create_context(ctx, auto_checkpoint)
         # Coordinate new names with namespace changes; writing and checkpointing
         # still share the same Context lock and exception rollback boundary.
         with self._context_graph_lock(exclusive=False):
@@ -51,28 +41,7 @@ class _ContextSavingMixin:
         source_bindings: Iterable[tuple[str, str]] = (),
         expected_context_catalog: Iterable[str] | None = None,
     ) -> tuple[Checkpoint, ...]:
-        """Persist one existing multi-Context command with exception rollback.
-
-        Each entry carries a Context and its checkpoint request. The complete
-        identity set stays locked through the final write. Rollback protects
-        ordinary exceptions; a durable crash journal remains deferred.
-        """
-
-        with self._command_write_lock():
-            return self._save_context_command_batch_command_locked(
-                entries,
-                source_bindings=source_bindings,
-                expected_context_catalog=expected_context_catalog,
-            )
-
-    def _save_context_command_batch_command_locked(
-        self,
-        entries: Iterable[tuple[Context, AutoCheckpointRequest]],
-        *,
-        source_bindings: Iterable[tuple[str, str]] = (),
-        expected_context_catalog: Iterable[str] | None = None,
-    ) -> tuple[Checkpoint, ...]:
-        """Reuse batch persistence when a coordinating operation owns the lock."""
+        """Persist one multi-Context command with rollback on ordinary failures."""
         records = tuple(entries)
         if not records:
             raise ValueError("At least one Context command entry is required.")
@@ -147,14 +116,6 @@ class _ContextSavingMixin:
                             f"Context '{context.name}' changed before the "
                             "command could be saved."
                         )
-                    # Validate the entire write set before the first
-                    # publication. Rollback still protects unexpected I/O
-                    # failures, while a locked later Context must fail the
-                    # complete command without a provisional earlier save.
-                    self._assert_context_record_change_allowed(
-                        current,
-                        context,
-                    )
                     original_records[context.name] = current.to_dict()
 
                 created: list[tuple[str, Checkpoint]] = []
@@ -206,24 +167,11 @@ class _ContextSavingMixin:
         require_new: bool = False,
         source_bindings: Iterable[tuple[str, str]],
     ) -> Checkpoint | None:
-        """Save one Merge result as one globally ordered command."""
-        with self._command_write_lock():
-            return self._save_merge_target_command_locked(
-                ctx,
-                auto_checkpoint,
-                require_new=require_new,
-                source_bindings=source_bindings,
-            )
-
-    def _save_merge_target_command_locked(
-        self,
-        ctx: Context,
-        auto_checkpoint: AutoCheckpointRequest,
-        *,
-        require_new: bool = False,
-        source_bindings: Iterable[tuple[str, str]],
-    ) -> Checkpoint | None:
         """Publish a Merge target while its Source identities stay locked."""
+        if require_new or not self.context_exists(ctx.name):
+            return self.create_context_with_sources(
+                ctx, auto_checkpoint, source_bindings=source_bindings,
+            )
         bindings = tuple(source_bindings)
         source_names = tuple(name for name, _ in bindings)
         if len(source_names) != len(set(source_names)) or ctx.name in source_names:
@@ -263,18 +211,21 @@ class _ContextSavingMixin:
         source_bindings: Iterable[tuple[str, str]],
     ) -> Checkpoint | None:
         """Save a target with its exact Source identities locked."""
+        if not self.context_exists(ctx.name):
+            return self.create_context_with_sources(
+                ctx, auto_checkpoint, source_bindings=source_bindings,
+            )
         bindings = tuple(source_bindings)
         source_names = tuple(name for name, _ in bindings)
         if not bindings or len(source_names) != len(set(source_names)):
             raise ValueError("Invalid Context source lock set.")
-        with self._command_write_lock():
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_locks((*source_names, ctx.name)):
-                    self._assert_source_bindings_locked(bindings)
-                    checkpoint = self._save_locked(
-                        ctx,
-                        auto_checkpoint,
-                    )
+        with self._context_graph_lock(exclusive=False):
+            with self._context_write_locks((*source_names, ctx.name)):
+                self._assert_source_bindings_locked(bindings)
+                checkpoint = self._save_locked(
+                    ctx,
+                    auto_checkpoint,
+                )
         return checkpoint
 
     def _assert_source_bindings_locked(
@@ -309,7 +260,6 @@ class _ContextSavingMixin:
         require_new: bool = False,
     ) -> Checkpoint | None:
         """Save while holding this Context's cooperative process lock."""
-        self._assert_profile_write_allowed()
         ctx_dir = self._context_dir(ctx.name)
         context_file = self._context_file(ctx.name)
         if context_file.is_symlink():
@@ -330,9 +280,11 @@ class _ContextSavingMixin:
                 loaded_record,
                 ctx.name,
             )
-        if current_record is not None:
-            self._assert_context_record_change_allowed(current_record, ctx)
+        if current_record is not None and current_record["uid"] != ctx.uid:
+            raise ValueError("A Context save cannot replace its stable identity.")
         if not context_preexisting:
+            from ..context_hierarchy import validate_context_hierarchy
+            validate_context_hierarchy((*self.list_context_names(), ctx.name))
             self._assert_context_storage_available(ctx.name)
         ctx_dir.mkdir(parents=True, exist_ok=True)
         checkpoints_dir = self._checkpoints_dir(ctx.name)

@@ -29,16 +29,17 @@ from memcommit.application.operations.duplicates.dedun.application import (
 from memcommit.application.operations.duplicates.dedun.runtime import (
     DedunScopeReceipt,
     MemoryStoreDedunPort,
-    apply_recursive_dedun_scope,
-    freeze_recursive_dedun_scope,
-    prepare_recursive_dedun_scope,
+)
+from memcommit.application.operations.duplicates.dedup.recursive import (
+    DedupScopeAnalysis,
+    run_recursive_dedup,
 )
 from memcommit.application.operations.duplicates.find_redundancies.application import (
     FindRedundanciesRequest,
     analyze_find_redundancies,
     prepare_find_redundancies,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import ProfileStore
 
 RedundancyOperation = Literal["find-redundancies", "dedun"]
 RedundancyRunStage = Literal["analyzing", "analyzed"]
@@ -48,7 +49,7 @@ RedundancyRunStage = Literal["analyzing", "analyzed"]
 class RedundancyRunResult:
     """The complete analysis and, for an applied Dedun, its durable receipt."""
 
-    analysis: RedundancyScopeAnalysis
+    analysis: RedundancyScopeAnalysis | DedupScopeAnalysis
     receipt: DedunReceipt | DedunScopeReceipt | None = None
 
 
@@ -56,7 +57,7 @@ def run_redundancies(
     request: FindRedundanciesRequest,
     *,
     operation: RedundancyOperation,
-    store: MemoryStore,
+    store: ProfileStore,
     provider_factory: Callable[[], FindingsProvider],
     on_progress: Callable[[RedundancyRunStage, QualityFindSourceFrame], None]
     | None = None,
@@ -67,15 +68,15 @@ def run_redundancies(
     if operation not in ("find-redundancies", "dedun"):
         raise ValueError(f"Unsupported redundancy operation: {operation!r}.")
     current_name = store.current_context_name()
-    recursive_dedun = None
     if operation == "dedun" and request.include_descendants:
         access = resolve_existing_context_access(
             store, request.context_name, current_name=current_name
         ).value
-        recursive_dedun = freeze_recursive_dedun_scope(store, access)
-        source = recursive_dedun.source
-    else:
-        source = prepare_find_redundancies(store, request, current_name=current_name)
+        analysis, receipt = run_recursive_dedup(
+            store, access.context_name, provider_factory, on_progress=on_progress
+        )
+        return RedundancyRunResult(analysis, receipt)
+    source = prepare_find_redundancies(store, request, current_name=current_name)
     if on_progress is not None:
         on_progress("analyzing", source)
     analysis = analyze_find_redundancies(source, provider_factory)
@@ -83,12 +84,6 @@ def run_redundancies(
         on_progress("analyzed", source)
     if operation == "find-redundancies":
         return RedundancyRunResult(analysis)
-    if recursive_dedun is not None:
-        port = MemoryStoreDedunPort(store, current_name=current_name)
-        prepared = prepare_recursive_dedun_scope(recursive_dedun, analysis, port=port)
-        return RedundancyRunResult(
-            analysis, apply_recursive_dedun_scope(store, prepared)
-        )
     frame = analysis.contexts[0]
     applicable = tuple(
         (

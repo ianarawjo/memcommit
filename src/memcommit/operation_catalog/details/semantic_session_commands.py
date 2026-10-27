@@ -40,10 +40,18 @@ SEMANTIC_SESSION_COMMAND_DETAILS = (
             "Context history. Receipt review is not available yet."
         ),
     ),
-    _detail(
-        "update",
-        "running it starts or resumes the staged Update decisions",
-        "running it replaces those decisions; completion Applies target changes",
+    OperationTextDetail(
+        id="instruction-execution",
+        operation="update",
+        title="APPLYING AN INSTRUCTION",
+        use_when="Checking the scope and saved result of an Update instruction.",
+        discovery=DetailDiscovery.ON_DEMAND,
+        detail_kind=HelpDetailKind.LIMITATION,
+        body=(
+            "One instruction is applied to the current Context. With -r, its lexical "
+            "descendants are updated in the same operation. The command saves the "
+            "changes and checkpoints, then prints a receipt."
+        ),
     ),
     _detail(
         "sever",
