@@ -20,7 +20,6 @@ class RetainedHistoryContext:
     """One locally owned Context frozen for retained-history inspection."""
 
     display_name: str
-    storage_name: str
     context: Context
 
 
@@ -39,40 +38,7 @@ def load_retained_history_context(
     ).value
     return RetainedHistoryContext(
         display_name=access.access_name,
-        storage_name=access.context_name,
         context=store.load_direct(access.context_name),
-    )
-
-
-def load_retained_history_scope(
-    store: ProfileStore,
-    *,
-    context_locator: str | None,
-    current_name: str | None,
-    include_descendants: bool,
-) -> tuple[RetainedHistoryContext, ...]:
-    """Freeze one locally owned exact or lexical-descendant history range."""
-
-    if type(include_descendants) is not bool:
-        raise TypeError("Retained-history descendant scope must be a boolean.")
-    root = load_retained_history_context(
-        store,
-        context_locator=context_locator,
-        current_name=current_name,
-    )
-    names = tuple(
-        name
-        for name in store.list_context_names()
-        if name == root.storage_name
-        or (include_descendants and name.startswith(root.storage_name + "/"))
-    )
-    return tuple(
-        RetainedHistoryContext(
-            display_name=name,
-            storage_name=name,
-            context=store.load_direct(name),
-        )
-        for name in names
     )
 
 

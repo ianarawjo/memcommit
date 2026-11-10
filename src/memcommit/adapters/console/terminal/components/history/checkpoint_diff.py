@@ -464,21 +464,3 @@ def render_checkpoint_revision_cli(
         context_name=context_name,
         verbose=verbose,
     )
-
-
-def checkpoint_diff_detail_renderer(
-    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
-):
-    """Compatibility name for the shared complete revision renderer."""
-
-    return checkpoint_revision_detail_renderer(checkpoints)
-
-
-def checkpoint_restore_detail_renderer(
-    current_snapshot: Mapping[str, Any],
-    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
-):
-    """Compatibility adapter; Revert now reviews the checkpoint revision."""
-
-    del current_snapshot
-    return checkpoint_revision_detail_renderer(checkpoints)

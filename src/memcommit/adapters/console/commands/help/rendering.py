@@ -26,8 +26,6 @@ from memcommit.adapters.console.commands.help.inventory import (
     HELP_COMMAND_ORDER,
     HELP_COMMON_KEYS,
     HELP_COMMON_LOCATORS,
-    HELP_CORE_CONCEPTS,
-    HELP_CORE_CONCEPT_STYLES,
     CommandEntry,
 )
 
@@ -74,87 +72,24 @@ def _entry_line(
     return f"{label:<{name_width}} - {entry.description}"
 
 
-_HELP_USE_WHEN_LABEL = "WHEN"
-_HELP_USE_WHEN_PREFIX = _HELP_USE_WHEN_LABEL + " · "
-
-
-def _wrap_prefixed_terminal_text(
-    prefix: str,
-    value: str,
-    *,
-    width: int,
-) -> list[str]:
-    """Wrap translated prose after one stable terminal-cell prefix."""
-
-    prefix_width = terminal_cell_width(prefix)
-    value_width = max(1, width - prefix_width)
-    value_lines = wrap_terminal_text(display_escape_text(value), value_width)
-    continuation = " " * prefix_width
-    return [
-        (prefix if index == 0 else continuation) + line
-        for index, line in enumerate(value_lines)
-    ]
-
-
 def _help_command_rows(
     entry: CommandEntry,
     *,
     command_prefixes: tuple[str, ...],
     content_width: int,
-) -> list[tuple[str, str, str, int | None]]:
-    """Project one command as a connected Description/When record."""
+) -> list[tuple[str, str, str]]:
+    """Connect one command label to its wrapped description."""
 
     prefix_width = terminal_cell_width(command_prefixes[0])
     if any(terminal_cell_width(prefix) != prefix_width for prefix in command_prefixes):
         raise ValueError("Help command prefixes must share one display width.")
-    # The two-cell connector belongs to the record rather than either text
-    # column. This preserves the previous row count while making the command,
-    # description, and use case read as one connected unit.
     connector_width = 2
     body_width = max(1, content_width - prefix_width - connector_width)
-    summary = entry.description
-    best_for = entry.operation_help.best_for if entry.operation_help is not None else ""
     summary_lines = wrap_terminal_text(
-        display_escape_text(summary),
+        display_escape_text(entry.description),
         body_width,
     )
-    body_rows: list[tuple[str, int | None, bool]] = [
-        (pad_terminal_text(line, body_width), None, False) for line in summary_lines
-    ]
-    if not best_for:
-        best_for_lines: list[str] = []
-    else:
-        best_for_lines = _wrap_prefixed_terminal_text(
-            _HELP_USE_WHEN_PREFIX,
-            best_for,
-            width=body_width,
-        )
-        body_rows.extend(
-            (
-                pad_terminal_text(line, body_width),
-                0 if index == 0 else None,
-                True,
-            )
-            for index, line in enumerate(best_for_lines)
-        )
-
-    row_count = max(len(body_rows), len(command_prefixes))
-    semantic_row_count = len(body_rows)
-    has_when = any(is_when for _body, _offset, is_when in body_rows)
-
-    def connector(index: int) -> str:
-        if index >= semantic_row_count:
-            return " " * connector_width
-        if not has_when:
-            return "─ " if index == 0 else " " * connector_width
-        if index == 0:
-            return "┬ "
-        if body_rows[index][2] and not body_rows[index - 1][2]:
-            return "└ "
-        if body_rows[index][2]:
-            return " " * connector_width
-        return "│ "
-
+    row_count = max(len(summary_lines), len(command_prefixes))
     return [
         (
             (
@@ -162,9 +97,11 @@ def _help_command_rows(
                 if index < len(command_prefixes)
                 else " " * prefix_width
             ),
-            connector(index),
-            body_rows[index][0] if index < semantic_row_count else " " * body_width,
-            body_rows[index][1] if index < semantic_row_count else None,
+            "─ " if index == 0 else " " * connector_width,
+            pad_terminal_text(
+                summary_lines[index] if index < len(summary_lines) else "",
+                body_width,
+            ),
         )
         for index in range(row_count)
     ]
@@ -204,7 +141,7 @@ def render_help_lookup_entries(
         rendered.append(
             "\n".join(
                 (prefix + connector + body).rstrip()
-                for prefix, connector, body, _label_offset in rows
+                for prefix, connector, body in rows
             )
         )
     return "\n\n".join(rendered)
@@ -298,10 +235,10 @@ def _help_group_fragments(
         command_focused = focused and owns_selection and selected_form is None
         marker = "▾" if expanded else "▸"
         first_label = label_lines[index][0]
-        # Each operation owns its junction. Keeping it next to that operation
+        # Each operation owns its connector. Keeping it next to that operation
         # prevents a category-wide prose column from visually overpowering the
         # command list. A display-only continuation still reserves enough
-        # left-side width, but the branch always begins on the first row.
+        # left-side width, but the description begins on the first row.
         connector_name_width = max(len(line) for line in label_lines[index])
         first_command_prefix = f"{marker} mem {first_label} " + "─" * (
             connector_name_width - len(first_label) + 1
@@ -320,7 +257,7 @@ def _help_group_fragments(
                 for line in label_lines[index][1:]
             ),
         )
-        for prefix, connector, body, label_offset in _help_command_rows(
+        for prefix, connector, body in _help_command_rows(
             entry,
             command_prefixes=command_prefixes,
             content_width=content_width,
@@ -335,24 +272,12 @@ def _help_group_fragments(
             fragments.append((prefix_style, f" {prefix}"))
             connector_style = body_style if command_focused else "class:help-connector"
             fragments.append((connector_style, connector))
-            if label_offset is None:
-                fragments.append((body_style, f"{body} "))
-            else:
-                label = _HELP_USE_WHEN_LABEL
-                label_end = label_offset + len(label)
-                fragments.extend(
-                    [
-                        (body_style, body[:label_offset]),
-                        (body_style, body[label_offset:label_end]),
-                        (body_style, body[label_end:] + " "),
-                    ]
-                )
+            fragments.append((body_style, f"{body} "))
             fragments.append((border_style, vertical + "\n"))
         if command_focused:
             # Anchor after the complete connected record. Prompt-toolkit only
             # guarantees visibility through the cursor row; anchoring before
-            # a two-line record let the final WHEN row (and the closing border
-            # after the last operation) fall below the viewport at the end of Help.
+            # a wrapped record can leave its final line below the viewport.
             fragments.append(("[SetCursorPosition]", ""))
         if expanded:
             if entry.operation_help is not None:
@@ -362,8 +287,8 @@ def _help_group_fragments(
                 )
                 detail_label_width = max(len(row.label) for row in composed.overview)
                 for row in composed.overview:
-                    # The use case is already visible in every command row,
-                    # even before expansion; do not duplicate it in the detail.
+                    # Help presents descriptions and invocation contracts;
+                    # use cases remain catalog metadata for operation lookup.
                     if row.label == "BEST FOR":
                         continue
                     prefix = f"  {row.label:<{detail_label_width}} · "
@@ -510,17 +435,16 @@ def _help_information_box_fragments(
     *,
     width: int,
     by_kind: bool,
-    focused_concept_index: int | None = None,
     focused: bool = False,
     viewport_height: int | None = None,
 ) -> list[tuple[str, str]]:
-    """Render the trailing BY KIND concepts, locators, and key reference."""
+    """Render the trailing BY KIND locator and keyboard reference."""
     if not by_kind:
         return []
     width = max(36, width)
     inner_width = width - 2
     content_width = inner_width - 2
-    guide_focused = focused and focused_concept_index is not None
+    guide_focused = focused
     border_style = (
         "class:help-guide.border.focused"
         if guide_focused
@@ -547,23 +471,15 @@ def _help_information_box_fragments(
             )
         )
 
-    def rows(
-        items: tuple[tuple[str, str], ...],
-        *,
-        selectable: bool,
-        label_styles: dict[str, str] | None = None,
-    ) -> None:
+    def rows(items: tuple[tuple[str, str], ...]) -> None:
         label_width = max(terminal_cell_width(label) for label, _description in items)
-        for item_index, (label, description) in enumerate(items):
-            row_focused = selectable and focused and focused_concept_index == item_index
+        for label, description in items:
             prefix = pad_terminal_text(label, label_width) + "  "
             lines = wrap_terminal_text(
                 display_escape_text(description),
                 max(1, content_width - terminal_cell_width(prefix)),
             )
             for line_index, line in enumerate(lines):
-                if row_focused and line_index == 0:
-                    fragments.append(("[SetCursorPosition]", ""))
                 row_prefix = prefix if line_index == 0 else " " * len(prefix)
                 padding = " " * max(
                     0,
@@ -574,66 +490,19 @@ def _help_information_box_fragments(
                 fragments.extend(
                     [
                         (border_style, "┃" if guide_focused else "│"),
-                        (
-                            (
-                                "class:selected" if row_focused else "",
-                                " " + row_prefix + line + padding + " ",
-                            )
-                            if row_focused
-                            else ("", " ")
-                        ),
+                        ("", " "),
+                        (label_style if line_index == 0 else "", row_prefix),
+                        ("", line + padding + " "),
                     ]
                 )
-                if not row_focused:
-                    fragments.extend(
-                        [
-                            (
-                                (
-                                    (label_styles or {}).get(label, label_style)
-                                    if line_index == 0
-                                    else ""
-                                ),
-                                row_prefix,
-                            ),
-                            ("", line + padding + " "),
-                        ]
-                    )
                 fragments.append((border_style, ("┃" if guide_focused else "│") + "\n"))
 
-    border("CORE CONCEPTS", middle=False)
-    rows(
-        tuple(
-            (
-                label,
-                description,
-            )
-            for label, description in HELP_CORE_CONCEPTS
-        ),
-        selectable=True,
-        label_styles=HELP_CORE_CONCEPT_STYLES,
-    )
-    border("COMMON LOCATORS", middle=True)
-    rows(
-        tuple(
-            (
-                locator,
-                description,
-            )
-            for locator, description in HELP_COMMON_LOCATORS
-        ),
-        selectable=False,
-    )
+    if guide_focused:
+        fragments.append(("[SetCursorPosition]", ""))
+    border("COMMON LOCATORS", middle=False)
+    rows(HELP_COMMON_LOCATORS)
     border("COMMON KEYS", middle=True)
-    rows(
-        tuple(
-            (
-                key,
-                description,
-            )
-            for key, description in HELP_COMMON_KEYS
-        ),
-        selectable=False,
-    )
+    rows(HELP_COMMON_KEYS)
     fragments.append(
         (
             border_style,
@@ -644,7 +513,7 @@ def _help_information_box_fragments(
         )
     )
     # The reference follows commands now. Anchor its closing border when the
-    # whole box fits, so entering Memory does not reveal only the first row.
+    # whole box fits, so focusing the guide reveals both retained sections.
     if (
         guide_focused
         and viewport_height is not None

@@ -7,6 +7,7 @@ import uuid
 from collections.abc import Iterable
 from typing import Callable, Protocol
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -18,7 +19,6 @@ from memcommit.application.capabilities.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.models.context import Context
 
 from .changes import (
     AddOperation,
@@ -27,16 +27,12 @@ from .changes import (
     SourceReference,
     UpdateError,
     UpdateOperation,
-    _strict_json_object,
 )
 from .inputs import (
     SourceCandidate,
-    UpdateInputs,
-    collect_update_inputs,
-    inline_update_context,
+    UpdatePlanningInputs,
 )
 from .plan import UpdatePlan
-from .instruction import UpdateInstruction
 
 
 UPDATE_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
@@ -66,25 +62,12 @@ class UpdateProvider(Protocol):
 
 
 def _update_payload(
-    source: Context,
-    target: Context,
-    inputs: UpdateInputs,
+    inputs: UpdatePlanningInputs,
     goal_focus: FrozenGoalFocus | None = None,
 ) -> dict[str, object]:
     payload: dict[str, object] = {
-        "source": {
-            "name": source.name,
-            "memories": [
-                {
-                    "source_id": candidate.candidate_id,
-                    "context": candidate.context_name,
-                    "content": candidate.content,
-                }
-                for candidate in inputs.source_candidates
-            ],
-        },
         "target": {
-            "name": target.name,
+            "name": inputs.execution_inputs.target_name,
             "contexts": [
                 {
                     "context_id": candidate.candidate_id,
@@ -103,10 +86,24 @@ def _update_payload(
             ],
         },
     }
-    if inputs.instruction is not None:
+    if inputs.source_candidates and inputs.execution_inputs.instruction is None:
+        payload["source"] = {
+            "name": inputs.execution_inputs.source_name,
+            "memories": [
+                {
+                    "source_id": candidate.candidate_id,
+                    "context": candidate.context_name,
+                    "content": candidate.content,
+                }
+                for candidate in inputs.source_candidates
+            ],
+        }
+    if inputs.execution_inputs.instruction is not None:
         payload["instruction"] = {
-            "text": inputs.instruction.text,
-            "source_id": inputs.source_candidates[0].candidate_id,
+            "text": inputs.execution_inputs.instruction,
+            "source_id": inputs.source_candidates[0].candidate_id
+            if inputs.source_candidates
+            else "s000001",
         }
     if inputs.source_context_only:
         payload["source"]["context_evidence"] = [  # type: ignore[index]
@@ -138,14 +135,12 @@ def _update_payload(
 
 
 def _build_update_prompt(
-    source: Context,
-    target: Context,
-    inputs: UpdateInputs,
+    inputs: UpdatePlanningInputs,
     goal_focus: FrozenGoalFocus | None = None,
     *,
     allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> str:
-    payload_value = _update_payload(source, target, inputs, goal_focus)
+    payload_value = _update_payload(inputs, goal_focus)
     payload = json.dumps(
         payload_value,
         ensure_ascii=False,
@@ -234,7 +229,7 @@ def _build_update_prompt(
         if "DELETE" in allowed_update_effects
         else ""
     )
-    if inputs.instruction is not None:
+    if inputs.execution_inputs.instruction is not None:
         return (
             "Plan changes requested by the user's single Update instruction.\n"
             "The instruction.text field is the explicit edit request, including when "
@@ -286,11 +281,11 @@ def _build_update_prompt(
 
 def _update_execution_workload(
     payload: object,
-    inputs: UpdateInputs,
+    inputs: UpdatePlanningInputs,
     *,
     allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> BudgetVector:
-    source_count = len(inputs.source_candidates)
+    source_count = len(inputs.source_candidates) or 1
     target_count = len(inputs.target_memories)
     context_count = len(inputs.source_context_only) + len(inputs.target_context_only)
     return json_budget(
@@ -308,16 +303,16 @@ def _update_execution_workload(
     )
 
 
-def _addition_limit(inputs: UpdateInputs) -> int:
+def _addition_limit(inputs: UpdatePlanningInputs) -> int:
     return (
         UPDATE_INSTRUCTION_ADDITION_LIMIT
-        if inputs.instruction is not None
+        if inputs.execution_inputs.instruction is not None
         else len(inputs.source_candidates)
     )
 
 
 def _update_output_schema(
-    inputs: UpdateInputs,
+    inputs: UpdatePlanningInputs,
     *,
     allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> dict[str, object]:
@@ -328,7 +323,8 @@ def _update_output_schema(
         ]
     source_id = {
         "type": "string",
-        "enum": [candidate.candidate_id for candidate in inputs.source_candidates],
+        "enum": [candidate.candidate_id for candidate in inputs.source_candidates]
+        or ["s000001"],
     }
     target_context_id: dict[str, object] = {"type": "string"}
     if inputs.target_contexts:
@@ -357,7 +353,7 @@ def _update_output_schema(
                         "source_ids": {
                             "type": "array",
                             "minItems": 1,
-                            "maxItems": len(inputs.source_candidates),
+                            "maxItems": len(inputs.source_candidates) or 1,
                             "items": source_id,
                         },
                         "reason": {
@@ -394,7 +390,7 @@ def _update_output_schema(
                         "source_ids": {
                             "type": "array",
                             "minItems": 1,
-                            "maxItems": len(inputs.source_candidates),
+                            "maxItems": len(inputs.source_candidates) or 1,
                             "items": source_id,
                         },
                         "reason": {
@@ -426,7 +422,7 @@ def _update_output_schema(
                         "source_ids": {
                             "type": "array",
                             "minItems": 1,
-                            "maxItems": len(inputs.source_candidates),
+                            "maxItems": len(inputs.source_candidates) or 1,
                             "items": source_id,
                         },
                         "reason": {
@@ -459,6 +455,11 @@ def _parse_source_ids(
         raise UpdateError("Codex update returned invalid source provenance.")
     if len(value) != len(set(value)):
         raise UpdateError("Codex update returned duplicate source provenance.")
+    if not by_id:
+        if value != ["s000001"]:
+            raise UpdateError("Codex update selected an unknown instruction.")
+        # The instruction belongs to the request, not to a synthetic Memory.
+        return ()
     if any(item not in by_id for item in value):
         raise UpdateError("Codex update selected an unknown source Memory.")
     return tuple(by_id[item].reference for item in value)
@@ -466,7 +467,7 @@ def _parse_source_ids(
 
 def _parse_provider_operations(
     raw: object,
-    inputs: UpdateInputs,
+    inputs: UpdatePlanningInputs,
     *,
     allowed_update_effects: frozenset[str] = UPDATE_EFFECTS,
 ) -> tuple[UpdateOperation, ...]:
@@ -475,7 +476,7 @@ def _parse_provider_operations(
     if len(raw) > UPDATE_RESPONSE_CHAR_LIMIT:
         raise UpdateError("Codex update returned too much structured output.")
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise UpdateError("Codex update returned invalid structured output.") from error
     if (
@@ -643,29 +644,12 @@ def _parse_provider_operations(
 
 
 def plan_update(
-    source_contexts: tuple[Context, ...],
-    target_contexts: tuple[Context, ...],
+    inputs: UpdatePlanningInputs,
     provider_factory: Callable[[], UpdateProvider],
     *,
-    source_include_descendants: bool = False,
-    target_include_descendants: bool = False,
-    source_memory_selector: str | None = None,
-    target_memory_selector: str | None = None,
-    inline_source_content: str | None = None,
-    goal_focus: FrozenGoalFocus | None = None,
     allowed_update_effects: Iterable[str] | None = None,
-    instruction: UpdateInstruction | None = None,
 ) -> UpdatePlan:
     """Ask a provider for a validated, non-mutating update plan."""
-    source = source_contexts[0]
-    target = target_contexts[0]
-    if (
-        type(source_include_descendants) is not bool
-        or type(target_include_descendants) is not bool
-    ):
-        raise ValueError("Update descendant scopes must be booleans.")
-    if goal_focus is not None and not isinstance(goal_focus, FrozenGoalFocus):
-        raise UpdateError("Update Goal focus must be a typed frozen frame.")
     provided_target_uses = (
         None if allowed_update_effects is None else frozenset(allowed_update_effects)
     )
@@ -683,43 +667,9 @@ def plan_update(
             "The Target Context permits no create, update, or delete use; "
             "Update planning was not started."
         )
-    if source.uid == target.uid:
-        raise UpdateError("A Context cannot update itself.")
-    if source_memory_selector is not None and source_include_descendants:
-        raise UpdateError(
-            "A Source Memory selector cannot be combined with descendant scope."
-        )
-    if target_memory_selector is not None and target_include_descendants:
-        raise UpdateError(
-            "A Target Memory selector cannot be combined with descendant scope."
-        )
-    if inline_source_content is not None:
-        inline_source = inline_update_context(inline_source_content)
-        if (
-            len(source_contexts) != 1
-            or source.uid != inline_source.uid
-            or source.name != inline_source.name
-            or source.to_dict() != inline_source.to_dict()
-            or source_include_descendants
-            or source_memory_selector is not None
-        ):
-            raise UpdateError(
-                "Inline Update input requires one exact process-local Source Memory."
-            )
-    inputs = collect_update_inputs(
-        source_contexts,
-        target_contexts,
-        source_memory_selector=source_memory_selector,
-        target_memory_selector=target_memory_selector,
-        instruction=instruction,
-    )
-    if not inputs.source_candidates:
-        raise UpdateError(f"Source Context '{source.name}' has no readable Memories.")
     prompt = _build_update_prompt(
-        source,
-        target,
         inputs,
-        goal_focus,
+        inputs.execution_inputs.goal_focus,
         allowed_update_effects=allowed_mutations,
     )
     provider = provider_factory()
@@ -738,7 +688,7 @@ def plan_update(
     )
     return UpdatePlan(
         uid=str(uuid.uuid4()),
-        target_uid=target.uid,
-        target_name=target.name,
+        target_uid=inputs.execution_inputs.target_uid,
+        target_name=inputs.execution_inputs.target_name,
         operations=operations,
     )

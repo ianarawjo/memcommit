@@ -2,19 +2,20 @@
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-import fcntl
 import json
-import os
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
 
 from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditSession,
 )
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.persistence.store import ProfileStore
+from memcommit.persistence.store.infrastructure.atomic_io import _atomic_write_stream
+from memcommit.persistence.store.infrastructure.locking import _blocking_file_lock
 
 
 class JsonAuditRecordRepository:
@@ -55,13 +56,8 @@ class JsonAuditRecordRepository:
         lock_path = lock_directory / f"{uid}.lock"
         if lock_path.exists() and (not lock_path.is_file() or lock_path.is_symlink()):
             raise QualityAuditError("Audit session lock storage is invalid.")
-        descriptor = os.open(lock_path, os.O_RDWR | os.O_CREAT, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX)
+        with _blocking_file_lock(lock_path, exclusive=True):
             yield
-        finally:
-            fcntl.flock(descriptor, fcntl.LOCK_UN)
-            os.close(descriptor)
 
     def create(self, session: QualityAuditSession) -> None:
         """Create one immutable UID-addressed Audit record."""
@@ -77,24 +73,9 @@ class JsonAuditRecordRepository:
             if path.exists() and (not path.is_file() or path.is_symlink()):
                 raise QualityAuditError("Audit session storage is invalid.")
             if path.exists():
-                raise QualityAuditError(
-                    "An Audit record with this uid already exists."
-                )
-            temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
-            try:
-                descriptor = os.open(
-                    temporary,
-                    os.O_WRONLY | os.O_CREAT | os.O_EXCL,
-                    0o600,
-                )
-                with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-                    json.dump(data, handle, indent=2, ensure_ascii=False)
-                    handle.flush()
-                    os.fsync(handle.fileno())
-                os.replace(temporary, path)
-            finally:
-                if temporary.exists() and not temporary.is_symlink():
-                    temporary.unlink()
+                raise QualityAuditError("An Audit record with this uid already exists.")
+            with _atomic_write_stream(path, mode="w") as handle:
+                json.dump(data, handle, indent=2, ensure_ascii=False)
 
     def load(self, uid: str) -> QualityAuditSession:
         path = self._path(uid)
@@ -103,7 +84,7 @@ class JsonAuditRecordRepository:
         try:
             with open(path, encoding="utf-8") as handle:
                 return QualityAuditSession.from_dict(
-                    json.load(handle, object_pairs_hook=_strict_json_object)
+                    json.load(handle, object_pairs_hook=reject_duplicate_json_keys)
                 )
         except (OSError, ValueError, json.JSONDecodeError) as error:
             raise QualityAuditError("Saved Audit session is invalid.") from error
@@ -125,12 +106,3 @@ class JsonAuditRecordRepository:
                 raise QualityAuditError("Audit session storage is invalid.")
             sessions.append(self.load(path.stem))
         return tuple(sorted(sessions, key=lambda item: item.uid))
-
-
-def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result

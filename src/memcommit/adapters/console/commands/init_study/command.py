@@ -11,10 +11,6 @@ from memcommit.persistence.command_ledger.attempts import current_command_attemp
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.providers.policy import (
-    STUDY_PROVIDER_POLICY_DIGEST,
-    STUDY_PROVIDER_POLICY_VERSION,
-)
 from memcommit.adapters.console.commands.init_study.name_dialog import (
     choose_study_profile_name,
 )
@@ -24,6 +20,7 @@ from memcommit.adapters.console.commands.init_study.receipt import (
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
+    profile_store_dir,
     study_run_identity,
 )
 from memcommit.application.operations.init_study.application import (
@@ -64,8 +61,6 @@ def cmd(
                 return
         result = initialize_study(
             name=name,
-            provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
-            provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
         )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(
@@ -110,4 +105,16 @@ def cmd(
             )
             raise typer.Exit(1)
 
+    from memcommit.adapters.background.automatic_sync import ensure_worker
+    from memcommit.persistence.store import ProfileStore
+
+    for profile in result.profiles:
+        try:
+            ensure_worker(ProfileStore(root=profile_store_dir(profile), create=False))
+        except (OSError, ValueError, TypeError, RuntimeError) as error:
+            typer.echo(
+                f"Automatic sync pending for {display_escape_text(profile.name)}: "
+                + display_escape_text(str(error)),
+                err=True,
+            )
     render_study_init_receipt(result)

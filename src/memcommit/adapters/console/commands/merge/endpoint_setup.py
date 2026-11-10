@@ -28,7 +28,7 @@ def merge_setup_spec(setup: merge_setup.MergeSetup) -> EndpointSetupSpec:
         raise TypeError("Merge endpoint setup requires a MergeSetup.")
     return EndpointSetupSpec(
         title="MERGE",
-        subtitle="Review changes before applying.",
+        subtitle="Merge immediately if no conflicts are found; otherwise review them.",
         mode_label="METHOD",
         modes=(
             EndpointSetupMode("SEMANTIC", "SEMANTIC"),

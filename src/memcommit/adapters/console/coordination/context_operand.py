@@ -44,9 +44,3 @@ class ContextOperandSnapshot:
     def resolve(self, locator: str) -> str:
         """Return the canonical name selected by one existing-Context operand."""
         return resolve_context_locator(locator, current=self.current_name)
-
-    def resolve_or_current(self, locator: str | None) -> str | None:
-        """Resolve an explicit operand or use the same frozen active name."""
-        if locator is None:
-            return self.current_name
-        return self.resolve(locator)

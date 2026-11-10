@@ -175,7 +175,7 @@ _OPERATIONS = (
         "May change global configuration",
     ),
     _operation(
-        "contexts",
+        "context",
         "List Context names in the active Profile and mark the current Context.",
         "Active Profile -> ordered Context names + current selection",
         ExecutionKind.DETERMINISTIC,
@@ -275,12 +275,12 @@ _OPERATIONS = (
         "One complete bounded proposition frame from auto-typed or explicit literals, direct Memory selectors, or readable direct Contexts; Ground checks Context, vertical, peer, and Rule–Example relations",
     ),
     _operation(
-        "resolve",
+        "conflict",
         "Find current-Context conflicts, collect resolution decisions, and recheck the "
         "result for conflicts before applying it.",
         "Direct Context -> conflict check -> decisions and proposed changes -> conflict recheck -> Apply",
         ExecutionKind.SEMANTIC,
-        "Reviewed additions, edits and removals apply as one Resolve checkpoint",
+        "Reviewed additions, edits and removals apply as one Conflict checkpoint",
         "The complete current Context; no Memory-level input filter or recursive target",
     ),
     _operation(
@@ -438,11 +438,11 @@ _OPERATIONS = (
         "Study headings",
     ),
     _operation(
-        "provider",
-        "Select and verify Codex, Ollama, or OpenRouter semantic execution.",
-        "Provider configuration <-> status or probe",
+        "llm-provider",
+        "Select Codex and configure its model/reasoning for all Profiles.",
+        "LLM provider configuration <-> status or probe",
         ExecutionKind.DETERMINISTIC,
-        "May change provider configuration or make a probe request",
+        "May change LLM provider configuration or make a probe request",
         maturity="PARTIAL",
     ),
     _operation(
@@ -627,9 +627,6 @@ _OPERATIONS = (
 
 
 OPERATION_BY_NAME = {operation.name: operation for operation in _OPERATIONS}
-# Compatibility name retained for callers that consume this catalog through
-# the Help application rather than as the product-level operation affordance.
-OPERATION_HELP_BY_NAME = OPERATION_BY_NAME
 
 if len(OPERATION_BY_NAME) != len(_OPERATIONS):  # pragma: no cover
     raise RuntimeError("Public operation names must be unique.")
@@ -663,12 +660,6 @@ def operation_descriptor(name: str) -> OperationDescriptor:
         return OPERATION_BY_NAME[name]
     except KeyError as error:
         raise KeyError(f"No public operation is registered for {name!r}.") from error
-
-
-def operation_help(name: str) -> OperationDescriptor:
-    """Compatibility spelling for Help-oriented catalog consumers."""
-
-    return operation_descriptor(name)
 
 
 def operation_summary(name: str) -> str:

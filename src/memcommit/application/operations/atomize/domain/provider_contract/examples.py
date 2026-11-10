@@ -8,6 +8,7 @@ from importlib import resources
 
 import json
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from ..model import (
     ATOMIZE_RULESET_VERSION,
     ATOMIZE_SEGMENTER_VERSION,
@@ -15,8 +16,6 @@ from ..model import (
     ATOMIZE_SIZE_REVIEW_SEGMENTS,
     AtomizeImpactError,
 )
-
-from .response.fields import _reject_duplicate_json_keys
 
 
 def _load_calibration(
@@ -30,7 +29,7 @@ def _load_calibration(
         ).joinpath("fixtures", "atomize.json")
         fixture = json.loads(
             resource.read_text(encoding="utf-8"),
-            object_pairs_hook=_reject_duplicate_json_keys,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         raise AtomizeImpactError(

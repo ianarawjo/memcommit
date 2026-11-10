@@ -1,20 +1,13 @@
-"""Operation-owned deterministic text Find application."""
+"""Exact text-pattern contract that deterministic Replace matches against."""
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Literal, Protocol
-
-from memcommit.application.capabilities.durable_uid_resolution import (
-    DurableUidAmbiguityError,
-    DurableUidCandidate,
-    try_resolve_durable_uid,
-)
+from typing import Literal
 
 
 FindMode = Literal["LITERAL", "REGEX"]
-FindItemKind = Literal[("memory",)]
 _PATTERN_LIMIT = 2_000
 
 
@@ -63,58 +56,6 @@ class FindRequest:
 
 
 @dataclass(frozen=True, slots=True)
-class FindSourceItem:
-    """One authorized Memory-shaped value frozen before matching."""
-
-    context_name: str
-    context_uid: str
-    kind: FindItemKind
-    item_uid: str
-    source_position: int
-    content: str
-
-    def __post_init__(self) -> None:
-        text_values = (
-            self.context_name,
-            self.context_uid,
-            self.item_uid,
-        )
-        if any(not isinstance(value, str) or not value for value in text_values):
-            raise FindError("Find source identities must be nonblank text.")
-        if self.kind not in {"memory"}:
-            raise FindError("Find received an unsupported source item.")
-        if (
-            not isinstance(self.source_position, int)
-            or isinstance(self.source_position, bool)
-            or self.source_position < 1
-        ):
-            raise FindError("Find source position must be a positive integer.")
-        if not isinstance(self.content, str):
-            raise FindError("Find source content must be text.")
-
-
-@dataclass(frozen=True, slots=True)
-class FrozenFindSource:
-    """Complete authorized item frame for one request."""
-
-    items: tuple[FindSourceItem, ...]
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.items, tuple) or any(
-            not isinstance(item, FindSourceItem) for item in self.items
-        ):
-            raise FindError("Find source frame must contain typed items.")
-        if tuple(item.source_position for item in self.items) != tuple(
-            range(1, len(self.items) + 1)
-        ):
-            # The alias is a location in this complete frozen searchable frame,
-            # not a rank among the later matching subset.
-            raise FindError(
-                "Find source positions must cover the frozen frame in order."
-            )
-
-
-@dataclass(frozen=True, slots=True)
 class FindSpan:
     start: int
     end: int
@@ -132,55 +73,6 @@ class FindSpan:
             or len(self.text) != self.end - self.start
         ):
             raise FindError("Find returned an invalid text span.")
-
-
-@dataclass(frozen=True, slots=True)
-class FindMatch:
-    """Content occurrences and/or one durable identity match in a source item."""
-
-    source: FindSourceItem
-    spans: tuple[FindSpan, ...]
-    matched_uids: tuple[str, ...] = ()
-
-    def __post_init__(self) -> None:
-        if not self.spans and not self.matched_uids:
-            raise FindError("A Find match requires content or UID evidence.")
-        if (
-            not isinstance(self.matched_uids, tuple)
-            or any(not isinstance(uid, str) or not uid for uid in self.matched_uids)
-            or len(set(self.matched_uids)) != len(self.matched_uids)
-        ):
-            raise FindError("Find UID matches must contain distinct identities.")
-        previous_end = -1
-        for span in self.spans:
-            if (
-                span.start < previous_end
-                or self.source.content[span.start : span.end] != span.text
-            ):
-                raise FindError("Find spans do not match the frozen content.")
-            previous_end = span.end
-
-
-@dataclass(frozen=True, slots=True)
-class FindResult:
-    """Complete provider-free result for the exact request."""
-
-    request: FindRequest
-    scanned_item_count: int
-    matches: tuple[FindMatch, ...]
-
-    @property
-    def occurrence_count(self) -> int:
-        return sum(len(match.spans) for match in self.matches)
-
-    @property
-    def identity_match_count(self) -> int:
-        return sum(len(match.matched_uids) for match in self.matches)
-
-
-class FindSourcePort(Protocol):
-    def freeze(self, request: FindRequest) -> FrozenFindSource:
-        """Return one complete authorized frame without constructing a provider."""
 
 
 def compile_find_pattern(request: FindRequest) -> re.Pattern[str]:
@@ -204,76 +96,11 @@ def compile_find_pattern(request: FindRequest) -> re.Pattern[str]:
     return compiled
 
 
-def run_find(
-    request: FindRequest,
-    *,
-    source_port: FindSourcePort,
-) -> FindResult:
-    """Find every non-overlapping occurrence without provider or Store effects."""
-
-    if not isinstance(request, FindRequest):
-        raise FindInputError("Find requires a FindRequest.")
-    compiled = compile_find_pattern(request)
-    frozen = source_port.freeze(request)
-    if not isinstance(frozen, FrozenFindSource):
-        raise FindError("Find source returned an invalid frozen frame.")
-    identity_by_position: dict[int, tuple[str, ...]] = {}
-    if request.mode == "LITERAL":
-        identity_candidates: list[DurableUidCandidate[FindSourceItem]] = []
-        for item in frozen.items:
-            identity_uids = [item.item_uid]
-            identity_candidates.extend(
-                DurableUidCandidate(uid=uid, kind=item.kind, value=item)
-                for uid in identity_uids
-            )
-        try:
-            identity = try_resolve_durable_uid(
-                tuple(identity_candidates),
-                request.pattern,
-            )
-        except DurableUidAmbiguityError as error:
-            raise FindInputError(str(error)) from error
-        if identity is not None:
-            for item in identity.values:
-                identity_by_position[item.source_position] = (identity.uid,)
-    matches: list[FindMatch] = []
-    for item in frozen.items:
-        spans = tuple(
-            FindSpan(
-                start=match.start(),
-                end=match.end(),
-                text=match.group(0),
-            )
-            for match in compiled.finditer(item.content)
-        )
-        matched_uids = identity_by_position.get(item.source_position, ())
-        if spans or matched_uids:
-            matches.append(
-                FindMatch(
-                    source=item,
-                    spans=spans,
-                    matched_uids=matched_uids,
-                )
-            )
-    return FindResult(
-        request=request,
-        scanned_item_count=len(frozen.items),
-        matches=tuple(matches),
-    )
-
-
 __all__ = [
-    "FrozenFindSource",
     "FindError",
     "FindInputError",
-    "FindItemKind",
-    "FindMatch",
     "FindMode",
     "FindRequest",
-    "FindResult",
-    "FindSourceItem",
-    "FindSourcePort",
     "FindSpan",
     "compile_find_pattern",
-    "run_find",
 ]

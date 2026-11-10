@@ -11,7 +11,7 @@ from memcommit.adapters.console.commands.merge.endpoint_setup import (
 from memcommit.adapters.console.commands.merge.preview import (
     run_merge_preview,
 )
-from memcommit.adapters.console.commands.resolve.resolution_rounds import (
+from memcommit.adapters.console.commands.conflict.resolution_rounds import (
     run_resolution_rounds,
 )
 from memcommit.adapters.console.coordination.endpoint_operand import (
@@ -38,7 +38,7 @@ from memcommit.application.operations.merge.preparation import (
     prepare_literal_merge,
     prepare_merge,
 )
-from memcommit.application.operations.merge.resolve_preparation import (
+from memcommit.application.operations.merge.conflict_resolution_preparation import (
     prepare_semantic_review,
 )
 from memcommit.application.operations.merge.result import finish_merge
@@ -47,8 +47,8 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_semantic_provider
-from memcommit.providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
 
 from .conflict_screen import run_merge_conflicts
 
@@ -94,14 +94,12 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Merge two exact Contexts; review Setup changes before Apply."""
+    """Merge two exact Contexts; review conflicts before applying."""
     try:
         source = choose_endpoint_operand(
             source, role="Source", options=(("--from", from_),)
         )
-        target = choose_endpoint_operand(
-            target, role="Target", options=(("--to", to),)
-        )
+        target = choose_endpoint_operand(target, role="Target", options=(("--to", to),))
         if sum((keep_target_all, take_source_all, keep_both_all)) > 1:
             raise ValueError(
                 "Choose one of --keep-target-all, --take-source-all, or --keep-both-all."
@@ -119,7 +117,6 @@ def cmd(
         store = ProfileStore(create=False)
         current_name = store.current_context_name()
         method = "LITERAL" if literal else "SEMANTIC"
-        from_setup = source is None
         bulk = (
             MergeDecision.KEEP_TARGET
             if keep_target_all
@@ -129,7 +126,7 @@ def cmd(
             if keep_both_all
             else None
         )
-        if from_setup:
+        if source is None:
             setup = build_merge_setup(
                 store, current_name=current_name, method=method, requested_target=target
             )
@@ -158,7 +155,6 @@ def cmd(
             store=store,
             current_name=current_name,
             bulk=bulk,
-            review_before_apply=from_setup,
         )
         if result is None:
             annotate_command_outcome("CANCELLED")
@@ -193,7 +189,6 @@ def execute_merge(
     store,
     current_name,
     bulk=None,
-    review_before_apply=False,
 ):
     """Prepare once, then enter the same review/publication flow for either method."""
     prepared = prepare_merge(request, store=store, current_name=current_name)
@@ -204,7 +199,6 @@ def execute_merge(
         provider_factory=connect_semantic_provider,
         repository=JsonAuditRecordRepository(store),
         bulk=bulk,
-        review_before_apply=review_before_apply,
     )
 
 
@@ -215,9 +209,8 @@ def review_merge(
     provider_factory,
     repository=None,
     bulk=None,
-    review_before_apply=False,
 ):
-    """Resolve → Preview → Apply through the same flow for either method."""
+    """Resolve conflicts → Preview → Apply through the same flow for either method."""
     literal = run_merge_conflicts(review, bulk=bulk)
     if literal is None:
         return None
@@ -237,8 +230,7 @@ def review_merge(
         results = run_resolution_rounds(
             (semantic_review,),
             provider_factory=provider_factory,
-            preview_choices=True,
-            header_label="MERGE · RESOLVE",
+            header_label="MERGE · CONFLICT",
         )
         if results is None:
             return None
@@ -251,6 +243,6 @@ def review_merge(
     interactive_decisions = bulk is None and any(
         round.decisions.decisions for round in result.rounds
     )
-    if review_before_apply or interactive_decisions:
+    if interactive_decisions:
         return run_merge_preview(prepared, result, apply_preview=apply_reviewed)
     return apply_reviewed(result)

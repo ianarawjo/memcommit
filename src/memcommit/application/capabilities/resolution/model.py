@@ -166,9 +166,3 @@ class ResolutionProgress:
             self.unresolved_required_uids
         ):
             raise ValueError("Resolution progress repeats an unresolved item.")
-
-    @property
-    def ready(self) -> bool:
-        """Whether every REQUIRED item has an exact staged answer."""
-
-        return not self.unresolved_required_uids

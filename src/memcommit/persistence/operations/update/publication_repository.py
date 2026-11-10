@@ -20,10 +20,9 @@ from memcommit.application.operations.update.model import (
     UpdateCheckpointReceipt,
     UpdateError,
     UpdateOperation,
-    UpdateContextInputs,
+    UpdateExecutionInputs,
     UpdatePlan,
     UpdateReceipt,
-    inline_update_source,
     operation_digest,
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
@@ -77,49 +76,50 @@ def _apply_operations_to_direct(
 
 def _apply_locked(
     active_store: ProfileStore,
-    inputs: UpdateContextInputs,
+    execution_inputs: UpdateExecutionInputs,
     plan: UpdatePlan,
 ) -> UpdateReceipt:
     """Apply after all participant records and control-plane state are locked."""
 
     if UpdateReceiptRepository(active_store).path(plan.uid).exists():
         raise ConcurrentContextUpdateError("This Update was already applied.")
-    inline_source = inline_update_source(inputs)
-    if inputs.goal_focus is not None:
+    if execution_inputs.goal_focus is not None:
         try:
-            revalidate_goal_focus(active_store, inputs.goal_focus)
+            revalidate_goal_focus(active_store, execution_inputs.goal_focus)
         except GoalFocusError as error:
             raise ConcurrentContextUpdateError(
                 "The Update Goal focus changed before application."
             ) from error
-    source_contexts = (
-        (inline_source,)
-        if inline_source is not None
-        else _load_endpoint(
+    if execution_inputs.source_name is not None:
+        source_contexts = _load_endpoint(
             active_store,
-            inputs.source_name,
-            include_descendants=inputs.source_include_descendants,
-            direct=inputs.instruction is not None,
+            execution_inputs.source_name,
+            include_descendants=execution_inputs.source_include_descendants,
+            direct=execution_inputs.instruction is not None,
         )
-    )
+        if (source_contexts[0].uid, source_contexts[0].name) != (
+            execution_inputs.source_uid,
+            execution_inputs.source_name,
+        ):
+            raise ConcurrentContextUpdateError(
+                "The Update Source identity changed before application."
+            )
     target_contexts = _load_endpoint(
         active_store,
-        inputs.target_name,
-        include_descendants=inputs.target_include_descendants,
-        direct=inputs.instruction is not None and not inputs.target_include_descendants,
+        execution_inputs.target_name,
+        include_descendants=execution_inputs.target_include_descendants,
+        direct=execution_inputs.instruction is not None
+        and not execution_inputs.target_include_descendants,
     )
-    if (source_contexts[0].uid, source_contexts[0].name) != (
-        inputs.source_uid,
-        inputs.source_name,
-    ) or (target_contexts[0].uid, target_contexts[0].name) != (
-        inputs.target_uid,
-        inputs.target_name,
+    if (target_contexts[0].uid, target_contexts[0].name) != (
+        execution_inputs.target_uid,
+        execution_inputs.target_name,
     ):
         raise ConcurrentContextUpdateError(
             "The Update Source or Target identity changed before application."
         )
 
-    target_identities = set(inputs.target_contexts)
+    target_identities = set(execution_inputs.target_contexts)
     current_target_identities = {
         (context.uid, context.name) for context in target_contexts
     }
@@ -137,16 +137,16 @@ def _apply_locked(
     originals: dict[str, dict[str, object]] = {}
     post_images: dict[str, Context] = {}
     for updated_context in result.updated_contexts:
-        physical_name = updated_context.context_name
+        physical_name = updated_context.name
         direct = target_store.load_direct(physical_name)
-        if direct.uid != updated_context.context_uid:
+        if direct.uid != updated_context.uid:
             raise ConcurrentContextUpdateError(
                 "An Update Target Context identity changed before application."
             )
         owner_operations = tuple(
             operation
             for operation in plan.operations
-            if operation.owner_context_uid == updated_context.context_uid
+            if operation.owner_context_uid == updated_context.uid
         )
         originals[physical_name] = direct.to_dict()
         post_images[physical_name] = _apply_operations_to_direct(
@@ -160,22 +160,22 @@ def _apply_locked(
     try:
         operation_hash = operation_digest(plan.operations)
         for updated_context in result.updated_contexts:
-            public_name = updated_context.context_name
+            public_name = updated_context.name
             physical_name = public_name
             owner_operations = tuple(
                 operation
                 for operation in plan.operations
-                if operation.owner_context_uid == updated_context.context_uid
+                if operation.owner_context_uid == updated_context.uid
             )
             checkpoint = target_store._save_locked(
                 post_images[physical_name],
                 AutoCheckpointRequest(
                     command="update",
                     command_details=build_update_checkpoint(
-                        inputs,
+                        execution_inputs,
                         plan,
                         operation_hash=operation_hash,
-                        owner_uid=updated_context.context_uid,
+                        owner_uid=updated_context.uid,
                         owner_operations=owner_operations,
                         updated_contexts=result.updated_contexts,
                     ),
@@ -195,14 +195,14 @@ def _apply_locked(
             operation_digest=operation_hash,
             checkpoints=tuple(
                 UpdateCheckpointReceipt(
-                    context_uid=updated_context.context_uid,
-                    context_name=updated_context.context_name,
-                    checkpoint_uid=checkpoint_by_public[updated_context.context_name],
+                    context_uid=updated_context.uid,
+                    context_name=updated_context.name,
+                    checkpoint_uid=checkpoint_by_public[updated_context.name],
                 )
                 for updated_context in result.updated_contexts
             ),
         )
-        applied = UpdateReceipt(inputs, plan, receipt)
+        applied = UpdateReceipt(execution_inputs, plan, receipt)
         repository = UpdateReceiptRepository(active_store)
         path = repository.path(applied.uid)
         if path.exists() or path.is_symlink():
@@ -235,11 +235,12 @@ def _apply_locked(
     return applied
 
 
-def _source_lock_names(inputs: UpdateContextInputs, plan: UpdatePlan) -> set[str]:
-    if inline_update_source(inputs) is not None:
-        return set()
-    public_names = {name for _uid, name in inputs.source_contexts}
-    public_names.add(inputs.source_name)
+def _source_lock_names(
+    execution_inputs: UpdateExecutionInputs, plan: UpdatePlan
+) -> set[str]:
+    public_names = {name for _uid, name in execution_inputs.source_contexts}
+    if execution_inputs.source_name is not None:
+        public_names.add(execution_inputs.source_name)
     public_names.update(
         source.context_name
         for operation in plan.operations
@@ -248,29 +249,34 @@ def _source_lock_names(inputs: UpdateContextInputs, plan: UpdatePlan) -> set[str
     return public_names
 
 
-def _target_lock_names(inputs: UpdateContextInputs) -> set[str]:
-    public_names = {name for _uid, name in inputs.target_contexts}
-    public_names.add(inputs.target_name)
+def _target_lock_names(execution_inputs: UpdateExecutionInputs) -> set[str]:
+    public_names = {name for _uid, name in execution_inputs.target_contexts}
+    public_names.add(execution_inputs.target_name)
     return public_names
 
 
 def publish_update_transaction(
     active_store: ProfileStore,
-    inputs: UpdateContextInputs,
+    execution_inputs: UpdateExecutionInputs,
     plan: UpdatePlan,
 ) -> UpdateReceipt:
     """Publish a pre-authorized Update or leave no partial effect."""
 
-    if not isinstance(inputs, UpdateContextInputs) or not isinstance(plan, UpdatePlan):
+    if not isinstance(execution_inputs, UpdateExecutionInputs) or not isinstance(
+        plan, UpdatePlan
+    ):
         raise TypeError("Expected frozen Update inputs and an exact plan.")
-    source_locks = _source_lock_names(inputs, plan)
-    target_locks = _target_lock_names(inputs)
+    source_locks = _source_lock_names(execution_inputs, plan)
+    target_locks = _target_lock_names(execution_inputs)
     goal_locks = set()
-    if inputs.goal_focus is not None and inputs.goal_focus.kind != "INLINE":
-        assert inputs.goal_focus.context_name is not None
-        goal_locks.add(inputs.goal_focus.context_name)
+    if (
+        execution_inputs.goal_focus is not None
+        and execution_inputs.goal_focus.kind != "INLINE"
+    ):
+        assert execution_inputs.goal_focus.context_name is not None
+        goal_locks.add(execution_inputs.goal_focus.context_name)
     with active_store._context_write_locks(source_locks | target_locks | goal_locks):
-        return _apply_locked(active_store, inputs, plan)
+        return _apply_locked(active_store, execution_inputs, plan)
 
 
 __all__ = ["publish_update_transaction"]

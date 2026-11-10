@@ -160,12 +160,6 @@ class OperationDescriptor:
     maturity: str | None = None
     details: tuple[OperationHelpDetail, ...] = ()
 
-    @property
-    def use_when(self) -> str:
-        """Expose the reviewed use case under the public presentation label."""
-
-        return self.best_for
-
     def __post_init__(self) -> None:
         if not isinstance(self.family, OperationFamilyId):
             raise TypeError("Operation family must use a stable family identity.")
@@ -196,10 +190,6 @@ class OperationDescriptor:
             raise ValueError("Operation Help detail ids must be unique per operation.")
 
 
-# Historical callers used the presentation-oriented name before the catalog
-# became the top-level owner of the complete public operation affordance.
-OperationHelp = OperationDescriptor
-
 __all__ = [
     "DetailDiscovery",
     "ExecutionKind",
@@ -207,7 +197,6 @@ __all__ = [
     "OperationComparisonDetail",
     "OperationComparisonOption",
     "OperationDescriptor",
-    "OperationHelp",
     "OperationHelpDetail",
     "OperationTextDetail",
 ]

@@ -13,6 +13,7 @@ from memcommit.application.capabilities.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,
 )
+from memcommit.core.json_objects import canonical_json_digest
 from memcommit.models.context import Context
 
 from .model import (
@@ -50,7 +51,7 @@ def atomize_declared_frame_digest(
     text: str,
 ) -> str:
     """Bind reviewed text to the exact source finding and analysis."""
-    encoded = json.dumps(
+    return canonical_json_digest(
         {
             "memory_uid": memory_uid,
             "review_item_uid": review_item_uid,
@@ -58,11 +59,7 @@ def atomize_declared_frame_digest(
             "uncertainty_reason": uncertainty_reason,
             "text": text,
         },
-        ensure_ascii=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+    )
 
 
 @dataclass(frozen=True)
@@ -867,12 +864,6 @@ class AtomizeAnalysisSession:
             source_review_digest=source_review_digest,
             evidence_digest=evidence_digest,
             source_positions=tuple(source_positions),
-        )
-
-    def item_for(self, memory_uid: str) -> AtomizeAnalysisItem | None:
-        return next(
-            (item for item in self.items if item.memory_uid == memory_uid),
-            None,
         )
 
 

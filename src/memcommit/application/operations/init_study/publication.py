@@ -26,6 +26,8 @@ from memcommit.application.operations.profile.project_root import (
     write_profile_marker,
 )
 from memcommit.configuration.config import Config
+from memcommit.persistence.operations.mem_sync.automatic import write_automatic_settings
+from memcommit.persistence.store import ProfileStore
 from memcommit.models.profile import Profile
 from memcommit.persistence.command_ledger.study_records import (
     initialize_study_records,
@@ -40,8 +42,6 @@ def publish_local_study_profile(
     study_name: str,
     study_uid: str,
     created_at: str,
-    provider_policy_version: str,
-    provider_policy_digest: str,
 ) -> StudyInitializationResult:
     """Stage a run once, then save and read back its Profile registration."""
     from memcommit.application.operations.profile.study.topology import (
@@ -62,8 +62,6 @@ def publish_local_study_profile(
         study_name=study_name,
         study_uid=study_uid,
         created_at=created_at,
-        provider_policy_version=provider_policy_version,
-        provider_policy_digest=provider_policy_digest,
     )
     occupied_names = {profile.name.casefold() for profile in registry.profiles}
     if study_name.casefold() in occupied_names or any(
@@ -94,6 +92,13 @@ def publish_local_study_profile(
                 created_at=created_at,
             )
             write_profile_marker(store_root=staged_store_root, uid=profile.uid)
+            # Consent belongs to this new Study Profile, never the copied
+            # template identity or the participant's authoring Profile.
+            write_automatic_settings(
+                ProfileStore(root=staged_store_root, create=False),
+                True,
+                profile_uid=profile.uid,
+            )
             inspections.append(replace(inspection, root=profile_store_dir(profile)))
         initialize_study_records(
             batch / "study-records",
@@ -135,16 +140,12 @@ def _build_study_profiles(
     study_name: str,
     study_uid: str,
     created_at: str,
-    provider_policy_version: str,
-    provider_policy_digest: str,
 ) -> tuple[Profile, ...]:
     common_source = {
         "kind": STUDY_RUN_PARTICIPANT_SOURCE_KIND,
         "study_uid": study_uid,
         "study_name": study_name,
         "created_at": created_at,
-        "provider_policy_version": provider_policy_version,
-        "provider_policy_digest": provider_policy_digest,
         "study_records_root": str(run_root / "study-records"),
     }
     try:

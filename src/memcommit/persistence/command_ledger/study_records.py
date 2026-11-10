@@ -4,6 +4,7 @@ from collections.abc import Mapping
 import json
 from pathlib import Path
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
@@ -11,10 +12,7 @@ from memcommit.application.operations.profile.config import (
     study_run_identity,
 )
 from memcommit.models.profile import Profile
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
 from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
 )
@@ -88,7 +86,7 @@ def validate_study_record_directory(
     try:
         manifest = json.loads(
             manifest_path.read_text(encoding="utf-8"),
-            object_pairs_hook=_reject_duplicate_json_keys,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
     except (OSError, ValueError) as error:
         raise ProfileConfigError("Study record manifest is unreadable.") from error

@@ -68,25 +68,6 @@ from memcommit.adapters.console.terminal.components.selection import (
 )
 
 
-def suggest_fresh_context_name(
-    stem: str,
-    occupied_names: tuple[str, ...] | list[str],
-) -> str:
-    """Return an editable collision-free spelling without touching storage."""
-
-    if not isinstance(stem, str) or not stem.strip():
-        raise ValueError("Context-name suggestion stem must be nonempty text.")
-    occupied = {
-        name.casefold() for name in occupied_names if isinstance(name, str) and name
-    }
-    candidate = stem
-    suffix = 2
-    while candidate.casefold() in occupied:
-        candidate = f"{stem}-{suffix}"
-        suffix += 1
-    return candidate
-
-
 @dataclass(frozen=True)
 class ContextNameView(ExactNameFieldView):
     """One exact Context name whose operation meaning is supplied by a caller."""
@@ -398,10 +379,6 @@ class ContextNameControl:
     @property
     def name_frame(self) -> Frame:
         return self.field.frame
-
-    @property
-    def tree_frame(self) -> Frame | None:
-        return self.parent_locator.frame if self.parent_locator is not None else None
 
     @property
     def text(self) -> str:

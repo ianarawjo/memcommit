@@ -12,8 +12,7 @@ from memcommit.application.operations.profile.config import (
 STUDY_VISIBLE_COMMAND_NAMES = frozenset(
     {
         "add",
-        "branch",
-        "contexts",
+        "context",
         "dedup",
         "delete",
         "edit",
@@ -27,9 +26,9 @@ STUDY_VISIBLE_COMMAND_NAMES = frozenset(
         "pwd",
         "query",
         "redo",
-        "resolve",
+        "conflict",
+        "summarize",
         "switch",
-        "sync",
         "undo",
         "update",
     }

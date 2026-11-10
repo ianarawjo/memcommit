@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import sys
-from typing import Literal
 
 import typer
 
@@ -32,9 +31,6 @@ from memcommit.application.operations.ground.workspace_runtime import (
 from memcommit.persistence.store import ProfileStore
 
 from . import create as create_workflow
-
-
-GroundViewExit = Literal["CLOSED", "BACK_TO_PICKER"]
 
 
 def _interactive_terminal() -> bool:

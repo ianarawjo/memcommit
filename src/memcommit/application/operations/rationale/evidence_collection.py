@@ -19,12 +19,7 @@ from memcommit.application.operations.rationale.model import (
     RATIONALE_PROVENANCE_CHAR_LIMIT,
     ContextEvidence,
     RationaleError,
-    SavedAnalysis,
     UpdateProposalEvidence,
-)
-from memcommit.application.operations.review.model import (
-    atomize_review_matches_analysis,
-    review_matches_context,
 )
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
@@ -56,86 +51,6 @@ def _origin_events(trace: MemoryHistory) -> tuple[MemoryHistoryEvent, ...]:
 
 def _recorded_reason_events(trace: MemoryHistory) -> tuple[MemoryHistoryRecord, ...]:
     return tuple(event for event in trace.records if event.reason)
-
-
-def _saved_analysis(
-    store: ProfileStore,
-    ctx: Context,
-    trace: MemoryHistory,
-) -> tuple[SavedAnalysis | None, bool, list[str]]:
-    warnings: list[str] = []
-    try:
-        session = store.load_review_session()
-    except ValueError as error:
-        warnings.append(f"Saved review could not be read: {error}")
-        return None, False, warnings
-    if session is None:
-        return None, False, warnings
-    component = set(trace.component_uids)
-    item = next(
-        (
-            candidate
-            for candidate in session.items
-            if set(candidate.source_uids) & component
-        ),
-        None,
-    )
-    if item is None:
-        return None, False, warnings
-    if session.kind == "atomize":
-        try:
-            atomize_analysis = store.load_atomize_analysis(ctx.uid)
-        except ValueError as error:
-            warnings.append(f"Saved atomize analysis could not be read: {error}")
-            return None, True, warnings
-        matches_current = (
-            atomize_analysis is not None
-            and atomize_review_matches_analysis(
-                session,
-                ctx,
-                atomize_analysis,
-            )
-        )
-    else:
-        matches_current = review_matches_context(session, ctx)
-    if (
-        session.context_uid != ctx.uid
-        or session.context_name != ctx.name
-        or not matches_current
-    ):
-        # Stale semantic text is not repeated because doing so can make an old
-        # interpretation look current after any part of its local frame changed.
-        return None, True, warnings
-
-    response = session.responses.get(item.uid)
-    selected_reading: str | None = None
-    response_text = ""
-    if response is not None:
-        response_text = response.text
-        if response.selected_choice_uid is not None:
-            selected = next(
-                (
-                    choice
-                    for choice in item.choices
-                    if choice.uid == response.selected_choice_uid
-                ),
-                None,
-            )
-            selected_reading = selected.text if selected is not None else None
-    return (
-        SavedAnalysis(
-            session_uid=session.uid,
-            interpretation=item.interpretation,
-            clarification=item.clarification,
-            reason=item.reason,
-            question=item.question,
-            readings=tuple((choice.label, choice.text) for choice in item.choices),
-            selected_reading=selected_reading,
-            response=response_text,
-        ),
-        False,
-        warnings,
-    )
 
 
 def _proposal_evidence(

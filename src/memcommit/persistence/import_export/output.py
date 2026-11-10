@@ -8,7 +8,11 @@ import stat
 import tempfile
 
 from memcommit.core.document_path import relative_document_path
-from .source import read_output_files, require_regular_output_path
+from .source import (
+    read_output_files,
+    require_regular_output_directory,
+    require_regular_output_path,
+)
 
 
 def write_output_files(
@@ -20,7 +24,7 @@ def write_output_files(
     removed_directories: tuple[str, ...] = (),
     expected_hashes: dict[str, str | None] | None = None,
 ) -> tuple[str, ...]:
-    destination = Path(destination).absolute()
+    destination = require_regular_output_directory(destination)
     paths = [relative_document_path(path) for path, _ in files]
     if len({path.casefold() for path in paths}) != len(paths):
         raise ValueError("Duplicate output path.")
@@ -35,10 +39,7 @@ def write_output_files(
         relative_document_path(directory)
         if any(directory == path or directory.startswith(path + "/") for path in paths):
             raise ValueError("Output directory conflicts with an output file.")
-        target = destination / directory
-        for parent in (*reversed(target.parents), target):
-            if parent.is_symlink() or (parent.exists() and not parent.is_dir()):
-                raise ValueError(f"Invalid output directory: {parent}")
+        require_regular_output_directory(destination / directory)
     if expected_hashes is not None:
         if set(expected_hashes) != set(originals):
             raise ValueError("Incomplete external publication preconditions.")
@@ -108,9 +109,8 @@ def write_output_files(
             removed_directories, key=lambda path: path.count("/"), reverse=True
         ):
             relative_document_path(relative)
-            target = destination / relative
-            if target.is_symlink() or (target.exists() and not target.is_dir()):
-                raise ValueError(f"Invalid removed directory: {target}")
+            # A regular leaf still escapes the destination through a linked parent.
+            target = require_regular_output_directory(destination / relative)
             if target.exists():
                 mode = stat.S_IMODE(target.stat().st_mode)
                 try:

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.move.application import run_move
 from memcommit.application.operations.move.contracts import (
     FrozenMoveMemoriesPlan,
     MoveMemoriesRequest,
@@ -59,9 +58,3 @@ class MemoryStoreMovePort:
 
     def apply_move(self, plan: FrozenMoveMemoriesPlan) -> MoveMemoriesResult:
         return apply_move(plan, store=self._store, owner=self._owner)
-
-
-def execute_move(
-    request: MoveMemoriesRequest, *, store: ProfileStore
-) -> MoveMemoriesResult:
-    return run_move(request, port=MemoryStoreMovePort.capture(store))

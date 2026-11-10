@@ -5,13 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import cast
 
-from memcommit.models.context import Context
-from memcommit.models.memory import Memory
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
-    HistoryTimeline,
     HistoryTransitionKind,
-    MemoryTransition,
-    MemoryVersion,
 )
 from memcommit.application.capabilities.history.reconstruction.history_graph_reconstruction import (
     reconstruct_history_graph,
@@ -98,127 +93,6 @@ class ContextHistorySlice:
             "current": [state.to_dict() for state in self.current],
             "warnings": list(self.warnings),
         }
-
-
-def _position(
-    timeline: HistoryTimeline,
-    *,
-    state_index: int,
-    memory_uid: str,
-) -> int:
-    state = timeline.state(state_index)
-    return next(
-        (
-            index
-            for index, version in enumerate(state.memories)
-            if version.memory_uid == memory_uid
-        ),
-        -1,
-    )
-
-
-def _memory_state(
-    timeline: HistoryTimeline,
-    version: MemoryVersion | None,
-    *,
-    state_index: int,
-) -> ContextHistoryMemoryState | None:
-    if version is None:
-        return None
-    return ContextHistoryMemoryState(
-        uid=version.memory_uid,
-        content=version.content,
-        position=_position(
-            timeline,
-            state_index=state_index,
-            memory_uid=version.memory_uid,
-        ),
-    )
-
-
-def _change(
-    timeline: HistoryTimeline,
-    transition: MemoryTransition,
-) -> ContextHistoryChange:
-    return ContextHistoryChange(
-        kind=transition.kind,
-        memory_uid=transition.memory_uid,
-        before=_memory_state(
-            timeline,
-            transition.before,
-            state_index=transition.from_state_index,
-        ),
-        after=_memory_state(
-            timeline,
-            transition.after,
-            state_index=transition.to_state_index,
-        ),
-    )
-
-
-def slice_context_history_from_timeline(timeline: HistoryTimeline) -> ContextHistorySlice:
-    """Group the neutral timeline into complete operation-shaped evidence.
-
-    Checkpoints with no direct Memory delta remain visible because Context
-    History is an operation lineage, not a concatenation of nonempty Diffs.
-    """
-
-    transitions_by_checkpoint: dict[str | None, list[MemoryTransition]] = {}
-    for transition in timeline.transitions:
-        transitions_by_checkpoint.setdefault(transition.checkpoint_uid, []).append(
-            transition
-        )
-
-    events = [
-        ContextHistoryEvent(
-            checkpoint_uid=checkpoint.uid,
-            timestamp=checkpoint.timestamp,
-            command=checkpoint.command,
-            description=checkpoint.description,
-            changes=tuple(
-                _change(timeline, transition)
-                for transition in transitions_by_checkpoint.get(checkpoint.uid, ())
-            ),
-        )
-        for checkpoint in timeline.checkpoints
-    ]
-    live_transitions = transitions_by_checkpoint.get(None, ())
-    if live_transitions:
-        events.append(
-            ContextHistoryEvent(
-                checkpoint_uid=None,
-                timestamp=None,
-                command="current",
-                description=(
-                    "Current Context differs from the last reconstructable "
-                    "checkpoint state."
-                ),
-                changes=tuple(
-                    _change(timeline, transition)
-                    for transition in live_transitions
-                ),
-            )
-        )
-
-    current_state = next(
-        (state for state in reversed(timeline.states) if state.current),
-        timeline.states[-1],
-    )
-    current = tuple(
-        ContextHistoryMemoryState(
-            uid=version.memory_uid,
-            content=version.content,
-            position=index,
-        )
-        for index, version in enumerate(current_state.memories)
-    )
-    return ContextHistorySlice(
-        context_uid=timeline.context_uid,
-        context_name=timeline.context_name,
-        events=tuple(events),
-        current=current,
-        warnings=timeline.warnings,
-    )
 
 
 def _projected_memory_state(
@@ -332,28 +206,6 @@ def build_context_history_slice(
     )
 
 
-def current_context_history_slice(
-    context: Context,
-    *,
-    warnings: tuple[str, ...] = (),
-) -> ContextHistorySlice:
-    """Project current direct content when retained owner history is concealed."""
-
-    current = tuple(
-        ContextHistoryMemoryState(memory.uid, memory.content, position)
-        for position, memory in enumerate(
-            item for item in context.iter_memories() if isinstance(item, Memory)
-        )
-    )
-    return ContextHistorySlice(
-        context_uid=context.uid,
-        context_name=context.name,
-        events=(),
-        current=current,
-        warnings=warnings,
-    )
-
-
 __all__ = [
     "ContextHistoryChange",
     "ContextHistoryEvent",
@@ -361,6 +213,4 @@ __all__ = [
     "ContextHistorySlice",
     "build_context_history_slice",
     "slice_context_history_from_graph",
-    "slice_context_history_from_timeline",
-    "current_context_history_slice",
 ]

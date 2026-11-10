@@ -7,6 +7,7 @@ import json
 import unicodedata
 from typing import Literal, Protocol, Sequence
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     HistoryCheckpoint,
     HistoryState,
@@ -413,15 +414,6 @@ def _build_prompt(
     )
 
 
-def _strict_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
-
-
 def _bounded_text(value: object) -> str:
     if (
         not isinstance(value, str)
@@ -453,7 +445,7 @@ def _parse_plan(
     if not isinstance(raw, str) or len(raw) > HISTORY_SEARCH_RESPONSE_CHAR_LIMIT:
         raise HistorySearchError("History search returned invalid structured output.")
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise HistorySearchError(
             "History search returned invalid structured output."
@@ -479,7 +471,15 @@ def _parse_plan(
     relation = value["relation"]
     reduction = value["reduce"]
     if (
-        result_kind not in result_kinds
+        # Provider JSON can contain arrays/objects even for schema enum fields.
+        # Reject their types before set membership can leak a raw TypeError.
+        not all(
+            isinstance(item, str)
+            for item in (
+                result_kind, subject_mode, anchor_kind, occurrence, relation, reduction
+            )
+        )
+        or result_kind not in result_kinds
         or subject_mode not in {"ALL", "MATCHED"}
         or anchor_kind
         not in {"NONE", "MEMORY_PRESENCE", "MEMORY_TRANSITION", "CHECKPOINT"}

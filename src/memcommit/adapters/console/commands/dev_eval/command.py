@@ -13,7 +13,7 @@ from memcommit.application.operations.dev_eval.catalog import (
     list_scenarios,
 )
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 def cmd(

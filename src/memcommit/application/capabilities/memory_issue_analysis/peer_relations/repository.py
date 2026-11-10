@@ -9,6 +9,7 @@ import re
 import uuid
 
 import memcommit.persistence.store as store_module
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     MemoryRelationAnalysis,
     MemoryRelationError,
@@ -75,17 +76,6 @@ def memory_relation_analysis_path(
     return root / f"{reference}--{compared}.json"
 
 
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
-
-
 def load_memory_relation_analysis(
     reference_context_uid: str,
     compared_context_uid: str,
@@ -106,7 +96,7 @@ def load_memory_relation_analysis(
         with open(path, encoding="utf-8") as file:
             value = json.load(
                 file,
-                object_pairs_hook=_strict_json_object,
+                object_pairs_hook=reject_duplicate_json_keys,
             )
         analysis = MemoryRelationAnalysis.from_dict(value)
     except (
@@ -307,8 +297,6 @@ def delete_memory_relation_paths(paths: tuple[Path, ...]) -> None:
 # names remain aliases, while all production ownership is relation-neutral.
 ConcurrentComparisonUpdateError = ConcurrentMemoryRelationUpdateError
 comparison_analyses_dir = memory_relation_analyses_dir
-comparison_analysis_path = memory_relation_analysis_path
 load_comparison_analysis = load_memory_relation_analysis
-save_comparison_analysis = save_memory_relation_analysis
 comparison_paths_for_context = memory_relation_paths_for_context
 delete_comparison_paths = delete_memory_relation_paths

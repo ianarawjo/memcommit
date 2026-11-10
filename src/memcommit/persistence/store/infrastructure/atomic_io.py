@@ -1,43 +1,55 @@
 """Atomic persistence primitives shared by Store owners."""
 
 from __future__ import annotations
-import hashlib
+
 import json
 import os
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
+from typing import BinaryIO, Literal, TextIO
+
+from memcommit.core.json_objects import canonical_json_digest
 from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
 
 
-def _reject_duplicate_json_keys(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    """Build a JSON object while rejecting duplicate keys."""
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
-
-
-def _write_json_atomic(path: Path, data: object) -> None:
-    """Write owner-only JSON through a same-directory atomic replacement."""
+@contextmanager
+def _atomic_write_stream(
+    path: Path, *, mode: Literal["w", "wb"]
+) -> Iterator[TextIO | BinaryIO]:
+    """Publish a private staged stream only after its contents are flushed."""
     temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
     try:
         ensure_private_directory(path.parent, parents=True)
         descriptor = open_private_exclusive(temporary)
-        with os.fdopen(descriptor, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2)
-            f.flush()
-            os.fsync(f.fileno())
+        try:
+            # Retain descriptor ownership through partial stream construction;
+            # fdopen may otherwise close it before raising its original error.
+            with os.fdopen(
+                descriptor,
+                mode,
+                encoding="utf-8" if mode == "w" else None,
+                closefd=False,
+            ) as stream:
+                yield stream
+                stream.flush()
+                os.fsync(stream.fileno())
+        finally:
+            os.close(descriptor)
         os.replace(temporary, path)
     finally:
         if temporary.exists() and not temporary.is_symlink():
             temporary.unlink()
+
+
+def _write_json_atomic(path: Path, data: object) -> None:
+    """Write owner-only JSON through a same-directory atomic replacement."""
+    with _atomic_write_stream(path, mode="w") as file:
+        json.dump(data, file, indent=2)
 
 
 def _fsync_directory(path: Path) -> None:
@@ -51,25 +63,8 @@ def _fsync_directory(path: Path) -> None:
 
 def _write_bytes_atomic(path: Path, data: bytes) -> None:
     """Restore owner-only bytes through the JSON replace boundary."""
-    temporary = path.parent / f".{path.name}.write-{uuid.uuid4().hex}"
-    try:
-        ensure_private_directory(path.parent, parents=True)
-        descriptor = open_private_exclusive(temporary)
-        with os.fdopen(descriptor, "wb") as file:
-            file.write(data)
-            file.flush()
-            os.fsync(file.fileno())
-        os.replace(temporary, path)
-    finally:
-        if temporary.exists() and not temporary.is_symlink():
-            temporary.unlink()
+    with _atomic_write_stream(path, mode="wb") as file:
+        file.write(data)
 
 
-def _canonical_json_digest(value: object) -> str:
-    encoded = json.dumps(
-        value,
-        ensure_ascii=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+_canonical_json_digest = canonical_json_digest

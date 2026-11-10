@@ -38,7 +38,6 @@ from memcommit.application.operations.ground.distill import (
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.adapters.console.commands.distill.proposal import distill_result_text
 from memcommit.adapters.console.commands.distill.receipt import render_distill_receipt
 from memcommit.adapters.console.terminal.components.applied_memory_preview import (
     render_applied_memory_preview,
@@ -46,18 +45,12 @@ from memcommit.adapters.console.terminal.components.applied_memory_preview impor
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_existing_semantic_result_endpoints,
 )
 from memcommit.persistence.store import ProfileStore
-
-
-def render_distill(result: DistillResult) -> str:
-    """Compatibility projection for former command-local renderer callers."""
-
-    return distill_result_text(result)
 
 
 def cmd(

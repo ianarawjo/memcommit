@@ -45,7 +45,6 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
     _current_impact,
     _impact_entry_item,
     _impact_entry_section_uid,
-    _impact_repeats_results,
     _line,
     _memory_row_section_uid,
     _seeded_report_lines,
@@ -62,6 +61,9 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
 from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.effect_report import (
     effect_report_fragments,
     effect_report_sections,
+)
+from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.reporting import (
+    resolution_report_sections,
 )
 from memcommit.adapters.console.terminal.components.responses import (
     response_frame_fragments,
@@ -112,7 +114,9 @@ def report_sections(
         impact = _current_impact(impact_controller, view)
         if impact is None:
             raise ValueError("An effect report requires an exact preview.")
-        return effect_report_sections(impact, effect_report, unchanged_expanded=unchanged_expanded)
+        return effect_report_sections(
+            impact, effect_report, unchanged_expanded=unchanged_expanded
+        )
 
     if split_report_text is not None:
         lines = _seeded_report_lines(
@@ -145,44 +149,13 @@ def report_sections(
             entries = (("REPORT", "SEEDED:REPORT", 0),)
         return _stable_sections(entries)
 
-    entries: list[tuple[str, str, int | None]] = [
-        ("OVERVIEW", f"REPORT:OVERVIEW:{section.uid}", 0)
-        for section in view.semantic_overview_sections
-    ]
-    if view.report_items_summary is not None:
-        entries.append(("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0))
-    else:
-        entries.extend(
-            ("ITEM", f"ITEM:{item.uid}", index)
-            for index, item in enumerate(view.items, start=1)
-        )
-    active_impact = _current_impact(impact_controller, view)
-    impact_repeats_results = _impact_repeats_results(active_impact, view)
-    if view.show_results and not impact_repeats_results:
-        entries.append(("RESULTS", "REPORT:RESULTS", 0))
-    if active_impact is not None:
-        entries.append(("IMPACT", "REPORT:IMPACT", 0))
-        entries.extend(
-            (
-                "IMPACT_ENTRY",
-                _impact_entry_section_uid(entry, index),
-                0,
-            )
-            for index, entry in enumerate(active_impact.entries, start=1)
-        )
-    if not read_only:
-        entries.append(
-            (
-                "REPORT_APPLY"
-                if report_apply
-                else "REVIEW_AND_APPLY"
-                if review_and_apply
-                else "RESOLVE_ALL",
-                "REPORT:ACTION",
-                None,
-            )
-        )
-    return _stable_sections(tuple(entries))
+    return resolution_report_sections(
+        view,
+        review_and_apply=review_and_apply,
+        report_apply=report_apply,
+        read_only=read_only,
+        impact=_current_impact(impact_controller, view),
+    )
 
 
 def item_sections(item: ResolutionItem | None) -> tuple[WorkbenchSection, ...]:
@@ -475,7 +448,7 @@ class ResolutionShellControls:
         if self.controller.viewer_content["kind"] == "REVIEW":
             return review_sections(
                 self.controller.review_action(),
-                self.controller.final_command_review["value"],
+                self.controller.final_command_review,
             )
         return self.item_sections()
 
@@ -545,7 +518,8 @@ class ResolutionShellControls:
         return (
             self.config.effect_report is not None
             and self.controller.session_navigation.pane == "viewer"
-            and self.active_viewer_sections()[self.viewer_section_index()].kind == "IMPACT_GROUP"
+            and self.active_viewer_sections()[self.viewer_section_index()].kind
+            == "IMPACT_GROUP"
         )
 
     def focused_impact_entry_uid(self) -> str | None:
@@ -570,10 +544,9 @@ class ResolutionShellControls:
         show_reason = presentation is None or not presentation.inline_memory_diffs
         for index, entry in enumerate(impact.entries, start=1):
             if _impact_entry_section_uid(entry, index) == section.uid and (
-                entry.rules or (entry.reason and show_reason) or (
-                    presentation is not None
-                    and presentation.details_for(entry.uid)
-                )
+                entry.rules
+                or (entry.reason and show_reason)
+                or (presentation is not None and presentation.details_for(entry.uid))
             ):
                 return section.uid
         return None
@@ -615,8 +588,8 @@ class ResolutionShellControls:
                     self.controller.review_action(),
                     self.viewer_section_index(),
                     content_width=self.pane_content_width(),
-                    review_title=self.controller.final_review_title["value"],
-                    command_review=self.controller.final_command_review["value"],
+                    review_title=self.controller.final_review_title,
+                    command_review=self.controller.final_command_review,
                 ),
                 focused=navigation.pane == "viewer",
             )
@@ -627,7 +600,9 @@ class ResolutionShellControls:
                     raise ValueError("An effect report requires an exact preview.")
                 return _viewer_focus_fragments(
                     effect_report_fragments(
-                        active_view, impact, config.effect_report,
+                        active_view,
+                        impact,
+                        config.effect_report,
                         focused_section=self.viewer_section_index(),
                         expanded_uid=self.controller.impact_reason_expanded["uid"],
                         unchanged_expanded=self.controller.unchanged_effects_expanded,

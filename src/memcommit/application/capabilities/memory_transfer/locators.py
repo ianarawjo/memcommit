@@ -167,26 +167,6 @@ def unique_local_source_frames(
     return tuple(frames_by_name[name] for name in names)
 
 
-def source_owner_locators(
-    memory_locators: tuple[str, ...],
-    source_locator: str | None,
-) -> tuple[str, ...]:
-    locators: list[str] = []
-    for operand in memory_locators:
-        try:
-            locator = parse_direct_memory_locator(
-                operand,
-                explicit_context=source_locator,
-            )
-        except ValueError as error:
-            raise MemoryTransferError(str(error)) from error
-        if locator.context_locator is None:
-            continue
-        if locator.context_locator not in locators:
-            locators.append(locator.context_locator)
-    return tuple(locators)
-
-
 def resolve_source_memories(
     locators: tuple[str, ...],
     *,

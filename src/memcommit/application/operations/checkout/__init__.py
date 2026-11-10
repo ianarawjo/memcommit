@@ -2,9 +2,8 @@
 
 from memcommit.application.operations.checkout.application import (
     CheckoutAction,
-    CheckoutPlan,
     CheckoutRequest,
     plan_checkout,
 )
 
-__all__ = ["CheckoutAction", "CheckoutPlan", "CheckoutRequest", "plan_checkout"]
+__all__ = ["CheckoutAction", "CheckoutRequest", "plan_checkout"]

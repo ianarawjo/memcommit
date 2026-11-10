@@ -111,7 +111,3 @@ class OperationContextRepository:
         if isinstance(resource, Path) and resource.resolve() != resource.absolute():
             raise ValueError("Operation Context resource changed to a symbolic link.")
         return load_operation_context(resource, expected_name=name)
-
-    def resource_location(self, name: str) -> str:
-        resource = self._resources[name]
-        return str(resource.absolute()) if isinstance(resource, Path) else str(resource)

@@ -13,8 +13,8 @@ from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.search.errors import SearchError
 from memcommit.application.operations.search.runtime import execute_profile_search
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_search_provider
-from memcommit.providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
 
 
 def cmd(
@@ -40,14 +40,10 @@ def cmd(
             response = execute_profile_search(
                 search_description,
                 store=ProfileStore(),
-                provider_factory=connect_search_provider,
+                provider_factory=connect_semantic_provider,
                 observer=observe,
             )
-        render_search_receipt(
-            response,
-            target_names=response.request.target_names,
-            all_readable_contexts=True,
-        )
+        render_search_receipt(response)
     except (
         SearchError,
         QueryProviderError,

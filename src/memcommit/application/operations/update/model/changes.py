@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import uuid
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
+
+from memcommit.core.json_objects import canonical_json_digest
 
 
 class UpdateError(RuntimeError):
@@ -17,26 +18,7 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def _sha256_json(value: object) -> str:
-    encoded = json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    )
-    return _sha256_text(encoded)
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    """Build one JSON object while rejecting duplicate keys."""
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
+_sha256_json = canonical_json_digest
 
 
 def _is_sha256(value: object) -> bool:
@@ -207,7 +189,7 @@ UpdateOperation: TypeAlias = EditOperation | AddOperation | RemoveOperation
 
 def operation_digest(operations: tuple[UpdateOperation, ...]) -> str:
     """Hash the exact ordered operation set approved for one update."""
-    return _sha256_json([operation.to_dict() for operation in operations])
+    return canonical_json_digest([operation.to_dict() for operation in operations])
 
 
 def _parse_owner(value: object) -> tuple[str, str]:
@@ -219,7 +201,7 @@ def _parse_owner(value: object) -> tuple[str, str]:
 
 
 def _parse_source_refs(value: object) -> tuple[SourceReference, ...]:
-    if not isinstance(value, list) or not value:
+    if not isinstance(value, list):
         raise ValueError("Invalid operation source references.")
     refs = tuple(SourceReference.from_dict(item) for item in value)
     identities = {(ref.context_uid, ref.memory_uid) for ref in refs}

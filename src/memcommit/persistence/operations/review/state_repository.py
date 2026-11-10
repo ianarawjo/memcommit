@@ -4,13 +4,11 @@ from __future__ import annotations
 import json
 import uuid
 from pathlib import Path
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.models.context import Context
 
 
-from ...store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from ...store.infrastructure.atomic_io import _write_json_atomic
 
 
 class _ReviewStateStoreMixin:
@@ -32,7 +30,7 @@ class _ReviewStateStoreMixin:
             with open(path, encoding="utf-8") as f:
                 data = json.load(
                     f,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
         except (json.JSONDecodeError, ValueError) as error:
             raise ValueError("Semantic review session is invalid JSON.") from error
@@ -79,7 +77,7 @@ class _ReviewStateStoreMixin:
                 context = Context.from_dict(
                     json.load(
                         handle,
-                        object_pairs_hook=_reject_duplicate_json_keys,
+                        object_pairs_hook=reject_duplicate_json_keys,
                     )
                 )
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
@@ -190,9 +188,8 @@ class _ReviewStateStoreMixin:
             try:
                 current = self._load_review_session(self.review_session_file)
             except ValueError:
-                # --new/--replace-review is also the documented recovery path
-                # for a malformed legacy singleton. There is no trustworthy
-                # terminal evidence to archive in that case.
+                # A malformed retired singleton has no trustworthy terminal
+                # evidence to archive.
                 current = None
         if current is not None and current.uid != session.uid and current.terminal:
             history_path = self._review_session_history_path(current.uid)

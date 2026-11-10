@@ -8,6 +8,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,
@@ -77,16 +78,6 @@ class SearchMatch:
             not _valid_related_query(self.related_query, allow_empty=False)
         ):
             raise ValueError("Related Search matches require a bounded related query.")
-
-
-def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
-    """Build one JSON object while rejecting duplicate keys."""
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _candidate_payload(candidate: RetrievalCandidate) -> dict[str, object]:
@@ -234,7 +225,7 @@ def _rank_candidate_batch(
     if not isinstance(raw, str):
         raise SearchError("Codex Search returned invalid structured output.")
     try:
-        data = json.loads(raw, object_pairs_hook=_strict_json_object)
+        data = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise SearchError("Codex Search returned invalid structured output.") from error
     if (

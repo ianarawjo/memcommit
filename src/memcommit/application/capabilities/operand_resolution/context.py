@@ -117,11 +117,6 @@ def try_resolve_existing_context_operand(
     named = tuple(candidate for candidate in frozen if candidate.name == canonical_name)
     if len(named) == 1:
         return _resolved(operand, named[0])
-    if len(named) > 1:
-        raise ContextOperandAmbiguityError(
-            f"Context name {canonical_name!r} has multiple authorized identities."
-        )
-
     if not is_unresolved_uid_selector(operand):
         return None
     try:
@@ -191,30 +186,6 @@ def freeze_local_context_operand_candidates(
     )
 
 
-def resolve_existing_local_context_operand(
-    store: LocalContextOperandStore,
-    operand: str | None,
-    *,
-    current: str | None,
-    candidates: tuple[ContextOperandCandidate[Context], ...] | None = None,
-) -> ResolvedExistingContextOperand[Context]:
-    """Require a local Context from one frozen name/relative/UID identity frame. Multi-operand commands can reuse the same command-start catalog."""
-
-    if operand is None:
-        if current is None:
-            raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        operand = current
-    return resolve_existing_context_operand(
-        (
-            candidates
-            if candidates is not None
-            else freeze_local_context_operand_candidates(store)
-        ),
-        operand,
-        current=current,
-    )
-
-
 __all__ = [
     "ContextOperandAmbiguityError",
     "ContextOperandCandidate",
@@ -223,6 +194,5 @@ __all__ = [
     "ResolvedExistingContextOperand",
     "freeze_local_context_operand_candidates",
     "resolve_existing_context_operand",
-    "resolve_existing_local_context_operand",
     "try_resolve_existing_context_operand",
 ]

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Literal, Protocol
+from typing import Literal
 
 
 RESULT_TEXT_LIMIT = 20_000
@@ -344,13 +344,3 @@ class ResultWorkbenchView:
                 "A boundary case requires an outcome or unresolved finding."
             )
         return detail
-
-
-class ResultWorkbenchAdapter(Protocol):
-    """Operation-owned projection and detail lookup for common presentation."""
-
-    def view(self) -> ResultWorkbenchView:
-        """Return one immutable result projection."""
-
-    def case_detail(self, case_uid: str) -> ResultCaseDetail:
-        """Return detail bound to the same operation artifact."""

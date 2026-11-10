@@ -8,7 +8,7 @@ import typer
 
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.application.operations.fit.ground_report import FitError, FitReport
+from memcommit.application.operations.fit.ground_report import FitError
 from memcommit.application.operations.fit.application import (
     FitMemorySourceRequest,
     FitPropositionsRequest,
@@ -31,18 +31,11 @@ from memcommit.adapters.console.commands.fit.render import (
     render_proposition_fit_plain,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.commands.fit.presentation import fit_result_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 from memcommit.persistence.store import ProfileStore
-
-
-def render_fit(report: FitReport, *, current: bool = True) -> str:
-    """Compatibility projection for callers of the former command renderer."""
-
-    return fit_result_text(FitResult(report, current))
 
 
 def _memory_source_operand(value: str) -> FitMemorySourceRequest:

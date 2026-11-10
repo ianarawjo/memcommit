@@ -153,7 +153,7 @@ class PreparedMerge:
     def _validate_inputs(self):
         review = self.literal_input
         if not isinstance(review, LiteralMergeInput):
-            raise ValueError("Prepared Merge requires its Resolve input.")
+            raise ValueError("Prepared Merge requires its conflict resolution input.")
         if review.method != self.request.method:
             raise ValueError("Prepared Merge has a different method's review settings.")
         if (

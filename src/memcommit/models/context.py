@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Iterator, Protocol, runtime_checkable
+from typing import Any, Iterator
 
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.models.asset_metadata import AssetMetadata
@@ -11,11 +11,6 @@ from memcommit.models.corresponding_document_metadata import (
     CorrespondingDocumentMetadata,
 )
 from memcommit.models.memory import Memory
-
-
-@runtime_checkable
-class Identifiable(Protocol):
-    uid: str
 
 
 class Context:
@@ -81,9 +76,6 @@ class Context:
         self.memories.clear()
         self.order.clear()
 
-    def get_all_memories(self) -> dict[str, Memory]:
-        return self.memories
-
     def replace_memory(self, memory: Memory) -> None:
         if not isinstance(memory, Memory):
             raise TypeError("A Context can contain only Memories.")
@@ -140,6 +132,9 @@ class Context:
                 or not isinstance(item.get("content"), str)
             ):
                 raise ValueError("A Context Memory requires a UID and text content.")
+            if item["uid"] != uid:
+                # Re-keying malformed records could silently collapse two Memories.
+                raise ValueError("Context Memory UID must match its dictionary key.")
             memory = Memory.from_dict(item)
             memories_by_uid[memory.uid] = memory
 

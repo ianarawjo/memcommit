@@ -12,9 +12,11 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.query.ordinary_runtime import execute_profile_query
+from memcommit.application.operations.query.ordinary_runtime import (
+    execute_profile_query,
+)
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_ordinary_query_provider
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 def cmd(
@@ -34,7 +36,7 @@ def cmd(
             response = execute_profile_query(
                 question,
                 store=ProfileStore(),
-                provider_factory=connect_ordinary_query_provider,
+                provider_factory=connect_semantic_provider,
                 observer=lambda stage: (
                     progress.update("answering question", step=2)
                     if stage == "ANSWERING"

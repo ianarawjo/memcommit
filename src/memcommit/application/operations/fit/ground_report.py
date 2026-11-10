@@ -30,7 +30,10 @@ from memcommit.application.operations.fit.judgment import (
     judge_fit_questions,
 )
 from memcommit.application.operations.fit.coherence import FitCoherenceReport
-from memcommit.providers.types import ProviderIdentity
+from memcommit.llm_providers.identity import (
+    provider_identity_record as _identity_dict,
+)
+from memcommit.llm_providers.types import ProviderIdentity
 
 
 FIT_SCHEMA_VERSION = 3
@@ -102,19 +105,6 @@ def _exact(value: object, keys: set[str], label: str) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
         raise FitError(f"Invalid Fit {label}.")
     return value
-
-
-def _identity_dict(identity: ProviderIdentity | None) -> object:
-    if identity is None:
-        return None
-    return {
-        "provider": identity.provider,
-        "model": identity.model,
-        "model_digest": identity.model_digest,
-        "runtime": identity.runtime,
-        "endpoint": identity.endpoint,
-        "reasoning_effort": identity.reasoning_effort,
-    }
 
 
 def _identity(value: object) -> ProviderIdentity | None:

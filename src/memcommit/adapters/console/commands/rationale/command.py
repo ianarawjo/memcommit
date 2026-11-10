@@ -82,8 +82,8 @@ from memcommit.application.operations.rationale.skills.memory_rationale.response
 )
 
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 def _uid(value: str, verbose: bool) -> str:

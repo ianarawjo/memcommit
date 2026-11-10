@@ -318,11 +318,3 @@ def rationale_ruleset_prompt_payload(
         # the same rules without replaying the examples on every invocation.
         "cases": data["cases"] if include_cases else [],
     }
-
-
-def rationale_rule_ids() -> tuple[str, ...]:
-    """Return rule IDs in their normative prompt order."""
-
-    rules = _loaded_ruleset()["rules"]
-    assert isinstance(rules, list)
-    return tuple(str(rule["id"]) for rule in rules if isinstance(rule, dict))

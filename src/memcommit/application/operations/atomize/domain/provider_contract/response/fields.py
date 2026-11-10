@@ -5,17 +5,6 @@ from __future__ import annotations
 from ...model import AtomizeImpactError
 
 
-def _reject_duplicate_json_keys(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
-
-
 def _exact_dict(
     value: object,
     keys: set[str],

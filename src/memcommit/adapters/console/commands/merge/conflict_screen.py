@@ -2,10 +2,10 @@
 
 from dataclasses import replace
 
-from memcommit.adapters.console.commands.resolve.decision_round.screen.screen import (
+from memcommit.adapters.console.commands.conflict.decision_round.screen.screen import (
     build_compact_application,
 )
-from memcommit.adapters.console.commands.resolve.decision_round.screen.screen_state import (
+from memcommit.adapters.console.commands.conflict.decision_round.screen.screen_state import (
     DecisionScreenState,
 )
 from memcommit.adapters.console.terminal.components.inline_diff import (
@@ -51,7 +51,7 @@ def run_merge_conflicts(
         return review.prepare_result(decisions or ())
     if require_tty:
         require_interactive_terminal("Merge conflict review")
-    view = compact_resolve_views((review.analysis,))
+    view = build_merge_conflict_views((review.analysis,))
     selected = {
         item.uid: item.selected_option_uid
         for item in view.items
@@ -229,7 +229,7 @@ def _issue_memory_blocks(analysis: MergeConflictAnalysis, issue: MergeConflictIs
     return tuple(blocks)
 
 
-def compact_resolve_view(analysis: MergeConflictAnalysis) -> ResolutionWorkbenchView:
+def build_merge_conflict_view(analysis: MergeConflictAnalysis) -> ResolutionWorkbenchView:
     """Project unresolved meanings, never mutations, for finalization."""
     return ResolutionWorkbenchView(
         operation="MERGE",
@@ -286,13 +286,13 @@ def compact_resolve_view(analysis: MergeConflictAnalysis) -> ResolutionWorkbench
     )
 
 
-def compact_resolve_views(
+def build_merge_conflict_views(
     analyses: tuple[MergeConflictAnalysis, ...],
 ) -> ResolutionWorkbenchView:
     """One decision surface, retaining each destination's independent binding."""
     if not analyses:
-        raise ValueError("Resolve requires at least one analysis.")
-    views = tuple(compact_resolve_view(analysis) for analysis in analyses)
+        raise ValueError("Conflict review requires at least one analysis.")
+    views = tuple(build_merge_conflict_view(analysis) for analysis in analyses)
     return replace(
         views[0],
         items=tuple(item for view in views for item in view.items),

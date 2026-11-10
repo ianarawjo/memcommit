@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from ..infrastructure.checkpoint_records import normalize_checkpoint_record
 import copy
 import json
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.models.context import Context
 from memcommit.application.capabilities.history.reconstruction.memory_lineage_relations import (
@@ -17,11 +19,12 @@ from ..context_memory.models import ConcurrentContextUpdateError
 from ..context_memory.records import (
     checkpoint_history_digest,
 )
-from ..infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_bytes_atomic,
-    _write_json_atomic,
-)
+from ..infrastructure.atomic_io import _write_bytes_atomic, _write_json_atomic
+
+if TYPE_CHECKING:
+    from memcommit.application.capabilities.checkpoint_catalog import (
+        CheckpointUnitRevertMember,
+    )
 
 
 class _CheckpointRevertMixin:
@@ -59,7 +62,7 @@ class _CheckpointRevertMixin:
         *,
         expected_context_uid: str | None = None,
         expected_history_digest: str | None = None,
-    ) -> tuple[Checkpoint, Checkpoint]:
+    ) -> CheckpointUnitRevertMember:
         """Revert one Context while holding its cooperative write lock."""
         with self._context_write_lock(ctx_name):
             return self._revert_locked(
@@ -86,7 +89,6 @@ class _CheckpointRevertMixin:
         """
 
         from memcommit.application.capabilities.checkpoint_catalog import (
-            CheckpointUnitRevertMember,
             CheckpointUnitRevertResult,
             ResolvedCheckpointUnit,
         )
@@ -161,7 +163,7 @@ class _CheckpointRevertMixin:
                 published: list[CheckpointUnitRevertMember] = []
                 try:
                     for member in unit.members:
-                        recovery, target = self._revert_locked(
+                        restored_member = self._revert_locked(
                             member.context_name,
                             member.checkpoint_uid,
                             keep_history=keep_history,
@@ -171,13 +173,7 @@ class _CheckpointRevertMixin:
                             ),
                             revert_unit=revert_unit,
                         )
-                        published.append(
-                            CheckpointUnitRevertMember(
-                                context_name=member.context_name,
-                                target=target,
-                                recovery=recovery,
-                            )
-                        )
+                        published.append(restored_member)
                 except Exception as error:
                     rollback_error: Exception | None = None
                     for member in unit.members:
@@ -223,6 +219,7 @@ class _CheckpointRevertMixin:
         entries,
         restored_snapshot,
         *,
+        before_snapshot,
         keep_history=True,
         revert_unit=None,
     ):
@@ -258,6 +255,7 @@ class _CheckpointRevertMixin:
             command="revert",
             command_details=command_details,
             auto=True,
+            command_before=before_snapshot,
         )
 
     def _revert_locked(
@@ -269,8 +267,8 @@ class _CheckpointRevertMixin:
         expected_context_uid: str | None,
         expected_history_digest: str | None,
         revert_unit: dict[str, object] | None,
-    ) -> tuple[Checkpoint, Checkpoint]:
-        """Revert context to a checkpoint. Returns (revert_cp, target_cp).
+    ) -> CheckpointUnitRevertMember:
+        """Revert a Context and return its exact input and result checkpoints.
 
         By default, all checkpoint files remain active and the restored
         snapshot is appended as the new head. Pass ``keep_history=False`` to
@@ -278,8 +276,13 @@ class _CheckpointRevertMixin:
         Revert checkpoint carrying a log_snapshot, discard mode rebuilds
         the full original log from that snapshot instead of just truncating.
         """
+        from memcommit.application.capabilities.checkpoint_catalog import (
+            CheckpointUnitRevertMember,
+        )
+
         entries = self.list_checkpoints(ctx_name)  # captured before any mutations
         ctx = self.load_direct(ctx_name)
+        before_snapshot = ctx.to_dict()
         if expected_context_uid is not None and ctx.uid != expected_context_uid:
             raise ConcurrentContextUpdateError(
                 "Context identity changed before the reviewed revert."
@@ -314,7 +317,7 @@ class _CheckpointRevertMixin:
                 with open(path, encoding="utf-8") as file:
                     record = json.load(
                         file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
+                        object_pairs_hook=reject_duplicate_json_keys,
                     )
             except (json.JSONDecodeError, ValueError) as error:
                 raise ValueError(
@@ -343,6 +346,7 @@ class _CheckpointRevertMixin:
             target_data,
             entries,
             restored_snapshot,
+            before_snapshot=before_snapshot,
             keep_history=keep_history,
             revert_unit=revert_unit,
         )
@@ -445,4 +449,9 @@ class _CheckpointRevertMixin:
             command_details=target_data.get("command_details"),
             auto=target_data.get("auto", False),
         )
-        return revert_checkpoint, target_cp
+        return CheckpointUnitRevertMember(
+            context_name=ctx_name,
+            target=target_cp,
+            recovery=revert_checkpoint,
+            before_snapshot=before_snapshot,
+        )

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from ...model import (
     ATOMIZE_RESPONSE_CHAR_LIMIT,
     AtomizeCandidate,
@@ -12,7 +13,7 @@ from ...model import (
     AtomizeOverview,
     AtomizeQualityIssue,
 )
-from .fields import _exact_dict, _reject_duplicate_json_keys
+from .fields import _exact_dict
 from .items import parse_items
 from .overview import _parse_overview
 from .quality_issues import _parse_quality_issues
@@ -39,7 +40,7 @@ def parse_response(
     try:
         data = json.loads(
             raw,
-            object_pairs_hook=_reject_duplicate_json_keys,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
     except (json.JSONDecodeError, ValueError) as error:
         raise AtomizeImpactError(

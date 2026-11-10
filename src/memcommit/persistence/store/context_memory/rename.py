@@ -8,6 +8,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path, PurePosixPath
 
+from memcommit.core.json_objects import canonical_json_digest, reject_duplicate_json_keys
 from memcommit.models.context import Context
 from memcommit.core.context_name_validation import validate_context_name
 
@@ -18,8 +19,6 @@ from ..context_hierarchy import (
 from ..checkpoint.requests import AutoCheckpointRequest
 
 from ..infrastructure.atomic_io import (
-    _canonical_json_digest,
-    _reject_duplicate_json_keys,
     _write_bytes_atomic,
     _write_json_atomic,
 )
@@ -69,7 +68,7 @@ class _ContextRenameMixin:
                         with open(checkpoint_file, encoding="utf-8") as file:
                             raw_checkpoint = json.load(
                                 file,
-                                object_pairs_hook=_reject_duplicate_json_keys,
+                                object_pairs_hook=reject_duplicate_json_keys,
                             )
                     except (json.JSONDecodeError, ValueError) as error:
                         raise ValueError(
@@ -163,7 +162,7 @@ class _ContextRenameMixin:
         checkpoints: dict[str, dict[str, dict[str, object]]],
         state: dict[str, object],
     ) -> str:
-        return _canonical_json_digest(
+        return canonical_json_digest(
             {
                 "contexts": [
                     {
@@ -253,7 +252,7 @@ class _ContextRenameMixin:
             with open(self.state_file, encoding="utf-8") as file:
                 raw_state = json.load(
                     file,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
         except (json.JSONDecodeError, ValueError) as error:
             raise ValueError("Context state storage is invalid JSON.") from error

@@ -10,6 +10,7 @@ from memcommit.application.operations.import_export_sync.mem_sync.model import (
     SyncResult,
 )
 from memcommit.models.context import Context
+from memcommit.persistence.store.context_memory.models import ConcurrentContextUpdateError
 from memcommit.persistence.import_export.source import (
     read_project_documents,
 )
@@ -33,6 +34,7 @@ def publish_profile_changes(
     plan,
     *,
     restoration=None,
+    trigger="MANUAL",
 ):
     """Publish one fully validated frame without a durable pending publication."""
     frame = plan.profile_changes
@@ -144,7 +146,7 @@ def publish_profile_changes(
             }
         receipt = {
             **SyncRunRepository(store).receipt_record(
-                result, restoration["direction"] if restoration else None
+                result, restoration["direction"] if restoration else None, trigger=trigger,
             ),
             "profile": publication,
         }
@@ -171,6 +173,12 @@ def _validate_profile_inputs(store, project_root_dir, plan, restoration):
     ):
         raise ValueError("Project files or .memignore changed before Sync publication.")
     records, checkpoints = store._read_context_graph_for_rename()
+    # Publication locks cannot protect the earlier planning read. Compare the
+    # full owned graph, including excluded records, before staging any changes.
+    if records != {record["name"]: record for record in frame.before_records}:
+        raise ConcurrentContextUpdateError(
+            "The Context graph changed after Sync planning; retry Sync."
+        )
     for change in frame.changes:
         if change.before is None:
             store._assert_context_storage_available(change.after["name"])

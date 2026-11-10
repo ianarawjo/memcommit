@@ -36,7 +36,7 @@ def apply_merge(prepared: PreparedMerge, result: MergeResult) -> MergeReceipt:
     if target.to_dict() != inputs.target().to_dict():
         raise ValueError("Merge Preview no longer matches the frozen Target baseline.")
 
-    # Resolve may use a temporary Context identity. Only that envelope changes;
+    # Conflict resolution may use a temporary Context identity. Only that envelope changes;
     # every item value, identity and position is exactly the reviewed result.
     record = result.post_image.to_dict()
     record.update(uid=target.uid, name=target_access.context_name)

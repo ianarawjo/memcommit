@@ -28,8 +28,10 @@ STUDY_SCENARIOS_ROOT = Path(__file__).resolve().parent / "study_scenarios"
 def list_study_project_roots() -> tuple[Path, ...]:
     """Use each visible child directory as one prepared Study project."""
     project_roots = []
+    # Practice remains the entry point even when scenario names sort before it.
     for project_root in sorted(
-        STUDY_SCENARIOS_ROOT.iterdir(), key=lambda path: path.name.casefold()
+        STUDY_SCENARIOS_ROOT.iterdir(),
+        key=lambda path: (path.name.casefold() != "practice", path.name.casefold()),
     ):
         if project_root.name.startswith(".") or not project_root.is_dir():
             continue

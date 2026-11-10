@@ -45,15 +45,6 @@ class _ActiveStorePath(os.PathLike[str]):
 
 STORE_DIR = _ActiveStorePath()
 CONTEXTS_DIR = _ActiveStorePath("contexts")
-STATE_FILE = _ActiveStorePath("state.json")
-IMPACT_PLAN_FILE = _ActiveStorePath("impact-plan.json")
-STAGED_UPDATE_FILE = _ActiveStorePath("staged-update.json")
-REVIEW_SESSION_FILE = _ActiveStorePath("review-session.json")
-REVIEW_SESSION_HISTORY_DIR = _ActiveStorePath("review-session-history")
-REVIEW_SESSION_SOURCES_DIR = _ActiveStorePath("review-session-sources")
-ATOMIZE_ANALYSES_DIR = _ActiveStorePath("atomize-analyses")
-ATOMIZE_WORKBENCHES_DIR = _ActiveStorePath("atomize-workbenches")
-ATOMIZE_SESSION_HISTORY_DIR = _ActiveStorePath("atomize-session-history")
 
 
 class _StorePathsMixin:
@@ -111,14 +102,6 @@ class _StorePathsMixin:
     @property
     def state_file(self) -> Path:
         return self.store_dir / "state.json"
-
-    @property
-    def impact_plan_file(self) -> Path:
-        return self.store_dir / "impact-plan.json"
-
-    @property
-    def staged_update_file(self) -> Path:
-        return self.store_dir / "staged-update.json"
 
     @property
     def review_session_file(self) -> Path:

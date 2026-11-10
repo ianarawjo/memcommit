@@ -12,7 +12,7 @@ from memcommit.adapters.console.terminal.components.command_wait import run_comm
 from memcommit.adapters.console.terminal.core.output import echo_text
 from memcommit.application.operations.forget.application import run_forget
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 def cmd(

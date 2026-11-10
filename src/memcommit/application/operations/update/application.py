@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from memcommit.application.operations.update.model import (
     AddOperation,
-    UpdatedContext,
     EditOperation,
     RemoveOperation,
     UpdateError,
@@ -44,7 +43,7 @@ def apply_update_to_working_contexts(
     for operation in plan.operations:
         operations_by_context_uid[operation.owner_context_uid].append(operation)
 
-    updated_contexts: list[UpdatedContext] = []
+    updated_contexts: list[Context] = []
     for context in target_contexts:
         context_operations = operations_by_context_uid[context.uid]
         if not context_operations:
@@ -70,13 +69,7 @@ def apply_update_to_working_contexts(
                 working_copy.add(
                     Memory(uid=operation.memory_uid, content=operation.new_content)
                 )
-        updated_contexts.append(
-            UpdatedContext(
-                context_uid=context.uid,
-                context_name=context.name,
-                post_image=working_copy,
-            )
-        )
+        updated_contexts.append(working_copy)
     return UpdateResult(
         plan_uid=plan.uid,
         target_uid=root_context.uid,

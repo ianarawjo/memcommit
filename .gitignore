@@ -14,3 +14,11 @@ __pycache__/
 .env
 .env.*
 .venv/
+
+# Study projects are public placeholders; their contents stay private.
+/src/memcommit/application/operations/init_study/study_scenarios/*
+!/src/memcommit/application/operations/init_study/study_scenarios/isaac/
+!/src/memcommit/application/operations/init_study/study_scenarios/peter/
+!/src/memcommit/application/operations/init_study/study_scenarios/practice/
+/src/memcommit/application/operations/init_study/study_scenarios/*/*
+!/src/memcommit/application/operations/init_study/study_scenarios/*/.gitkeep

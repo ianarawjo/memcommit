@@ -111,14 +111,6 @@ class SeverDecisionRequest:
 
 
 @dataclass(frozen=True)
-class SeverDestinationRequest:
-    """Rebind an unapplied review to one validated save location."""
-
-    snapshot: SeverSessionSnapshot
-    output_name: str
-
-
-@dataclass(frozen=True)
 class SeverPersistedApplyRequest:
     """Apply and persist one exact saved review under its version token."""
 
@@ -179,13 +171,6 @@ class SeverSessionRepository(Protocol):
         expected_version: str,
     ) -> SeverSessionSnapshot:
         """Replace one session only if its opaque version token is unchanged."""
-
-
-class SeverDestinationPort(Protocol):
-    """Validate one local self- or other-save location against runtime state."""
-
-    def validate(self, output_name: str, *, current_output_name: str) -> None:
-        """Fail unless the proposed destination remains safe for this review."""
 
 
 def _observe(
@@ -449,31 +434,6 @@ def run_sever_session_decision(
         request.selection,
         custom,
     )
-    return _validated_snapshot(
-        repository.replace(
-            changed,
-            expected_version=request.snapshot.version_token,
-        ),
-        expected_session=changed,
-    )
-
-
-def run_sever_session_destination_change(
-    request: SeverDestinationRequest,
-    *,
-    repository: SeverSessionRepository,
-    destination_port: SeverDestinationPort,
-) -> SeverSessionSnapshot:
-    """Validate and persist one review destination revision."""
-
-    session = request.snapshot.session
-    destination_port.validate(
-        request.output_name,
-        current_output_name=session.output_name,
-    )
-    changed = session.with_output_name(request.output_name)
-    if changed is session:
-        return request.snapshot
     return _validated_snapshot(
         repository.replace(
             changed,

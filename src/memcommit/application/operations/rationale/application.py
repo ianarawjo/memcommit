@@ -14,7 +14,6 @@ from memcommit.application.operations.rationale.evidence_collection import (
     _proposal_evidence,
     _provenance_character_budget,
     _recorded_reason_events,
-    _saved_analysis,
     _target_state,
 )
 from memcommit.application.operations.rationale.model import (
@@ -46,18 +45,12 @@ def build_rationale(
 ) -> RationaleReport:
     """Combine live durable evidence with an optional contextual reading."""
     target = _target_state(trace)
+    saved_analysis = None
+    stale_analysis = False
     if recorded_evidence_available:
-        saved_analysis, stale_analysis, review_warnings = _saved_analysis(
-            store,
-            ctx,
-            trace,
-        )
         proposals, proposal_warnings = _proposal_evidence(store, ctx, trace)
     else:
-        saved_analysis = None
-        stale_analysis = False
         proposals = ()
-        review_warnings = []
         proposal_warnings = []
     inference_contexts = inference_contexts or (ctx,)
     # A provenance-only caller must not inspect neighboring Memories merely to
@@ -84,7 +77,7 @@ def build_rationale(
         inference_source_character_count, inference_character_limit = (
             _inference_character_budget(target, candidates, saved_analysis)
         )
-    warnings = [*review_warnings, *proposal_warnings]
+    warnings = [*proposal_warnings]
     if limited:
         warnings.append(
             "The Context exceeded the one-shot rationale input limit; "

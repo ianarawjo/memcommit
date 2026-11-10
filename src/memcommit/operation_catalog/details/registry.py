@@ -16,7 +16,7 @@ from memcommit.operation_catalog.details.init_study import INIT_STUDY_DETAILS
 from memcommit.operation_catalog.details.log import LOG_DETAILS
 from memcommit.operation_catalog.details.merge import MERGE_DETAILS
 from memcommit.operation_catalog.details.profile import PROFILE_DETAILS
-from memcommit.operation_catalog.details.provider import PROVIDER_DETAILS
+from memcommit.operation_catalog.details.llm_provider import LLM_PROVIDER_DETAILS
 from memcommit.operation_catalog.details.query import QUERY_DETAILS
 from memcommit.operation_catalog.details.revert import REVERT_DETAILS
 from memcommit.operation_catalog.details.semantic_session_commands import (
@@ -41,7 +41,7 @@ _DETAIL_GROUPS = (
     LOG_DETAILS,
     MERGE_DETAILS,
     PROFILE_DETAILS,
-    PROVIDER_DETAILS,
+    LLM_PROVIDER_DETAILS,
     QUERY_DETAILS,
     REVERT_DETAILS,
     SEMANTIC_SESSION_COMMAND_DETAILS,

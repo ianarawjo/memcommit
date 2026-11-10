@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.models.context import Context
 from memcommit.persistence.store.lookup.context_names import (
     list_context_and_descendant_names,
 )
 
-from ..infrastructure.atomic_io import _reject_duplicate_json_keys
 from ..context_memory.records import _validate_context_header
 
 
@@ -21,7 +21,7 @@ class _ContextLoadingMixin:
         if not self.context_exists(name):
             raise FileNotFoundError(f"Context '{name}' not found.")
         with open(self._context_file(name), encoding="utf-8") as file:
-            data = json.load(file, object_pairs_hook=_reject_duplicate_json_keys)
+            data = json.load(file, object_pairs_hook=reject_duplicate_json_keys)
         data = _validate_context_header(data, name)
         try:
             context = Context.from_dict(data)
@@ -61,13 +61,6 @@ class _ContextLoadingMixin:
             raise RuntimeError("No current context. Run 'mem init <name>' first.")
         return self.load(name)
 
-    def load_current_direct(self) -> Context:
-        """Load the current Context through the non-resolving direct path."""
-        name = self.current_context_name()
-        if not name:
-            raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        return self.load_direct(name)
-
     def load_all_contexts(self) -> tuple[Context, ...]:
         """Load and validate all Contexts in this Profile."""
         record_paths = self.scan_context_catalog()
@@ -79,7 +72,7 @@ class _ContextLoadingMixin:
                 with open(context_file, encoding="utf-8") as file:
                     raw = json.load(
                         file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
+                        object_pairs_hook=reject_duplicate_json_keys,
                     )
             except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
                 raise ValueError(f"Context '{name}' is invalid JSON.") from error

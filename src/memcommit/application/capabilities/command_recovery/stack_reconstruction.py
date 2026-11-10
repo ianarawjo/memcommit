@@ -703,6 +703,8 @@ def _context_parts(
             effective is not None
             and normalized_before is not None
             and effective != normalized_before
+            # Explicit Revert also captures current, never-checkpointed content.
+            and command != "revert"
         ):
             raise CommandHistoryError(
                 f"Checkpoint [{uid[:8]}] pre-image conflicts with retained history."
@@ -714,8 +716,12 @@ def _context_parts(
             or command in {"checkpoint", "init"}
             or not owned
             or before is None
-            # Merge has no companion state; an unchanged Context needs no Undo.
-            or (before == snapshot and command not in {"merge", "sever"})
+            # Recursive Revert must retain every declared member, even unchanged.
+            or (
+                before == snapshot
+                and command not in {"merge", "sever"}
+                and not (command == "revert" and _revert_unit(args) is not None)
+            )
         ):
             continue
         originals.append(

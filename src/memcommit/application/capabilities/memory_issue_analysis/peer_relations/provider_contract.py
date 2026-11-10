@@ -7,6 +7,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Protocol
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     MEMORY_RELATION_TEXT_LIMIT,
     MemoryRelationAnalysis,
@@ -35,7 +36,9 @@ from memcommit.application.capabilities.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
-from memcommit.application.capabilities.semantic.understanding import understanding_text_schema
+from memcommit.application.capabilities.semantic.understanding import (
+    understanding_text_schema,
+)
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"
@@ -85,17 +88,6 @@ class _ProviderView:
     memory_by_id: dict[str, MemoryRelationMember]
     frame_ids: tuple[str, str]
     payload: dict[str, object]
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _exact_dict(
@@ -539,7 +531,7 @@ def _parse_analysis(
     try:
         value = json.loads(
             response,
-            object_pairs_hook=_strict_json_object,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
     except (json.JSONDecodeError, ValueError) as error:
         raise MemoryRelationProviderError(
@@ -1040,8 +1032,5 @@ def analyze_memory_relations(
 
 # Provider operation names remain stable so existing saved analysis and cache
 # evidence keep matching, while Python ownership is capability-neutral.
-ComparisonProvider = MemoryRelationProvider
 ComparisonProviderError = MemoryRelationProviderError
-COMPARISON_EXECUTION_POLICY = MEMORY_RELATION_EXECUTION_POLICY
-comparison_output_schema = memory_relation_output_schema
 analyze_comparison = analyze_memory_relations

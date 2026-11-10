@@ -411,7 +411,7 @@ def build_history(
     try:
         current_context = store.load_direct(context_name)
         physical = store.list_checkpoints(context_name)
-    except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+    except (OSError, RuntimeError, ValueError, KeyError, TypeError, AttributeError) as error:
         raise HistoryError(str(error)) from error
     return reconstruct_checkpoint_timeline(current_context, physical)
 

@@ -84,38 +84,8 @@ class DuplicateReport:
     findings: tuple[DuplicateFinding, ...]
 
     @property
-    def exact_findings(self) -> tuple[DuplicateFinding, ...]:
-        """Return deterministic DUP evidence inside the complete DUN report."""
-        return tuple(
-            (finding for finding in self.findings if finding.relation == "EXACT")
-        )
-
-    @property
-    def semantic_findings(self) -> tuple[DuplicateFinding, ...]:
-        """Return differently stored semantic-DUN evidence."""
-        return tuple(
-            (finding for finding in self.findings if finding.relation != "EXACT")
-        )
-
-    @property
     def group_count(self) -> int:
         return _duplicate_group_count(self.findings)
-
-    @property
-    def exact_group_count(self) -> int:
-        return _duplicate_group_count(self.exact_findings)
-
-    @property
-    def semantic_group_count(self) -> int:
-        return _duplicate_group_count(self.semantic_findings)
-
-    @property
-    def exact_duplicate_count(self) -> int:
-        return len(self.exact_findings)
-
-    @property
-    def semantic_redundancy_count(self) -> int:
-        return len(self.semantic_findings)
 
     @property
     def redundancy_count(self) -> int:

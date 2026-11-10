@@ -5,8 +5,6 @@
 import sys
 from types import ModuleType
 
-from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
-
 from . import context_memory as _context_memory_module
 from .checkpoint import CheckpointStoreMixin
 from .checkpoint import repository as _checkpoint_repository_module
@@ -25,9 +23,6 @@ from .context_memory.models import (
     ContextBranchBinding,
     ContextBranchMemoryBinding,
     ContextDeletionCommittedError,
-    ContextRenameBinding,
-    ContextRenamePlan,
-    ContextRenameResult,
 )
 from .context_memory.records import (
     canonical_context_record,
@@ -40,22 +35,12 @@ from .infrastructure import paths as _paths_module
 from .infrastructure.atomic_io import (
     _canonical_json_digest,
     _fsync_directory,
-    _reject_duplicate_json_keys,
     _write_bytes_atomic,
     _write_json_atomic,
 )
 from .infrastructure.locking import _StoreLockingMixin
 from .infrastructure.paths import (
-    ATOMIZE_ANALYSES_DIR,
-    ATOMIZE_SESSION_HISTORY_DIR,
-    ATOMIZE_WORKBENCHES_DIR,
     CONTEXTS_DIR,
-    IMPACT_PLAN_FILE,
-    REVIEW_SESSION_FILE,
-    REVIEW_SESSION_HISTORY_DIR,
-    REVIEW_SESSION_SOURCES_DIR,
-    STAGED_UPDATE_FILE,
-    STATE_FILE,
     STORE_DIR,
     _StorePathsMixin,
     resolve_active_store_dir,
@@ -129,15 +114,6 @@ _FORWARDED_COMPATIBILITY_NAMES = frozenset(
     {
         "STORE_DIR",
         "CONTEXTS_DIR",
-        "STATE_FILE",
-        "IMPACT_PLAN_FILE",
-        "STAGED_UPDATE_FILE",
-        "REVIEW_SESSION_FILE",
-        "REVIEW_SESSION_HISTORY_DIR",
-        "REVIEW_SESSION_SOURCES_DIR",
-        "ATOMIZE_ANALYSES_DIR",
-        "ATOMIZE_WORKBENCHES_DIR",
-        "ATOMIZE_SESSION_HISTORY_DIR",
         "_write_json_atomic",
         "_write_bytes_atomic",
         "_fsync_directory",

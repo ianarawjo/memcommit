@@ -2,16 +2,17 @@
 
 from __future__ import annotations
 
-
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.persistence.store.context_memory.models import (
     ConcurrentContextUpdateError,
 )
 from memcommit.persistence.store.infrastructure.atomic_io import (
-    _write_json_atomic,
     _write_bytes_atomic,
+    _write_json_atomic,
 )
+
+from .compensation import CompensationStack
 
 
 def save_merge_undo(
@@ -75,8 +76,11 @@ def save_merge_undo(
             checkpoints_dir = store._checkpoints_dir(change.context_name)
             archived_context = archive / "context.json"
             archived_checkpoints = archive / "checkpoints"
-            context_file.rename(archived_context)
-            checkpoints_dir.rename(archived_checkpoints)
+            # The outer archive ledger is valid only after both moves finish.
+            # Compensate the first move if the second cannot publish its half.
+            with CompensationStack() as compensation:
+                compensation.move(context_file, archived_context)
+                compensation.move(checkpoints_dir, archived_checkpoints)
             moved.append(
                 (
                     change,
@@ -106,8 +110,13 @@ def save_merge_undo(
             archived_checkpoints,
         ) in reversed(moved):
             try:
-                archived_checkpoints.rename(store._checkpoints_dir(change.context_name))
-                archived_context.rename(store._context_file(change.context_name))
+                with CompensationStack() as compensation:
+                    compensation.move(
+                        archived_checkpoints, store._checkpoints_dir(change.context_name)
+                    )
+                    compensation.move(
+                        archived_context, store._context_file(change.context_name)
+                    )
                 checkpoint = next(
                     checkpoint
                     for name, checkpoint in created_saved
@@ -200,8 +209,9 @@ def save_merge_redo(
             checkpoints_dir = store._checkpoints_dir(change.context_name)
             archived_context = archive / "context.json"
             archived_checkpoints = archive / "checkpoints"
-            archived_context.rename(context_file)
-            archived_checkpoints.rename(checkpoints_dir)
+            with CompensationStack() as compensation:
+                compensation.move(archived_context, context_file)
+                compensation.move(archived_checkpoints, checkpoints_dir)
             activated.append(
                 (
                     change,
@@ -244,8 +254,13 @@ def save_merge_redo(
                     change.context_name,
                     checkpoint.uid,
                 )
-                store._checkpoints_dir(change.context_name).rename(archived_checkpoints)
-                store._context_file(change.context_name).rename(archived_context)
+                with CompensationStack() as compensation:
+                    compensation.move(
+                        store._checkpoints_dir(change.context_name), archived_checkpoints
+                    )
+                    compensation.move(
+                        store._context_file(change.context_name), archived_context
+                    )
             except Exception as candidate:
                 rollback_error = rollback_error or candidate
         for (
@@ -257,8 +272,13 @@ def save_merge_redo(
             if change.context_name in moved_names:
                 continue
             try:
-                store._checkpoints_dir(change.context_name).rename(archived_checkpoints)
-                store._context_file(change.context_name).rename(archived_context)
+                with CompensationStack() as compensation:
+                    compensation.move(
+                        store._checkpoints_dir(change.context_name), archived_checkpoints
+                    )
+                    compensation.move(
+                        store._context_file(change.context_name), archived_context
+                    )
             except Exception as candidate:
                 rollback_error = rollback_error or candidate
         for name, checkpoint in reversed(updated_written):

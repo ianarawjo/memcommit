@@ -33,7 +33,7 @@ from memcommit.application.operations.duplicates.find_duplicates.application imp
     analyze_exact_duplicates,
 )
 from memcommit.models.context import Context
-from memcommit.providers.types import CompletionRun, ProviderIdentity
+from memcommit.llm_providers.types import CompletionRun, ProviderIdentity
 
 
 class _CapturingProviderFactory:
@@ -152,7 +152,7 @@ def find_current_quality_audit(
         session
         for session in repository.list()
         if session.source == source
-        # Reusing a superset would send unrequested findings into Resolve.
+        # Reusing a superset would send unrequested findings into Conflict.
         and session.requested_checks == selected
     )
     if not matches:

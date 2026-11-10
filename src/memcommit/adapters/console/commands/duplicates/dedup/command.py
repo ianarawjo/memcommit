@@ -64,13 +64,13 @@ def cmd(
             with CommandProgress(
                 "DEDUP", "comparing combined subtree Memories", total=1
             ):
-                _analysis, receipt = run_recursive_dedup(
+                analysis, receipt = run_recursive_dedup(
                     store,
                     current_name,
                     find_redundancies.connect_semantic_provider,
                     literal=True,
                 )
-            render_recursive_dedup_receipt(receipt, literal=True)
+            render_recursive_dedup_receipt(analysis, receipt, literal=True)
             return
         access = resolve_context_access(store, current_name, current_name=current_name)
         analysis = analyze_exact_duplicate_scope(

@@ -12,7 +12,7 @@ from memcommit.application.operations.dev_eval.merge_visitor_notices.steps impor
 )
 from memcommit.application.operations.dev_eval.terminal import ScenarioTerminal
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.types import SemanticProvider
+from memcommit.llm_providers.types import SemanticProvider
 
 
 def run_scenario(

@@ -31,7 +31,6 @@ from memcommit.adapters.console.commands.ground.shell.runtime.terminal_interacti
 from memcommit.adapters.console.commands.ground.shell.runtime.terminal_interaction.workbench.workbench_view import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,
-    GROUND_LOCATION_FRAME_HEIGHT,
     INITIAL_QUESTION,
     BlankGroundWorkbenchView,
 )
@@ -51,8 +50,6 @@ _THINKING_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
 __all__ = [
     "GROUND_CONTEXTS_FRAME_HEIGHT",
     "GROUND_GOAL_FRAME_HEIGHT",
-    "GROUND_LOCATION_FRAME_HEIGHT",
-    "INITIAL_QUESTION",
     "_THINKING_INTERVAL_SECONDS",
     "run_ground_shell",
 ]

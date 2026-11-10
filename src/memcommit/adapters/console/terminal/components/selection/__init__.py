@@ -11,11 +11,10 @@ from memcommit.adapters.console.terminal.components.selection.rendering import (
     tree_choice_marker,
     tree_choice_styles,
 )
-from memcommit.adapters.console.terminal.components.selection.state import MultiSelectionState, SingleSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
 
 __all__ = [
     "ChoiceVisualState",
-    "MultiSelectionState",
     "SingleSelectionState",
     "SelectionOption",
     "choice_marker",

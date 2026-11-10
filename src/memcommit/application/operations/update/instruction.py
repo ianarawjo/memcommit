@@ -6,11 +6,10 @@ from memcommit.persistence.store import ProfileStore
 from .model import (
     UpdateError,
     UpdateReceipt,
-    freeze_update_context_inputs,
-    inline_update_context,
+    collect_update_inputs,
     plan_update,
 )
-from .model.instruction import UpdateInstruction, UpdateRequest
+from .model.instruction import UpdateRequest
 from .model.planning import UpdateProvider
 from memcommit.persistence.operations.update.publication_repository import (
     publish_update_transaction,
@@ -33,27 +32,15 @@ def run_instruction_update(
         if request.recursive
         else (store.load_direct(current_name),)
     )
-    instruction = UpdateInstruction(request.instruction)
-    source = inline_update_context(instruction.text)
-    source_contexts = (source,)
-    inputs = freeze_update_context_inputs(
-        source_contexts,
+    planning_inputs = collect_update_inputs(
+        (),
         target_contexts,
-        inline_source_content=instruction.text,
-        instruction=instruction,
+        instruction=request.instruction,
         target_include_descendants=request.recursive,
     )
-    plan = plan_update(
-        source_contexts,
-        target_contexts,
-        provider_factory,
-        source_memory_selector=inputs.source_memory_uid,
-        inline_source_content=inputs.inline_source_content,
-        instruction=inputs.instruction,
-        target_include_descendants=inputs.target_include_descendants,
-    )
+    plan = plan_update(planning_inputs, provider_factory)
     return publish_update_transaction(
         store,
-        inputs,
+        planning_inputs.execution_inputs,
         plan,
     )

@@ -5,13 +5,6 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
-from prompt_toolkit.formatted_text.base import StyleAndTextTuples
-
-from memcommit.adapters.console.terminal.components.horizontal_choice import (
-    HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
-)
 from memcommit.core.context_targeting.model import ContextSelectionMode
 
 
@@ -65,12 +58,6 @@ class ContextSelectionState:
         return frozenset(self._selected_order)
 
     @property
-    def most_recent_name(self) -> str:
-        if not self._selected_order:
-            raise ValueError("No Context is currently selected.")
-        return self._selected_order[-1]
-
-    @property
     def selected_name(self) -> str:
         """Return the sole selected name for a single-cardinality control."""
 
@@ -81,36 +68,6 @@ class ContextSelectionState:
     @property
     def multiple(self) -> bool:
         return self.mode == "MULTIPLE"
-
-    def set_multiple(
-        self,
-        enabled: bool,
-        *,
-        fallback_name: str | None = None,
-    ) -> bool:
-        """Change cardinality and keep SINGLE valid when MULTIPLE is empty."""
-
-        next_mode: ContextSelectionMode = "MULTIPLE" if enabled else "SINGLE"
-        if next_mode == self.mode:
-            return False
-        selection_changed = False
-        if not enabled:
-            if len(self._selected_order) > 1:
-                # Retain the last explicit choice rather than silently reverting
-                # to the initial/current Context when a multi-root search narrows.
-                self._selected_order = [self.most_recent_name]
-                selection_changed = True
-            elif not self._selected_order:
-                if fallback_name not in self.catalog:
-                    raise ValueError(
-                        "Single Context selection requires a visible fallback."
-                    )
-                # The moving cursor is the only visible non-stale choice when
-                # an empty multi-select control switches back to single mode.
-                self._selected_order = [fallback_name]
-                selection_changed = True
-        self.mode = next_mode
-        return selection_changed
 
     def choose(self, name: str) -> bool:
         """Choose or toggle one name and report whether the checked set changed."""
@@ -150,8 +107,7 @@ class ContextSelectionState:
 
         The selection model deliberately does not infer hierarchy. A composing
         tree can supply its frozen subtree, while a flat picker can keep using
-        ``choose``. Keeping the anchor most recent also makes a later collapse
-        to SINGLE retain the row the person explicitly acted on.
+        ``choose``.
         """
 
         group = tuple(dict.fromkeys(names))
@@ -174,46 +130,10 @@ class ContextSelectionState:
             ]
             return True
 
-        # Replace any partial group with the complete group, and append the
-        # actual row last so cardinality collapse preserves the visible intent.
+        # Replace any partial group with the complete group.
         self._selected_order = [
             name for name in self._selected_order if name not in group_set
         ]
         self._selected_order.extend(name for name in group if name != anchor_name)
         self._selected_order.append(anchor_name)
         return True
-
-
-@dataclass
-class ContextTargetModeState:
-    """Cardinality choice for operations that expose one versus many roots."""
-
-    choice: HorizontalChoiceState
-
-    @classmethod
-    def create(cls, *, multiple: bool) -> "ContextTargetModeState":
-        return cls(
-            HorizontalChoiceState(
-                (
-                    HorizontalChoiceOption(value="SINGLE", label="SINGLE TARGET"),
-                    HorizontalChoiceOption(value="MULTIPLE", label="MULTIPLE TARGETS"),
-                ),
-                selected_value="MULTIPLE" if multiple else "SINGLE",
-            )
-        )
-
-    @property
-    def multiple(self) -> bool:
-        return self.choice.selected_value == "MULTIPLE"
-
-    def move(self, delta: int) -> bool:
-        return self.choice.move(delta)
-
-
-def render_context_target_mode(
-    state: ContextTargetModeState,
-    *,
-    focused: bool,
-    title: str = "TARGET SELECTION",
-) -> StyleAndTextTuples:
-    return render_horizontal_choice(state.choice, title=title, focused=focused)

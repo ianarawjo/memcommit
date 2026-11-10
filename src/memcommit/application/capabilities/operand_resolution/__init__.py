@@ -8,7 +8,6 @@ from .context import (
     ResolvedExistingContextOperand,
     freeze_local_context_operand_candidates,
     resolve_existing_context_operand,
-    resolve_existing_local_context_operand,
     try_resolve_existing_context_operand,
 )
 
@@ -20,6 +19,5 @@ __all__ = [
     "ResolvedExistingContextOperand",
     "freeze_local_context_operand_candidates",
     "resolve_existing_context_operand",
-    "resolve_existing_local_context_operand",
     "try_resolve_existing_context_operand",
 ]

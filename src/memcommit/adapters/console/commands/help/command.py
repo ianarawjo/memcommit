@@ -25,8 +25,6 @@ from memcommit.adapters.console.commands.help.inventory import (
     HELP_COMMAND_ORDER,
     HELP_COMMON_KEYS,
     HELP_COMMON_LOCATORS,
-    HELP_CORE_CONCEPT_STYLES,
-    HELP_CORE_CONCEPTS,
     HELP_SECTION_BY_COMMAND,
     CommandEntry,
     HelpSelection,
@@ -45,7 +43,6 @@ from memcommit.adapters.console.commands.help.rendering import (
     _help_section_heading_fragments,
     _ordered_help_entries,
     _render_plain_inventory,
-    _wrap_prefixed_terminal_text,
     render_help_lookup_entries,
 )
 from memcommit.adapters.console.commands.help.selector import (
@@ -66,8 +63,8 @@ from memcommit.persistence.command_ledger.study_actions import (
     record_study_help_lookup_completed,
     record_study_help_lookup_submitted,
 )
-from memcommit.providers.connection import connect_help_provider
-from memcommit.providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
 
 
 # The command module was the original owner of the complete Help implementation.
@@ -86,8 +83,6 @@ __all__ = [
     "HELP_COMMAND_ORDER",
     "HELP_COMMON_KEYS",
     "HELP_COMMON_LOCATORS",
-    "HELP_CORE_CONCEPT_STYLES",
-    "HELP_CORE_CONCEPTS",
     "HELP_SECTION_BY_COMMAND",
     "CommandEntry",
     "HelpSelection",
@@ -104,7 +99,6 @@ __all__ = [
     "_ordered_help_entries",
     "_render_plain_inventory",
     "_selectable_form_line",
-    "_wrap_prefixed_terminal_text",
     "bind_focused_frame_style",
     "cmd",
     "command_entries",
@@ -217,7 +211,7 @@ def cmd(
             # after focused lookup preflight so invalid input
             # never looks like provider work has begun.
             with CommandProgress("help", "thinking", total=1):
-                provider = connect_help_provider()
+                provider = connect_semantic_provider()
                 operations = execute_help_lookup(plan, provider)
             record_study_help_lookup_completed(
                 tuple(operation.name for operation in operations)

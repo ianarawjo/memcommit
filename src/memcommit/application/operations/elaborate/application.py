@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 import json
 from typing import Protocol
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
@@ -86,15 +87,6 @@ class ElaboratePrepared:
     request: ElaborateRequest
     source: FrozenElaborateSource
     revision: ElaborateRevision
-
-
-def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _output_schema(frame: ElaborateFrame) -> dict[str, object]:
@@ -186,7 +178,7 @@ def _decode_revision(frame: ElaborateFrame, raw: str) -> ElaborateRevision:
     if not isinstance(raw, str) or len(raw) > ELABORATE_RESPONSE_CHAR_LIMIT:
         raise ElaborateError("Elaborate returned invalid structured output.")
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, TypeError, ValueError) as error:
         raise ElaborateError("Elaborate returned invalid structured output.") from error
     if not isinstance(value, dict) or set(value) != {

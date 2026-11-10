@@ -4,9 +4,19 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import Literal
 
 from memcommit.adapters.console.terminal.components.command_editor.model import (
     CommandReview,
+)
+from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation import (
+    ResolutionDestination,
+    ResolutionGlobalStrategy,
+    SessionTodoView,
+    _item_draft,
+    _item_is_answered,
+    session_review_action_view,
+    session_todo_view,
 )
 from memcommit.adapters.console.terminal.components.responses.model import (
     ResponseDraft,
@@ -18,12 +28,12 @@ from memcommit.adapters.console.terminal.components.responses.resolution import 
 from memcommit.adapters.console.terminal.components.responses.state import (
     ResponseFrameState,
 )
-from memcommit.adapters.console.terminal.components.selection import (
-    SingleSelectionState,
-    SelectionOption,
-)
 from memcommit.adapters.console.terminal.components.save_location import (
     SaveLocationEditorState,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    SelectionOption,
+    SingleSelectionState,
 )
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
@@ -37,16 +47,6 @@ from memcommit.application.capabilities.reviewing.session_navigation import (
     WorkbenchPane,
 )
 
-from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation import (
-    ResolutionDestination,
-    ResolutionGlobalStrategy,
-    SessionTodoView,
-    _item_draft,
-    _item_is_answered,
-    session_review_action_view,
-    session_todo_view,
-)
-
 
 @dataclass(frozen=True)
 class FinalReviewOrigin:
@@ -57,6 +57,22 @@ class FinalReviewOrigin:
     row_index: int
     viewer_row_index: int
     section_uid: str | None
+
+
+FinalReviewKind = Literal["APPLY", "RESOLVE_ALL"]
+
+
+@dataclass(frozen=True)
+class FinalReviewState:
+    """One review's semantic kind, exact command, and cancellation destination."""
+
+    kind: FinalReviewKind
+    origin: FinalReviewOrigin | None
+    command: CommandReview | None = None
+
+    @property
+    def title(self) -> str:
+        return "RESOLVE ALL" if self.kind == "RESOLVE_ALL" else "APPLY CONFIRMATION"
 
 
 @dataclass
@@ -85,15 +101,7 @@ class ResolutionSessionController:
     global_comment: dict[str, bool] = field(default_factory=lambda: {"value": False})
     strategy: dict[str, int] = field(default_factory=lambda: {"index": 0})
     viewer_content: dict[str, str] = field(default_factory=lambda: {"kind": "REPORT"})
-    final_review_title: dict[str, str] = field(
-        default_factory=lambda: {"value": "APPLY CONFIRMATION"}
-    )
-    final_review_origin: dict[str, FinalReviewOrigin | None] = field(
-        default_factory=lambda: {"value": None}
-    )
-    final_command_review: dict[str, CommandReview | None] = field(
-        default_factory=lambda: {"value": None}
-    )
+    final_review: FinalReviewState | None = None
     impact_reason_expanded: dict[str, str | None] = field(
         default_factory=lambda: {"uid": None}
     )
@@ -325,8 +333,18 @@ class ResolutionSessionController:
             self.set_status(str(error))
             return None
 
-    def review_action(self) -> SessionTodoView:
-        if self.final_review_title["value"] == "RESOLVE ALL":
+    @property
+    def final_review_title(self) -> str:
+        return self.final_review.title if self.final_review else "APPLY CONFIRMATION"
+
+    @property
+    def final_command_review(self) -> CommandReview | None:
+        return self.final_review.command if self.final_review else None
+
+    def review_action(self, *, kind: FinalReviewKind | None = None) -> SessionTodoView:
+        if kind is None:
+            kind = self.final_review.kind if self.final_review else "APPLY"
+        if kind == "RESOLVE_ALL":
             if not self.global_strategies:
                 return SessionTodoView(
                     "COMPLETE",
@@ -359,7 +377,7 @@ class ResolutionSessionController:
         if self.viewer_content["kind"] == "REVIEW":
             action = self.review_action()
             return SessionTodoView(
-                self.final_review_title["value"],
+                self.final_review_title,
                 f"Confirm final {active_view.operation.title()} action",
                 f"{action.kind} is ready. Enter to {action.kind.lower()} now.",
             )

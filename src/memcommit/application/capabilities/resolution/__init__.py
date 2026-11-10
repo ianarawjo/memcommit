@@ -9,8 +9,6 @@ from memcommit.application.capabilities.resolution.model import (
     ResolutionAttempt,
     ResolutionBinding,
     ResolutionCase,
-    ResolutionObligation,
-    ResolutionProgress,
     ResolutionRequirement,
     ResolutionSubmission,
 )
@@ -24,8 +22,6 @@ __all__ = [
     "ResolutionAttempt",
     "ResolutionBinding",
     "ResolutionCase",
-    "ResolutionObligation",
-    "ResolutionProgress",
     "ResolutionRequirement",
     "ResolutionSubmission",
     "ResolutionValidationError",

@@ -6,9 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
 from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchView
-from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 
 
 ReviewReportKind = Literal[
@@ -19,29 +17,6 @@ ReviewReportKind = Literal[
     "CLARIFICATION",
     "CHANGE_PLAN",
 ]
-
-
-@dataclass(frozen=True)
-class ReviewTextFragment:
-    """One plain Review span with optional semantic-token or Memory-diff meaning."""
-
-    text: str
-    role: SemanticColorRole | None = None
-    bold: bool = False
-    memory_change: MemoryChange | None = None
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.text, str):
-            raise TypeError("Review text fragments require text.")
-        if self.role is not None and not isinstance(self.role, SemanticColorRole):
-            raise TypeError("Review text fragments require a semantic color role.")
-        if not isinstance(self.bold, bool):
-            raise TypeError("Review text fragment bold state must be boolean.")
-        if self.memory_change is not None:
-            if not isinstance(self.memory_change, MemoryChange):
-                raise TypeError("Review Memory fragments require a Memory change.")
-            if self.role is not None or self.bold:
-                raise ValueError("Review Memory styles belong to the shared diff renderer.")
 
 
 @dataclass(frozen=True)
@@ -56,7 +31,6 @@ class ReviewReport:
     summary: str
     view: ResolutionWorkbenchView | None = None
     report_text: str = ""
-    report_fragments: tuple[ReviewTextFragment, ...] = ()
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -79,17 +53,6 @@ class ReviewReport:
             raise ValueError("Unsupported Review report kind.")
         if not isinstance(self.report_text, str):
             raise ValueError("Review report text must be text.")
-        if not isinstance(self.report_fragments, tuple) or any(
-            not isinstance(fragment, ReviewTextFragment)
-            for fragment in self.report_fragments
-        ):
-            raise TypeError("Review report fragments must be typed fragments.")
-        if self.report_fragments and "".join(
-            fragment.text for fragment in self.report_fragments
-        ) != self.report_text:
-            raise ValueError(
-                "Review report fragments must preserve the exact plain report text."
-            )
         if self.view is None and not self.report_text.strip():
             raise ValueError("A Review report requires a view or report text.")
         if self.view is not None:
@@ -177,7 +140,6 @@ class ReviewReportController:
         title: str,
         summary: str,
         report_text: str,
-        report_fragments: tuple[ReviewTextFragment, ...] = (),
     ) -> "ReviewReportController":
         return cls(
             lambda: ReviewReport(
@@ -188,6 +150,5 @@ class ReviewReportController:
                 title=title,
                 summary=summary,
                 report_text=report_text,
-                report_fragments=report_fragments,
             )
         )

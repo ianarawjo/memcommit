@@ -32,7 +32,7 @@ from .target_policy import MergeTargetPolicy
 def prepare_merge(
     request: MergeRequest, *, store: ProfileStore, current_name: str | None
 ) -> PreparedMerge:
-    """Freeze one Source/Target pair; Resolve owns Audit and review preparation."""
+    """Freeze one Source/Target pair; Conflict owns Audit and review preparation."""
     if not isinstance(request, MergeRequest):
         raise TypeError("Merge preparation requires a MergeRequest.")
     inputs = load_merge_context_inputs(request, store=store, current_name=current_name)

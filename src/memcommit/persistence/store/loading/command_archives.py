@@ -5,12 +5,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.models.context import Context
 from memcommit.persistence.store.context_memory.records import _validate_context_header
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-)
 from memcommit.persistence.store.infrastructure.checkpoint_records import (
     normalize_checkpoint_record,
 )
@@ -40,7 +38,7 @@ class _CommandArchiveLoadingMixin:
         with open(manifest_path, encoding="utf-8") as file:
             manifest = json.load(
                 file,
-                object_pairs_hook=_reject_duplicate_json_keys,
+                object_pairs_hook=reject_duplicate_json_keys,
             )
         sever_manifest_fields = {
             "version",
@@ -130,7 +128,7 @@ class _CommandArchiveLoadingMixin:
         with open(context_path, encoding="utf-8") as file:
             context_record = json.load(
                 file,
-                object_pairs_hook=_reject_duplicate_json_keys,
+                object_pairs_hook=reject_duplicate_json_keys,
             )
         context = Context.from_dict(
             _validate_context_header(context_record, context_name)
@@ -144,7 +142,7 @@ class _CommandArchiveLoadingMixin:
             with open(path, encoding="utf-8") as file:
                 value = json.load(
                     file,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             if not isinstance(value, dict):
                 raise ValueError("Command Context archive checkpoint is invalid.")
@@ -179,5 +177,5 @@ def load_archived_atomize_analysis(archive: Path):
         raise ValueError("Archived Atomize analysis is invalid.")
     with archived_analysis.open(encoding="utf-8") as file:
         return AtomizeAnalysisSession.from_dict(
-            json.load(file, object_pairs_hook=_reject_duplicate_json_keys)
+            json.load(file, object_pairs_hook=reject_duplicate_json_keys)
         )

@@ -7,8 +7,7 @@ It never calls a provider and never mutates either the analysis or a Context.
 """
 from __future__ import annotations
 
-import hashlib
-import json
+from memcommit.core.json_objects import canonical_json_digest
 
 from memcommit.application.operations.atomize.domain import (
     ATOMIZE_CLASSIFICATIONS,
@@ -18,8 +17,6 @@ from memcommit.application.operations.atomize.domain import (
 )
 from memcommit.application.capabilities.reviewing.result_workbench import (
     ResultCase,
-    ResultCaseDetail,
-    ResultDetailBlock,
     ResultMetric,
     ResultRef,
     ResultSection,
@@ -45,13 +42,7 @@ def atomize_result_artifact_digest(
     """Content-address the normalized complete Atomize analysis artifact."""
     if not isinstance(analysis, AtomizeAnalysisSession):
         raise TypeError("Expected an AtomizeAnalysisSession.")
-    encoded = json.dumps(
-        analysis.to_dict(),
-        ensure_ascii=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+    return canonical_json_digest(analysis.to_dict())
 
 
 def _unique_refs(refs: tuple[ResultRef, ...]) -> tuple[ResultRef, ...]:
@@ -60,10 +51,6 @@ def _unique_refs(refs: tuple[ResultRef, ...]) -> tuple[ResultRef, ...]:
 
 def _source_ref(memory_uid: str) -> ResultRef:
     return ResultRef(kind="source-memory", key=memory_uid)
-
-
-def _item_ref(memory_uid: str) -> ResultRef:
-    return ResultRef(kind="atomize-analysis-item", key=memory_uid)
 
 
 def _result_ref(memory_uid: str) -> ResultRef:
@@ -94,12 +81,6 @@ def _preview(text: str, *, limit: int = 180) -> str:
     return compact[: limit - 1].rstrip() + "…"
 
 
-def _exact_content(text: str) -> str:
-    # ResultDetailBlock rejects empty text, so JSON notation preserves an
-    # empty source exactly instead of silently substituting semantic content.
-    return text if text else 'Content: ""'
-
-
 def _outcome_refs(item: AtomizeAnalysisItem) -> tuple[ResultRef, ...]:
     if item.classification == "COMPOSITE":
         return tuple(
@@ -107,81 +88,6 @@ def _outcome_refs(item: AtomizeAnalysisItem) -> tuple[ResultRef, ...]:
             for index, _ in enumerate(item.children, start=1)
         )
     return (_result_ref(item.memory_uid),)
-
-
-def _judgment_text(item: AtomizeAnalysisItem) -> str:
-    lines = [
-        f"Classification: {item.classification}",
-        f"Action: {item.action}",
-        f"Rules: {', '.join(item.reason_codes)}",
-        f"Reason: {item.reason}",
-    ]
-    if item.lint:
-        lines.append("Lint: " + "; ".join(item.lint))
-    return "\n".join(lines)
-
-
-def _outcome_text(item: AtomizeAnalysisItem) -> str:
-    if item.classification == "COMPOSITE":
-        children: list[str] = []
-        for index, child in enumerate(item.children, start=1):
-            lines = [
-                f"CHILD {index}",
-                child.content,
-                "Source spans:",
-                *(f"- {span}" for span in child.source_spans),
-            ]
-            if child.frame_spans:
-                lines.extend(
-                    [
-                        "Declared-frame spans:",
-                        *(f"- {span}" for span in child.frame_spans),
-                    ]
-                )
-            children.append("\n".join(lines))
-        return "\n\n".join(children)
-    if item.classification == "UNCERTAIN":
-        return (
-            "The original Memory is retained for reconciliation; no child "
-            "Memory is proposed.\n"
-            + _exact_content(item.content)
-        )
-    if item.classification == "NON_PROPOSITIONAL":
-        return (
-            "The original Memory is retained and classified as "
-            "non-propositional.\n"
-            + _exact_content(item.content)
-        )
-    return "The original Memory is kept unchanged.\n" + _exact_content(
-        item.content
-    )
-
-
-def _quality_judgment_text(issue: AtomizeQualityIssue) -> str:
-    lines = [f"Kind: {issue.kind}"]
-    if issue.kind == "AMBIGUITY":
-        lines.extend(
-            [
-                f"Interpretation: {issue.interpretation}",
-                f"Clarification: {issue.clarification}",
-            ]
-        )
-    else:
-        lines.append(f"Conflict: {issue.conflict}")
-        if issue.scope_dimensions:
-            lines.append(
-                "Scope dimensions: " + ", ".join(issue.scope_dimensions)
-            )
-    lines.append(f"Reason: {issue.reason}")
-    if issue.readings:
-        lines.append("Saved readings:")
-        lines.extend(
-            (
-                f"- [{reading.role}] {reading.label}: {reading.text}"
-                for reading in issue.readings
-            )
-        )
-    return "\n".join(lines)
 
 
 def _is_actionable_quality_issue(issue: AtomizeQualityIssue) -> bool:
@@ -212,17 +118,12 @@ class AtomizeResultWorkbenchAdapter:
         self._item_by_uid = {
             item.memory_uid: item for item in self._analysis.items
         }
-        self._cases, self._details = self._build_cases()
+        self._cases = self._build_cases()
         self._view = self._build_view()
 
     def view(self) -> ResultWorkbenchView:
         """Return the immutable common result projection."""
         return self._view
-
-    def case_detail(self, case_uid: str) -> ResultCaseDetail:
-        """Return exact Atomize-owned evidence for one projected case."""
-        self._view.case(case_uid)
-        return self._view.validate_detail(self._details[case_uid])
 
     def _source_refs(
         self,
@@ -463,12 +364,12 @@ class AtomizeResultWorkbenchAdapter:
     def _representative_case(
         self,
         item: AtomizeAnalysisItem,
-    ) -> tuple[ResultCase, ResultCaseDetail]:
+    ) -> ResultCase:
         case_uid = (
             f"representative:{item.classification.lower()}:"
             f"{item.memory_uid}"
         )
-        case = ResultCase(
+        return ResultCase(
             uid=case_uid,
             role="REPRESENTATIVE",
             title=f"{item.classification} · {item.action}",
@@ -479,39 +380,11 @@ class AtomizeResultWorkbenchAdapter:
                 "a statistical claim of typicality."
             ),
         )
-        source_ref = _source_ref(item.memory_uid)
-        judgment_ref = _item_ref(item.memory_uid)
-        outcome_refs = _outcome_refs(item)
-        detail = ResultCaseDetail(
-            case_uid=case_uid,
-            artifact_digest=self._artifact_digest,
-            blocks=(
-                ResultDetailBlock(
-                    heading="SOURCE MEMORY",
-                    text=_exact_content(item.content),
-                    refs=(source_ref,),
-                ),
-                ResultDetailBlock(
-                    heading="ATOMIZE JUDGMENT",
-                    text=_judgment_text(item),
-                    refs=(judgment_ref,),
-                ),
-                ResultDetailBlock(
-                    heading="RESULT",
-                    text=_outcome_text(item),
-                    refs=outcome_refs,
-                ),
-            ),
-            evidence_refs=(source_ref,),
-            judgment_refs=(judgment_ref,),
-            outcome_refs=outcome_refs,
-        )
-        return case, detail
 
     def _quality_case(
         self,
         issue: AtomizeQualityIssue,
-    ) -> tuple[ResultCase, ResultCaseDetail]:
+    ) -> ResultCase:
         case_uid = f"boundary:quality:{issue.uid}"
         if issue.kind == "AMBIGUITY":
             title = (
@@ -520,7 +393,7 @@ class AtomizeResultWorkbenchAdapter:
             )
         else:
             title = f"CONFLICT · {issue.conflict}"
-        case = ResultCase(
+        return ResultCase(
             uid=case_uid,
             role="BOUNDARY",
             title=title,
@@ -531,79 +404,13 @@ class AtomizeResultWorkbenchAdapter:
                 "validated the issue; the adapter did not synthesize it."
             ),
         )
-        source_refs = tuple(_source_ref(uid) for uid in issue.source_uids)
-        source_blocks = "\n\n".join(
-            (
-                f"SOURCE {index} [{uid}]\n"
-                + _exact_content(self._item_by_uid[uid].content)
-            )
-            for index, uid in enumerate(issue.source_uids, start=1)
-        )
-        judgment_ref = _quality_ref(issue.uid)
-        blocks: list[ResultDetailBlock] = [
-            ResultDetailBlock(
-                heading="SOURCE EVIDENCE",
-                text=source_blocks,
-                refs=source_refs,
-            ),
-            ResultDetailBlock(
-                heading="ATOMIZE JUDGMENT",
-                text=_quality_judgment_text(issue),
-                refs=(judgment_ref,),
-            ),
-        ]
-        outcome_refs: tuple[ResultRef, ...] = ()
-        unresolved_refs: tuple[ResultRef, ...] = ()
-        if _is_actionable_quality_issue(issue):
-            blocks.append(
-                ResultDetailBlock(
-                    heading="WHAT REMAINS UNRESOLVED",
-                    text=issue.question.strip() or issue.reason,
-                    refs=(judgment_ref,),
-                )
-            )
-            unresolved_refs = (judgment_ref,)
-        else:
-            outcome_refs = _unique_refs(
-                tuple(
-                    ref
-                    for uid in issue.source_uids
-                    for ref in _outcome_refs(self._item_by_uid[uid])
-                )
-            )
-            blocks.append(
-                ResultDetailBlock(
-                    heading="CURRENT RESULT",
-                    text="\n\n".join(
-                        (
-                            f"SOURCE {index}\n"
-                            + _outcome_text(self._item_by_uid[uid])
-                        )
-                        for index, uid in enumerate(
-                            issue.source_uids,
-                            start=1,
-                        )
-                    ),
-                    refs=outcome_refs,
-                )
-            )
-        detail = ResultCaseDetail(
-            case_uid=case_uid,
-            artifact_digest=self._artifact_digest,
-            blocks=tuple(blocks),
-            evidence_refs=source_refs,
-            judgment_refs=(judgment_ref,),
-            outcome_refs=outcome_refs,
-            unresolved_refs=unresolved_refs,
-        )
-        return case, detail
 
     def _uncertain_case(
         self,
         item: AtomizeAnalysisItem,
-    ) -> tuple[ResultCase, ResultCaseDetail]:
+    ) -> ResultCase:
         case_uid = f"boundary:uncertain:{item.memory_uid}"
-        case = ResultCase(
+        return ResultCase(
             uid=case_uid,
             role="BOUNDARY",
             title="UNCERTAIN · RECONCILE",
@@ -614,47 +421,9 @@ class AtomizeResultWorkbenchAdapter:
                 "adapter did not infer an additional issue."
             ),
         )
-        source_ref = _source_ref(item.memory_uid)
-        judgment_ref = _item_ref(item.memory_uid)
-        unresolved_ref = _uncertain_ref(item.memory_uid)
-        detail = ResultCaseDetail(
-            case_uid=case_uid,
-            artifact_digest=self._artifact_digest,
-            blocks=(
-                ResultDetailBlock(
-                    heading="SOURCE MEMORY",
-                    text=_exact_content(item.content),
-                    refs=(source_ref,),
-                ),
-                ResultDetailBlock(
-                    heading="ATOMIZE JUDGMENT",
-                    text=_judgment_text(item),
-                    refs=(judgment_ref,),
-                ),
-                ResultDetailBlock(
-                    heading="WHAT REMAINS UNRESOLVED",
-                    text=(
-                        item.reason
-                        + "\n\nThe source is retained for reconciliation; "
-                        "no child Memory was proposed."
-                    ),
-                    refs=(unresolved_ref,),
-                ),
-            ),
-            evidence_refs=(source_ref,),
-            judgment_refs=(judgment_ref,),
-            unresolved_refs=(unresolved_ref,),
-        )
-        return case, detail
 
-    def _build_cases(
-        self,
-    ) -> tuple[
-        tuple[ResultCase, ...],
-        dict[str, ResultCaseDetail],
-    ]:
+    def _build_cases(self) -> tuple[ResultCase, ...]:
         cases: list[ResultCase] = []
-        details: dict[str, ResultCaseDetail] = {}
 
         selected_classifications: set[str] = set()
         for item in sorted(
@@ -667,9 +436,7 @@ class AtomizeResultWorkbenchAdapter:
             ):
                 continue
             selected_classifications.add(item.classification)
-            case, detail = self._representative_case(item)
-            cases.append(case)
-            details[case.uid] = detail
+            cases.append(self._representative_case(item))
 
         position_by_uid = {
             item.memory_uid: item.position for item in self._analysis.items
@@ -695,9 +462,7 @@ class AtomizeResultWorkbenchAdapter:
                 continue
             selected_issue_kinds.add(issue.kind)
             selected_source_uids.update(issue.source_uids)
-            case, detail = self._quality_case(issue)
-            cases.append(case)
-            details[case.uid] = detail
+            cases.append(self._quality_case(issue))
 
         uncertain = next(
             (
@@ -712,15 +477,6 @@ class AtomizeResultWorkbenchAdapter:
             None,
         )
         if uncertain is not None:
-            case, detail = self._uncertain_case(uncertain)
-            cases.append(case)
-            details[case.uid] = detail
+            cases.append(self._uncertain_case(uncertain))
 
-        return tuple(cases), details
-
-
-def project_atomize_result(
-    analysis: AtomizeAnalysisSession,
-) -> ResultWorkbenchView:
-    """Convenience projection for callers that only need the common view."""
-    return AtomizeResultWorkbenchAdapter(analysis).view()
+        return tuple(cases)

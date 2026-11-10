@@ -4,8 +4,6 @@
   native JSON/setup primitives. It has no command dispatch or provider policy.
 - `mem_sync/` owns `.md` discovery, Context/file correspondence, comparison,
   conflict selection, publication, checkpoints, and whole-action restoration.
-- `mem_import/` and `mem_export/` are reserved for future native `.mem` movement.
-  They contain design descriptions only and have no executable CLI/API route.
 
 One Markdown document corresponds to one Context. File-derived names remove only
 the final `.md`; default output adds `.md` to the complete Context name. Thus

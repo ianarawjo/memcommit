@@ -274,7 +274,7 @@ def cmd(
 def merge_impact_cmd() -> None:
     """Describe deferred Merge Impact without preparing or loading anything."""
     # TODO(merge-impact): Build a validated KEEP_BOTH result through Merge's
-    # preparation/Resolve contracts and reuse its Preview projection read-only.
+    # preparation/conflict-resolution contracts and reuse its Preview projection read-only.
     # Keep this auxiliary view here; it must not become another Apply pipeline.
     typer.echo(
         "IMPACT MERGE · NOT IMPLEMENTED\n"

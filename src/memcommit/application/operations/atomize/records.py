@@ -9,11 +9,11 @@ adapters never persist interactive UI state or choose an execution destination.
 
 from __future__ import annotations
 
-import hashlib
-import json
 import uuid
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Iterable, Literal
+
+from memcommit.core.json_objects import canonical_json_digest
 
 if TYPE_CHECKING:
     from memcommit.application.operations.atomize.domain import (
@@ -301,14 +301,7 @@ def atomize_review_response_digest(
             for issue in session.issues
         },
     }
-    return hashlib.sha256(
-        json.dumps(
-            payload,
-            ensure_ascii=False,
-            separators=(",", ":"),
-            sort_keys=True,
-        ).encode("utf-8")
-    ).hexdigest()
+    return canonical_json_digest(payload)
 
 
 def atomize_review_record_digest(
@@ -316,101 +309,7 @@ def atomize_review_record_digest(
 ) -> str:
     """Fingerprint the complete mutable record for lifecycle CAS."""
 
-    return hashlib.sha256(
-        json.dumps(
-            session.to_dict(),
-            ensure_ascii=False,
-            separators=(",", ":"),
-            sort_keys=True,
-        ).encode("utf-8")
-    ).hexdigest()
-
-
-def atomize_review_record_declared_frames(
-    session: "AtomizeReviewRecord",
-    analysis: "AtomizeAnalysisSession",
-):
-    """Convert reviewed unary readings/comments into per-Memory frames.
-
-    Pairwise conflict responses remain staged evidence but cannot be smuggled
-    into one source Memory's atomization frame. A later reconcile operation
-    can consume them with their original two-source arity.  The current
-    provenance format also binds one declared frame to exactly one issue, so a
-    second answered unary issue for the same Memory must be consolidated or
-    cleared before reanalysis instead of being silently misattributed.
-    """
-    from memcommit.application.operations.atomize.domain import AtomizeFrameOrigin
-
-    findings = {
-        finding.uid: finding for finding in project_atomize_review_findings(analysis)
-    }
-    if not session.matches_analysis(
-        analysis_uid=analysis.uid,
-        context_uid=analysis.context_uid,
-        context_name=analysis.context_name,
-        context_digest=analysis.context_digest,
-        issues=atomize_review_issue_projection(analysis),
-    ):
-        raise AtomizeRecordError("The atomize workbench does not match its analysis.")
-    entries: dict[str, tuple[AtomizeReviewFinding, str]] = {}
-    for issue_uid, response in session.responses.items():
-        if not response.answered:
-            continue
-        finding = findings[issue_uid]
-        if len(finding.source_uids) != 1:
-            raise AtomizeRecordError(
-                "Pairwise conflict responses cannot become single-Memory "
-                "atomization frames. They remain staged for a future "
-                "reconcile operation; clear them before reviewed reanalysis."
-            )
-        parts: list[str] = []
-        if response.selected_choice_uid is not None:
-            reading = next(
-                (
-                    reading
-                    for reading in finding.readings
-                    if reading.uid == response.selected_choice_uid
-                ),
-                None,
-            )
-            if reading is None:
-                raise AtomizeRecordError(
-                    "The selected atomize workbench reading is unavailable."
-                )
-            parts.append(f"Selected ordinary reading: {reading.text}")
-        if response.text.strip():
-            # A plain free-form answer remains byte-for-byte semantic input.
-            # Prefix only when it qualifies a selected proposal, otherwise an
-            # older provider contract that expects the exact declared frame
-            # would be silently changed by the UI adapter.
-            parts.append(
-                (
-                    "User refinement/comment: "
-                    if response.selected_choice_uid is not None
-                    else ""
-                )
-                + response.text.strip()
-            )
-        if parts:
-            memory_uid = finding.source_uids[0]
-            if memory_uid in entries:
-                raise AtomizeRecordError(
-                    "More than one answered unary issue targets the same "
-                    "Memory. Consolidate the exact context into one response "
-                    "and clear the other before reviewed reanalysis."
-                )
-            entries[memory_uid] = (finding, "\n".join(parts))
-
-    frames: dict[str, str] = {}
-    origins: dict[str, AtomizeFrameOrigin] = {}
-    for memory_uid, (finding, text) in entries.items():
-        frames[memory_uid] = text
-        origins[memory_uid] = AtomizeFrameOrigin(
-            review_item_uid=finding.uid,
-            source_analysis_uid=analysis.uid,
-            uncertainty_reason=finding.reason,
-        )
-    return frames, origins
+    return canonical_json_digest(session.to_dict())
 
 
 def normalize_atomize_review_issues(
@@ -433,13 +332,7 @@ def atomize_review_issue_digest(
 ) -> str:
     """Fingerprint issue identity, order, priority, and selectable readings."""
     parsed = normalize_atomize_review_issues(issues)
-    encoded = json.dumps(
-        [issue.digest_record() for issue in parsed],
-        ensure_ascii=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+    return canonical_json_digest([issue.digest_record() for issue in parsed])
 
 
 @dataclass
@@ -941,9 +834,6 @@ class AtomizeReviewRecord:
         # Cursor identity is stable across order changes; do not silently jump
         # to whichever issue happens to become first.
         self.current_issue()
-
-    def toggle_layout(self) -> None:
-        self.layout = "STACKED" if self.layout == "SPLIT" else "SPLIT"
 
     @property
     def answered_count(self) -> int:

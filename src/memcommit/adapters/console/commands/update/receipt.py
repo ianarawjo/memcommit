@@ -33,10 +33,8 @@ def render_update_receipt(
     source_label = (
         display_escape_text(instruction_text)
         if instruction_text is not None
-        else display_escape_text(receipt.inputs.instruction.text)
+        else display_escape_text(receipt.inputs.instruction)
         if receipt.inputs.instruction is not None
-        else display_escape_text(receipt.inputs.inline_source_content)
-        if receipt.inputs.inline_source_content is not None
         else display_escape_text(receipt.inputs.source_name)
     )
     lines = [

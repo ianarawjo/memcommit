@@ -3,7 +3,6 @@
 from memcommit.application.capabilities.semantic_execution.budgeting import json_budget
 from memcommit.application.capabilities.semantic_execution.coverage import (
     CoverageError,
-    InputCoverageLedger,
     decode_exact_source_assignments,
     exact_source_assignment_schema,
 )
@@ -26,7 +25,6 @@ from memcommit.application.capabilities.semantic_execution.partitioning import (
 )
 from memcommit.application.capabilities.semantic_execution.planning import plan_semantic_execution
 from memcommit.application.capabilities.semantic_execution.relations import (
-    RelationBlock,
     RelationScheduleError,
     build_relation_block_matrix,
     connected_relation_components,
@@ -40,9 +38,7 @@ __all__ = [
     "ExecutionPlan",
     "ExecutionProgress",
     "ExecutionStrategy",
-    "InputCoverageLedger",
     "PartitionError",
-    "RelationBlock",
     "RelationScheduleError",
     "SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT",
     "SemanticExecutionPolicy",

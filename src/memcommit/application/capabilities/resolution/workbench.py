@@ -7,8 +7,8 @@ semantic artifacts, provider calls, persistence, reanalysis, and mutation.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Literal, Protocol
+from dataclasses import dataclass
+from typing import Literal
 
 from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
 
@@ -849,7 +849,6 @@ class ResolutionNavigation:
     selected_option_uid: str | None = None
     _selected_index_hint: int = 0
     _revision: str | None = None
-    _item_uids: tuple[str, ...] = field(default=(), repr=False)
 
     def sync(self, view: ResolutionWorkbenchView) -> None:
         """Reconcile navigation after an adapter replaces its complete view."""
@@ -864,7 +863,6 @@ class ResolutionNavigation:
             selected_index = 0
             self.selected_item_uid = None
         self._selected_index_hint = selected_index
-        self._item_uids = uids
 
         if self.expanded_item_uid != self.selected_item_uid:
             self.close_detail()
@@ -962,10 +960,3 @@ class ResolutionNavigation:
         self.expanded_item_uid = None
         self.option_cursor_uid = None
         self.selected_option_uid = None
-
-
-class ResolutionWorkbenchAdapter(Protocol):
-    """Operation-owned projection boundary for common presentation."""
-
-    def view(self) -> ResolutionWorkbenchView:
-        """Return the latest complete immutable workbench revision."""

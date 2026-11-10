@@ -59,8 +59,8 @@ from memcommit.application.capabilities.history.query.semantic_history_query imp
     HistorySearchError,
     search_history,
 )
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 from memcommit.persistence.store import (
     ProfileStore,
     checkpoint_history_digest,
@@ -231,7 +231,7 @@ def _apply_resolved_checkpoint_unit(
     if isinstance(restoration, SingleCheckpointRestoration):
         render_revert_receipt(
             context_name=restoration.context_name,
-            before_snapshot=restoration.recovery.snapshot,
+            before_snapshot=restoration.before_snapshot,
             target=restoration.target,
             recovery=restoration.recovery,
         )

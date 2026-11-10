@@ -28,6 +28,16 @@ class MemCommandGroup(CanonicalCommandGroup):
         return command_names
 
     def main(self, args: Any = None, prog_name: Any = None, **kwargs: Any) -> Any:
+        try:
+            return self._main_with_setup(args=args, prog_name=prog_name, **kwargs)
+        finally:
+            # Separate the next shell input without changing piped command data.
+            if sys.stdout.isatty():
+                click.echo("\n")
+
+    def _main_with_setup(
+        self, args: Any = None, prog_name: Any = None, **kwargs: Any
+    ) -> Any:
         # main also covers bare mem and eager --help, which bypass invoke.
         # Session entry precedes the ledger; its replayed command is recorded
         # once. Post-command coordination runs after Click closes its Contexts.
@@ -48,7 +58,6 @@ class MemCommandGroup(CanonicalCommandGroup):
             from memcommit.application.operations.profile.config import (
                 ProfileConfigError,
             )
-            from memcommit.providers.profile_routes import ProfileProviderRoutesError
 
             try:
                 if initial_setup_needed():
@@ -61,7 +70,6 @@ class MemCommandGroup(CanonicalCommandGroup):
             except (
                 WorkspaceError,
                 ProfileConfigError,
-                ProfileProviderRoutesError,
             ) as error:
                 render_cli_error(error)
                 raise SystemExit(1) from error
@@ -130,11 +138,30 @@ class MemCommandGroup(CanonicalCommandGroup):
             raise click.exceptions.Exit(1) from error
 
     def _invoke_in_workspace(self, ctx: Any) -> Any:
-        # Synchronization is an explicit user command in the study prototype.
-        return self._invoke_with_ledger(ctx)
+        protected = tuple(getattr(ctx, "_protected_args", ())) or tuple(
+            getattr(ctx, "protected_args", ())
+        )
+        entered = (*protected, *tuple(getattr(ctx, "args", ())))
+        operation = self.canonical_command_name(ctx, entered[0]) if entered else None
+        if operation == "sync" and entered[1:] in {
+            ("--auto", "status"), ("--auto=status",),
+        }:
+            # Even the attempt ledger creates Store directories. Status must
+            # inspect an absent Profile without initializing its storage.
+            return super().invoke(ctx)
+        # Controls and eager help must remain usable without running Sync;
+        # notably, disabling cannot first import pending editor changes.
+        if operation in {"sync", "config", "profile", "init-study", "help"} or any(
+            argument in {"-h", "--help"} for argument in entered
+        ):
+            return self._invoke_with_ledger(ctx)
+        from memcommit.adapters.console.coordination.automatic_sync import automatic_sync_command
+
+        with automatic_sync_command():
+            return self._invoke_with_ledger(ctx)
 
     def _invoke_with_ledger(self, ctx: Any) -> Any:
-        from memcommit.providers.connection import reset_semantic_provider_cache
+        from memcommit.llm_providers.connection import reset_semantic_provider_cache
 
         reset_semantic_provider_cache()
         active_attempt = None

@@ -125,6 +125,34 @@ class ExactNameInputControl:
     def validate_candidate(self) -> str:
         return self.view.validate_value(self.input.text)
 
+    def move_completion(self, delta: int) -> bool:
+        """Consume vertical movement only while a completion menu is open."""
+        buffer = self.input.buffer
+        if buffer.complete_state is None:
+            return False
+        if delta > 0:
+            buffer.complete_next()
+        else:
+            buffer.complete_previous()
+        return True
+
+    def accept_completion(self) -> bool:
+        """Accept the highlighted text; the host still owns confirmation."""
+        buffer = self.input.buffer
+        state = buffer.complete_state
+        if state is None or state.current_completion is None:
+            return False
+        buffer.apply_completion(state.current_completion)
+        return True
+
+    def cancel_completion(self) -> bool:
+        """Dismiss the menu and restore its original uncompleted draft."""
+        buffer = self.input.buffer
+        if buffer.complete_state is None:
+            return False
+        buffer.cancel_completion()
+        return True
+
 
 @dataclass
 class ExactNameFieldControl:

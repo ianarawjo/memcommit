@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import unicodedata
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.capabilities.history.verification import MemoryState
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -42,17 +43,6 @@ RATIONALE_EXECUTION_POLICY = SemanticExecutionPolicy(
     # hidden provider hierarchy would change the explanation frame.
     staged_supported=False,
 )
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _inference_character_budget(
@@ -206,7 +196,7 @@ def _parse_inference(
     ):
         raise RationaleError("Codex rationale returned invalid structured output.")
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise RationaleError(
             "Codex rationale returned invalid structured output."

@@ -19,6 +19,7 @@ class SingleCheckpointRestoration:
     context_name: str
     recovery: Checkpoint
     target: Checkpoint
+    before_snapshot: dict[str, object]
 
 
 @dataclass(frozen=True)
@@ -45,7 +46,7 @@ def restore_checkpoint_unit(
         if len(unit.members) != 1:
             raise ValueError("A direct checkpoint recovery unit must have one member.")
         member = unit.members[0]
-        recovery, target = store.revert(
+        restored = store.revert(
             member.context_name,
             member.checkpoint_uid,
             keep_history=keep_history,
@@ -54,8 +55,9 @@ def restore_checkpoint_unit(
         )
         return SingleCheckpointRestoration(
             context_name=member.context_name,
-            recovery=recovery,
-            target=target,
+            recovery=restored.recovery,
+            target=restored.target,
+            before_snapshot=restored.before_snapshot,
         )
     return RecursiveCheckpointRestoration(
         result=store.revert_checkpoint_unit(unit, keep_history=keep_history)

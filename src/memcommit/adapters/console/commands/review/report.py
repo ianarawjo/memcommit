@@ -5,15 +5,10 @@ from __future__ import annotations
 from collections.abc import Callable
 import sys
 
-import click
 import typer
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.terminal.components.inline_diff import (
-    render_inline_memory_change,
-    render_inline_memory_change_text,
-)
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_report_fragments,
     run_resolution_workbench_shell,
@@ -21,8 +16,6 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
 from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.terminal.core.theme import SemanticColorRole, semantic_color_rgb
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
     ResolutionOverviewSection,
@@ -37,7 +30,6 @@ from memcommit.adapters.console.terminal.components.responses import response_sn
 from memcommit.application.capabilities.reviewing.report import (
     ReviewReport,
     ReviewReportController,
-    ReviewTextFragment,
 )
 
 
@@ -134,60 +126,6 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
     return "\n\n".join(parts).rstrip()
 
 
-def echo_review_report_snapshot(report: ReviewReport) -> None:
-    """Emit a snapshot while retaining typed semantic tokens when available."""
-
-    if not report.report_fragments:
-        click.echo(render_review_report_snapshot(report))
-        return
-    fragments = (
-        ReviewTextFragment(f"{report.title}\n{report.summary}\n\n"),
-        *report.report_fragments,
-    )
-    for fragment in fragments:
-        if fragment.memory_change is not None:
-            click.echo(
-                render_inline_memory_change_text(fragment.memory_change, color=True),
-                nl=False,
-            )
-        elif fragment.role is None:
-            click.echo(fragment.text, nl=False)
-        else:
-            click.secho(
-                fragment.text,
-                fg=semantic_color_rgb(fragment.role),
-                bold=fragment.bold,
-                nl=False,
-            )
-    click.echo()
-
-
-def _review_report_tui_fragments(
-    report: ReviewReport,
-) -> tuple[tuple[str, str], ...] | None:
-    if not report.report_fragments:
-        return None
-    styled_fragments: list[tuple[str, str]] = []
-    for fragment in report.report_fragments:
-        if fragment.memory_change is not None:
-            # Review owns line breaks; the common diff renderer supplies the row.
-            styled_fragments.extend(
-                render_inline_memory_change(fragment.memory_change)[:-1]
-            )
-        else:
-            style = (
-                "class:impact.add"
-                if fragment.role is SemanticColorRole.ADD
-                else "class:impact.remove"
-                if fragment.role is SemanticColorRole.REMOVE
-                else semantic_role_style(fragment.role)
-                if fragment.role is not None
-                else ""
-            )
-            styled_fragments.append((style, fragment.text))
-    return tuple(styled_fragments)
-
-
 def _text_only_view(report: ReviewReport) -> ResolutionWorkbenchView:
     overview_sections = (
         ResolutionOverviewSection("summary", "SUMMARY", report.summary),
@@ -239,7 +177,6 @@ def run_review_report_shell(
         snapshot_hint="Run the same 'mem review' command outside a TTY for a snapshot.",
         split_viewer_items=True,
         split_report_text=report.report_text or None,
-        split_report_fragments=_review_report_tui_fragments(report),
         read_only=not interactive_actions,
         draft_loader=draft_loader,
         draft_saver=draft_saver,
@@ -260,9 +197,6 @@ def show_operation_review(
 
     report = controller.report()
     if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
-        if report.report_fragments:
-            echo_review_report_snapshot(report)
-        else:
-            typer.echo(render_review_report_snapshot(report))
+        typer.echo(render_review_report_snapshot(report))
         return
     run_review_report_shell(controller, interactive_actions=False)

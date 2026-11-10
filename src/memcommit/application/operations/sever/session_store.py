@@ -2,16 +2,20 @@
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-import fcntl
 import json
-import os
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
 
-from memcommit.application.operations.sever.model import SeverError, SeverSession, sever_record_digest
+from memcommit.application.operations.sever.model import (
+    SeverError,
+    SeverSession,
+    sever_record_digest,
+)
 from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
+from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
+from memcommit.persistence.store.infrastructure.locking import _blocking_file_lock
 
 
 class SeverSessionStore:
@@ -39,18 +43,15 @@ class SeverSessionStore:
         lock_path = lock_directory / f"{uid}.lock"
         if lock_path.exists() and (not lock_path.is_file() or lock_path.is_symlink()):
             raise SeverError("Sever session lock storage is invalid.")
-        descriptor = os.open(lock_path, os.O_RDWR | os.O_CREAT, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX)
+        with _blocking_file_lock(lock_path, exclusive=True):
             yield
-        finally:
-            fcntl.flock(descriptor, fcntl.LOCK_UN)
-            os.close(descriptor)
 
     def save(self, session: SeverSession, *, expected_digest: str | None) -> None:
         path = self._path(session.uid)
         data = session.to_dict()
-        if self.directory.exists() and (not self.directory.is_dir() or self.directory.is_symlink()):
+        if self.directory.exists() and (
+            not self.directory.is_dir() or self.directory.is_symlink()
+        ):
             raise SeverError("Sever session storage is invalid.")
         self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         with self._write_lock(session.uid):
@@ -60,28 +61,18 @@ class SeverSessionStore:
                 with open(path, encoding="utf-8") as handle:
                     current = json.load(handle)
                 if expected_digest is None:
-                    raise ConcurrentContextUpdateError("A Sever session already exists.")
+                    raise ConcurrentContextUpdateError(
+                        "A Sever session already exists."
+                    )
                 if sever_record_digest(current) != expected_digest:
                     raise ConcurrentContextUpdateError(
                         "The Sever session changed before it could be saved."
                     )
             elif expected_digest is not None:
-                raise ConcurrentContextUpdateError("The Sever session no longer exists.")
-            temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
-            try:
-                descriptor = os.open(
-                    temporary,
-                    os.O_WRONLY | os.O_CREAT | os.O_EXCL,
-                    0o600,
+                raise ConcurrentContextUpdateError(
+                    "The Sever session no longer exists."
                 )
-                with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-                    json.dump(data, handle, indent=2)
-                    handle.flush()
-                    os.fsync(handle.fileno())
-                os.replace(temporary, path)
-            finally:
-                if temporary.exists() and not temporary.is_symlink():
-                    temporary.unlink()
+            _write_json_atomic(path, data)
 
     def load(self, uid: str) -> SeverSession:
         path = self._path(uid)

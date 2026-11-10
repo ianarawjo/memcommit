@@ -240,20 +240,6 @@ class AtomizeApplyResult:
         }
 
 
-def project_atomize_source(ctx: Context, new_name: str) -> Context:
-    """Copy a process-local analysis frame while retaining its evidence UIDs."""
-
-    # The reviewed analysis is keyed by Source Memory UID. Final Save As owns
-    # durable result identities; this projection must not use Branch semantics.
-    output = Context.create(new_name)
-    for item in ctx.iter_memories():
-        if isinstance(item, Memory):
-            output.add(Memory(uid=item.uid, content=item.content))
-        else:
-            output.add(item)
-    return output
-
-
 def apply_atomize_analysis(
     ctx: Context,
     session: AtomizeAnalysisSession,

@@ -10,22 +10,10 @@ from prompt_toolkit.application.current import get_app
 from memcommit.adapters.console.terminal.components.command_editor.model import (
     CommandReview,
 )
-from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
-from memcommit.adapters.console.terminal.components.semantic_viewer import (
-    SemanticViewerController,
-)
-from memcommit.adapters.console.terminal.core.keybindings import NavigationAccelerator
-from memcommit.application.capabilities.resolution.workbench import (
-    ResolutionWorkbenchAction,
-    ResolutionWorkbenchView,
-)
-from memcommit.application.capabilities.reviewing.session_navigation import (
-    WorkbenchPane,
-)
-from memcommit.persistence.command_ledger.study_actions import record_study_action
-
 from memcommit.adapters.console.terminal.components.resolution.session_shell.controller import (
+    FinalReviewKind,
     FinalReviewOrigin,
+    FinalReviewState,
     ResolutionSessionController,
 )
 from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation import (
@@ -40,6 +28,19 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.run
 from memcommit.adapters.console.terminal.components.resolution.session_shell.runtime.editors import (
     ResolutionEditors,
 )
+from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
+    SemanticViewerController,
+)
+from memcommit.adapters.console.terminal.core.keybindings import NavigationAccelerator
+from memcommit.application.capabilities.resolution.workbench import (
+    ResolutionWorkbenchAction,
+    ResolutionWorkbenchView,
+)
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    WorkbenchPane,
+)
+from memcommit.persistence.command_ledger.study_actions import record_study_action
 
 
 class ResolutionReviewFlow:
@@ -215,9 +216,8 @@ class ResolutionReviewFlow:
         """Return from final review to the exact process-local entry surface."""
 
         controller = self.controller
-        origin = controller.final_review_origin["value"]
-        controller.final_review_origin["value"] = None
-        controller.final_command_review["value"] = None
+        origin = controller.final_review.origin if controller.final_review else None
+        controller.final_review = None
         if origin is None:
             # Compatibility fallback for navigation state created before this
             # shell began tracking review entry. The report action is the
@@ -283,23 +283,29 @@ class ResolutionReviewFlow:
             else:
                 controller.set_status(todo.detail)
             return
-        controller.final_review_title["value"] = (
-            "APPLY CONFIRMATION" if todo.kind == "REVIEW AND APPLY" else todo.kind
+        kind: FinalReviewKind = (
+            "APPLY" if todo.kind == "REVIEW AND APPLY" else "RESOLVE_ALL"
         )
-        proposed_action = self.final_review_action(active_view, open_custom=False)
-        controller.final_command_review["value"] = (
+        proposed_action = self.final_review_action(
+            active_view, open_custom=False, review_kind=kind
+        )
+        command = (
             self.turn_command_review(proposed_action)
             if self.turn_command_review is not None and proposed_action is not None
             else None
         )
+        origin = controller.final_review.origin if controller.final_review else None
         if controller.viewer_content["kind"] != "REVIEW":
-            controller.final_review_origin["value"] = FinalReviewOrigin(
+            origin = FinalReviewOrigin(
                 viewer_kind=controller.viewer_content["kind"],
                 pane=controller.session_navigation.pane,
                 row_index=controller.session_navigation.row_index,
                 viewer_row_index=controller.session_navigation.viewer_row_index,
                 section_uid=controller.session_navigation.section_uid,
             )
+        # Keep command approval and its return surface from the same review;
+        # a failed command projection must not publish a partial review record.
+        controller.final_review = FinalReviewState(kind, origin, command)
         controller.session_navigation.row_index = len(active_view.items) + 1
         controller.session_navigation.viewer_row_index = (
             controller.session_navigation.row_index
@@ -323,9 +329,10 @@ class ResolutionReviewFlow:
         active_view: ResolutionWorkbenchView,
         *,
         open_custom: bool = True,
+        review_kind: FinalReviewKind | None = None,
     ) -> ResolutionWorkbenchAction | None:
         controller = self.controller
-        final_action = controller.review_action()
+        final_action = controller.review_action(kind=review_kind)
         if final_action.kind in {"APPLY", "APPLY AS IS"}:
             return controller.semantic_action("ACCEPT")
         if final_action.kind == "INCORPORATE AND APPLY":
@@ -358,7 +365,7 @@ class ResolutionReviewFlow:
         if action is None or self.turn_command_review is None:
             return action
         rebuilt = self.turn_command_review(action)
-        if rebuilt != self.controller.final_command_review["value"]:
+        if rebuilt != self.controller.final_command_review:
             self.controller.set_status(
                 "The semantic turn changed after review. Reopen the final review."
             )

@@ -3,10 +3,7 @@
 import json
 from datetime import datetime, timezone
 from uuid import UUID
-
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-)
+from memcommit.core.json_objects import reject_duplicate_json_keys
 
 
 def sync_record_path(store, *segments):
@@ -27,14 +24,14 @@ class SyncRunRepository:
     def __init__(self, store):
         self.store = store
 
-    def receipt_record(self, result, causing_command=None):
+    def receipt_record(self, result, causing_command=None, *, trigger="MANUAL"):
         uid = str(UUID(result.run_uid))
         return {
             "uid": uid,
             "created_at": datetime.now(timezone.utc).isoformat(),
             "command": "sync",
             "direction": result.direction,
-            "trigger": "MANUAL",
+            "trigger": trigger,
             "checkpoint_uids": list(result.checkpoint_uids),
             "memory_effects": [
                 {
@@ -65,7 +62,7 @@ class SyncRunRepository:
             if path.is_symlink() or str(UUID(path.stem)) != path.stem:
                 raise ValueError("Invalid Sync execution receipt path.")
             with path.open(encoding="utf-8") as stream:
-                record = json.load(stream, object_pairs_hook=_reject_duplicate_json_keys)
+                record = json.load(stream, object_pairs_hook=reject_duplicate_json_keys)
             if not isinstance(record, dict):
                 raise ValueError("Invalid Sync execution receipt.")
             if record.get("uid") != path.stem:

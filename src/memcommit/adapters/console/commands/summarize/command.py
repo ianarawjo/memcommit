@@ -23,8 +23,8 @@ from memcommit.adapters.console.commands.summarize.presentation import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
@@ -64,8 +64,9 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Existing Context to summarize by canonical name or explicit "
-                "relative locator (defaults to current)"
+                "Existing Context and lexical descendants to summarize by canonical "
+                "name or explicit relative locator (defaults to current; "
+                "-d selects only that Context)"
             )
         ),
     ] = None,
@@ -82,7 +83,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help=("Include local lexical descendants"),
+            help="Include local lexical descendants (the default)",
         ),
     ] = False,
     copy_result: Annotated[
@@ -101,7 +102,7 @@ def cmd(
         preset = resolve_scope_preset(
             direct=direct,
             recursive=recursive,
-            default=ContextScopePreset.DIRECT,
+            default=ContextScopePreset.RECURSIVE,
         )
         traversal = resolve_context_traversal(preset=preset)
 

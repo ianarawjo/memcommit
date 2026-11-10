@@ -6,6 +6,7 @@ import json
 from dataclasses import dataclass
 from typing import Protocol, Sequence
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.operations.help.application import list_operation_help
 from memcommit.operation_catalog.model import DetailDiscovery, OperationDescriptor
 from memcommit.application.capabilities.semantic_execution import (
@@ -60,17 +61,6 @@ class HelpLookupPlan:
     result_count: int
     prompt: str
     output_schema: dict[str, object]
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _operation_payload(operation: OperationDescriptor) -> dict[str, object]:
@@ -240,7 +230,7 @@ def execute_help_lookup(
     if not isinstance(raw, str) or len(raw) > HELP_LOOKUP_RESPONSE_LIMIT:
         raise HelpLookupError("Help lookup returned invalid structured output.")
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise HelpLookupError(
             "Help lookup returned invalid structured output."

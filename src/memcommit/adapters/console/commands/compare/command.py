@@ -12,10 +12,6 @@ from memcommit.adapters.console.commands.compare.endpoint_setup import (
     choose_compare_setup,
 )
 from memcommit.adapters.console.commands.compare.execution import (
-    COMPARISON_AGGREGATE_TIMEOUT_SECONDS as SHARED_COMPARISON_TIMEOUT_SECONDS,
-)
-from memcommit.adapters.console.commands.compare.execution import (
-    connect_comparison_provider,
     ensure_comparison_analysis,
     load_comparison_context,
 )
@@ -34,7 +30,6 @@ from memcommit.adapters.console.commands.compare.summary_presentation import (
 from memcommit.adapters.console.commands.compare.targeting import (
     resolve_compare_cli_targets,
 )
-from memcommit.adapters.console.commands.rationale.command import render_rationale
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     legacy_root_only_option_alias,
@@ -71,46 +66,20 @@ from memcommit.application.operations.compare.compare_summary import (
     ComparisonSummary,
     ComparisonSummaryError,
 )
-from memcommit.application.operations.compare.provider_contract import (
-    COMPARISON_SUMMARY_OPERATION,
-)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.rationale.application import build_rationale
 from memcommit.application.operations.rationale.model import RationaleError
-from memcommit.application.operations.rationale.scope import (
-    load_rationale_scope,
-    rationale_memory_history,
-    resolve_rationale_target,
-)
-from memcommit.application.operations.rationale.skills.memory_rationale.execution import (
-    generate_memory_rationale,
-)
 from memcommit.core.context_targeting.model import DirectMemoryLocator
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.profile_routes import (
-    ProfileProviderRoutesError,
-)
-from memcommit.providers.connection import connect_operation_provider
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
-
-# A full Task 1 subtree Compare is one intentionally indivisible relation
-# frame. The subscription-backed xhigh run can remain healthy beyond the
-# configured ten-minute default, so use the shared peer-relation aggregate
-# window instead of timing out one complete provider turn.
-COMPARE_AGGREGATE_TIMEOUT_SECONDS = SHARED_COMPARISON_TIMEOUT_SECONDS
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 class CompareCommandError(RuntimeError):
     """Safe user-facing Compare orchestration failure."""
-
-
-def _connect_compare_provider(provider_factory):
-    return connect_comparison_provider(provider_factory)
 
 
 def _resume_selected_comparison(
@@ -164,35 +133,6 @@ def _start_new_comparison_from_setup(
     # This keeps bare and launcher-New creation on the normal command boundary
     # without letting saved-session discovery choose an analysis implicitly.
     cmd(**start_kwargs)
-
-
-def _render_selected_rationale(
-    *,
-    store: ProfileStore,
-    context_name: str,
-    memory_uid: str,
-) -> None:
-    """Explain one exact source selected from the immutable Compare ledger."""
-    scope = load_rationale_scope(
-        store,
-        context_name,
-        current_name=store.current_context_name(),
-    )
-    target = resolve_rationale_target(scope, memory_uid)
-    trace = rationale_memory_history(scope, target)
-    report = build_rationale(
-        scope.access.store,
-        target.owner,
-        trace,
-        None,
-        recorded_evidence_available=True,
-    )
-    projection = generate_memory_rationale(
-        report.trace,
-        provider_factory=connect_semantic_provider,
-        history_available=report.recorded_evidence_available,
-    )
-    render_rationale(report, projection)
 
 
 def _present_comparison(
@@ -573,12 +513,11 @@ def cmd(
 
             def summarize_frames(progress):
                 def provider_factory():
-                    provider, policy = connect_operation_provider(
-                        COMPARISON_SUMMARY_OPERATION
+                    provider = connect_semantic_provider()
+                    identity = getattr(provider, "identity", None)
+                    detail = (
+                        identity.display_name() if identity is not None else "provider"
                     )
-                    detail = policy.model or policy.provider_id
-                    if policy.reasoning_effort is not None:
-                        detail += f" · reasoning {policy.reasoning_effort}"
                     progress.update(f"summarizing · {detail}", step=2)
                     return provider
 
@@ -609,7 +548,7 @@ def cmd(
 
         def analyze_input(comparison_input: ComparisonInput) -> ComparisonAnalysis:
             def compare_frames(progress):
-                provider = _connect_compare_provider(connect_semantic_provider)
+                provider = connect_semantic_provider()
                 progress.update("analyzing relations", step=2)
                 return analyze_comparison(comparison_input, provider)
 
@@ -655,7 +594,6 @@ def cmd(
         OSError,
         MemoryHistoryReconstructionError,
         ProfileConfigError,
-        ProfileProviderRoutesError,
         ProfileError,
         QueryProviderError,
         RationaleError,

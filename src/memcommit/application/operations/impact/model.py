@@ -154,9 +154,9 @@ IMPACT_ROUTES = ImpactRouteCatalog(
             "preview or review lifecycle.",
         ),
         ExcludedImpactOperation(
-            "resolve",
-            "Resolve requires explicit issue decisions; issue inspection and "
-            "choice previews belong to Audit and Resolve itself.",
+            "conflict",
+            "Conflict requires explicit issue decisions; issue inspection and "
+            "choice previews belong to Audit and Conflict itself.",
         ),
         ExcludedImpactOperation(
             "translate",

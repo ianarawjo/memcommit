@@ -378,9 +378,7 @@ class CompactReadableScopeControl:
     def open_browser(self, event: KeyPressEvent) -> SurfaceActionResult:
         if self._locked():
             return "HANDLED"
-        buffer = self.name.input.buffer
-        if buffer.complete_state is not None:
-            buffer.cancel_completion()
+        self.name.cancel_completion()
         self.browser_open = True
         event.app.layout.focus(self.tree_control)
         self.on_status("BROWSE · ENTER OR SPACE CHECKS · ESC CLOSES")
@@ -399,22 +397,10 @@ class CompactReadableScopeControl:
         _event: KeyPressEvent,
         delta: int,
     ) -> SurfaceMoveResult:
-        buffer = self.name.input.buffer
-        if buffer.complete_state is None:
-            return "BOUNDARY"
-        if delta > 0:
-            buffer.complete_next()
-        else:
-            buffer.complete_previous()
-        return "CONSUMED"
+        return "CONSUMED" if self.name.move_completion(delta) else "BOUNDARY"
 
     def _activate_direct(self, _event: KeyPressEvent) -> SurfaceActionResult:
-        buffer = self.name.input.buffer
-        if (
-            buffer.complete_state is not None
-            and buffer.complete_state.current_completion is not None
-        ):
-            buffer.apply_completion(buffer.complete_state.current_completion)
+        self.name.accept_completion()
         try:
             self.commit_direct()
         except (OSError, TypeError, ValueError) as error:

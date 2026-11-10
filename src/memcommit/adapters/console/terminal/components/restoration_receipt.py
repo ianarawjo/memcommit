@@ -734,10 +734,8 @@ def render_revert_receipt(
         )
     )
     typer.echo(
-        # Recovery checkpoints carry the displaced log snapshot. Explicit
-        # discard mode materializes that snapshot again; the keep-all default
-        # would restore content without rebuilding removed active files.
-        typer.style("Exact recovery checkpoint: ", dim=True)
+        # This restores retained history; the checkpoint itself holds Revert's result.
+        typer.style("Restore displaced history: ", dim=True)
         + typer.style(
             "mem revert",
             fg=semantic_color_rgb(SemanticColorRole.UNDO),
@@ -771,7 +769,7 @@ def render_checkpoint_unit_revert_receipt(
         _render_action_detail(member.target.checkpoint_message)
         _render_impact(
             context_name=member.context_name,
-            before_snapshot=member.recovery.snapshot,
+            before_snapshot=member.before_snapshot,
             after_snapshot=member.target.snapshot,
         )
         target_ts = member.target.timestamp.strftime("%Y-%m-%d %H:%M")
@@ -793,7 +791,7 @@ def render_checkpoint_unit_revert_receipt(
             bold=True,
         )
     )
-    typer.echo("Exact member recovery checkpoints:")
+    typer.echo("Restore displaced member history:")
     for member in result.members:
         command = (
             f"mem revert {member.recovery.uid} --context "

@@ -7,6 +7,7 @@ import uuid
 from pathlib import Path
 from typing import Iterable, Optional
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.models.context import Context
@@ -18,15 +19,10 @@ from memcommit.application.capabilities.history.reconstruction.memory_lineage_re
     memory_lineage_record,
 )
 
-from ..infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_bytes_atomic,
-    _write_json_atomic,
-)
+from ..infrastructure.atomic_io import _write_bytes_atomic, _write_json_atomic
 from .models import (
     ConcurrentContextUpdateError,
     ContextBranchBinding,
-    ContextBranchMemoryBinding,
     _NO_CURRENT_CONTEXT_EXPECTATION,
 )
 from .records import validate_checkpoint_context_frames, checkpoint_history_digest
@@ -77,64 +73,6 @@ class _ContextCreationMixin:
             expected_context_catalog=expected_context_catalog,
         )
         return checkpoints.get(ctx.name)
-
-    def create_branch_context(
-        self,
-        ctx: Context,
-        *,
-        source_name: str,
-        expected_source_uid: str,
-        expected_history_digest: str,
-        expected_current: str | None,
-    ) -> None:
-        """Create, inherit history, and select one exact branch atomically."""
-        source = self.load_direct(source_name)
-        source_memories = tuple(
-            item for item in source.iter_memories() if isinstance(item, Memory)
-        )
-        target_memories = tuple(
-            item for item in ctx.iter_memories() if isinstance(item, Memory)
-        )
-        if len(source_memories) != len(target_memories) or any(
-            source_item.content != target_item.content
-            for source_item, target_item in zip(
-                source_memories,
-                target_memories,
-                strict=True,
-            )
-        ):
-            raise ValueError("Branch target Memories do not match the Source frame.")
-        self.create_branch_contexts(
-            (
-                ContextBranchBinding(
-                    source_name=source_name,
-                    expected_source_uid=expected_source_uid,
-                    expected_history_digest=expected_history_digest,
-                    target=ctx,
-                    memories=tuple(
-                        ContextBranchMemoryBinding(
-                            source_uid=source_item.uid,
-                            target_uid=target_item.uid,
-                            source_content_sha256=memory_content_sha256(
-                                source_item.content
-                            ),
-                            target_content_sha256=memory_content_sha256(
-                                target_item.content
-                            ),
-                        )
-                        for source_item, target_item in zip(
-                            source_memories,
-                            target_memories,
-                            strict=True,
-                        )
-                    ),
-                ),
-            ),
-            source_root=source_name,
-            target_root=ctx.name,
-            include_descendants=False,
-            expected_current=expected_current,
-        )
 
     def create_branch_contexts(
         self,
@@ -393,7 +331,7 @@ class _ContextCreationMixin:
                                 with open(path, encoding="utf-8") as file:
                                     raw = json.load(
                                         file,
-                                        object_pairs_hook=(_reject_duplicate_json_keys),
+                                        object_pairs_hook=(reject_duplicate_json_keys),
                                     )
                             except (json.JSONDecodeError, ValueError) as error:
                                 raise ValueError(

@@ -1,39 +1,21 @@
 """Operation-owned chunking methods for splitting Memory content.
 
-Public API compatibility remains available through :mod:`memcommit.application.operations.chunk.domain`.
-
-    chunks = chunk_content("some long text", "paragraphs")
-    chunks = chunk_content(content, ChunkMethod.markdown_headers)
+chunks = chunk_content("some long text", "paragraphs")
+chunks = chunk_content(content, ChunkMethod.markdown_headers)
 """
+
 from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import Callable
-
 
 _SENTENCE_DELIMITERS = frozenset(".!?。！？")
 _CLAUSE_DELIMITERS = _SENTENCE_DELIMITERS | frozenset(";:—；：")
 _CLOSING_PUNCTUATION = frozenset("\"'’”»)]}」』】")
 
 
-def _split_at_boundaries(content: str, boundaries: list[int]) -> list[str]:
-    chunks: list[str] = []
-    start = 0
-    for end in sorted(set(boundaries)):
-        if end <= start or end >= len(content):
-            continue
-        chunk = content[start:end].strip()
-        if chunk:
-            chunks.append(chunk)
-        start = end
-    final = content[start:].strip()
-    if final:
-        chunks.append(final)
-    return chunks
-
-
 def _markdown_header_boundaries(content: str) -> list[int]:
+    """Split at the shallowest repeated heading depth, retaining deeper headings."""
     headers: list[tuple[int, int]] = []
     offset = 0
     for line in content.splitlines(keepends=True):
@@ -84,82 +66,18 @@ def _punctuation_boundaries(
 
 
 # ---------------------------------------------------------------------------
-# Method implementations
-# ---------------------------------------------------------------------------
-
-def _by_markdown_headers(content: str) -> list[str]:
-    """
-    Split on the shallowest markdown header depth that appears more than once.
-
-    The heuristic picks the smallest ``#``-level (1–6) that repeats — that
-    level is almost always the natural "section boundary" of the document.
-    Content before the first matching header (a preamble) is returned as its
-    own chunk when non-empty.  Sub-headers below the split level are kept
-    intact inside their parent chunk.
-
-    Returns the original content as a single-element list when no repeating
-    header depth is found (cannot split further).
-    """
-    return _split_at_boundaries(content, _markdown_header_boundaries(content))
-
-
-def _by_paragraphs(content: str) -> list[str]:
-    """Split on one or more blank lines (double-newline boundaries)."""
-    chunks = re.split(r'\n[ \t]*\n', content)
-    return [c.strip() for c in chunks if c.strip()]
-
-
-def _by_sentences(content: str) -> list[str]:
-    """
-    Split on sentence boundaries (approximate heuristic).
-
-    Splits after ``.``, ``!``, or ``?`` (and an optional closing quote) when
-    followed by whitespace.  This deliberately does not require an uppercase
-    next character: sentence chunking is also the CLI default for scripts and
-    languages without Latin case.  It remains an approximate mechanical
-    boundary and is less reliable on abbreviations or code snippets.
-    """
-    return _split_at_boundaries(
-        content,
-        _punctuation_boundaries(
-            content,
-            _SENTENCE_DELIMITERS,
-            require_following_whitespace=True,
-        ),
-    )
-
-
-def _by_clauses(content: str) -> list[str]:
-    """Split after strong clause punctuation, retaining the punctuation."""
-
-    return _split_at_boundaries(
-        content,
-        _punctuation_boundaries(
-            content,
-            _CLAUSE_DELIMITERS,
-            require_following_whitespace=True,
-        ),
-    )
-
-
-# ---------------------------------------------------------------------------
 # Registry & public API
 # ---------------------------------------------------------------------------
 
+
 class ChunkMethod(str, Enum):
     """Named chunking strategies available to ``mem chunk``."""
+
     markdown_headers = "markdown_headers"
     paragraphs = "paragraphs"
     sentences = "sentences"
     clauses = "clauses"
 
-
-_DISPATCH: dict[str, Callable[[str], list[str]]] = {
-    "markdown_headers": _by_markdown_headers,
-    "paragraphs":       _by_paragraphs,
-    "sentences":        _by_sentences,
-    "clauses":          _by_clauses,
-}
 
 #: Ordered list of valid method names (matches ChunkMethod enum values).
 CHUNKING_METHODS: list[str] = [m.value for m in ChunkMethod]
@@ -193,7 +111,9 @@ def _trim_span(content: str, start: int, end: int) -> tuple[int, int] | None:
     return (start, end) if start < end else None
 
 
-def _spans_from_boundaries(content: str, boundaries: list[int]) -> list[tuple[int, int]]:
+def _spans_from_boundaries(
+    content: str, boundaries: list[int]
+) -> list[tuple[int, int]]:
     spans: list[tuple[int, int]] = []
     start = 0
     for end in sorted(set(boundaries)):
@@ -326,8 +246,7 @@ def chunk_content(
     Raises :exc:`ValueError` for invalid methods, delimiters, or limits.
     """
     key = method.value if isinstance(method, ChunkMethod) else method
-    fn = _DISPATCH.get(key)
-    if fn is None:
+    if key not in {item.value for item in ChunkMethod}:
         valid = ", ".join(CHUNKING_METHODS)
         raise ValueError(f"Unknown chunking method '{key}'. Valid: {valid}")
     delimiters = _validate_break_on(break_on)

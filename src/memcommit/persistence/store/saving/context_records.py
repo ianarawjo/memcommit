@@ -5,15 +5,13 @@ from __future__ import annotations
 import json
 from typing import Iterable, Optional
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.models.context import Context
 from memcommit.core.context_name_validation import validate_context_name
 
-from ..infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from ..infrastructure.atomic_io import _write_json_atomic
 from ..context_memory.models import ConcurrentContextUpdateError
 from ..context_memory.records import _validate_context_header
 
@@ -274,7 +272,7 @@ class _ContextSavingMixin:
             with open(context_file, encoding="utf-8") as file:
                 loaded_record = json.load(
                     file,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             current_record = _validate_context_header(
                 loaded_record,

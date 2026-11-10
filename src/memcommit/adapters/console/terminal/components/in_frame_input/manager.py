@@ -42,19 +42,6 @@ class InFrameInputManager:
             for pane in panes
         }
         self._active_pane: ScrollableTextPane | None = None
-        self._active_sections: tuple[InFrameInputSection, ...] = ()
-
-    @property
-    def active_pane(self) -> ScrollableTextPane | None:
-        """Return the pane currently hosting writable fields, if any."""
-
-        return self._active_pane
-
-    @property
-    def active_sections(self) -> tuple[InFrameInputSection, ...]:
-        """Return the currently embedded fields in display order."""
-
-        return self._active_sections
 
     def show(
         self,
@@ -99,7 +86,6 @@ class InFrameInputManager:
         if height is not None:
             pane.frame.container.height = height
         self._active_pane = pane
-        self._active_sections = tuple(sections)
 
     def clear(self) -> None:
         """Detach all inputs and restore the active pane's original layout."""
@@ -111,4 +97,3 @@ class InFrameInputManager:
         pane.frame.body = base.body
         pane.frame.container.height = base.height
         self._active_pane = None
-        self._active_sections = ()

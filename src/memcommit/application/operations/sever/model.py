@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
+
+from memcommit.core.json_objects import canonical_json_digest
 
 
 SEVER_SCHEMA_VERSION = 5
@@ -499,20 +499,6 @@ class SeverSession:
             raise SeverError("Unknown Sever candidate.")
         return replace(self, revision=self.revision + 1, candidates=tuple(updated))
 
-    def with_output_name(self, output_name: str) -> "SeverSession":
-        """Rebind an unapplied review to one newly validated local name."""
-
-        if self.state != "REVIEWING":
-            raise SeverError("An applied Sever session cannot change output location.")
-        _text(output_name, "output name")
-        if output_name == self.output_name:
-            return self
-        return replace(
-            self,
-            revision=self.revision + 1,
-            output_name=output_name,
-        )
-
     def results(self) -> tuple[tuple[SeverCandidate, SeverMemory, str], ...]:
         """Return the Memories retained in the reviewed local result."""
         results: list[tuple[SeverCandidate, SeverMemory, str]] = []
@@ -633,10 +619,7 @@ def sever_record_digest(value: SeverSession | dict[str, object]) -> str:
         if isinstance(value, SeverSession)
         else SeverSession.from_dict(value).to_dict()
     )
-    encoded = json.dumps(
-        record, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ).encode()
-    return hashlib.sha256(encoded).hexdigest()
+    return canonical_json_digest(record)
 
 
 def sever_frame_digest(
@@ -654,8 +637,4 @@ def sever_frame_digest(
         "memories": [memory.to_dict() for memory in memories],
         "include_descendants": include_descendants,
     }
-    return hashlib.sha256(
-        json.dumps(
-            payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-        ).encode()
-    ).hexdigest()
+    return canonical_json_digest(payload)

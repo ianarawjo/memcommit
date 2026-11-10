@@ -137,10 +137,6 @@ def _execute_context_trace(
     )
 
 
-def _shown_uid(value: str, *, verbose: bool) -> str:
-    return value if verbose else value[:8]
-
-
 def cmd(
     selector: Annotated[
         Optional[str],

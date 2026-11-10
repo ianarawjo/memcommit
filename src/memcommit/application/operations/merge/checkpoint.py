@@ -1,4 +1,4 @@
-"""One Merge history contract for exact and semantic Resolve results."""
+"""One Merge history contract for exact and semantic conflict resolution results."""
 
 from dataclasses import asdict
 
@@ -44,7 +44,7 @@ def merge_checkpoint(prepared, result, post_target):
         dict(
             **round.to_dict(),
             revision=round.decisions.revision,
-            phase="LITERAL" if isinstance(round, LiteralMergeRound) else "RESOLVE",
+            phase="LITERAL" if isinstance(round, LiteralMergeRound) else "CONFLICT",
         )
         for round in result.rounds
     ]
@@ -78,8 +78,8 @@ def merge_review_round_from_dict(value):
     """Decode each phase with its owner rather than fabricating structural Audits."""
     if value.get("phase") == "LITERAL":
         return LiteralMergeRound.from_dict(value)
-    if value.get("phase") == "RESOLVE":
-        from memcommit.application.operations.resolve.review_round.review_round_record import (
+    if value.get("phase") == "CONFLICT":
+        from memcommit.application.operations.conflict.review_round.review_round_record import (
             ReviewRoundRecord,
         )
 

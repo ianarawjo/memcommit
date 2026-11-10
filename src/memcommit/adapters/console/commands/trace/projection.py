@@ -45,7 +45,6 @@ from memcommit.application.capabilities.history.model.memory_event import (
 
 
 _COMPACT_CONTENT_LIMIT = 44
-_COMPACT_STATES_LIMIT = 2
 DEFAULT_TRACE_OPERATION_LIMIT = 20
 MAX_TRACE_OPERATION_LIMIT = 200
 _TRACE_VIEWER_MIN_HEIGHT = 10
@@ -124,35 +123,6 @@ def trace_operation_rows(report: MemoryHistory) -> tuple[TraceOperationRow, ...]
         for identity, events in grouped
     ]
     return tuple(reversed(rows))
-
-
-def compact_text(value: str, limit: int = _COMPACT_CONTENT_LIMIT) -> str:
-    escaped = display_escape_text(value)
-    if not escaped:
-        return "(empty)"
-    return elide_terminal_text(escaped, limit)
-
-
-def format_trace_states(
-    states: tuple[MemoryState, ...],
-    *,
-    verbose: bool,
-) -> str:
-    if not states:
-        return "∅"
-    visible = states[:_COMPACT_STATES_LIMIT]
-    rendered = [
-        (
-            f"[{display_escape_text(short_uid(state.uid, verbose))}]"
-            f"@{state.position + 1} "
-            f"“{compact_text(state.content)}”"
-        )
-        for state in visible
-    ]
-    remaining = len(states) - len(visible)
-    if remaining:
-        rendered.append(f"+{remaining} more")
-    return " + ".join(rendered)
 
 
 def trace_row_effect(row: TraceOperationRow) -> str:
@@ -330,34 +300,6 @@ def trace_history_display_row(row: TraceOperationRow) -> HistoryDisplayRow:
         summary=_trace_row_summary(row),
         badges=tuple(badges),
         details=(),
-    )
-
-
-def format_trace_operation(
-    row: TraceOperationRow,
-    *,
-    verbose: bool,
-) -> str:
-    history_row = trace_history_display_row(row)
-    header = "".join(
-        display_escape_text(segment.text)
-        for segment in history_display_row_segments(history_row)
-    )
-    # The shared Log summary is the compact semantic label; repeating the
-    # typed effect and evidence here would make one operation read three times.
-    if not verbose and trace_row_action(row) in {"add", "remove"}:
-        return header
-    transitions = _unique_context_transitions(row)
-    if trace_row_action(row) in {"branch", "merge"} and len(transitions) == 1:
-        transition = transitions[0]
-        return (
-            f"{header} · CONTEXT {display_escape_text(transition.source.name)} → "
-            f"{display_escape_text(transition.target.name)} · "
-            f"{format_trace_states(row.after, verbose=verbose)}"
-        )
-    return (
-        f"{header} · {format_trace_states(row.before, verbose=verbose)} → "
-        f"{format_trace_states(row.after, verbose=verbose)}"
     )
 
 
@@ -1034,33 +976,6 @@ def open_trace_viewer(
         title="TRACE REPORT",
         frame_title="LINEAGE",
         compact_height=compact_height,
-        app_input=app_input,
-        app_output=app_output,
-        require_tty=require_tty,
-    )
-
-
-def open_trace_history(
-    report: MemoryHistory,
-    *,
-    context_name: str | None = None,
-    verbose: bool = False,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> None:
-    """Compatibility adapter for callers migrating from the Items workbench.
-
-    The Context name no longer changes presentation because the frozen report
-    already owns its canonical Context identity.  Existing callers still land
-    in the same single vertical Viewer instead of requiring a broad migration
-    alongside this focused Trace change.
-    """
-
-    del context_name
-    open_trace_viewer(
-        report,
-        verbose=verbose,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,

@@ -11,7 +11,6 @@ from memcommit.application.operations.sever.application import (
     SeverApplyRequest,
     SeverApplyResult,
     SeverDecisionRequest,
-    SeverDestinationRequest,
     SeverPersistedApplyRequest,
     SeverPersistedApplyResult,
     SeverProgressObserver,
@@ -22,7 +21,6 @@ from memcommit.application.operations.sever.application import (
     run_sever_apply,
     run_sever_session_apply,
     run_sever_session_decision,
-    run_sever_session_destination_change,
     run_sever_session_open,
     run_sever_session_start,
 )
@@ -41,12 +39,11 @@ from memcommit.application.operations.sever.model import (
 )
 from memcommit.application.operations.sever.provider import SeverProviderError
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.core.context_name_validation import validate_context_name
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
     ProfileStore,
 )
-from memcommit.providers.errors import QueryProviderError, QueryProviderTimeoutError
+from memcommit.llm_providers.errors import QueryProviderError, QueryProviderTimeoutError
 
 SeverProgressCallback = SeverProgressObserver
 
@@ -83,25 +80,6 @@ class MemoryStoreSeverSessionRepository:
     ) -> SeverSessionSnapshot:
         self.sessions.save(session, expected_digest=expected_version)
         return self._snapshot(session)
-
-
-@dataclass
-class MemoryStoreSeverDestinationPort:
-    """Validate one local self- or other-save destination against the live Store."""
-
-    store: ProfileStore
-    source_name: str
-
-    def validate(self, output_name: str, *, current_output_name: str) -> None:
-        validate_context_name(output_name)
-        if output_name == self.source_name:
-            return
-        if output_name != current_output_name and self.store.context_exists(
-            output_name
-        ):
-            raise SeverApplicationError(
-                f"Output Context '{output_name}' already exists."
-            )
 
 
 def _provider_with_attempt_evidence(factory: SeverProviderFactory) -> object:
@@ -210,24 +188,6 @@ def execute_sever_session_decision(
     return run_sever_session_decision(
         request,
         repository=MemoryStoreSeverSessionRepository(store),
-    )
-
-
-def execute_sever_session_destination_change(
-    request: SeverDestinationRequest,
-    *,
-    store: ProfileStore,
-) -> SeverSessionSnapshot:
-    """Validate and persist one self- or other-save destination revision."""
-
-    session = request.snapshot.session
-    return run_sever_session_destination_change(
-        request,
-        repository=MemoryStoreSeverSessionRepository(store),
-        destination_port=MemoryStoreSeverDestinationPort(
-            store,
-            source_name=session.source.root_name,
-        ),
     )
 
 

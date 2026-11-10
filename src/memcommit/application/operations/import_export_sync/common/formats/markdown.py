@@ -153,15 +153,6 @@ def parse_markdown(text: str, *, path="document.md", state=None) -> Document:
     return Document(state or CorrespondingDocumentMetadata(path, "md"), tuple(blocks))
 
 
-def _raw_gap(lines):
-    lines = list(lines)
-    while lines and not lines[0].strip():
-        lines.pop(0)
-    while lines and not lines[-1].strip():
-        lines.pop()
-    return "".join(lines)
-
-
 def render_markdown(
     document: Document, policy=SpacingPolicy(), *, source_ranges=None
 ) -> str:
@@ -185,7 +176,3 @@ def render_markdown(
             )
         previous = block
     return result
-
-
-def normalized_markdown(text: str, policy=SpacingPolicy()) -> str:
-    return render_markdown(parse_markdown(text), policy)

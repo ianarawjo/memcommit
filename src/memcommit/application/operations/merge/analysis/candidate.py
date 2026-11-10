@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import uuid
 from copy import deepcopy
 from dataclasses import asdict, dataclass
 from typing import Mapping
 
+from memcommit.core.json_objects import canonical_json_digest
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 
@@ -179,47 +179,6 @@ def combine_contexts(
     return MergeCandidate(encode(candidate), tuple(origins), frames)
 
 
-def rebase_candidate(previous: MergeCandidate, context: Context) -> MergeCandidate:
-    """Keep surviving origin identities while inspecting their current post-image.
-
-    The previous Audit retains original bytes; this revision records transformed
-    bytes. New result items receive their own identities, never invented ancestry.
-    """
-    old = {origin.uid: origin for origin in previous.origins}
-    record = context.to_dict()
-    origins = []
-    for uid in record["order"]:
-        item = record["memories"][uid]
-        prior = old.get(uid)
-        if prior is not None:
-            origins.append(
-                CandidateOrigin(
-                    uid,
-                    prior.frame,
-                    prior.context_uid,
-                    prior.context_name,
-                    prior.item_uid,
-                    prior.identity_uid,
-                    prior.placement,
-                    encode(dict(item, uid=prior.item_uid)),
-                )
-            )
-        else:
-            origins.append(
-                CandidateOrigin(
-                    uid,
-                    previous.frame_order[-1],
-                    context.uid,
-                    context.name,
-                    uid,
-                    uid,
-                    previous.origins[0].placement if previous.origins else context.name,
-                    encode(item),
-                )
-            )
-    return MergeCandidate(encode(record), tuple(origins), previous.frame_order)
-
-
 def copy_direct_item(
     item: Memory,
     *,
@@ -253,5 +212,4 @@ def encode(value: object) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
-def digest(value: object) -> str:
-    return hashlib.sha256(encode(value).encode()).hexdigest()
+digest = canonical_json_digest

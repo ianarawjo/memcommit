@@ -8,6 +8,7 @@ import json
 from collections.abc import Sequence
 from typing import Protocol
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.application.capabilities.reviewing.result_workbench import (
@@ -80,17 +81,6 @@ class SummaryFrame:
     sources: tuple[SummarySource, ...]
 
 
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
-
-
 def collect_summary_scope(
     contexts: Sequence[Context],
     *,
@@ -161,19 +151,6 @@ def collect_summary_scope(
         include_descendants=include_descendants,
         digest=hashlib.sha256(encoded).hexdigest(),
         sources=tuple(sources),
-    )
-
-
-def collect_summary_frame(
-    ctx: Context,
-) -> SummaryFrame:
-    """Freeze the selected Context and its independently selected local owners."""
-
-    return collect_summary_scope(
-        (ctx,),
-        root_context_uid=ctx.uid,
-        root_context_name=ctx.name,
-        include_descendants=False,
     )
 
 
@@ -262,7 +239,7 @@ def summarize_frame(
     if not isinstance(raw, str) or len(raw) > SUMMARIZE_RESPONSE_CHAR_LIMIT:
         raise SummarizeError("Codex summarize returned invalid structured output.")
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, TypeError) as error:
         raise SummarizeError(
             "Codex summarize returned invalid structured output."

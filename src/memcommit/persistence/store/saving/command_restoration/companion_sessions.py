@@ -3,13 +3,11 @@
 import json
 from pathlib import Path
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.persistence.store.context_memory.models import (
     ConcurrentContextUpdateError,
 )
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
 
 
 def write_companion_session_restore(
@@ -35,7 +33,7 @@ def write_companion_session_restore(
             with open(path, encoding="utf-8") as file:
                 current = json.load(
                     file,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             if current != expected:
                 raise ConcurrentContextUpdateError(
@@ -50,7 +48,7 @@ def write_companion_session_restore(
     with open(path, encoding="utf-8") as file:
         current = json.load(
             file,
-            object_pairs_hook=_reject_duplicate_json_keys,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
     if current != expected:
         raise ConcurrentContextUpdateError(

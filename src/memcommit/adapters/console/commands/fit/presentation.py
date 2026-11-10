@@ -25,12 +25,6 @@ class FitReceiptLine:
     judgment: str | None = None
     after_judgment: str = ""
 
-    @property
-    def text(self) -> str:
-        """Return the ANSI-free public text for this receipt line."""
-
-        return self.before_judgment + (self.judgment or "") + self.after_judgment
-
 
 def _proposition_fit_receipt_line(
     result: FitPropositionsResult,
@@ -79,12 +73,6 @@ def _proposition_fit_receipt_line(
     return FitReceiptLine("FIT · ", assessment.verdict, suffix)
 
 
-def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
-    """Return one grouped target line for the complete general Fit frame."""
-
-    return _proposition_fit_receipt_line(result).text
-
-
 def proposition_fit_receipt_lines(
     result: FitPropositionsResult,
 ) -> tuple[FitReceiptLine, ...]:
@@ -93,47 +81,6 @@ def proposition_fit_receipt_lines(
     if not isinstance(result, FitPropositionsResult):
         raise TypeError("General Fit presentation requires a typed result.")
     return (_proposition_fit_receipt_line(result),)
-
-
-def proposition_fit_result_lines(
-    result: FitPropositionsResult,
-) -> tuple[str, ...]:
-    """Project one target line while retaining detail in the typed result."""
-
-    if not isinstance(result, FitPropositionsResult):
-        raise TypeError("General Fit presentation requires a typed result.")
-    return tuple(line.text for line in proposition_fit_receipt_lines(result))
-
-
-def proposition_fit_result_text(result: FitPropositionsResult) -> str:
-    """Return the stable plain projection for one general Fit judgment."""
-
-    return "\n".join(proposition_fit_result_lines(result))
-
-
-def fit_mark(
-    result: FitResult,
-    *,
-    status: FitStatus | FitCoherenceStatus | None = None,
-) -> str:
-    """Project freshness and conformance into Fit's compact shared marks."""
-
-    if not isinstance(result, FitResult):
-        raise TypeError("Fit marks require a typed Fit result.")
-    # A stale judgment must not look currently passing or failing. Its stored
-    # classification remains in the immutable receipt, while the public mark
-    # asks the person or agent to run Fit again.
-    if not result.current:
-        return "◷"
-    if status is None:
-        return {
-            "YES": "✓",
-            "MAY": "?",
-            "NO": "!",
-        }[fit_verdict(result)]
-    if status == "FIT":
-        return "✓"
-    return fit_issue_label(status)[0]
 
 
 def fit_verdict(result: FitResult) -> str:
@@ -231,12 +178,6 @@ def _fit_summary_receipt_line(result: FitResult) -> FitReceiptLine:
     if axis_counts:
         suffix += " · " + " · ".join(f"{axis} {count}" for axis, count in axis_counts)
     return FitReceiptLine("FIT · ", verdict, suffix)
-
-
-def fit_summary_line(result: FitResult) -> str:
-    """Return the stable first line of Fit's compact receipt."""
-
-    return _fit_summary_receipt_line(result).text
 
 
 def _ground_judgment_lines(result: FitResult) -> tuple[FitReceiptLine, ...]:
@@ -364,17 +305,3 @@ def fit_receipt_lines(result: FitResult) -> tuple[FitReceiptLine, ...]:
                 continue
             lines.extend(_coherence_issue_lines(coherence, finding))
     return tuple(lines)
-
-
-def fit_result_lines(result: FitResult) -> tuple[str, ...]:
-    """Project one summary plus current issue relationship blocks."""
-
-    if not isinstance(result, FitResult):
-        raise TypeError("Fit presentation requires a typed Fit result.")
-    return tuple(line.text for line in fit_receipt_lines(result))
-
-
-def fit_result_text(result: FitResult) -> str:
-    """Return Fit's stable compact receipt text."""
-
-    return "\n".join(fit_result_lines(result))

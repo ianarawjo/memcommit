@@ -48,16 +48,6 @@ class ConformanceProviderFactory(Protocol):
 
 
 @dataclass(frozen=True)
-class FrozenContextConformance:
-    target_name: str
-    rules_name: str
-    target_digest: str
-    rules_digest: str
-    rules: tuple[ConformanceRule, ...]
-    subjects: tuple[ConformanceSubject, ...]
-
-
-@dataclass(frozen=True)
 class FrozenConformanceRulesOperand:
     """One exact Context, direct Memory, or process-local Rule source."""
 
@@ -72,35 +62,12 @@ class FrozenConformanceRulesOperand:
     inputs: ConformanceInputs | None = None
 
 
-def _direct_memories(ctx: Context) -> tuple[Memory, ...]:
-    return tuple(item for item in ctx.iter_memories() if isinstance(item, Memory))
-
-
 def _rules_from_memories(
     memories: tuple[Memory, ...],
 ) -> tuple[ConformanceRule, ...]:
     return tuple(
         ConformanceRule(memory.uid, f"r{index}", memory.content)
         for index, memory in enumerate(memories, 1)
-    )
-
-
-def _subjects_from_target(
-    target: Context,
-    rules: tuple[ConformanceRule, ...],
-) -> tuple[ConformanceSubject, ...]:
-    target_memories = _direct_memories(target)
-    if not target_memories:
-        raise ConformanceError("The Target Context contains no direct Memories.")
-    rule_uids = tuple(rule.uid for rule in rules)
-    return tuple(
-        ConformanceSubject(
-            uid=memory.uid,
-            alias=f"m{index:06d}",
-            content=memory.content,
-            linked_rule_uids=rule_uids,
-        )
-        for index, memory in enumerate(target_memories, 1)
     )
 
 
@@ -213,54 +180,6 @@ def freeze_conformance_rules_operand(
         context_uid=context.uid,
         context_digest=context_record_digest(context),
         inputs=prepared,
-    )
-
-
-def freeze_context_conformance(
-    target: Context,
-    rules_context: Context,
-) -> FrozenContextConformance:
-    """Freeze two local direct Contexts without interpreting hierarchy."""
-
-    if target.uid == rules_context.uid:
-        raise ConformanceError(
-            "Conformance Target and Rules must be distinct Contexts."
-        )
-    rule_memories = _direct_memories(rules_context)
-    if not rule_memories:
-        raise ConformanceError("The Rules Context contains no direct Memories.")
-    rules = _rules_from_memories(rule_memories)
-    subjects = _subjects_from_target(target, rules)
-    return FrozenContextConformance(
-        target_name=target.name,
-        rules_name=rules_context.name,
-        target_digest=context_record_digest(target),
-        rules_digest=context_record_digest(rules_context),
-        rules=rules,
-        subjects=subjects,
-    )
-
-
-def execute_context_conformance(
-    *,
-    store: ProfileStore,
-    target_name: str,
-    rules_name: str,
-    provider_factory: ConformanceProviderFactory,
-) -> ConformanceReport:
-    """Check two exact readable Contexts with the common directional route."""
-
-    rules_access = resolve_context_access(
-        store,
-        rules_name,
-        current_name=None,
-    )
-    return execute_context_conformance_with_rules_operand(
-        store=store,
-        target_name=target_name,
-        rules_operand=rules_access.access_name,
-        current_name=None,
-        provider_factory=provider_factory,
     )
 
 

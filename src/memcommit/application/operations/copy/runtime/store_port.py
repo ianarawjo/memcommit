@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.copy.application import run_copy
 from memcommit.application.operations.copy.contracts import (
     CopyMemoriesRequest,
     CopyMemoriesResult,
@@ -59,9 +58,3 @@ class MemoryStoreCopyPort:
 
     def apply_copy(self, plan: FrozenCopyMemoriesPlan) -> CopyMemoriesResult:
         return apply_copy(plan, store=self._store, owner=self._owner)
-
-
-def execute_copy(
-    request: CopyMemoriesRequest, *, store: ProfileStore
-) -> CopyMemoriesResult:
-    return run_copy(request, port=MemoryStoreCopyPort.capture(store))

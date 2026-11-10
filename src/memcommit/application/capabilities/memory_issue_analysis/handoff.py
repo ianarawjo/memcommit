@@ -35,7 +35,7 @@ from memcommit.application.operations.review.model import REVIEW_RESPONSE_CHAR_L
 
 QUALITY_FINDING_HANDOFF_CONTRACT_VERSION = "quality-finding-handoff-v1"
 QualityFindingKind = Literal["DUPLICATE", "AMBIGUITY", "CONFLICT"]
-QualityFindingRoute = Literal["DEDUP", "CLARIFY", "RESOLVE"]
+QualityFindingRoute = Literal["DEDUP", "CLARIFY", "CONFLICT"]
 
 
 class QualityFindingHandoffError(ValueError):
@@ -166,7 +166,7 @@ class QualityFindingHandoff:
         expected_route = {
             "DUPLICATE": "DEDUP",
             "AMBIGUITY": "CLARIFY",
-            "CONFLICT": "RESOLVE",
+            "CONFLICT": "CONFLICT",
         }.get(self.kind)
         if expected_route is None or self.route != expected_route:
             raise QualityFindingHandoffError(
@@ -291,7 +291,7 @@ class QualityFindingHandoff:
         if kind not in {"DUPLICATE", "AMBIGUITY", "CONFLICT"} or route not in {
             "DEDUP",
             "CLARIFY",
-            "RESOLVE",
+            "CONFLICT",
         }:
             raise QualityFindingHandoffError(
                 "Quality finding handoff kind or route is invalid."
@@ -548,7 +548,7 @@ def quality_finding_handoffs(
                 session,
                 finding_uid=f"conflict:{finding.left.uid}:{finding.right.uid}",
                 kind="CONFLICT",
-                route="RESOLVE",
+                route="CONFLICT",
                 memory_uids=(finding.left.uid, finding.right.uid),
                 classification=finding.conflict,
                 reason=finding.reason,
@@ -560,67 +560,6 @@ def quality_finding_handoffs(
     )
 
 
-def quality_finding_handoff(
-    session: QualityFindWorkbenchSession,
-    finding_uid: str,
-) -> QualityFindingHandoff:
-    """Select one exact handoff by the shared Resolution item identity."""
-
-    matches = tuple(
-        handoff
-        for handoff in quality_finding_handoffs(session)
-        if handoff.finding_uid == finding_uid
-    )
-    if len(matches) != 1:
-        raise QualityFindingHandoffError(
-            f"Quality finding '{finding_uid}' is unavailable."
-        )
-    return matches[0]
-
-
-def quality_finding_handoff_json(handoff: QualityFindingHandoff) -> str:
-    """Serialize one receipt canonically for an explicit CLI boundary."""
-
-    if not isinstance(handoff, QualityFindingHandoff):
-        raise TypeError("Quality finding JSON requires a typed handoff.")
-    return json.dumps(
-        handoff.to_dict(),
-        ensure_ascii=False,
-        allow_nan=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    )
-
-
-def quality_finding_handoff_from_json(value: str) -> QualityFindingHandoff:
-    """Decode one strict receipt, rejecting duplicate JSON keys."""
-
-    if not isinstance(value, str) or not value.strip():
-        raise QualityFindingHandoffError(
-            "Quality finding handoff JSON must be nonblank text."
-        )
-
-    def exact_pairs(pairs: list[tuple[str, object]]) -> dict[str, object]:
-        result: dict[str, object] = {}
-        for key, item in pairs:
-            if key in result:
-                raise QualityFindingHandoffError(
-                    f"Duplicate quality finding handoff JSON key '{key}'."
-                )
-            result[key] = item
-        return result
-
-    try:
-        decoded = json.loads(value, object_pairs_hook=exact_pairs)
-    except (json.JSONDecodeError, ValueError) as error:
-        if isinstance(error, QualityFindingHandoffError):
-            raise
-        raise QualityFindingHandoffError(
-            "Quality finding handoff JSON is invalid."
-        ) from error
-    return QualityFindingHandoff.from_dict(decoded)
-
-
 __all__ = [
     "QUALITY_FINDING_HANDOFF_CONTRACT_VERSION",
     "QualityFindingHandoff",
@@ -629,8 +568,5 @@ __all__ = [
     "QualityFindingReviewDraft",
     "QualityFindingRoute",
     "QualityFindingSource",
-    "quality_finding_handoff_from_json",
-    "quality_finding_handoff_json",
-    "quality_finding_handoff",
     "quality_finding_handoffs",
 ]

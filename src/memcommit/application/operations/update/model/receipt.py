@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from .inputs import UpdateContextInputs
+from .inputs import UpdateExecutionInputs
 from .plan import UpdatePlan
 from .changes import (
     _is_sha256,
@@ -65,13 +65,6 @@ class UpdateApplicationReceipt:
 
     @classmethod
     def from_dict(cls, value: object) -> UpdateApplicationReceipt:
-        # Older receipts retain state snapshots; new evidence needs only the effects.
-        if isinstance(value, dict):
-            value = {
-                key: item
-                for key, item in value.items()
-                if key not in {"target_digest", "target_contexts"}
-            }
         data = _require_exact_keys(
             value,
             {
@@ -107,7 +100,7 @@ class UpdateApplicationReceipt:
 
 @dataclass(frozen=True, slots=True)
 class UpdateReceipt:
-    inputs: UpdateContextInputs
+    inputs: UpdateExecutionInputs
     plan: UpdatePlan
     application: UpdateApplicationReceipt
 
@@ -139,6 +132,10 @@ class UpdateReceipt:
         if not owners <= set(self.inputs.target_contexts):
             raise ValueError("Update receipt has an owner outside its Target scope.")
         for op in self.plan.operations:
+            if self.inputs.instruction is None and not op.source_refs:
+                raise ValueError(
+                    "Context-based Update requires Source Memory evidence."
+                )
             if self.inputs.target_memory_uid is not None and (
                 isinstance(op, AddOperation)
                 or op.memory_uid != self.inputs.target_memory_uid
@@ -172,13 +169,15 @@ class UpdateReceipt:
             or not isinstance(data["operations"], list)
         ):
             raise ValueError("Invalid Update receipt schema.")
-        inputs = UpdateContextInputs.from_dict(data["inputs"])
+        execution_inputs = UpdateExecutionInputs.from_dict(data["inputs"])
         plan = UpdatePlan(
             _require_uuid(data["uid"], "Update operation uid"),
-            inputs.target_uid,
-            inputs.target_name,
+            execution_inputs.target_uid,
+            execution_inputs.target_name,
             tuple(_operation_from_dict(op) for op in data["operations"]),
         )
         return cls(
-            inputs, plan, UpdateApplicationReceipt.from_dict(data["application"])
+            execution_inputs,
+            plan,
+            UpdateApplicationReceipt.from_dict(data["application"]),
         )

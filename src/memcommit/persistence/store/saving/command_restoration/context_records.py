@@ -1,12 +1,8 @@
 """Save prepared Context images and their companion session as one attempt."""
 
-import json
-
 from memcommit.models.checkpoint import Checkpoint
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
+
 from .companion_sessions import write_companion_session_restore
 
 
@@ -59,7 +55,7 @@ def save_restored_contexts(
                     value=session_before,
                     sever_sessions=companion_sessions,
                 )
-            except Exception as candidate:
+            except Exception as candidate:  # noqa: BLE001 -- Finish all inverses before reporting failure.
                 rollback_error = rollback_error or candidate
         for name in written_names:
             try:
@@ -67,30 +63,18 @@ def save_restored_contexts(
                     store._context_file(name),
                     original_records[name],
                 )
-            except Exception as candidate:
+            except Exception as candidate:  # noqa: BLE001 -- Finish all inverses before reporting failure.
                 rollback_error = rollback_error or candidate
         for name, checkpoint in created_checkpoints:
             try:
-                removed = False
-                for path in store._checkpoints_dir(name).glob(
-                    f"*-{checkpoint.uid[:8]}.json"
-                ):
-                    if path.is_symlink() or not path.is_file():
-                        continue
-                    with open(path, encoding="utf-8") as file:
-                        value = json.load(
-                            file,
-                            object_pairs_hook=(_reject_duplicate_json_keys),
-                        )
-                    if value.get("uid") == checkpoint.uid:
-                        path.unlink()
-                        removed = True
-                        break
-                if not removed:
+                try:
+                    store._remove_checkpoint_uid_locked(name, checkpoint.uid)
+                except RuntimeError as error:
+                    # Preserve this restoration route's missing-checkpoint cause.
                     raise RuntimeError(
                         "Restoration checkpoint could not be found during rollback."
-                    )
-            except Exception as candidate:
+                    ) from error
+            except Exception as candidate:  # noqa: BLE001 -- Finish all inverses before reporting failure.
                 rollback_error = rollback_error or candidate
         if rollback_error is not None:
             raise RuntimeError(

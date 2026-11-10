@@ -10,6 +10,5 @@ __all__ = [
     "Checkpoint",
     "Context",
     "Memory",
-    "Memory",
     "ProfileStore",
 ]

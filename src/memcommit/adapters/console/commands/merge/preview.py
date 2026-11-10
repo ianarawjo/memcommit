@@ -104,12 +104,14 @@ def _round_sections(rounds, target, *, group):
     sections = []
     destination = target.name
     destination_uids = set(target.memories)
-    resolve_round = 0
+    conflict_resolution_round = 0
     for number, round in enumerate(rounds, 1):
         literal = isinstance(round, LiteralMergeRound)
         if not literal:
-            resolve_round += 1
-        phase = "LITERAL" if literal else f"RESOLVE · ROUND {resolve_round}"
+            conflict_resolution_round += 1
+        phase = (
+            "LITERAL" if literal else f"CONFLICT · ROUND {conflict_resolution_round}"
+        )
         if not round.decisions.decisions:
             destination_uids = set(round.after().memories)
             continue
@@ -198,7 +200,7 @@ def _round_sections(rounds, target, *, group):
                 continue
             labels = {choice.uid: choice.label for choice in issue.choices}
             label = {
-                "CONFIRM": "USE SUGGESTION",
+                "CONFIRM": "USE THIS SUGGESTION",
                 "INTENT": "YOUR INTENT",
                 "FORCE": "LEAVE UNRESOLVED",
             }.get(
@@ -239,7 +241,7 @@ def project_merge_preview(
     """Compare the original Target with the exact result, then show its decisions."""
     validate_merge_result(prepared, result)
     before = prepared.inputs.target()
-    mode = "LITERAL" if prepared.request.method == "LITERAL" else "SEMANTIC + LITERAL"
+    mode = prepared.request.method
     sections = [
         _section(
             "MERGE:PREVIEW:HEADER",

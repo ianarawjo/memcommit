@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 
-from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Iterator, Protocol
 
 from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.context_access.operand_resolution import (
@@ -21,7 +19,6 @@ from memcommit.persistence.store.lookup.context_names import (
 from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
-    SummarizeProvider,
     SummaryFrame,
     collect_summary_scope,
 )
@@ -33,13 +30,6 @@ from memcommit.application.operations.summarize.application import (
     SummarySourcePort,
     run_summarize,
 )
-
-
-class SummaryProviderFactory(Protocol):
-    """Construct the already-configured provider for one nonempty request."""
-
-    def __call__(self) -> SummarizeProvider:
-        """Return a provider without introducing terminal presentation."""
 
 
 @dataclass(frozen=True)
@@ -170,26 +160,4 @@ def run_summarize_with_store(
             current_name=current_context_name,
         ),
         provider_session_factory=provider_session_factory,
-    )
-
-
-def execute_summarize(
-    request: SummarizeRequest,
-    *,
-    store: ProfileStore,
-    provider_factory: SummaryProviderFactory,
-) -> SummarizeResult:
-    """Execute against a real Store with no CLI, TUI, or terminal output."""
-
-    @contextmanager
-    def provider_session() -> Iterator[SummarizeProvider]:
-        # This closure is intentionally lazy: run_summarize opens it only after
-        # READ authorization and only when the frozen frame is nonempty.
-        yield provider_factory()
-
-    return run_summarize_with_store(
-        request,
-        store=store,
-        current_context_name=store.current_context_name(),
-        provider_session_factory=provider_session,
     )

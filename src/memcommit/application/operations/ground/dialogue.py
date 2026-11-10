@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 import json
 from typing import Callable, Literal, Protocol, TypeAlias, cast
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.operations.ground.contracts import (
     GROUND_GOAL_WORD_LIMIT,
     GROUND_TEXT_LIMIT,
@@ -20,7 +21,7 @@ from memcommit.application.operations.ground.contracts import (
     validate_ground_contract_name,
 )
 from memcommit.core.context_name_validation import validate_context_name
-from memcommit.providers.errors import QueryProviderError
+from memcommit.llm_providers.errors import QueryProviderError
 
 
 GROUND_DIALOGUE_USER_TEXT_LIMIT = 20_000
@@ -347,18 +348,6 @@ def ground_dialogue_output_schema() -> dict[str, object]:
         ],
         "additionalProperties": False,
     }
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    """Build an object while rejecting duplicate keys at every JSON depth."""
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _bounded_nonblank(value: object, label: str, limit: int) -> str:
@@ -874,7 +863,7 @@ def _parse_turn(
             "Codex ground chat returned invalid structured output."
         )
     try:
-        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+        value = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise GroundDialogueError(
             "Codex ground chat returned invalid structured output."

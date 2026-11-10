@@ -93,14 +93,6 @@ def capture_sever_binding(
     )
 
 
-def _local_output_access(store: ProfileStore, name: str) -> ContextAccess:
-    return ContextAccess(
-        store=store,
-        context_name=name,
-        access_name=name,
-    )
-
-
 class MemoryStoreSeverInputPort:
     """Resolve and freeze one Sever request against one current-name snapshot."""
 

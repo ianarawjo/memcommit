@@ -31,7 +31,6 @@ class ReadableContextCatalog:
     def __init__(
         self, active_store: ProfileStore, root_access: ContextAccess | None = None
     ):
-        self._active_store = active_store
         self._names = tuple(active_store.list_context_names())
         self._bindings = {
             name: ContextAccess(active_store, name, name) for name in self._names

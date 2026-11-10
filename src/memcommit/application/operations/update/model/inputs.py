@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import uuid
 from dataclasses import dataclass
 
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
@@ -18,27 +17,6 @@ from .changes import (
     UpdateError,
     _sha256_text,
 )
-from .instruction import UpdateInstruction
-
-
-INLINE_UPDATE_CONTEXT_NAME = "INLINE UPDATE MEMORY"
-_INLINE_UPDATE_NAMESPACE = uuid.UUID("a9e29d5e-4768-4a33-9f9b-77b6020b2d72")
-
-
-def inline_update_context(content: str) -> Context:
-    """Build the stable process-local Source frame for one exact text value.
-
-    Deterministic identities preserve exact inline-source provenance without
-    publishing a synthetic Context to the Store.
-    """
-
-    if not isinstance(content, str) or not content.strip():
-        raise UpdateError("Inline Update Memory content must be nonblank text.")
-    context_uid = str(uuid.uuid5(_INLINE_UPDATE_NAMESPACE, "context\0" + content))
-    memory_uid = str(uuid.uuid5(_INLINE_UPDATE_NAMESPACE, "memory\0" + content))
-    context = Context(uid=context_uid, name=INLINE_UPDATE_CONTEXT_NAME)
-    context.add(Memory(uid=memory_uid, content=content))
-    return context
 
 
 @dataclass(frozen=True)
@@ -85,27 +63,52 @@ class TargetMemoryCandidate:
 
 
 @dataclass(frozen=True)
-class UpdateInputs:
+class UpdatePlanningInputs:
+    """Provider candidates and the execution inputs captured alongside them."""
+
     source_candidates: tuple[SourceCandidate, ...]
     target_contexts: tuple[TargetContextCandidate, ...]
     target_memories: tuple[TargetMemoryCandidate, ...]
+    execution_inputs: UpdateExecutionInputs
     source_context_only: tuple[SourceCandidate, ...] = ()
     target_context_only: tuple[TargetMemoryCandidate, ...] = ()
-    source_memory_uid: str | None = None
-    target_memory_uid: str | None = None
-    instruction: UpdateInstruction | None = None
 
 
 def collect_update_inputs(
     source_contexts: tuple[Context, ...],
     target_contexts: tuple[Context, ...],
     *,
+    source_include_descendants: bool = False,
+    target_include_descendants: bool = False,
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
-    instruction: UpdateInstruction | None = None,
-) -> UpdateInputs:
+    goal_focus: FrozenGoalFocus | None = None,
+    instruction: str | None = None,
+) -> UpdatePlanningInputs:
     """Collect readable source facts and directly writable target Memories."""
-    # The instruction Source stays exact even when its Target spans several owners.
+    if not target_contexts:
+        raise UpdateError("Update requires a Target Context.")
+    if (
+        type(source_include_descendants) is not bool
+        or type(target_include_descendants) is not bool
+    ):
+        raise ValueError("Update descendant scopes must be booleans.")
+    if goal_focus is not None and not isinstance(goal_focus, FrozenGoalFocus):
+        raise UpdateError("Update Goal focus must be a typed frozen frame.")
+    if source_memory_selector is not None and source_include_descendants:
+        raise UpdateError(
+            "A Source Memory selector cannot be combined with descendant scope."
+        )
+    if target_memory_selector is not None and target_include_descendants:
+        raise UpdateError(
+            "A Target Memory selector cannot be combined with descendant scope."
+        )
+    if instruction is not None and (
+        not isinstance(instruction, str) or not instruction.strip()
+    ):
+        raise UpdateError("An Update instruction must be nonblank text.")
+    if source_contexts and source_contexts[0].uid == target_contexts[0].uid:
+        raise UpdateError("A Context cannot update itself.")
     overlap = {context.uid for context in source_contexts} & {
         context.uid for context in target_contexts
     }
@@ -182,16 +185,16 @@ def collect_update_inputs(
     except MemoryScopeError as error:
         raise UpdateError(str(error)) from error
     if instruction is not None:
-        if not isinstance(instruction, UpdateInstruction):
-            raise TypeError("Update requires a typed instruction.")
-        if (
+        if source_contexts and (
             len(source_scope.actionable) != 1
-            or source_scope.actionable[0].content != instruction.text
+            or source_scope.actionable[0].content != instruction
         ):
             raise UpdateError(
                 "Update instruction does not match its single frozen input."
             )
-    return UpdateInputs(
+    elif not source_scope.actionable:
+        raise UpdateError("Update Source has no readable Memories.")
+    return UpdatePlanningInputs(
         source_candidates=source_scope.actionable,
         # A focused target is an exact existing Memory operation. Its owner is
         # not exposed as an ADD target, preventing a sibling result from
@@ -200,22 +203,37 @@ def collect_update_inputs(
             () if target_scope.selected_uid is not None else target_context_candidates
         ),
         target_memories=target_scope.actionable,
+        execution_inputs=UpdateExecutionInputs(
+            source_uid=source_contexts[0].uid if source_contexts else None,
+            source_name=source_contexts[0].name if source_contexts else None,
+            source_contexts=tuple(
+                (context.uid, context.name) for context in source_contexts
+            ),
+            target_uid=target_contexts[0].uid,
+            target_name=target_contexts[0].name,
+            target_contexts=tuple(
+                (context.uid, context.name) for context in target_contexts
+            ),
+            source_include_descendants=source_include_descendants,
+            target_include_descendants=target_include_descendants,
+            source_memory_uid=source_scope.selected_uid,
+            target_memory_uid=target_scope.selected_uid,
+            goal_focus=goal_focus,
+            instruction=instruction,
+        ),
         source_context_only=()
         if instruction is not None
         else source_scope.context_only,
         target_context_only=target_scope.context_only,
-        source_memory_uid=source_scope.selected_uid,
-        target_memory_uid=target_scope.selected_uid,
-        instruction=instruction,
     )
 
 
 @dataclass(frozen=True, slots=True)
-class UpdateContextInputs:
-    """Frozen execution inputs; never a saved or resumable work slot."""
+class UpdateExecutionInputs:
+    """Frozen instruction, identities and scope for publication and evidence."""
 
-    source_uid: str
-    source_name: str
+    source_uid: str | None
+    source_name: str | None
     source_contexts: tuple[tuple[str, str], ...]
     target_uid: str
     target_name: str
@@ -224,9 +242,8 @@ class UpdateContextInputs:
     target_include_descendants: bool = False
     source_memory_uid: str | None = None
     target_memory_uid: str | None = None
-    inline_source_content: str | None = None
     goal_focus: FrozenGoalFocus | None = None
-    instruction: UpdateInstruction | None = None
+    instruction: str | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -241,7 +258,6 @@ class UpdateContextInputs:
                     "target_include_descendants",
                     "source_memory_uid",
                     "target_memory_uid",
-                    "inline_source_content",
                 )
             },
             "source_contexts": [
@@ -251,13 +267,11 @@ class UpdateContextInputs:
                 {"uid": uid, "name": name} for uid, name in self.target_contexts
             ],
             "goal_focus": self.goal_focus.receipt_record() if self.goal_focus else None,
-            "instruction": self.instruction.text
-            if self.instruction is not None
-            else None,
+            "instruction": self.instruction,
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> UpdateContextInputs:
+    def from_dict(cls, value: object) -> UpdateExecutionInputs:
         from dataclasses import fields
         from .changes import (
             _require_exact_keys,
@@ -265,13 +279,6 @@ class UpdateContextInputs:
             _require_uuid,
         )
 
-        # Retired state hashes are read compatibility only, never new save conditions.
-        if isinstance(value, dict):
-            value = {
-                key: item
-                for key, item in value.items()
-                if key not in {"source_digest", "target_digest"}
-            }
         # Older completed evidence predates instruction-based direct execution.
         if isinstance(value, dict) and "instruction" not in value:
             value = {**value, "instruction": None}
@@ -280,7 +287,9 @@ class UpdateContextInputs:
         )
         for role in ("source", "target"):
             for field in ("uid", "name"):
-                _require_string(data[f"{role}_{field}"], f"{role} {field}")
+                value = data[f"{role}_{field}"]
+                if role != "source" or value is not None:
+                    _require_string(value, f"{role} {field}")
             if type(data[f"{role}_include_descendants"]) is not bool:
                 raise ValueError("Invalid Update scope.")
             selected = data[f"{role}_memory_uid"]
@@ -312,72 +321,6 @@ class UpdateContextInputs:
             if data["goal_focus"] is not None
             else None
         )
-        data["instruction"] = (
-            UpdateInstruction(data["instruction"])
-            if data["instruction"] is not None
-            else None
-        )
-        result = cls(**data)
-        inline_update_source(result)
-        return result
-
-
-def freeze_update_context_inputs(
-    source_contexts: tuple[Context, ...],
-    target_contexts: tuple[Context, ...],
-    *,
-    source_include_descendants: bool = False,
-    target_include_descendants: bool = False,
-    source_memory_selector: str | None = None,
-    target_memory_selector: str | None = None,
-    inline_source_content: str | None = None,
-    goal_focus: FrozenGoalFocus | None = None,
-    instruction: UpdateInstruction | None = None,
-) -> UpdateContextInputs:
-    source = source_contexts[0]
-    target = target_contexts[0]
-    collected = collect_update_inputs(
-        source_contexts,
-        target_contexts,
-        source_memory_selector=source_memory_selector,
-        target_memory_selector=target_memory_selector,
-        instruction=instruction,
-    )
-    return UpdateContextInputs(
-        source_uid=source.uid,
-        source_name=source.name,
-        source_contexts=tuple(
-            (context.uid, context.name) for context in source_contexts
-        ),
-        target_uid=target.uid,
-        target_name=target.name,
-        target_contexts=tuple(
-            (context.uid, context.name) for context in target_contexts
-        ),
-        source_include_descendants=source_include_descendants,
-        target_include_descendants=target_include_descendants,
-        source_memory_uid=collected.source_memory_uid,
-        target_memory_uid=collected.target_memory_uid,
-        inline_source_content=inline_source_content,
-        goal_focus=goal_focus,
-        instruction=instruction,
-    )
-
-
-def inline_update_source(inputs: UpdateContextInputs) -> Context | None:
-    """Reconstruct and validate a process-local Update Source."""
-
-    if not isinstance(inputs, UpdateContextInputs):
-        raise TypeError("Inline Update reconstruction requires an UpdateContextInputs.")
-    if inputs.inline_source_content is None:
-        return None
-    source = inline_update_context(inputs.inline_source_content)
-    if (
-        source.uid != inputs.source_uid
-        or source.name != inputs.source_name
-        or inputs.source_contexts != ((source.uid, source.name),)
-        or inputs.source_include_descendants
-        or inputs.source_memory_uid is not None
-    ):
-        raise UpdateError("Inline Update Source no longer matches its frozen frame.")
-    return source
+        if data["instruction"] is not None:
+            _require_string(data["instruction"], "Update instruction")
+        return cls(**data)

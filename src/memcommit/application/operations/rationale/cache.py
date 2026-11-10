@@ -20,6 +20,7 @@ import unicodedata
 import uuid
 
 import memcommit.persistence.store as store_module
+from memcommit.core.json_objects import reject_duplicate_json_keys
 
 
 CACHE_SCHEMA_VERSION = 3
@@ -66,17 +67,6 @@ def _input_digest(value: object) -> str:
     if not isinstance(value, str) or _DIGEST.fullmatch(value) is None:
         raise ValueError("Invalid rationale inference input digest.")
     return value
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 @dataclass(frozen=True)
@@ -286,7 +276,7 @@ def load_rationale_inference(
             raise ValueError("Saved rationale inference is invalid.")
         value = json.loads(
             encoded,
-            object_pairs_hook=_strict_json_object,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
         if not isinstance(value, dict) or set(value) != {
             "schema_version",
@@ -432,7 +422,7 @@ def list_rationale_inferences(
             continue
         try:
             with open(path, encoding="utf-8") as file:
-                value = json.load(file, object_pairs_hook=_strict_json_object)
+                value = json.load(file, object_pairs_hook=reject_duplicate_json_keys)
         except (json.JSONDecodeError, OSError, UnicodeError, ValueError) as error:
             raise ValueError("Saved rationale inference is invalid.") from error
         if not isinstance(value, dict) or set(value) != {

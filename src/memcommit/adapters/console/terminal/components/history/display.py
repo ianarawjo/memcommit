@@ -27,24 +27,6 @@ HistoryRowSegmentStyle = Literal[
 ]
 
 
-def history_action_style(command: str) -> str:
-    """Return the shared semantic TUI class without its ``class:`` prefix.
-
-    Older History surfaces still accept this narrow string adapter.  Keeping
-    it here avoids forcing the Trace row refactor to migrate Diff and Revert in
-    the same change, while the color decision remains owned by the common
-    semantic palette.
-    """
-
-    from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
-        semantic_action_style,
-    )
-
-    return semantic_action_style(command, fallback="class:report-neutral").removeprefix(
-        "class:"
-    )
-
-
 @dataclass(frozen=True)
 class HistoryDisplayBadge:
     """One explicitly named identity in a compact History row."""

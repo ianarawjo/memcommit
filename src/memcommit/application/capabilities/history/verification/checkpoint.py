@@ -24,7 +24,9 @@ def _checkpoint_entries(
         entries, _physical_uids = flatten_checkpoint_entries(
             store.list_checkpoints(context_name)
         )
-    except HistoryError as error:
+    except (HistoryError, OSError, ValueError, KeyError, TypeError, AttributeError) as error:
+        # The selected owner must fail explicitly, while cross-owner Merge
+        # discovery can skip unreadable unrelated evidence using one typed error.
         raise MemoryHistoryReconstructionError(str(error)) from error
     return entries
 

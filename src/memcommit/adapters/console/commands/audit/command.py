@@ -37,8 +37,8 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import ConcurrentContextUpdateError, ProfileStore
-from memcommit.providers.connection import connect_semantic_provider
-from memcommit.providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
 
 
 def _parse_check_list(values: list[str] | None) -> frozenset[AuditCheckKind] | None:

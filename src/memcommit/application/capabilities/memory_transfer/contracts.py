@@ -3,9 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
-
-MemoryTransferKind = Literal["COPY", "MOVE"]
 
 
 class MemoryTransferError(RuntimeError):

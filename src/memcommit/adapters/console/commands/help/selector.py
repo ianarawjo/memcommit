@@ -41,7 +41,6 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
 )
 from memcommit.adapters.console.commands.help.inventory import (
     HELP_CATEGORY_BY_COMMAND,
-    HELP_CORE_CONCEPTS,
     CommandEntry,
     HelpSelection,
     _selectable_form_line,
@@ -99,7 +98,7 @@ def run_help_selector(
 
     visible_entries = {"value": ordered_entries()}
     selected_index = {"value": 0}
-    selected_concept_index: dict[str, int | None] = {"value": None}
+    reference_selected = {"value": False}
     expanded_index: dict[str, int | None] = {"value": None}
     selected_form: dict[str, int | None] = {"value": None}
     category_cursors: dict[str, int] = {}
@@ -123,12 +122,12 @@ def run_help_selector(
         )
         expanded_index["value"] = None
         selected_form["value"] = None
-        selected_concept_index["value"] = None
+        reference_selected["value"] = False
 
-    def concept_focus_active() -> bool:
+    def reference_focus_active() -> bool:
         return (
             view_state.selected_value == "CATEGORY"
-            and selected_concept_index["value"] is not None
+            and reference_selected["value"]
         )
 
     def visible_groups() -> list[tuple[str, list[tuple[int, CommandEntry]]]]:
@@ -148,7 +147,7 @@ def run_help_selector(
     def selected_group_index(
         groups: list[tuple[str, list[tuple[int, CommandEntry]]]],
     ) -> int | None:
-        if concept_focus_active():
+        if reference_focus_active():
             return None
         selected = selected_index["value"]
         return next(
@@ -169,7 +168,7 @@ def run_help_selector(
         row_indexes = {index for index, _entry in rows}
         retained = category_cursors.get(title)
         selected_index["value"] = retained if retained in row_indexes else rows[0][0]
-        selected_concept_index["value"] = None
+        reference_selected["value"] = False
         expanded_index["value"] = None
         selected_form["value"] = None
 
@@ -240,7 +239,7 @@ def run_help_selector(
                 and any(
                     index == selected_index["value"] for index, _entry in group_entries
                 )
-                and not concept_focus_active()
+                and not reference_focus_active()
             )
             fragments.extend(
                 _help_group_fragments(
@@ -265,8 +264,7 @@ def run_help_selector(
                 _help_information_box_fragments(
                     width=card_width,
                     by_kind=True,
-                    focused_concept_index=selected_concept_index["value"],
-                    focused=list_focused,
+                    focused=list_focused and reference_focus_active(),
                     viewport_height=_help_list_viewport_height(terminal_rows),
                 )
             )
@@ -298,26 +296,19 @@ def run_help_selector(
     )
 
     def focused_help_row_index() -> int:
-        concept_index = selected_concept_index["value"]
-        if concept_focus_active() and concept_index is not None:
-            return len(visible_entries["value"]) + concept_index
+        if reference_focus_active():
+            return len(visible_entries["value"])
         return selected_index["value"]
 
     def focus_help_row(row_index: int) -> None:
         command_count = len(visible_entries["value"])
-        concept_count = (
-            len(HELP_CORE_CONCEPTS) if view_state.selected_value == "CATEGORY" else 0
-        )
-        row_index = max(0, min(row_index, command_count + concept_count - 1))
-        if row_index < command_count:
-            selected_index["value"] = row_index
-            selected_concept_index["value"] = None
-        else:
-            selected_index["value"] = command_count - 1
-            selected_concept_index["value"] = row_index - command_count
+        reference_count = 1 if view_state.selected_value == "CATEGORY" else 0
+        row_index = max(0, min(row_index, command_count + reference_count - 1))
+        reference_selected["value"] = row_index == command_count
+        selected_index["value"] = min(row_index, command_count - 1)
 
     def move_one(direction: int) -> None:
-        if concept_focus_active():
+        if reference_focus_active():
             focus_help_row(focused_help_row_index() + direction)
             return
         form_index = selected_form["value"]
@@ -335,7 +326,7 @@ def run_help_selector(
             return
         previous = selected_index["value"]
         focus_help_row(previous + direction)
-        if selected_index["value"] != previous or concept_focus_active():
+        if selected_index["value"] != previous or reference_focus_active():
             expanded_index["value"] = None
 
     @bindings.add("down", filter=has_focus(list_control))
@@ -349,7 +340,7 @@ def run_help_selector(
     @bindings.add("up", filter=has_focus(list_control))
     def _previous_command(event) -> None:
         if (
-            not concept_focus_active()
+            not reference_focus_active()
             and selected_index["value"] == 0
             and selected_form["value"] is None
         ):
@@ -398,14 +389,14 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        selected_concept_index["value"] = None
+        reference_selected["value"] = False
         selected_index["value"] = len(visible_entries["value"]) - 1
         event.app.invalidate()
 
     @bindings.add("enter", filter=has_focus(list_control))
     def _select_row(event) -> None:
         navigation_accelerator.reset()
-        if concept_focus_active():
+        if reference_focus_active():
             return
         index = selected_index["value"]
         form_index = selected_form["value"]
@@ -440,7 +431,7 @@ def run_help_selector(
     @bindings.add("right", filter=has_focus(list_control))
     def _expand(event) -> None:
         navigation_accelerator.reset()
-        if concept_focus_active():
+        if reference_focus_active():
             return
         index = selected_index["value"]
         if expanded_index["value"] != index:
@@ -457,7 +448,7 @@ def run_help_selector(
     @bindings.add("left", filter=has_focus(list_control))
     def _collapse(event) -> None:
         navigation_accelerator.reset()
-        if concept_focus_active():
+        if reference_focus_active():
             return
         if selected_form["value"] is not None:
             selected_form["value"] = None
@@ -474,7 +465,7 @@ def run_help_selector(
             emit_explore_action("HIDE")
             event.app.exit(result=None)
             return
-        if concept_focus_active():
+        if reference_focus_active():
             return
         entry = visible_entries["value"][selected_index["value"]]
         event.app.exit(
@@ -583,13 +574,13 @@ def run_help_selector(
                 else "Tab list"
             )
             return f" VIEW: ←/→ choose · ↓ list · {tab_hint}{toggle} · Q {return_label}"
-        if concept_focus_active():
+        if reference_focus_active():
             toggle = (
-                f" H hide Help · Q return to {explore_return_label}"
+                " · H hide Help"
                 if mode == "EXPLORE"
                 else ""
             )
-            return f" ↑/↓ move (hold accelerates)  Tab view · Shift-Tab last kind {toggle}"
+            return f" ↑ previous command  Tab view · Shift-Tab last kind{toggle} · Q/Esc {return_label}"
         enter_action = (
             "Enter open forms"
             if selected_form["value"] is None
@@ -641,7 +632,6 @@ def run_help_selector(
                 Style.from_dict(
                     {
                         "title": "bold",
-                        "selected": "fg:#10242f bg:#8bd5ff bold",
                         "help-command.selected": "fg:#10242f bg:#8bd5ff",
                         "help-connector": "fg:#6e738d",
                         "form": "fg:#cad3f5",

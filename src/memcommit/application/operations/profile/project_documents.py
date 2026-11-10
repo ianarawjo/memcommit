@@ -60,6 +60,9 @@ def prepare_project_import(root):
 
 
 def import_project_documents(store, prepared):
+    # Empty folders are valid Profiles; native Context creation requires input.
+    if not prepared.content.contexts:
+        return ()
     for digest, data in prepared.content.attached_data.items():
         if save_attached_file(store_root=store.store_dir, data=data) != digest:
             raise ValueError("Attached-file identity mismatch.")

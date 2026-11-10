@@ -11,7 +11,7 @@ from .changes import UpdateOperation, operation_digest
 class UpdatePlan:
     """One exact ordered Update against a named working Target root.
 
-    A plan carries no review, persistence or Undo state. Resolve and other
+    A plan carries no review, persistence or Undo state. Conflict and other
     operations can calculate its result on their own working Target.
     """
 

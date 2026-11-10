@@ -27,6 +27,9 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
     _visual_width,
     _visual_wrap,
 )
+from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.inspection import (
+    _stable_sections,
+)
 from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.progression import (
     ResolutionGlobalStrategy,
     _item_draft,
@@ -53,6 +56,9 @@ from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     MemoryDiffSpan,
     memory_diff_lines,
+)
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    WorkbenchSection,
 )
 
 
@@ -489,6 +495,55 @@ def _impact_entry_fragments(
     return fragments
 
 
+def resolution_report_sections(
+    view: ResolutionWorkbenchView,
+    *,
+    review_and_apply: bool = False,
+    report_apply: bool = False,
+    read_only: bool = False,
+    impact: EffectPreviewView | None = None,
+) -> tuple[WorkbenchSection, ...]:
+    """Own ordinary report ordering for both focus navigation and rendering."""
+
+    entries: list[tuple[str, str, int | None]] = [
+        ("OVERVIEW", f"REPORT:OVERVIEW:{section.uid}", 0)
+        for section in view.semantic_overview_sections
+    ]
+    if view.report_items_summary is not None:
+        entries.append(("REVIEW_ITEMS", "REPORT:REVIEW_ITEMS", 0))
+    else:
+        entries.extend(
+            ("ITEM", f"ITEM:{item.uid}", index)
+            for index, item in enumerate(view.items, start=1)
+        )
+    impact_repeats_results = _impact_repeats_results(impact, view)
+    if view.show_results and not impact_repeats_results:
+        entries.append(("RESULTS", "REPORT:RESULTS", 0))
+    if impact is not None:
+        entries.append(("IMPACT", "REPORT:IMPACT", 0))
+        entries.extend(
+            (
+                "IMPACT_ENTRY",
+                _impact_entry_section_uid(entry, index),
+                0,
+            )
+            for index, entry in enumerate(impact.entries, start=1)
+        )
+    if not read_only:
+        entries.append(
+            (
+                "REPORT_APPLY"
+                if report_apply
+                else "REVIEW_AND_APPLY"
+                if review_and_apply
+                else "RESOLVE_ALL",
+                "REPORT:ACTION",
+                None,
+            )
+        )
+    return _stable_sections(tuple(entries))
+
+
 def resolution_report_fragments(
     view: ResolutionWorkbenchView,
     *,
@@ -502,60 +557,37 @@ def resolution_report_fragments(
     expanded_impact_section_uid: str | None = None,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
-    """Render the complete Meld reading surface before any individual issue."""
+    """Render each stop from the same topology used by keyboard navigation."""
     metric_text = " · ".join(
         f"{safe_terminal_text(metric.value)} {safe_terminal_text(metric.label)}"
         for metric in view.metrics
     )
     impact = _current_impact(impact_controller, view)
-    # A preview may project the same result rows with their rationale. Rendering
-    # both copies becomes unusable for large sessions, so its richer block is
-    # their single report location.
-    impact_repeats_results = _impact_repeats_results(impact, view)
-    show_results = view.show_results and not impact_repeats_results
-    review_sections = 1 if view.report_items_summary is not None else len(view.items)
-    overview_sections = view.semantic_overview_sections
-    section_count = (
-        review_sections
-        + len(overview_sections)
-        + (not read_only)
-        + show_results
-        + (impact is not None)
-        + (len(impact.entries) if impact is not None else 0)
+    sections = resolution_report_sections(
+        view,
+        review_and_apply=review_and_apply,
+        report_apply=report_apply,
+        read_only=read_only,
+        impact=impact,
     )
-    focused_section = max(0, min(focused_section, section_count - 1))
-    section_index = 0
+    focused_section = max(0, min(focused_section, len(sections) - 1))
     fragments: list[tuple[str, str]] = []
     draft_values = drafts or {}
-
-    def heading(text: str, *, style: str = "class:section") -> None:
-        nonlocal section_index
-        active = section_index == focused_section
-        fragments.extend(
-            semantic_viewer_block_fragments(
-                [(style, f" {safe_terminal_text(text)}\n")],
-                active=active,
-            )
+    overview_sections = iter(view.semantic_overview_sections)
+    impact_entries = (
+        iter(enumerate(impact.entries, start=1)) if impact is not None else iter(())
+    )
+    treatment_width = (
+        max(
+            (
+                _visual_width(f"[{safe_terminal_text(entry.label)}]")
+                for entry in impact.entries
+            ),
+            default=0,
         )
-        section_index += 1
-
-    def section_block(
-        block_fragments: list[tuple[str, str]],
-        *,
-        focus_indices: tuple[int, ...] | None = None,
-    ) -> None:
-        """Render one report stop whose semantic content may span paragraphs."""
-
-        nonlocal section_index
-        active = section_index == focused_section
-        fragments.extend(
-            semantic_viewer_block_fragments(
-                block_fragments,
-                active=active,
-                focus_indices=focus_indices,
-            )
-        )
-        section_index += 1
+        if impact is not None
+        else 0
+    )
 
     # Report identity and endpoint metadata orient the reader but are not
     # semantic inspection targets. Initial Viewer focus therefore lands on
@@ -587,42 +619,15 @@ def resolution_report_fragments(
             + "\n\n",
         )
     )
-    for overview_section in overview_sections:
-        active = section_index == focused_section
-        fragments.extend(
-            semantic_viewer_block_fragments(
-                [
-                    (
-                        "class:block-heading",
-                        f" {safe_terminal_text(overview_section.heading)}\n",
-                    ),
-                    (
-                        "class:viewer-body",
-                        f" {safe_terminal_text(overview_section.text) or '(none)'}\n\n",
-                    ),
-                ],
-                active=active,
-                focus_indices=((0, 1) if overview_section.focus_body else (0,)),
-            )
-        )
-        section_index += 1
-    if view.report_items_summary is not None:
-        section_block(
-            [
-                (
-                    "class:section",
-                    f" {safe_terminal_text(view.report_items_summary.heading)}\n",
-                ),
-                (
-                    "class:viewer-body",
-                    f" {safe_terminal_text(view.report_items_summary.text)}\n\n",
-                ),
-            ],
-            focus_indices=(0, 1),
-        )
-    else:
-        # The collection label is report chrome. Individual operation items
-        # are the independently reviewable focus stops beneath it.
+
+    collection_label_pending = view.report_items_summary is None
+
+    def append_collection_label() -> None:
+        nonlocal collection_label_pending
+        if not collection_label_pending:
+            return
+        collection_label_pending = False
+        # Collection labels are chrome, between overview and semantic item stops.
         fragments.append(
             (
                 "class:report-label",
@@ -631,7 +636,49 @@ def resolution_report_fragments(
         )
         if not view.items:
             fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
-        for index, item in enumerate(view.items, start=1):
+
+    for section_index, section in enumerate(sections):
+        active = section_index == focused_section
+        if section.kind != "OVERVIEW":
+            append_collection_label()
+        if section.kind == "OVERVIEW":
+            overview = next(overview_sections)
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [
+                        (
+                            "class:block-heading",
+                            f" {safe_terminal_text(overview.heading)}\n",
+                        ),
+                        (
+                            "class:viewer-body",
+                            f" {safe_terminal_text(overview.text) or '(none)'}\n\n",
+                        ),
+                    ],
+                    active=active,
+                    focus_indices=(0, 1) if overview.focus_body else (0,),
+                )
+            )
+        elif section.kind == "REVIEW_ITEMS":
+            summary = view.report_items_summary
+            assert summary is not None
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [
+                        ("class:section", f" {safe_terminal_text(summary.heading)}\n"),
+                        (
+                            "class:viewer-body",
+                            f" {safe_terminal_text(summary.text)}\n\n",
+                        ),
+                    ],
+                    active=active,
+                    focus_indices=(0, 1),
+                )
+            )
+        elif section.kind == "ITEM":
+            assert section.row_index is not None
+            index = section.row_index
+            item = view.items[index - 1]
             if item.compact_row_suffix is not None:
                 item_fragments = [
                     (
@@ -639,9 +686,7 @@ def resolution_report_fragments(
                         " "
                         + safe_terminal_text(
                             render_numbered_content_row(
-                                index,
-                                item.title,
-                                suffix=item.compact_row_suffix,
+                                index, item.title, suffix=item.compact_row_suffix
                             )
                         )
                         + "\n",
@@ -667,59 +712,71 @@ def resolution_report_fragments(
                         + f"{safe_terminal_text(item.summary)}\n",
                     ),
                 ]
-            if item.question:
-                item_fragments.append(
+            item_fragments.append(
+                (
+                    "class:viewer-body",
+                    f" QUESTION · {safe_terminal_text(item.question)}\n\n",
+                )
+                if item.question
+                else ("", "\n")
+            )
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    item_fragments,
+                    active=active,
+                    focus_indices=tuple(range(len(item_fragments))),
+                )
+            )
+        elif section.kind == "RESULTS":
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [
+                        (
+                            "class:report-label",
+                            f" {safe_terminal_text(view.results_label)} · {len(view.results)}\n",
+                        )
+                    ],
+                    active=active,
+                )
+            )
+            if not view.results:
+                fragments.append(("", "  (none)\n"))
+            for index, result in enumerate(view.results, start=1):
+                fragments.append(
                     (
-                        "class:viewer-body",
-                        f" QUESTION · {safe_terminal_text(item.question)}\n\n",
+                        "",
+                        (
+                            f"  {safe_terminal_text(result.marker)} {index}. "
+                            f"[{safe_terminal_text(result.label)}] {safe_terminal_text(result.text)}\n"
+                        ),
                     )
                 )
-            else:
-                item_fragments.append(("", "\n"))
-            section_block(
-                item_fragments,
-                focus_indices=tuple(range(len(item_fragments))),
-            )
-    if show_results:
-        heading(
-            f"{view.results_label} · {len(view.results)}",
-            style="class:report-label",
-        )
-        if not view.results:
-            fragments.append(("", "  (none)\n"))
-        for index, result in enumerate(view.results, start=1):
-            fragments.append(
-                (
-                    "",
-                    f"  {safe_terminal_text(result.marker)} {index}. "
-                    f"[{safe_terminal_text(result.label)}] "
-                    f"{safe_terminal_text(result.text)}\n",
+        elif section.kind == "IMPACT":
+            assert impact is not None
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [("class:section", f" {safe_terminal_text(impact.title)}\n")],
+                    active=active,
                 )
             )
-    if impact is not None:
-        heading(impact.title)
-        fragments.append(("", f" {safe_terminal_text(impact.summary)}\n"))
-        if any(entry.reason for entry in impact.entries):
-            fragments.append(
-                (
-                    "",
-                    " Focus a Memory: → shows why, ← hides it, and Enter toggles.\n",
+            fragments.append(("", f" {safe_terminal_text(impact.summary)}\n"))
+            if any(entry.reason for entry in impact.entries):
+                fragments.append(
+                    (
+                        "",
+                        " Focus a Memory: → shows why, ← hides it, and Enter toggles.\n",
+                    )
                 )
-            )
-        if impact.detail:
-            fragments.append(("", f"\n {safe_terminal_text(impact.detail)}\n"))
-        treatment_width = max(
-            (
-                _visual_width(f"[{safe_terminal_text(entry.label)}]")
-                for entry in impact.entries
-            ),
-            default=0,
-        )
-        for index, entry in enumerate(impact.entries, start=1):
+            if impact.detail:
+                fragments.append(("", f"\n {safe_terminal_text(impact.detail)}\n"))
+        elif section.kind == "IMPACT_ENTRY":
+            index, entry = next(impact_entries)
             fragments.extend(
                 _impact_entry_fragments(
-                    view, entry, index,
-                    active=section_index == focused_section,
+                    view,
+                    entry,
+                    index,
+                    active=active,
                     expanded_impact_section_uid=expanded_impact_section_uid,
                     treatment_width=treatment_width,
                     content_width=content_width,
@@ -727,42 +784,41 @@ def resolution_report_fragments(
                     draft_values=draft_values,
                 )
             )
-            section_index += 1
-    if not read_only:
-        if report_apply:
-            action_heading = "APPLY"
-            action_detail = (
-                "Press Enter on APPLY to apply the exact proposal. Press Esc to cancel."
-            )
-            show_strategies = False
         else:
-            action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
-            action_detail = (
-                "Choose a strategy below. It requests a revised proposal and "
-                "never applies the target."
-            )
-            show_strategies = True
-        if review_and_apply and not report_apply:
-            action_heading, action_detail, show_strategies = _report_action(
-                view,
-                draft_values,
-                strategies,
-            )
-        section_block(
-            [
-                ("class:section", f" {safe_terminal_text(action_heading)}\n"),
-                ("class:viewer-body", f" {safe_terminal_text(action_detail)}\n"),
-            ],
-            focus_indices=(0, 1),
-        )
-        if show_strategies:
-            for index, item in enumerate(strategies):
-                fragments.append(
-                    (
-                        "class:choice",
-                        f"   {index + 1}. {safe_terminal_text(item.label)}\n",
-                    )
+            if section.kind == "REPORT_APPLY":
+                action_heading = "APPLY"
+                action_detail = "Press Enter on APPLY to apply the exact proposal. Press Esc to cancel."
+                show_strategies = False
+            elif section.kind == "REVIEW_AND_APPLY":
+                action_heading, action_detail, show_strategies = _report_action(
+                    view, draft_values, strategies
                 )
+            else:
+                action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
+                action_detail = "Choose a strategy below. It requests a revised proposal and never applies the target."
+                show_strategies = True
+            fragments.extend(
+                semantic_viewer_block_fragments(
+                    [
+                        ("class:section", f" {safe_terminal_text(action_heading)}\n"),
+                        (
+                            "class:viewer-body",
+                            f" {safe_terminal_text(action_detail)}\n",
+                        ),
+                    ],
+                    active=active,
+                    focus_indices=(0, 1),
+                )
+            )
+            if show_strategies:
+                for index, item in enumerate(strategies):
+                    fragments.append(
+                        (
+                            "class:choice",
+                            f"   {index + 1}. {safe_terminal_text(item.label)}\n",
+                        )
+                    )
+    append_collection_label()
     return fragments
 
 
@@ -878,6 +934,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                 "REVIEW AND APPLY",
                 "APPLY CONFIRMATION",
                 "INCORPORATE RESPONSES",
+                "IMPACT ·",
                 "APPLY CHANGES ·",
                 "APPLY AS IS ·",
                 "APPLY",

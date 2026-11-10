@@ -27,8 +27,6 @@ from memcommit.application.operations.profile.errors import ProfileError
 def initialize_study(
     *,
     name: str | None = None,
-    provider_policy_version: str,
-    provider_policy_digest: str,
 ) -> StudyInitializationResult:
     """Create one isolated Study by copying its prepared project folders."""
 
@@ -57,8 +55,6 @@ def initialize_study(
         study_name=profile_name,
         study_uid=str(generated_uid),
         created_at=created.isoformat(),
-        provider_policy_version=provider_policy_version,
-        provider_policy_digest=provider_policy_digest,
     )
 
 

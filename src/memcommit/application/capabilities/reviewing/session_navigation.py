@@ -67,25 +67,6 @@ class SessionWorkbenchNavigation:
             raise ValueError("Unsupported workbench pane.")
         self.pane = pane
 
-    def toggle_frames(self) -> WorkbenchPane:
-        """Toggle only the two durable reading frames."""
-        self.pane = "viewer" if self.pane == "items" else "items"
-        return self.pane
-
-    def cycle_panes(
-        self,
-        panes: Sequence[WorkbenchPane],
-        delta: int = 1,
-    ) -> WorkbenchPane:
-        """Cycle one shell's visible panes without inventing hidden targets."""
-
-        values = tuple(panes)
-        if not values or len(set(values)) != len(values) or "composer" in values:
-            raise ValueError("Session pane cycle must contain distinct visible panes.")
-        index = values.index(self.pane) if self.pane in values else 0
-        self.pane = values[(index + delta) % len(values)]
-        return self.pane
-
     def move_row(self, row_count: int, delta: int) -> int:
         if row_count < 0:
             raise ValueError("Workbench row count cannot be negative.")

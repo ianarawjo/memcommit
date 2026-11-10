@@ -156,25 +156,18 @@ class FormNavigation:
         return "CONSUMED"
 
     def move_role(self, event, role_uid: str, delta: int) -> SurfaceMoveResult:
-        buffer = self.editors[role_uid].role_primary_input().buffer
-        if buffer.complete_state is None:
-            return self.move_role_row(event, role_uid, delta)
-        if delta > 0:
-            buffer.complete_next()
-        else:
-            buffer.complete_previous()
-        return "CONSUMED"
+        editor = self.editors[role_uid]
+        if (
+            editor.effective_source_type() != "INLINE_MEMORY"
+            and editor.name_control.move_completion(delta)
+        ):
+            return "CONSUMED"
+        return self.move_role_row(event, role_uid, delta)
 
     def choose_role(self, event, role_uid: str) -> SurfaceActionResult:
         editor = self.editors[role_uid]
-        buffer = editor.role_primary_input().buffer
         inline = editor.effective_source_type() == "INLINE_MEMORY"
-        if (
-            not inline
-            and buffer.complete_state is not None
-            and buffer.complete_state.current_completion is not None
-        ):
-            buffer.apply_completion(buffer.complete_state.current_completion)
+        if not inline and editor.name_control.accept_completion():
             self.status = ""
             return "HANDLED"
         try:
@@ -409,10 +402,11 @@ class FormNavigation:
         )
 
     def _cancel_completion(self, event) -> bool:
-        if self.input_focus() and event.current_buffer.complete_state is not None:
-            event.current_buffer.cancel_completion()
-            return True
-        return False
+        role_uid = self.focused_control_role("input")
+        return (
+            role_uid is not None
+            and self.editors[role_uid].name_control.cancel_completion()
+        )
 
     def _escape(self, event) -> None:
         dispatch_tui_back(

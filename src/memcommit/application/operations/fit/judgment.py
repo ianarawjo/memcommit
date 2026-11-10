@@ -15,7 +15,10 @@ import json
 from typing import Literal, Protocol
 import uuid
 
-from memcommit.providers.types import CompletionRun, ProviderIdentity
+from memcommit.llm_providers.identity import (
+    provider_completion_identity as _provider_identity,
+)
+from memcommit.llm_providers.types import ProviderIdentity
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
@@ -91,14 +94,6 @@ def _exact(value: object, keys: set[str], label: str) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
         raise FitJudgmentError(f"Invalid Fit {label}.")
     return value
-
-
-def _provider_identity(provider: object) -> ProviderIdentity | None:
-    last_run = getattr(provider, "last_run", None)
-    if isinstance(last_run, CompletionRun):
-        return last_run.identity
-    identity = getattr(provider, "identity", None)
-    return identity if isinstance(identity, ProviderIdentity) else None
 
 
 def _now() -> str:

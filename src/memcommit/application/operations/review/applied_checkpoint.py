@@ -18,7 +18,7 @@ from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique
 
 
 CHECKPOINT_REVIEW_OPERATIONS = frozenset(
-    {"dedun", "distill", "makemore", "resolve"}
+    {"distill", "makemore", "conflict"}
 )
 
 # Makemore is the new public name for the former Elaborate operation.  Keep the

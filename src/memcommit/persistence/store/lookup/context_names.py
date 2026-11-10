@@ -20,14 +20,6 @@ def list_child_context_names(
     )
 
 
-def list_context_and_child_names(
-    context_name: str,
-    catalog_names: Sequence[str],
-) -> tuple[str, ...]:
-    """List the root followed by its immediate children."""
-    return (context_name, *list_child_context_names(context_name, catalog_names))
-
-
 def list_context_and_descendant_names(
     target_names: Sequence[str],
     catalog_names: Sequence[str],

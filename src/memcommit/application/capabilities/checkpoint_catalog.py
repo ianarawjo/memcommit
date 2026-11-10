@@ -12,7 +12,7 @@ from __future__ import annotations
 import copy
 import re
 import uuid
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -69,6 +69,12 @@ class CheckpointUnitRevertMember:
     context_name: str
     target: Checkpoint
     recovery: Checkpoint
+    before_snapshot: dict[str, Any]
+
+    def __iter__(self) -> Iterator[Checkpoint]:
+        # Keep Store.revert's historical two-checkpoint unpacking contract.
+        yield self.recovery
+        yield self.target
 
 
 @dataclass(frozen=True)
@@ -532,17 +538,3 @@ def freeze_checkpoint_catalog(store: ProfileStore) -> CheckpointCatalog:
     """Return the shared command-local Profile checkpoint catalog."""
 
     return CheckpointCatalog.freeze(store)
-
-
-def resolve_checkpoint_unit(
-    store: ProfileStore,
-    selector: str,
-    *,
-    context_name: str | None = None,
-) -> ResolvedCheckpointUnit:
-    """Freeze and resolve one globally meaningful checkpoint selector."""
-
-    return freeze_checkpoint_catalog(store).resolve(
-        selector,
-        context_name=context_name,
-    )

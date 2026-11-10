@@ -2,35 +2,33 @@
 
 from __future__ import annotations
 
-from contextlib import ExitStack, contextmanager
-from dataclasses import replace
-import fcntl
 import json
-import os
 import shutil
 import uuid
+from collections.abc import Callable, Iterator
+from contextlib import ExitStack, contextmanager
+from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Iterator
 
 from memcommit.core.context_name_validation import validate_context_name
+from memcommit.core.json_objects import canonical_json_digest, reject_duplicate_json_keys
 from memcommit.models.context import Context
-from memcommit.persistence.store.lookup.context_names import (
-    list_context_and_descendant_names,
-)
 from memcommit.persistence.store.context_memory.lifecycle_model import (
-    ContextLifecycleEvent,
     PREVIOUS_CHECKPOINT_NONE,
     PREVIOUS_CHECKPOINT_RECORDED,
     PREVIOUS_CHECKPOINT_UNREADABLE,
+    ContextLifecycleEvent,
+)
+from memcommit.persistence.store.lookup.context_names import (
+    list_context_and_descendant_names,
 )
 
 from ..infrastructure.atomic_io import (
-    _canonical_json_digest,
     _fsync_directory,
-    _reject_duplicate_json_keys,
     _write_json_atomic,
 )
+from ..infrastructure.locking import _blocking_file_lock
 from .models import (
     ConcurrentContextUpdateError,
     ContextDeletionCommittedError,
@@ -75,26 +73,8 @@ class _ContextLifecycleMixin:
         lock_path = self.store_dir / "context-lifecycle-ledger.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link lifecycle lock.")
-        flags = os.O_RDWR | os.O_CREAT
-        if hasattr(os, "O_NOFOLLOW"):
-            flags |= os.O_NOFOLLOW
-        descriptor = os.open(lock_path, flags, 0o600)
-        try:
-            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
-                fcntl.flock(
-                    lock_file.fileno(),
-                    fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH,
-                )
-                try:
-                    yield
-                finally:
-                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
-        except Exception:
-            try:
-                os.close(descriptor)
-            except OSError:
-                pass
-            raise
+        with _blocking_file_lock(lock_path, exclusive=exclusive):
+            yield
 
     def _write_context_lifecycle_event(
         self,
@@ -156,7 +136,7 @@ class _ContextLifecycleMixin:
                     with open(path, encoding="utf-8") as file:
                         data = json.load(
                             file,
-                            object_pairs_hook=_reject_duplicate_json_keys,
+                            object_pairs_hook=reject_duplicate_json_keys,
                         )
                     event = ContextLifecycleEvent.from_dict(data)
                 except (
@@ -222,7 +202,7 @@ class _ContextLifecycleMixin:
                 raise ValueError(
                     "Latest Context checkpoint has no valid uid for deletion."
                 )
-            previous_digest = _canonical_json_digest(previous)
+            previous_digest = canonical_json_digest(previous)
         else:
             previous_uid = None
             previous_digest = None
@@ -259,36 +239,6 @@ class _ContextLifecycleMixin:
             validate_context_hierarchy(set(self.list_context_names()) - {name})
             with self._context_write_lock(name):
                 event = self._context_deletion_event_locked(name)
-                recorded = self._delete_locked(name, lifecycle_event=event)
-                assert recorded is event
-                return event
-
-    def delete_context_if(
-        self,
-        name: str,
-        *,
-        expected_context_uid: str,
-    ) -> ContextLifecycleEvent:
-        """Delete only the exact Context identity that was previously reviewed."""
-        with self._context_graph_lock(exclusive=False):
-            from ..context_hierarchy import validate_context_hierarchy
-
-            validate_context_hierarchy(set(self.list_context_names()) - {name})
-            with self._context_write_lock(name):
-                try:
-                    current = self.load_direct(name)
-                except FileNotFoundError as error:
-                    raise ConcurrentContextUpdateError(
-                        f"Context '{name}' no longer exists."
-                    ) from error
-                if current.uid != expected_context_uid:
-                    raise ConcurrentContextUpdateError(
-                        f"Context '{name}' changed after deletion was reviewed."
-                    )
-                event = self._context_deletion_event_locked(
-                    name,
-                    current=current,
-                )
                 recorded = self._delete_locked(name, lifecycle_event=event)
                 assert recorded is event
                 return event

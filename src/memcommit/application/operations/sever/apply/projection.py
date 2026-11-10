@@ -79,7 +79,7 @@ def apply_projection(
         raise SeverApplicationError(
             "The reviewed Sever Result could not be applied to its working Target."
         ) from error
-    post_image = result.post_image_for(target.uid)
+    post_image = result.get_updated_context(target.uid)
     if post_image is not None:
         return post_image
     if operations:
@@ -161,9 +161,7 @@ def self_save_contexts(
         )
     for source_name, source_uid in receipts:
         original = original_by_name[source_name]
-        if (
-            original.uid != source_uid
-        ):
+        if original.uid != source_uid:
             raise SeverApplicationError(
                 "The in-place Source changed after review. Re-run Sever."
             )
@@ -234,20 +232,3 @@ def self_save_contexts(
         for name, _uid in receipts
     )
     return outputs, tuple(result_uids), sources
-
-
-def self_save_context(
-    session: SeverSession,
-    original: Context,
-) -> tuple[Context, tuple[str, ...], list[dict[str, str]]]:
-    """Compatibility projection for one exact direct Source Context."""
-
-    outputs, result_uids, sources = self_save_contexts(
-        session,
-        (original,),
-    )
-    if len(outputs) != 1:
-        raise SeverApplicationError(
-            "Direct self-save cannot project a recursive Source scope."
-        )
-    return outputs[0], result_uids, sources

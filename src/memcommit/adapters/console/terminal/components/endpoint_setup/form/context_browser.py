@@ -50,9 +50,7 @@ class ContextBrowser:
 
     def prepare(self, role_uid: str) -> None:
         self.before_open()
-        buffer = self.editors[role_uid].input.buffer
-        if buffer.complete_state is not None:
-            buffer.cancel_completion()
+        self.editors[role_uid].name_control.cancel_completion()
 
     def open(self, event, role_uid: str) -> bool:
         editor = self.editors[role_uid]

@@ -114,39 +114,6 @@ def _context_records(
     return contexts
 
 
-def _context_record_at(root: Path, name: str) -> Context | None:
-    """Load only one exact Context without inspecting sibling authority data."""
-
-    from memcommit.core.context_name_validation import validate_context_name
-
-    canonical_name = validate_context_name(name)
-    contexts_dir = root / "contexts"
-    if contexts_dir.is_symlink() or not contexts_dir.is_dir():
-        raise ProfileError("ProfileStore contexts directory is missing or unsafe.")
-    context_dir = contexts_dir
-    for part in canonical_name.split("/"):
-        context_dir /= part
-        if context_dir.is_symlink():
-            raise ProfileError(f"Context {canonical_name!r} has an unsafe path.")
-        if not context_dir.exists():
-            return None
-        if not context_dir.is_dir():
-            raise ProfileError(f"Context {canonical_name!r} has an unsafe path.")
-    record_path = context_dir / "context.json"
-    if not record_path.exists():
-        return None
-    data = _read_json(record_path, label=f"Context {canonical_name!r}")
-    try:
-        context = Context.from_dict(data)
-    except (KeyError, TypeError, ValueError) as error:
-        raise ProfileError(f"Context {canonical_name!r} is invalid.") from error
-    if context.name != canonical_name:
-        raise ProfileError(
-            f"Context path {canonical_name!r} does not match record {context.name!r}."
-        )
-    return context
-
-
 def inspect_store(
     root: Path,
 ) -> StoreInspection:

@@ -39,9 +39,6 @@ from memcommit.core.context_targeting.uid_locator import (
 )
 
 
-SAVED_REVIEW_KIND = "saved-review"
-
-
 def select_report_session(
     entries: tuple[SessionPickerEntry, ...],
     *,
@@ -146,81 +143,6 @@ def _checkpoint_review_entries(store: ProfileStore) -> tuple[SessionPickerEntry,
     return tuple(entries)
 
 
-def _saved_review_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...]:
-    """Project the active ReviewSession and retained terminal histories."""
-
-    active = store.load_review_session()
-    active_uid = active.uid if active is not None else None
-    entries: list[SessionPickerEntry] = []
-    for session in store.list_review_sessions():
-        retained = session.uid != active_uid
-        path = (
-            store._review_session_history_path(session.uid)
-            if retained
-            else store.review_session_file
-        )
-        try:
-            modified = path.stat().st_mtime
-        except FileNotFoundError:
-            # Exact UID reload remains authoritative after picker selection.
-            modified = 0.0
-        operation = session.kind.replace("_", " ").replace("-", " ").upper()
-        total = len(session.items)
-        status = (
-            f"{session.answered_count}/{total} ANSWERED" if total else "NO REVIEW ITEMS"
-        )
-        if retained:
-            status += " · RETAINED"
-        entries.append(
-            SessionPickerEntry(
-                # Keep this distinct from the newer Context-bound Atomize
-                # workbench. Both may retain different reviewer evidence.
-                kind=SAVED_REVIEW_KIND,
-                key=session.uid,
-                title=f"{operation} · {session.context_name}",
-                status=status,
-                subtitle=f"{total} review {'item' if total == 1 else 'items'}",
-                group=session.context_name,
-                sort_timestamp=modified,
-                detail=(
-                    f"{operation} REVIEW\n"
-                    f"State: {status}\n"
-                    f"Context: {session.context_name}\n"
-                    f"Review session: {session.uid}\n\n"
-                    + (
-                        "Enter views this immutable terminal Review history.\n"
-                        if retained
-                        else "Enter resumes this active ReviewSession.\n"
-                    )
-                    + "Review does not apply Memory changes or create a checkpoint."
-                ),
-                # Hidden from the detail surface, but unique per retained UID
-                # so launcher revalidation cannot confuse old and active work.
-                reopen_argv=(
-                    "mem",
-                    "review",
-                    session.kind,
-                    "--session",
-                    session.uid,
-                ),
-                detail_only=True,
-            )
-        )
-    return tuple(entries)
-
-
-def _saved_review_entry(store: ProfileStore) -> SessionPickerEntry | None:
-    """Compatibility projection for the one active ReviewSession row."""
-
-    active = store.load_review_session()
-    if active is None:
-        return None
-    return next(
-        (entry for entry in _saved_review_entries(store) if entry.key == active.uid),
-        None,
-    )
-
-
 def review_session_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...]:
     """Return every saved session that the Review host can currently view."""
 
@@ -240,7 +162,6 @@ def review_session_entries(store: ProfileStore) -> tuple[SessionPickerEntry, ...
             if catalog_entry.picker_entry.status == "APPLIED"
         )
     )
-    entries.extend(_saved_review_entries(store))
     return tuple(entries)
 
 

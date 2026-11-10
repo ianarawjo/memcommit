@@ -13,7 +13,7 @@ from memcommit.adapters.console.terminal.core.output import echo_text
 from memcommit.application.operations.update.instruction import run_instruction_update
 from memcommit.application.operations.update.model.instruction import UpdateRequest
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 def cmd(

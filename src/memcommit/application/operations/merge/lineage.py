@@ -3,7 +3,7 @@
 import hashlib
 
 from memcommit.application.operations.merge.records import LiteralMergeRound
-from memcommit.application.operations.resolve.review_round.build_update_input_from_decisions import (
+from memcommit.application.operations.conflict.review_round.build_update_input_from_decisions import (
     resolution_input_uid,
 )
 from memcommit.models.memory import Memory

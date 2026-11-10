@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field, replace
 
-from memcommit.application.operations.resolve.resolve_finalization.proposal import ResolveProposal
+from memcommit.application.operations.conflict.finalization.proposal import ConflictResolutionProposal
 from memcommit.models.context import Context
 
 from .analysis.candidate import digest
@@ -88,7 +88,7 @@ class LiteralMergeReview:
             or retained[0] is not result
             or retained[1:] != (result.digest, self.digest)
         ):
-            raise ValueError("Resolve result changed or belongs to another input.")
+            raise ValueError("Conflict resolution result changed or belongs to another input.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,7 +140,7 @@ def prepare_literal_result(analysis, decisions, structural_input):
 @dataclass(frozen=True, slots=True)
 class MergeResult:
     literal: LiteralMergeResult
-    semantic: ResolveProposal | None = None
+    semantic: ConflictResolutionProposal | None = None
 
     @property
     def target(self):
@@ -196,17 +196,17 @@ class MergeResult:
                 or semantic.post_audit is None
             ):
                 raise ValueError(
-                    "Semantic Merge requires its completed Resolve result."
+                    "Semantic Merge requires its completed conflict resolution result."
                 )
             if semantic.review_input is None:
-                raise ValueError("Resolve result requires its original review binding.")
+                raise ValueError("Conflict resolution result requires its original review binding.")
             semantic.review_input.validate_result(semantic)
             if (
                 semantic.target.to_dict() != self.literal.post_image.to_dict()
                 or (semantic.initial_analysis or semantic.analysis).frame.revision
                 != self.literal.digest
             ):
-                raise ValueError("Resolve result is not bound to this Literal result.")
+                raise ValueError("Conflict resolution result is not bound to this Literal result.")
         # Semantic staging may use permissions unavailable at the destination.
         # Validate the composed effect against the real Target before Preview/Apply.
         validate_target_result(

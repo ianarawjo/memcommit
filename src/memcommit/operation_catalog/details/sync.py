@@ -26,7 +26,12 @@ SYNC_DETAILS = (
             "Documents changed on only one side keep their normal Sync direction. "
             "Up/Down moves, Enter chooses, and Escape cancels without changing files. "
             "Unsupported composite, placement, or local-edit/external-deletion conflicts "
-            "are refused without overwriting either side."
+            "are refused without overwriting either side. "
+            "Automatic Sync is off by default for each Profile. Use mem sync --auto on "
+            "to synchronize Markdown edits and ordinary mem actions automatically, "
+            "mem sync --auto off to disable it, and mem sync --auto status to inspect it. "
+            "Automatic conflicts remain pending until an explicit mem sync choice. "
+            "After a reboot, run a mem command or mem sync --auto on to restart the watcher."
         ),
         options=(
             OperationComparisonOption(

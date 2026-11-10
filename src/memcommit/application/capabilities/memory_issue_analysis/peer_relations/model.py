@@ -1132,22 +1132,8 @@ class MemoryRelationAnalysis:
 # The capability owns the Python model under MemoryRelation names. The old
 # Compare vocabulary remains an identity-preserving compatibility surface for
 # Compare-labelled callers. These aliases do not enable older artifact formats.
-ComparisonSide = MemoryRelationSide
-ComparisonRelationKind = MemoryRelationKind
-ComparisonRelationStatus = MemoryRelationStatus
-ComparisonIssuePriority = MemoryRelationIssuePriority
 ComparisonError = MemoryRelationError
-ComparisonMemory = MemoryRelationMemory
 ComparisonFrame = MemoryRelationFrame
-ComparisonMember = MemoryRelationMember
-ComparisonRelation = MemoryRelation
-ComparisonOption = MemoryRelationOption
-ComparisonIssue = MemoryRelationIssue
-ComparisonReports = MemoryRelationReports
 ComparisonInput = MemoryRelationInput
 ComparisonAnalysis = MemoryRelationAnalysis
-COMPARISON_SCHEMA_VERSION = MEMORY_RELATION_SCHEMA_VERSION
-COMPARISON_TEXT_LIMIT = MEMORY_RELATION_TEXT_LIMIT
-COMPARISON_NAME_LIMIT = MEMORY_RELATION_NAME_LIMIT
 comparison_canonical_digest = memory_relation_canonical_digest
-comparison_analysis_matches_input = memory_relation_analysis_matches_input

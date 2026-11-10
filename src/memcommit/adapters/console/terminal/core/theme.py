@@ -18,7 +18,6 @@ from memcommit.source_projection.model import (
 # Palette values are named once here so an operation adapter never owns a raw
 # terminal color. They retain the repository's established Macchiato-like
 # palette plus the brighter blue already reserved for keyboard focus.
-BACKGROUND_HEX = "#24273a"
 FOCUS_TEXT_HEX = "#10242f"
 FOCUS_HEX = "#8bd5ff"
 REPORT_HEX = "#f4f5f7"
@@ -218,10 +217,6 @@ def memory_object_color_rgb() -> tuple[int, int, int]:
     return _hex_to_rgb(MEMORY_HEX)
 
 
-# Compatibility aliases keep the in-flight compact Context catalog refactor
-# source-compatible while making the semantic owner explicit above.
-SOURCE_CAPABILITY_HEX = semantic_color_hex(SemanticColorRole.CAPABILITY)
-SOURCE_CAPABILITY_RGB = semantic_color_rgb(SemanticColorRole.CAPABILITY)
 # Validation errors are not REMOVE effects even though both use the established
 # red family. Keep a separate presentation token so adapters do not mislabel a
 # rejected interaction as a destructive operation.

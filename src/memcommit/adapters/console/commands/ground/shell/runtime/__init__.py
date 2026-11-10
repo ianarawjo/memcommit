@@ -23,8 +23,6 @@ from memcommit.adapters.console.commands.ground.shell.proposal import (
 from .entry import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,
-    GROUND_LOCATION_FRAME_HEIGHT,
-    INITIAL_QUESTION,
     _THINKING_INTERVAL_SECONDS,
     run_ground_shell,
 )
@@ -34,8 +32,6 @@ __all__ = [
     "Frame",
     "GROUND_CONTEXTS_FRAME_HEIGHT",
     "GROUND_GOAL_FRAME_HEIGHT",
-    "GROUND_LOCATION_FRAME_HEIGHT",
-    "INITIAL_QUESTION",
     "_THINKING_INTERVAL_SECONDS",
     "_freeze_memory_drafts",
     "_freeze_rule_drafts",

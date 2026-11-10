@@ -16,8 +16,8 @@ curl -fsSL https://raw.githubusercontent.com/ianarawjo/memcommit/user-study-prot
 
 The installer finds or prepares [uv](https://docs.astral.sh/uv/getting-started/installation/),
 installs memcommit in a tool environment with Python 3.12, registers `mem` on
-PATH, and opens `mem`. Initial setup starts automatically when provider settings
-are incomplete or no registered Profile or legacy authoring Store exists.
+PATH, and opens `mem`. Initial setup starts automatically when no registered
+Profile or legacy authoring Store exists.
 Open a new terminal after installation if your
 current shell has not picked up the PATH change. The bootstrap installs the
 public source archive without requiring Git.
@@ -43,7 +43,7 @@ For another workspace, enter its folder and run `mem profile`, then choose New
 Profile. Select it with `mem profile use NAME`. Changing directory alone does
 not switch the selected Profile. `mem init NAME` creates a Context inside it.
 Open `mem` again to resume interrupted initial setup. Existing installations
-retain their selected Profile; later settings use `mem provider`, `mem config`,
+retain their selected Profile; later settings use `mem llm-provider`, `mem config`,
 and `mem profile`.
 
 If uv is already available, you can install explicitly:
@@ -162,31 +162,33 @@ Import includes supported nested and hidden document paths. Creation preserves
 existing document bytes and keeps the previous Profile selected. The interactive
 `mem profile` creation screen exposes the same Import option.
 
-From the registered project folder, import supported existing documents and
-synchronize them back to those paths:
+Run Sync to discover and synchronize supported project documents:
 
 ```sh
-cd /path/to/my-project
-mem import .
 mem sync
 ```
 
-Import retains paths such as `AGENTS.md`, `.agents/skills/reviewer/SKILL.md`, and
-`.claude/rules/project.md`. Ordinary document import supports Markdown, text,
-YAML, and YML; `.mdc` is not yet supported. `.mem` and `.git` are excluded.
-With no Context argument, Sync discovers and synchronizes the selected Profile's
-project documents. It compares both sides against checkpoint history. When only
-one side changed, that version is used. When both sides changed differently,
-choose the external or mem version once for every conflict in the Profile.
-Both versions remain in checkpoint history, and Undo/Redo restores the entire
-Sync action at once. Sync is explicit; automatic Sync and `--always` are reserved
-for future work.
+Markdown paths such as `AGENTS.md`, `.agents/skills/reviewer/SKILL.md`, and
+`.claude/rules/project.md` retain their corresponding Context names. Internal
+`.mem` and `.git` data are excluded. Sync compares both sides against checkpoint
+history. When only one side changed, that version is used. When both sides
+changed differently, choose the external or mem version once for every conflict
+in the Profile. Both versions remain in checkpoint history, and Undo/Redo
+restores the entire Sync action at once.
 
-For an independent copy, use Export:
+Automatic Sync is optional and starts off for ordinary Profiles:
 
 ```sh
-mem export AGENTS.md --to /path/to/export-copy
+mem sync --auto on
+mem sync --auto status
+mem sync --auto off
 ```
+
+When enabled, a background worker observes Markdown edits and mem actions.
+Conflicts still require an explicit `mem sync` decision. A failed command pauses
+automatic publication until the next explicit mem action. The worker survives
+terminal closure; after reboot or worker exit, a mem command restarts it while
+the Profile's automatic setting remains enabled.
 
 The registered project folder is the Sync destination. To relocate an existing
 Profile with its Store and connected documents, use:
@@ -202,99 +204,37 @@ schema; it does not automatically migrate older workspace or registry data.
 
 Use `mem --help` for the command list and `mem COMMAND --help` for exact options.
 
-## Study scenarios
+## Study project placeholders
 
-The built-in Study copies four prepared projects into independent Profiles:
-Practice, Task 1, Task 2, and Task 3. Each project includes editable Markdown,
-its native Memories and identities, and initial document Sync checkpoints:
+The public source and installed package retain three empty folders under
+`application/operations/init_study/study_scenarios/`: `isaac`, `peter`, and
+`practice`. Each contains only `.gitkeep`. Study documents, prepared `.mem`
+Stores, and Sync checkpoints remain in the private research repository.
 
-```sh
-mem init-study demo-study
-mem profile list
-mem contexts
-```
-
-`init-study` selects the Practice Profile. Switch between the session Profiles
-with `mem profile`. Each run has separate project folders and Stores under
-`~/.memcommit/studies/<Study UID>/`; the participant shell starts in the selected
-Profile's project folder. Practice begins in the empty `you/AGENTS` Context,
-alongside `your-friend/AGENTS` and `cafe-selection-for-us/AGENTS`.
-
-All four prepared projects are included in the installed package. The former
-`--scenario` and language options are removed. To choose the parent for future
-runs:
-
-```sh
-mem config set study_root_dir /path/to/studies
-```
-
-Study `mem help` shows these 21 commands to reduce the number of commands a
-participant needs to learn:
-
-```text
-add       branch    contexts  dedup     delete
-edit      find      forget    help      init
-list      merge     profile   pwd       query
-redo      resolve   switch    sync      undo
-update
-```
-
-This list controls Study Help visibility. Contexts directly contain Memories;
-Embed, Reference, Share, and Grant execution are reserved for future work in
-this snapshot.
+`mem init-study` remains in the executable code but requires valid prepared
+projects, which this public distribution does not include. Use ordinary
+Profiles for the public examples above. Contexts directly contain Memories;
+Embed, Reference, Share, and Grant execution remain reserved in this snapshot.
 
 ## Semantic operations
 
-Commands that call a language model require a configured provider. Supported
-providers are Codex with a ChatGPT login, Ollama, and OpenRouter. Each requires
-its own runtime or credentials; the Python package does not install those
-services. Init, Add, List, Import, Export, and document Sync can be used before
-setting up a language-model provider.
+Commands that call a language model require a configured provider. Initial
+setup offers Codex with a ChatGPT login and verifies a synthetic response before
+creating the first Profile. Credentials remain with the provider; installing
+MemCommit does not transfer a login to another computer.
 
-### Codex: install, sign in, and connect
-
-On macOS or inside WSL Ubuntu, install the Codex CLI using the
-[official OpenAI installation instructions](https://learn.chatgpt.com/docs/codex/cli):
+Inspect or change shared provider settings with:
 
 ```sh
-curl -fsSL https://chatgpt.com/codex/install.sh | sh
+mem llm-provider status
+mem llm-provider configure
+mem llm-provider probe
 ```
 
-Open a new terminal so the installer's PATH change takes effect. Check the CLI,
-then sign in with the ChatGPT account that will run semantic operations:
-
-```sh
-codex --version
-codex login
-codex login status
-```
-
-`codex login` opens the browser sign-in flow. If the browser cannot be opened
-from WSL or a remote terminal, use `codex login --device-auth` and follow its
-instructions. See the [official login command reference](https://learn.chatgpt.com/docs/developer-commands?surface=cli#codex-login).
-For this prototype, the status must say `Logged in using ChatGPT`; an API-key
-login is not accepted by the `codex_chatgpt` route.
-
-For an ordinary Profile, select the provider and verify an actual connection:
-
-```sh
-mem provider use codex_chatgpt --reasoning low
-mem provider status
-mem provider probe
-```
-
-Select a reasoning level supported by your model; an unconfigured route can
-request `none`, which some models reject. Study Profiles use their own fixed
-provider configuration: install and sign in to the Codex CLI in the same
-environment, then run `mem provider status` and `mem provider probe` in the
-selected Study Profile without overriding its provider settings.
-
-If `codex` cannot be found, reopen the terminal and check the CLI installer's
-PATH instructions. If mem reports that authentication overrides are set, the
-`codex_chatgpt` route requires a shell without `OPENAI_API_KEY`, `CODEX_API_KEY`,
-or `CODEX_ACCESS_TOKEN` overrides. Provider login and settings must be prepared on
-each new computer; installing memcommit does not transfer credentials.
-Use `mem provider --help` for Ollama, OpenRouter, and the complete settings.
+The configuration screen selects a Codex model and supported reasoning effort.
+Settings are shared across Profiles. Init, Add, List, and document Sync can be
+used without making language-model calls. See `mem llm-provider --help` for the
+available commands.
 
 ## Update
 
@@ -315,41 +255,28 @@ and resumable Update sessions are removed. Repeating the command plans afresh.
 Direct Update has no dedicated Impact or Review route. `mem impact` remains a
 read-only preview for the operations listed in its Help.
 
-## Merge and Resolve
+## Merge and Conflict
 
 `mem merge` opens an interactive setup for two existing Contexts. Semantic Merge
-first handles structural conflicts, then reviews semantic issues in the merged
-Context. `--literal` handles the stored items without language-model inference:
+handles structural conflicts and reviews semantic issues in the merged Context.
+`--literal` combines stored items without language-model inference:
 
 ```sh
 mem merge
 mem merge incoming notes --literal
-mem resolve --help
+mem conflict --help
 ```
 
-Merge and Resolve require an interactive terminal. Semantic checks can vary
-between provider calls; this prototype does not guarantee identical findings on
-repeated runs. Saved Audit records from earlier schema versions are not migrated
-automatically by this snapshot.
+Interactive review requires a terminal. Semantic checks can vary between
+provider calls; this prototype does not guarantee identical findings on repeated
+runs. Saved records from older prototype schemas are not migrated automatically.
 
-## Developer scenarios
+## Developer checks
 
-List the registered scenarios with `mem dev-eval`. Supplying a scenario name
-runs its authored steps in the current Profile and prints their PASS/FAIL results:
-
-```sh
-mem dev-eval
-mem dev-eval merge_visitor_notices
-```
-
-`merge_visitor_notices` currently exercises CLI Init and Add for two Contexts,
-each with five visitor notices, and verifies the stored results. It prepares the
-Merge inputs; it does not yet run the interactive Merge decisions.
-`duplicates_coffee` exercises exact and semantic duplicate discovery and removal,
-and requires a semantic provider. Both scenarios retain their created Contexts.
-
-The Agent and Python API adapters remain reserved; the supported interface is
-the Console CLI/TUI.
+`mem dev-eval` lists the available developer scenarios. Supplying a scenario name
+runs its authored steps in the current Profile and prints PASS/FAIL results.
+These checks can create Contexts; semantic scenarios require a provider.
+The supported application interface is the Console CLI/TUI.
 
 ## Source layout
 
@@ -360,11 +287,11 @@ models/           Memory, Context, Checkpoint, Profile, and metadata models
 core/             Remaining shared memory concepts and pure helpers
 application/      Operations, capabilities, and authorization
 adapters/console/ CLI commands and terminal components
-providers/        Language-model provider integrations
+llm_providers/    Language-model provider integrations
 persistence/      Stores, checkpoints, and saved sessions
 configuration/    Global configuration
 application/operations/init_study/study_scenarios/
-                  Prepared Study project folders and native data
+                  Three empty Study project placeholders
 ```
 
 
@@ -377,7 +304,7 @@ flow. The installer opens it automatically when a terminal is available and
 otherwise prints that next step. Interrupted setup resumes by opening mem.
 
 Import starts ON and can be changed on the Profile creation screen before exact
-approval. Document synchronization uses explicit `mem sync`. Authentication
+approval. Document synchronization uses `mem sync`, with optional `--auto on`. Authentication
 stays with Codex; do not collect or write the person's tokens. The active Profile
 remains selected until changed with `mem profile use NAME`. Existing registered
 Profiles are kept.

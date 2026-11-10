@@ -24,16 +24,7 @@ from memcommit.models.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     project_memory_relation_context as _project_memory_relation_context,
 )
-from memcommit.providers.policy import (
-    COMPARE_LEDGER_PROVIDER_POLICY,
-)
-from memcommit.providers.clients.codex import CodexChatGPTProvider
 from memcommit.persistence.store import ProfileStore
-
-
-MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS = int(
-    COMPARE_LEDGER_PROVIDER_POLICY.timeout_floor_seconds or 900
-)
 
 
 @dataclass(frozen=True)
@@ -45,18 +36,6 @@ class MemoryRelationExecutionResult:
     durable: bool
     retention: AnalysisRetention | None
     origin: str
-
-
-def connect_memory_relation_provider(provider_factory):
-    """Connect one provider with the whole-ledger timeout boundary."""
-
-    provider = provider_factory()
-    if isinstance(provider, CodexChatGPTProvider):
-        provider.timeout = max(
-            provider.timeout,
-            MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS,
-        )
-    return provider
 
 
 def project_memory_relation_context(contexts: tuple[Context, ...]) -> Context:
@@ -93,7 +72,6 @@ def ensure_memory_relation_analysis(
     memory_selectors: tuple[str | None, str | None] = (None, None),
     refresh: bool = False,
     expected_version: str | None = None,
-    require_durable: bool = False,
     analyze: Callable[[MemoryRelationInput], MemoryRelationAnalysis],
 ) -> MemoryRelationExecutionResult:
     """Reuse or publish the exact ordered basis with source freshness and artifact CAS."""
@@ -177,8 +155,6 @@ def ensure_memory_relation_analysis(
 # Persisted Compare artifacts keep their established schema and storage keys;
 # old imports remain aliases while capability-neutral names own production.
 ComparisonExecutionResult = MemoryRelationExecutionResult
-COMPARISON_AGGREGATE_TIMEOUT_SECONDS = MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS
-connect_comparison_provider = connect_memory_relation_provider
 recursive_comparison_projection = project_memory_relation_context
 load_comparison_context = load_memory_relation_context
 ensure_comparison_analysis = ensure_memory_relation_analysis

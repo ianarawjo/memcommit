@@ -72,8 +72,8 @@ if TYPE_CHECKING:
         ResolutionDestination,
     )
 
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 
 _LIST_READING_PREVIEW_LIMIT = 2

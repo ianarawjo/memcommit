@@ -25,7 +25,8 @@ PROFILE_DETAILS = (
                 guidance=(
                     "Press N in the picker to choose a project folder, import "
                     "its documents. CLI creation accepts --root and "
-                    "--import-files. Run mem sync explicitly after editing. The new "
+                    "--import-files. Run mem sync explicitly after editing, or enable "
+                    "optional automatic synchronization with mem sync --auto on. The new "
                     "Profile is not selected automatically."
                 ),
             ),

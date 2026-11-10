@@ -2,26 +2,9 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-import hashlib
-import json
-from pathlib import Path
-
+from memcommit.core.context_name_validation import validate_context_name
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-)
-
-
-@dataclass(frozen=True)
-class NativeDocument:
-    path: Path
-    sha256: str
-    value: Context | Memory
-
-
-from memcommit.core.context_name_validation import validate_context_name
 
 
 def _identity(value: object) -> None:
@@ -64,17 +47,3 @@ def decode_context(record: object) -> Context:
             raise ValueError("Native Context item UID must match its dictionary key.")
         decode_memory(item)
     return Context.from_dict(record)
-
-
-def read_document(path: Path) -> NativeDocument:
-    path = Path(path)
-    if not path.is_file():
-        raise ValueError(f"Native document is not a regular file: {path}.")
-    data = path.read_bytes()
-    record = json.loads(data, object_pairs_hook=_reject_duplicate_json_keys)
-    value = (
-        decode_memory(record)
-        if isinstance(record, dict) and record.get("type") == "memory"
-        else decode_context(record)
-    )
-    return NativeDocument(path, hashlib.sha256(data).hexdigest(), value)

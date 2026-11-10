@@ -23,52 +23,12 @@ COMMAND_ANNOTATIONS = {
 # Exact alternate spellings stay executable but share their canonical
 # operation's discovery row. Conditional compatibility commands such as
 # checkout do not belong here because they route to more than one operation.
-COMMAND_DISPLAY_ALIASES = {
-}
+COMMAND_DISPLAY_ALIASES = {}
 
 # Related spellings can live under another command group while remaining
 # visible in the canonical operation's detail. They are kept separate from
 # owned forms so parser-validation and editable-command semantics stay explicit.
 COMMAND_RELATED_FORMS: dict[str, tuple[str, ...]] = {}
-
-HELP_CORE_CONCEPTS = (
-    (
-        "MEMORY",
-        "The basic record unit stored inside a Context and independently "
-        "selected, reviewed, or changed by Memory-level operations.",
-    ),
-    (
-        "CONTEXT",
-        "A named hierarchical workspace that contains only Memories and uses names to organize "
-        "separate Contexts. The / separator expresses hierarchy in names such as "
-        "task-1/participant; operations with descendant scope can treat a "
-        "Context and its descendant Contexts as one subtree. The current Context "
-        "is the working location for Context-editing commands; Find and Query "
-        "read all Contexts in the active Profile.",
-    ),
-    (
-        "PROFILE",
-        "An isolated ownership and storage boundary containing Contexts; "
-        "different Profiles may contain the same Context name.",
-    ),
-    (
-        "OPERATION",
-        "A reusable action that reads, analyzes, or changes selected Memories "
-        "or Contexts through defined inputs and behavior.",
-    ),
-    (
-        "CHECKPOINT",
-        "A recoverable history boundary created for each applied operation and "
-        "recorded per affected Context.",
-    ),
-)
-
-# The primer doubles as the legend for the existing object-level color
-# contract. Only the Memory type label adopts the Memory token; its explanatory
-# prose remains neutral so a report sentence is not mistaken for Memory data.
-HELP_CORE_CONCEPT_STYLES = {
-    "MEMORY": "class:memory-object bold",
-}
 
 HELP_COMMON_LOCATORS = (
     (
@@ -106,7 +66,7 @@ HELP_COMMON_LOCATORS = (
 )
 
 HELP_COMMON_KEYS = (
-    ("↑/↓", "Move by row or Form; hold to accelerate through long lists."),
+    ("↑/↓", "Move by command, Form, or reference; hold to accelerate through long lists."),
     (
         "←/→",
         "Change View, or expand and collapse command Forms.",
@@ -206,17 +166,14 @@ COMMAND_FORMS = {
         "mem fit --ground [ground] (run the revision-bound Ground adapter and save its receipt)",
         "mem fit --ground [ground] --receipt [uid] (reopen one current or stale Ground receipt)",
     ),
-    "resolve": (
-        "mem resolve (review conflicts across the complete current Context, then Apply)",
+    "conflict": (
+        "mem conflict (review conflicts across the complete current Context, then Apply)",
     ),
     "dedup": (
         "mem dedup (immediately remove exact plus semantic duplicates from the current Context)",
-        "mem dedup [context] (deduplicate one explicit Context)",
-        "mem dedup --context [context] (explicit Context option)",
-        "mem dedup -d (apply to the exact Context root; default)",
-        "mem dedup [context] -r (atomically deduplicate each local lexical Context frame)",
         "mem dedup --literal (remove only same-role exact copies without semantic inference)",
-        "mem dedup [context] --literal -r (atomically remove exact copies from each local lexical Context frame)",
+        "mem dedup -r (compare the complete current Context subtree and atomically remove duplicates)",
+        "mem dedup --literal -r (compare same-role exact copies across the current Context subtree)",
     ),
     "atomize": (
         "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",
@@ -274,7 +231,7 @@ COMMAND_FORMS = {
         "mem config show (show global configuration)",
         'mem config set [key] "[value]" (set one global value)',
     ),
-    "contexts": ("mem contexts (list local Contexts)",),
+    "context": ("mem context (list Context names in the active Profile)",),
     "delete": (
         "mem delete [UID] (delete one Memory in the current Context)",
         "mem delete --context (confirm deletion of the current Context and all descendants; -c is the same option)",
@@ -451,18 +408,16 @@ COMMAND_FORMS = {
         "mem profile remove [profile_name] (permanently delete one Profile store)",
         "mem profile remove-study [study_name] (permanently delete Study stores)",
     ),
-    "provider": (
-        "mem provider (print the active Profile route overview without editing)",
-        "mem provider status (inspect the selection without connecting)",
-        "mem provider use codex_chatgpt (select managed Codex defaults)",
-        "mem provider use ollama --model [model] (select a local model)",
-        "mem provider use openrouter --model [model] (select a routed model)",
-        "mem provider reset --operation [operation] (return to the inherited route)",
-        "mem provider probe (test the current selection)",
+    "llm-provider": (
+        "mem llm-provider (open USE and CONFIGURE in one terminal screen)",
+        "mem llm-provider status (inspect current settings without connecting)",
+        "mem llm-provider use codex_chatgpt (select saved Codex settings)",
+        "mem llm-provider configure codex_chatgpt (edit model and reasoning in the TUI)",
+        "mem llm-provider configure codex_chatgpt --model [model] --reasoning [effort]",
+        "mem llm-provider reset codex_chatgpt (restore Codex model/reasoning defaults)",
+        "mem llm-provider probe (test the active provider with a synthetic prompt)",
     ),
-    "query": (
-        'mem query "[question]" (ask all Contexts in the active Profile)',
-    ),
+    "query": ('mem query "[question]" (ask all Contexts in the active Profile)',),
     "rationale": (
         "mem rationale (select one exact Context or Memory from the current readable subtree)",
         "mem rationale [context] (explain one exact readable Context)",
@@ -492,9 +447,7 @@ COMMAND_FORMS = {
         "mem review atomize (open the current Context's applied Atomize evidence)",
         "mem review atomize --context [context] (Context-bound applied Atomize evidence)",
         "mem review atomize --session [analysis_uid] (open one current or retained applied Atomize run)",
-        "mem review dedun|distill|makemore|resolve --receipt [uid] (open exact applied checkpoint evidence)",
-        "mem review ambiguities (analyze current-Context ambiguities)",
-        "mem review ambiguities --context [context] (Context-bound Ambiguity review)",
+        "mem review distill|makemore|conflict --receipt [uid] (open exact applied checkpoint evidence)",
     ),
     "sever": (
         "mem sever (choose Source and Criteria for an in-place Sever)",
@@ -522,11 +475,11 @@ COMMAND_FORMS = {
     ),
     "pwd": ("mem pwd (print the current canonical Context name)",),
     "summarize": (
-        "mem summarize (direct summary of the current Context)",
-        "mem summarize [context] (direct summary of an explicit Context)",
-        "mem summarize -r (recursive summary of the current Context)",
-        "mem summarize [context] -r (lexical descendants)",
-        "mem summarize [context] --copy (copy verified direct understanding as plain text)",
+        "mem summarize (current Context and all lexical descendants)",
+        "mem summarize [context] (explicit Context and all lexical descendants)",
+        "mem summarize -d (only the current Context)",
+        "mem summarize [context] -d (only the explicit Context)",
+        "mem summarize [context] --copy (copy verified summary as plain text)",
     ),
     "switch": (
         "mem switch (enter the interactive Context picker)",

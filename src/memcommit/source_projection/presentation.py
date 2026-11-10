@@ -215,25 +215,6 @@ def source_annotation_tokens(
     )
 
 
-def source_annotation_text(
-    facts: SourceDisplayFacts,
-    *,
-    include_permissions: bool = False,
-    include_defaults: bool = False,
-    separator: str = " · ",
-) -> str:
-    """Render source annotations without repeating the object's kind."""
-
-    return separator.join(
-        token.text
-        for token in source_annotation_tokens(
-            facts,
-            include_permissions=include_permissions,
-            include_defaults=include_defaults,
-        )
-    )
-
-
 def normalize_source_display_tokens(
     value: SourceDisplayValue | None,
     *,

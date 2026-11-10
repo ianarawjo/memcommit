@@ -7,16 +7,14 @@ import uuid
 from datetime import datetime
 from typing import Iterable, Optional
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.models.checkpoint import Checkpoint
 from memcommit.models.context import Context
 from ..infrastructure.checkpoint_records import normalize_checkpoint_record
 from ..context_memory.models import ConcurrentContextUpdateError
 from ..context_memory.records import context_record_digest
-from ..infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from ..infrastructure.atomic_io import _write_json_atomic
 
 
 class _CheckpointRepositoryMixin:
@@ -277,7 +275,7 @@ class _CheckpointRepositoryMixin:
             with open(path, encoding="utf-8") as file:
                 value = json.load(
                     file,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             if value.get("uid") == checkpoint_uid:
                 path.unlink()

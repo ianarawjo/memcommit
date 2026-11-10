@@ -17,7 +17,6 @@ from memcommit.application.capabilities.durable_uid_resolution import (
     is_unresolved_uid_selector,
     try_resolve_durable_uid,
 )
-from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import DirectMemoryLocator
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.core.context_targeting.resolution import (
@@ -377,36 +376,3 @@ def resolve_local_context_memory_or_inline_text_target(
         except ValueError:
             return operand
         raise
-
-
-def try_resolve_short_local_direct_memory_locator(
-    store: LocalDirectMemoryLocatorStore,
-    operand: object,
-    *,
-    current: str | None,
-) -> tuple[Context, Memory] | None:
-    """Resolve a short bare UID only after an exact Context has missed.
-
-    The pure overloaded-operand parser deliberately reserves only the public
-    eight-character UID shape.  Shorter hexadecimal text can still be an
-    existing Context name or literal operation input, so storage-backed
-    adapters call this fallback only after preserving that stronger meaning.
-    A real ambiguity remains an error; only an empty local match returns
-    ``None`` so the calling operation can retain its established missing-name
-    or literal fallback.
-    """
-
-    if (
-        not isinstance(operand, str)
-        or not is_memory_uid_prefix(operand)
-        or len(operand) >= 8
-    ):
-        return None
-    try:
-        return resolve_local_direct_memory_locator(
-            store,
-            operand,
-            current=current,
-        )
-    except DirectMemoryNotFoundError:
-        return None

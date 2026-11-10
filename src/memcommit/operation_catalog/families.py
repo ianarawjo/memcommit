@@ -12,7 +12,8 @@ class OperationFamilyId(str, Enum):
     MEMORIES = "MEMORIES"
     CONTEXTS = "CONTEXTS"
     FIND_QUERY = "FIND_QUERY"
-    AUDIT_RESOLVE = "AUDIT_RESOLVE"
+    REFINE = "REFINE"
+    AUDIT_CONFLICT = "AUDIT_CONFLICT"
     MERGE = "MERGE"
     UNDO_REDO = "UNDO_REDO"
     SYNC = "SYNC"
@@ -35,9 +36,7 @@ class OperationFamilyId(str, Enum):
 class OperationFamilySectionId(str, Enum):
     """Stable identity for an intentional subdivision of one family."""
 
-    SEARCH_RETRIEVE_ANSWER = "SEARCH_RETRIEVE_ANSWER"
     SEARCH_SYNTHESIZE = "SEARCH_SYNTHESIZE"
-    SEMANTIC_UPDATE_FOUNDATION = "SEMANTIC_UPDATE_FOUNDATION"
     SEMANTIC_UPDATE_DERIVE = "SEMANTIC_UPDATE_DERIVE"
     SEMANTIC_UPDATE_CURATE_INTEGRATE = "SEMANTIC_UPDATE_CURATE_INTEGRATE"
     QUALITY_RESOLUTION_DIAGNOSE = "QUALITY_RESOLUTION_DIAGNOSE"
@@ -115,8 +114,7 @@ class OperationFamily:
 
 
 OPERATION_FAMILIES = (
-    # One common order serves ordinary and Study Help. Study's existing
-    # visibility filter leaves these first nine families and hides the tail.
+    # One shared order keeps Study grouping from becoming a separate catalog.
     OperationFamily(
         id=OperationFamilyId.MEMORIES,
         title="MEMORIES",
@@ -129,37 +127,28 @@ OPERATION_FAMILIES = (
     OperationFamily(
         id=OperationFamilyId.CONTEXTS,
         title="CONTEXTS",
-        operation_names=("contexts", "pwd", "init", "switch", "branch"),
+        operation_names=("context", "pwd", "init", "switch", "branch", "merge"),
         description=(
             "Inspect Context names and your current location, create a Context, "
-            "switch to another Context, or branch existing work."
+            "switch or branch existing work, or merge two Contexts."
         ),
     ),
     OperationFamily(
         id=OperationFamilyId.FIND_QUERY,
         title="FIND & QUERY",
-        operation_names=("find", "query"),
+        operation_names=("find", "query", "summarize"),
         description=(
-            "Find matching Memories or ask for an answer grounded in the "
+            "Find matching Memories, ask a question, or summarize the "
             "selected authorized knowledge."
         ),
     ),
     OperationFamily(
-        id=OperationFamilyId.AUDIT_RESOLVE,
-        title="AUDIT & RESOLVE",
-        operation_names=("audit", "resolve"),
+        id=OperationFamilyId.REFINE,
+        title="MAINTENANCE",
+        operation_names=("forget", "dedup", "conflict"),
         description=(
-            "Inspect quality issues and resolve retained findings through "
-            "reviewed decisions."
-        ),
-    ),
-    OperationFamily(
-        id=OperationFamilyId.MERGE,
-        title="MERGE",
-        operation_names=("merge",),
-        description=(
-            "Combine two exact Contexts into an existing Target through "
-            "semantic or literal Merge."
+            "Selectively forget information, remove duplicate Memories, "
+            "and resolve conflicts in the selected Context scope."
         ),
     ),
     OperationFamily(
@@ -224,16 +213,16 @@ OPERATION_FAMILIES = (
     OperationFamily(
         id=OperationFamilyId.SEARCH_EXPLAIN,
         title="SEARCH & EXPLAIN",
-        operation_names=("summarize", "compare"),
+        operation_names=("compare",),
         description=(
-            "Use LLM-based summarization and comparison within the selected "
+            "Use LLM-based comparison within the selected "
             "authorized scope."
         ),
         sections=(
             OperationFamilySection(
                 id=OperationFamilySectionId.SEARCH_SYNTHESIZE,
                 title="SYNTHESIZE",
-                operation_names=("summarize", "compare"),
+                operation_names=("compare",),
             ),
         ),
     ),
@@ -259,7 +248,6 @@ OPERATION_FAMILIES = (
             "distill",
             "elaborate",
             "makemore",
-            "forget",
             "sever",
         ),
         description=(
@@ -275,7 +263,7 @@ OPERATION_FAMILIES = (
             OperationFamilySection(
                 id=OperationFamilySectionId.SEMANTIC_UPDATE_CURATE_INTEGRATE,
                 title="CURATE & INTEGRATE",
-                operation_names=("forget", "sever"),
+                operation_names=("sever",),
             ),
         ),
     ),
@@ -292,16 +280,16 @@ OPERATION_FAMILIES = (
         id=OperationFamilyId.QUALITY_RESOLUTION,
         title="QUALITY & RESOLUTION",
         operation_names=(
+            "audit",
             "find-duplicates",
             "find-redundancies",
             "find-ambiguities",
             "find-conflicts",
-            "dedup",
             "fit",
             "check-conformance",
         ),
         description=(
-            "Diagnose quality issues, repair exact or semantic problems, and "
+            "Diagnose quality issues and "
             "validate compatibility or rule conformance."
         ),
         sections=(
@@ -309,16 +297,12 @@ OPERATION_FAMILIES = (
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_DIAGNOSE,
                 title="DIAGNOSE",
                 operation_names=(
+                    "audit",
                     "find-duplicates",
                     "find-redundancies",
                     "find-ambiguities",
                     "find-conflicts",
                 ),
-            ),
-            OperationFamilySection(
-                id=OperationFamilySectionId.QUALITY_RESOLUTION_REPAIR,
-                title="REPAIR",
-                operation_names=("dedup",),
             ),
             OperationFamilySection(
                 id=OperationFamilySectionId.QUALITY_RESOLUTION_VALIDATE,
@@ -384,7 +368,7 @@ OPERATION_FAMILIES = (
     OperationFamily(
         id=OperationFamilyId.SYSTEM_STUDY_TOOLS,
         title="SYSTEM & STUDY TOOLS",
-        operation_names=("provider", "config", "init-study", "dev-eval"),
+        operation_names=("llm-provider", "config", "init-study", "dev-eval"),
         description=(
             "Configure MemCommit, prepare studies, and run repeatable developer scenarios."
         ),

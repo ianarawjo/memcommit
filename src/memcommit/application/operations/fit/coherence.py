@@ -14,7 +14,11 @@ from datetime import datetime, timezone
 import json
 from typing import Literal, Protocol
 
-from memcommit.providers.types import CompletionRun, ProviderIdentity
+from memcommit.llm_providers.identity import (
+    provider_completion_identity as _provider_identity,
+    provider_identity_record as _identity_dict,
+)
+from memcommit.llm_providers.types import ProviderIdentity
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
@@ -162,19 +166,6 @@ def _string_list(value: object, label: str) -> tuple[str, ...]:
     return result
 
 
-def _identity_dict(identity: ProviderIdentity | None) -> object:
-    if identity is None:
-        return None
-    return {
-        "provider": identity.provider,
-        "model": identity.model,
-        "model_digest": identity.model_digest,
-        "runtime": identity.runtime,
-        "endpoint": identity.endpoint,
-        "reasoning_effort": identity.reasoning_effort,
-    }
-
-
 def _identity(value: object) -> ProviderIdentity | None:
     if value is None:
         return None
@@ -201,14 +192,6 @@ def _identity(value: object) -> ProviderIdentity | None:
         model=_text(data["model"], "provider model"),
         **optional,
     )
-
-
-def _provider_identity(provider: object) -> ProviderIdentity | None:
-    last_run = getattr(provider, "last_run", None)
-    if isinstance(last_run, CompletionRun):
-        return last_run.identity
-    identity = getattr(provider, "identity", None)
-    return identity if isinstance(identity, ProviderIdentity) else None
 
 
 def _now() -> str:

@@ -115,30 +115,6 @@ def _entry_line_parts(
     return prefix, command, suffix, description
 
 
-def _render_entry_line(
-    entry: HistoryPickerItem,
-    *,
-    entries: Sequence[HistoryPickerItem],
-    selected: bool,
-    checked: bool = False,
-    available_width: int,
-) -> str:
-    """Render the stable plain projection of one History Items row."""
-
-    return elide_terminal_text(
-        "".join(
-            _entry_line_parts(
-                entry,
-                entries=entries,
-                selected=selected,
-                checked=checked,
-                available_width=available_width,
-            )
-        ),
-        available_width,
-    )
-
-
 def render_history_entry_fragments(
     entry: HistoryPickerItem,
     *,

@@ -13,9 +13,6 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
 
 REDUNDANCY_EVIDENCE_VERSION = "redundancy-evidence-v2"
 LEGACY_SEMANTIC_REDUNDANCY_EVIDENCE_VERSION = "semantic-redundancy-evidence-v1"
-# Compatibility export for plugins importing the former constant name. New
-# serialization uses the inclusive v2 contract.
-SEMANTIC_REDUNDANCY_EVIDENCE_VERSION = REDUNDANCY_EVIDENCE_VERSION
 _RELATIONS = frozenset({"EXACT", "SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"})
 
 
@@ -118,24 +115,11 @@ def redundancy_evidence_from_json(
     return redundancy_evidence_from_dict(decoded)
 
 
-# Compatibility callables keep existing plugins importable while all new
-# payloads use the inclusive v2 contract.
-semantic_redundancy_evidence_dict = redundancy_evidence_dict
-semantic_redundancy_evidence_json = redundancy_evidence_json
-semantic_redundancy_evidence_from_dict = redundancy_evidence_from_dict
-semantic_redundancy_evidence_from_json = redundancy_evidence_from_json
-
-
 __all__ = [
     "LEGACY_SEMANTIC_REDUNDANCY_EVIDENCE_VERSION",
     "REDUNDANCY_EVIDENCE_VERSION",
-    "SEMANTIC_REDUNDANCY_EVIDENCE_VERSION",
     "redundancy_evidence_dict",
     "redundancy_evidence_from_dict",
     "redundancy_evidence_from_json",
     "redundancy_evidence_json",
-    "semantic_redundancy_evidence_dict",
-    "semantic_redundancy_evidence_from_dict",
-    "semantic_redundancy_evidence_from_json",
-    "semantic_redundancy_evidence_json",
 ]

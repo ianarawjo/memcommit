@@ -45,8 +45,8 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 from memcommit.application.operations.sever.model import (
     SeverError,
     SeverSelection,
@@ -57,16 +57,13 @@ from memcommit.application.operations.sever.application import (
     SeverAnalysisRequest,
     SeverAnalysisResult,
     SeverApplicationError,
-    SeverApplyRequest,
     SeverDecisionRequest,
     SeverPersistedApplyRequest,
     SeverSessionSnapshot,
 )
 from memcommit.application.operations.sever.provider import SeverProviderError
-from memcommit.application.operations.sever.inputs import capture_sever_binding
 from memcommit.application.operations.sever.runtime import (
     execute_sever_analysis,
-    execute_sever_apply,
     execute_sever_session_apply,
     execute_sever_session_decision,
     execute_sever_session_open,
@@ -83,9 +80,6 @@ SeverCommandError = SeverApplicationError
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
-
-
-_capture_binding = capture_sever_binding
 
 
 def _start_progress(progress, event: SeverAnalysisProgress) -> None:
@@ -147,45 +141,6 @@ def _start_analysis(
         work=freeze_and_analyze,
     )
     return result
-
-
-def _start(
-    *,
-    store: ProfileStore,
-    source_name: str,
-    criteria_name: str,
-    output_name: str,
-    source_descendants: bool = True,
-    criteria_descendants: bool = True,
-    provider_factory=None,
-) -> SeverSession:
-    """Compatibility facade for historical command-level test callers."""
-
-    snapshot = ContextOperandSnapshot.capture(store)
-    candidates = freeze_profile_context_access_candidates(
-        store,
-        current_name=snapshot.current_name,
-    )
-    return _start_analysis(
-        store=store,
-        current_name=snapshot.current_name,
-        source_name=resolve_existing_context_access(
-            store,
-            source_name,
-            current_name=snapshot.current_name,
-            candidates=candidates,
-        ).name,
-        criteria_name=resolve_existing_context_access(
-            store,
-            criteria_name,
-            current_name=snapshot.current_name,
-            candidates=candidates,
-        ).name,
-        output_name=output_name,
-        source_descendants=source_descendants,
-        criteria_descendants=criteria_descendants,
-        provider_factory=provider_factory,
-    ).session
 
 
 def render_sever(session: SeverSession) -> str:
@@ -319,13 +274,6 @@ def render_sever_incomplete_receipt(session: SeverSession) -> str:
             f"RESUME · mem sever --resume {session.uid}",
         ]
     )
-
-
-def _apply(store: ProfileStore, session: SeverSession) -> SeverSession:
-    return execute_sever_apply(
-        SeverApplyRequest(session=session),
-        store=store,
-    ).session
 
 
 def _interactive_setup(store: ProfileStore) -> tuple[str, str, bool, bool] | None:

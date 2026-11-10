@@ -122,12 +122,6 @@ class ProjectedMemoryRelationMemory(Memory):
             )
         self.relation_source = source
 
-    @property
-    def comparison_source(self) -> MemoryRelationEvidenceSource:
-        """Return the legacy attribute without giving it implementation ownership."""
-
-        return self.relation_source
-
 
 def _context_owner(context: Context) -> tuple[str, str]:
     return context.uid, context.name
@@ -206,19 +200,9 @@ def project_memory_relation_context(contexts: tuple[Context, ...]) -> Context:
     return projected
 
 
-ComparisonEvidenceError = MemoryRelationEvidenceError
-ComparisonEvidenceSource = MemoryRelationEvidenceSource
-ProjectedComparisonMemory = ProjectedMemoryRelationMemory
-project_comparison_context = project_memory_relation_context
-
-
 __all__ = [
-    "ComparisonEvidenceError",
-    "ComparisonEvidenceSource",
     "MemoryRelationEvidenceError",
     "MemoryRelationEvidenceSource",
     "ProjectedMemoryRelationMemory",
-    "ProjectedComparisonMemory",
     "project_memory_relation_context",
-    "project_comparison_context",
 ]

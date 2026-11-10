@@ -7,10 +7,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from memcommit.application.operations.update.model import UpdateReceipt
-from memcommit.persistence.store.infrastructure.atomic_io import (
-    _write_json_atomic,
-    _reject_duplicate_json_keys,
-)
+from memcommit.core.json_objects import reject_duplicate_json_keys
+from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
 
 
 class UpdateReceiptRepository:
@@ -48,7 +46,7 @@ class UpdateReceiptRepository:
             from memcommit.application.operations.update.model import UpdateReceipt
 
             receipt = UpdateReceipt.from_dict(
-                json.load(stream, object_pairs_hook=_reject_duplicate_json_keys)
+                json.load(stream, object_pairs_hook=reject_duplicate_json_keys)
             )
         if receipt.uid != operation_uid:
             raise ValueError("Update receipt identity does not match its path.")

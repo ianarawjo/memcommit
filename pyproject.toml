@@ -29,10 +29,7 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["memcommit*"]
-# README-only future interfaces are not distributable Python packages.
 exclude = [
-  "memcommit.adapters.python_api", "memcommit.adapters.python_api.*",
-  "memcommit.adapters.agent", "memcommit.adapters.agent.*",
   # Prepared projects are package resources, not Python packages.
   "memcommit.application.operations.init_study.study_scenarios",
   "memcommit.application.operations.init_study.study_scenarios.*",
@@ -46,5 +43,5 @@ exclude = [
 "memcommit.application.operations.compare" = ["fixtures/*.json"]
 "memcommit.application.operations.rationale.skills.memory_rationale" = ["**/context.json", "**/bindings.json"]
 "memcommit.application.operations.rationale.skills.context_rationale" = ["**/context.json", "**/bindings.json"]
-"memcommit.application.operations.resolve" = ["fixtures/*.json"]
-"memcommit.application.operations.init_study" = ["study_scenarios/**/*.md", "study_scenarios/**/.mem/**/*.json"]
+"memcommit.application.operations.conflict" = ["fixtures/*.json"]
+"memcommit.application.operations.init_study" = ["study_scenarios/*/.gitkeep"]

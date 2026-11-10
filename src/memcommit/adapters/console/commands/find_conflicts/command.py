@@ -28,8 +28,8 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
 from memcommit.application.capabilities.memory_issue_analysis.report import (
     conflict_label,
 )
-from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.errors import QueryProviderError
+from memcommit.llm_providers.connection import connect_semantic_provider
 from memcommit.persistence.store import ProfileStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError

@@ -342,11 +342,3 @@ class AtomizeResolutionWorkbenchAdapter:
             ),
             input_locked=application_complete,
         )
-
-
-def project_atomize_resolution(
-    analysis: AtomizeAnalysisSession,
-    workbench: AtomizeReviewRecord,
-) -> ResolutionWorkbenchView:
-    """Return the common view for one analysis-bound Atomize workbench."""
-    return AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()

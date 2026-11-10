@@ -1,4 +1,4 @@
-"""Provider contract for read-only Memory Issue analysis.
+"""Shared provider mechanics for read-only Memory Issue analysis.
 
 Each selected analysis makes at most one provider call. Conflict names its
 complete pair target space; redundancy discovery instead sends one
@@ -9,42 +9,36 @@ every possible pair.
 from __future__ import annotations
 
 import json
-import unicodedata
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from importlib import resources
-from typing import Callable
 
-from memcommit.models.context import Context
-from memcommit.models.memory import Memory
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
-    ExactDuplicateGroup,
-    find_exact_duplicate_groups,
-)
 from memcommit.application.capabilities.memory_issue_analysis.model import (
-    AmbiguityFinding,
+    QUALITY_RULESET_VERSIONS,
     AmbiguityReport,
-    ConflictFinding,
     ConflictReport,
-    DuplicateFinding,
     DuplicateReport,
     FindingsError,
     FindingsProvider,
-    QUALITY_RULESET_VERSIONS,
 )
-from memcommit.application.capabilities.semantic_execution import (
-    BudgetLimits,
-    BudgetVector,
-    ExecutionMode,
-    ExecutionStrategy,
-    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
-    SemanticExecutionPolicy,
-    plan_semantic_execution,
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    ExactDuplicateGroup,
 )
 from memcommit.application.capabilities.semantic.prompt_policy import (
     resolve_semantic_prompt_policy,
 )
-
+from memcommit.application.capabilities.semantic_execution import (
+    SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
+    BudgetLimits,
+    BudgetVector,
+    ExecutionMode,
+    ExecutionStrategy,
+    SemanticExecutionPolicy,
+    plan_semantic_execution,
+)
+from memcommit.core.json_objects import reject_duplicate_json_keys
+from memcommit.models.context import Context
+from memcommit.models.memory import Memory
 
 QUALITY_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 QUALITY_RESPONSE_CHAR_LIMIT = 1_000_000
@@ -52,9 +46,6 @@ QUALITY_REASON_CHAR_LIMIT = 1_000
 CONFLICT_REASON_WORD_LIMIT = 10
 QUALITY_QUESTION_CHAR_LIMIT = 500
 QUALITY_READING_LIMIT = 5
-_INTERPRETATIONS = {"SINGLE", "DOMINANT", "COMPETING"}
-_CLARIFICATIONS = {"NONE", "HELPFUL", "REQUIRED"}
-_CONFLICT_LABELS = {"YES", "MAY"}
 
 
 def _findings_execution_policy(operation: str) -> SemanticExecutionPolicy:
@@ -88,18 +79,6 @@ class MemoryPair:
     pair_id: str
     left: MemoryCandidate
     right: MemoryCandidate
-
-
-def _strict_json_object(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    """Build one JSON object while rejecting duplicate keys."""
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
 
 
 def _exact_dict(
@@ -200,7 +179,7 @@ def _load_calibration_cases(filename: str) -> list[object]:
         resource = resources.files(__package__).joinpath("fixtures", filename)
         data = json.loads(
             resource.read_text(encoding="utf-8"),
-            object_pairs_hook=_strict_json_object,
+            object_pairs_hook=reject_duplicate_json_keys,
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         raise FindingsError(
@@ -258,7 +237,7 @@ def _parse_response(raw: object, operation: str) -> list[object]:
     ):
         raise FindingsError(f"Codex {operation} returned invalid structured output.")
     try:
-        data = json.loads(raw, object_pairs_hook=_strict_json_object)
+        data = json.loads(raw, object_pairs_hook=reject_duplicate_json_keys)
     except (json.JSONDecodeError, ValueError) as error:
         raise FindingsError(
             f"Codex {operation} returned invalid structured output."
@@ -317,118 +296,8 @@ def _findings_schema(
     }
 
 
-def _is_horizontal_space(character: str) -> bool:
-    """Keep vertical separators distinct while recognizing Unicode spaces."""
-    return character == "\t" or unicodedata.category(character) == "Zs"
-
-
-def _trim_horizontal(value: str) -> str:
-    start = 0
-    end = len(value)
-    while start < end and _is_horizontal_space(value[start]):
-        start += 1
-    while end > start and _is_horizontal_space(value[end - 1]):
-        end -= 1
-    return value[start:end]
-
-
-def _collapse_horizontal(value: str) -> str:
-    result: list[str] = []
-    in_space = False
-    for character in value:
-        if _is_horizontal_space(character):
-            if not in_space:
-                result.append(" ")
-            in_space = True
-        else:
-            result.append(character)
-            in_space = False
-    return "".join(result)
-
-
-def _surface_key(content: str) -> str:
-    """Return a conservative comparison key without rewriting stored text."""
-    normalized = unicodedata.normalize(
-        "NFC",
-        content.replace("\r\n", "\n").replace("\r", "\n"),
-    )
-    # Outer trimming intentionally removes only line breaks and horizontal
-    # spaces. Other vertical separators remain semantic structure.
-    start = 0
-    end = len(normalized)
-    while start < end and (
-        normalized[start] == "\n" or _is_horizontal_space(normalized[start])
-    ):
-        start += 1
-    while end > start and (
-        normalized[end - 1] == "\n" or _is_horizontal_space(normalized[end - 1])
-    ):
-        end -= 1
-    normalized = normalized[start:end]
-    return "\n".join(
-        _trim_horizontal(_collapse_horizontal(line)) for line in normalized.split("\n")
-    )
-
-
-def _mechanical_duplicate_forest(
-    candidates: list[MemoryCandidate], exact_groups: tuple[ExactDuplicateGroup, ...]
-) -> tuple[list[DuplicateFinding], list[MemoryCandidate]]:
-    """Find exact/surface components without constructing their pair cliques."""
-    findings: list[DuplicateFinding] = []
-    candidate_by_uid = {candidate.memory.uid: candidate for candidate in candidates}
-    exact_survivors = {
-        uid: group.survivor_uid for group in exact_groups for uid in group.absorbed_uids
-    }
-    surface_representatives: dict[str, MemoryCandidate] = {}
-    semantic_representatives: list[MemoryCandidate] = []
-    for candidate in candidates:
-        content = candidate.memory.content
-        exact = candidate_by_uid.get(exact_survivors.get(candidate.memory.uid))
-        if exact is not None:
-            findings.append(
-                DuplicateFinding(
-                    left=exact.memory,
-                    right=candidate.memory,
-                    relation="EXACT",
-                    reason="Stored content is identical.",
-                )
-            )
-            continue
-        surface_key = _surface_key(content)
-        surface = surface_representatives.get(surface_key)
-        if surface is not None:
-            findings.append(
-                DuplicateFinding(
-                    left=surface.memory,
-                    right=candidate.memory,
-                    relation="SURFACE_EQUIVALENT",
-                    reason="Content differs only under conservative Unicode, line-ending, outer-space, or horizontal-space normalization.",
-                )
-            )
-            continue
-        surface_representatives[surface_key] = candidate
-        semantic_representatives.append(candidate)
-    return (findings, semantic_representatives)
-
-
-def _ordered_duplicate_findings(
-    candidates: list[MemoryCandidate],
-    findings: list[DuplicateFinding],
-) -> tuple[DuplicateFinding, ...]:
-    """Restore Context order after provider groups are locally canonicalized."""
-    order_by_uid = {
-        candidate.memory.uid: index for index, candidate in enumerate(candidates)
-    }
-
-    def finding_key(finding: DuplicateFinding) -> tuple[int, int]:
-        return (
-            order_by_uid[finding.left.uid],
-            order_by_uid[finding.right.uid],
-        )
-
-    return tuple(sorted(findings, key=finding_key))
-
-
+# Retain the original ctx= entry points without making the canonical analysis
+# modules depend on a second implementation; local imports avoid an import cycle.
 def find_redundancies(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
@@ -436,135 +305,16 @@ def find_redundancies(
     context_name_by_uid: Mapping[str, str] | None = None,
     exact_groups: tuple[ExactDuplicateGroup, ...] | None = None,
 ) -> DuplicateReport:
-    """Discover complete DUN evidence: exact DUP plus semantic redundancy."""
-    candidates = collect_direct_memories(ctx, context_name_by_uid=context_name_by_uid)
-    if exact_groups is None:
-        exact_groups = find_exact_duplicate_groups(ctx)
-    mechanical, semantic_candidates = _mechanical_duplicate_forest(
-        candidates, exact_groups
+    """Compatibility entry point; semantic ownership lives in relation_analysis."""
+    from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+        analyze_memory_redundancies,
     )
-    findings = list(mechanical)
-    if len(semantic_candidates) >= 2:
-        prompt_policy, calibration_cases = _prompt_calibration_cases("duplicates.json")
-        candidate_by_id = {
-            candidate.candidate_id: candidate for candidate in semantic_candidates
-        }
-        item_schema: dict[str, object] = {
-            "type": "object",
-            "properties": {
-                "candidate_ids": {
-                    "type": "array",
-                    "minItems": 2,
-                    "maxItems": len(semantic_candidates),
-                    "items": {"type": "string", "enum": list(candidate_by_id)},
-                },
-                "relation": {"type": "string", "enum": ["SEMANTIC_EQUIVALENT"]},
-                "reason": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": QUALITY_REASON_CHAR_LIMIT,
-                },
-            },
-            "required": ["candidate_ids", "relation", "reason"],
-            "additionalProperties": False,
-        }
-        records = _call_once(
-            provider_factory=provider_factory,
-            operation="find_duplicates",
-            instructions="You discover semantically duplicate atomic Memories inside one selected Context frame. The frame may combine several readable Contexts, and each candidate carries its original context_name. The supplied Memories are one representative from each exact/surface-equivalent component; do not construct or request an all-pairs comparison table. Treat each candidate's complete stored content as one indivisible judgment unit: do not split a Memory or extract matching substrings or propositions. If only a proper part would be redundant, omit the group; Atomize must first make that part a separately reviewable Memory. Return disjoint groups of two or more candidate IDs only when every member is mutually substitutable without information loss under the same subject, predicate, object, place, audience, time, modality, condition, access method, and exception. Do not return mere entailment, overlap, related information, uncertain scope, or distinct claims. A candidate may occur in at most one returned group. Omit candidates for which you discover no semantic-equivalence group. Absence is not proof that no duplicate exists.",
-            payload={
-                "operation": "find_duplicates",
-                **(
-                    {"prompt_policy": prompt_policy}
-                    if prompt_policy is not None
-                    else {}
-                ),
-                "context": {"name": ctx.name, "direct_memory_count": len(candidates)},
-                "memories": _memory_payload(semantic_candidates),
-                "calibration_cases": calibration_cases,
-            },
-            schema=_findings_schema(
-                item_schema, max_items=len(semantic_candidates) // 2
-            ),
-        )
-        used_candidate_ids: set[str] = set()
-        candidate_order = {
-            candidate.candidate_id: index
-            for index, candidate in enumerate(semantic_candidates)
-        }
-        semantic_groups: list[tuple[list[MemoryCandidate], str]] = []
-        for value in records:
-            record = _exact_dict(
-                value,
-                {"candidate_ids", "relation", "reason"},
-                operation="find_duplicates",
-            )
-            candidate_ids = record["candidate_ids"]
-            if (
-                not isinstance(candidate_ids, list)
-                or len(candidate_ids) < 2
-                or len(candidate_ids) > len(semantic_candidates)
-                or (
-                    len(
-                        set(
-                            (
-                                candidate_id
-                                for candidate_id in candidate_ids
-                                if isinstance(candidate_id, str)
-                            )
-                        )
-                    )
-                    != len(candidate_ids)
-                )
-                or any(
-                    (
-                        not isinstance(candidate_id, str)
-                        or candidate_id not in candidate_by_id
-                        for candidate_id in candidate_ids
-                    )
-                )
-                or any(
-                    (
-                        candidate_id in used_candidate_ids
-                        for candidate_id in candidate_ids
-                    )
-                )
-                or (record["relation"] != "SEMANTIC_EQUIVALENT")
-            ):
-                raise FindingsError(
-                    "Codex find_duplicates returned an unknown, repeated, overlapping, or invalid duplicate group."
-                )
-            ordered_ids = sorted(candidate_ids, key=candidate_order.__getitem__)
-            used_candidate_ids.update(ordered_ids)
-            reason = _short_string(
-                record["reason"],
-                operation="find_duplicates",
-                label="reason",
-                limit=QUALITY_REASON_CHAR_LIMIT,
-            )
-            semantic_groups.append(
-                (
-                    [candidate_by_id[candidate_id] for candidate_id in ordered_ids],
-                    reason,
-                )
-            )
-        semantic_groups.sort(
-            key=lambda group: candidate_order[group[0][0].candidate_id]
-        )
-        for group, reason in semantic_groups:
-            representative = group[0]
-            for member in group[1:]:
-                findings.append(
-                    DuplicateFinding(
-                        left=representative.memory,
-                        right=member.memory,
-                        relation="SEMANTIC_EQUIVALENT",
-                        reason=reason,
-                    )
-                )
-    return DuplicateReport(
-        memory_count=len(candidates),
-        findings=_ordered_duplicate_findings(candidates, findings),
+
+    return analyze_memory_redundancies(
+        ctx,
+        provider_factory,
+        context_name_by_uid=context_name_by_uid,
+        exact_groups=exact_groups,
     )
 
 
@@ -574,211 +324,15 @@ def find_ambiguities(
     *,
     context_name_by_uid: Mapping[str, str] | None = None,
 ) -> AmbiguityReport:
-    """Find ambiguous or underspecified direct Memories in one provider call."""
-    candidates = collect_direct_memories(
+    """Compatibility entry point; semantic ownership lives in reading_analysis."""
+    from memcommit.application.capabilities.memory_issue_analysis.reading_analysis import (
+        analyze_memory_ambiguities,
+    )
+
+    return analyze_memory_ambiguities(
         ctx,
+        provider_factory,
         context_name_by_uid=context_name_by_uid,
-    )
-    if not candidates:
-        return AmbiguityReport(memory_count=0, findings=())
-    by_id = {candidate.candidate_id: candidate for candidate in candidates}
-    item_schema: dict[str, object] = {
-        "type": "object",
-        "properties": {
-            "candidate_id": {
-                "type": "string",
-                "enum": list(by_id),
-            },
-            "interpretation": {
-                "type": "string",
-                "enum": sorted(_INTERPRETATIONS),
-            },
-            "clarification": {
-                "type": "string",
-                "enum": sorted(_CLARIFICATIONS),
-            },
-            "ordinary_readings": {
-                "type": "array",
-                "maxItems": QUALITY_READING_LIMIT,
-                "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": QUALITY_QUESTION_CHAR_LIMIT,
-                },
-            },
-            "reason": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": QUALITY_REASON_CHAR_LIMIT,
-            },
-            "question": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": QUALITY_QUESTION_CHAR_LIMIT,
-            },
-        },
-        "required": [
-            "candidate_id",
-            "interpretation",
-            "clarification",
-            "ordinary_readings",
-            "reason",
-            "question",
-        ],
-        "additionalProperties": False,
-    }
-    prompt_policy, calibration_cases = _prompt_calibration_cases("ambiguity.json")
-    has_examples = bool(calibration_cases)
-    ordinary_resolution_example = (
-        "For example, 'the main entrance closes at 5' followed by 'after that "
-        "time a card is required' resolves the time for this quality scan, and "
-        "'if it does not work, call' ordinarily continues a preceding card/NFC "
-        "failure sequence. "
-        if has_examples
-        else ""
-    )
-    records = _call_once(
-        provider_factory=provider_factory,
-        operation="find_ambiguities",
-        instructions=(
-            "You find ambiguous or underspecified atomic Memories in one "
-            "selected Context frame. The frame may combine several readable "
-            "Contexts, and each candidate carries its original context_name. "
-            "Interpret each Memory using the complete combined frame and "
-            "ordinary common-sense reading; do "
-            "not invent remote possible worlds merely to create or remove an "
-            "ambiguity. First resolve ordinary antecedents, ellipsis, deixis, "
-            "and shared scope against every supplied Memory. A target that is "
-            "not self-contained is not thereby ambiguous: when the Context "
-            "supplies one usable reading and no operational decision changes, "
-            "it is clean SINGLE/NONE and must be omitted. "
-            + ordinary_resolution_example
-            + "SINGLE/REQUIRED is valid only when the complete "
-            "Context still lacks information necessary to perform or reliably "
-            "verify an explicit operation, not for optional precision or "
-            "wayfinding.\n\n"
-            "Reading structure is SINGLE when there is one ordinary "
-            "reading, DOMINANT when one reading is ordinary but alternatives "
-            "remain live, and COMPETING when multiple ordinary readings lack "
-            "a single dominant reading. Clarification need is NONE, HELPFUL, "
-            "or REQUIRED according to whether clarification would materially "
-            "help or is needed for a reliable operational result. Return every "
-            "Memory except the clean SINGLE/NONE combination. Intentional "
-            "ambiguity may therefore be COMPETING/NONE. Return exactly one "
-            "ordinary reading for SINGLE and at least two for DOMINANT or "
-            "COMPETING; list the dominant reading first. Write every ordinary "
-            "reading, reason, and question in English even when the source "
-            "Memory uses another language. The reason must name the ambiguous "
-            "expression or missing information and connect both labels to a "
-            "concrete operational consequence. For REQUIRED, state what "
-            "cannot be determined reliably; for HELPFUL, state what remains "
-            "possible and what clarification would make more precise; for "
-            "NONE, state why no operational result depends on resolving the "
-            "readings. If the same uncertainty blocks additional decisions, "
-            "name them in additional concise sentences rather than generic "
-            "topic labels. Supply the smallest useful question for HELPFUL or "
-            "REQUIRED; use an empty question for NONE. Never expose candidate "
-            "IDs in human-facing readings, reasons, or questions."
-        ),
-        payload={
-            "operation": "find_ambiguities",
-            **({"prompt_policy": prompt_policy} if prompt_policy is not None else {}),
-            "context": {"name": ctx.name},
-            "memories": _memory_payload(candidates),
-            "calibration_cases": calibration_cases,
-        },
-        schema=_findings_schema(item_schema, max_items=len(candidates)),
-    )
-    findings: dict[str, AmbiguityFinding] = {}
-    for value in records:
-        record = _exact_dict(
-            value,
-            {
-                "candidate_id",
-                "interpretation",
-                "clarification",
-                "ordinary_readings",
-                "reason",
-                "question",
-            },
-            operation="find_ambiguities",
-        )
-        candidate_id = record["candidate_id"]
-        interpretation = record["interpretation"]
-        clarification = record["clarification"]
-        readings = record["ordinary_readings"]
-        if (
-            not isinstance(candidate_id, str)
-            or candidate_id not in by_id
-            or candidate_id in findings
-            or interpretation not in _INTERPRETATIONS
-            or clarification not in _CLARIFICATIONS
-            or not isinstance(readings, list)
-            or len(readings) > QUALITY_READING_LIMIT
-        ):
-            raise FindingsError(
-                "Codex find_ambiguities returned an unknown, duplicate, or "
-                "invalid finding."
-            )
-        if interpretation == "SINGLE" and clarification == "NONE":
-            raise FindingsError(
-                "Codex find_ambiguities returned a clean Memory as a finding."
-            )
-        ordinary_readings: list[str] = []
-        for reading in readings:
-            parsed = _short_string(
-                reading,
-                operation="find_ambiguities",
-                label="ordinary reading",
-                limit=QUALITY_QUESTION_CHAR_LIMIT,
-            )
-            if parsed in ordinary_readings:
-                raise FindingsError(
-                    "Codex find_ambiguities returned duplicate readings."
-                )
-            ordinary_readings.append(parsed)
-        if interpretation == "SINGLE" and len(ordinary_readings) != 1:
-            raise FindingsError(
-                "Codex find_ambiguities returned an invalid SINGLE reading."
-            )
-        if interpretation in {"DOMINANT", "COMPETING"} and len(ordinary_readings) < 2:
-            raise FindingsError(
-                "Codex find_ambiguities omitted ordinary alternative readings."
-            )
-        question = _short_string(
-            record["question"],
-            operation="find_ambiguities",
-            label="question",
-            limit=QUALITY_QUESTION_CHAR_LIMIT,
-            empty=True,
-        )
-        if clarification == "NONE" and question:
-            raise FindingsError("Codex find_ambiguities returned a question for NONE.")
-        if clarification != "NONE" and not question.strip():
-            raise FindingsError(
-                "Codex find_ambiguities omitted a clarification question."
-            )
-        candidate = by_id[candidate_id]
-        findings[candidate_id] = AmbiguityFinding(
-            memory=candidate.memory,
-            interpretation=interpretation,  # type: ignore[arg-type]
-            clarification=clarification,  # type: ignore[arg-type]
-            ordinary_readings=tuple(ordinary_readings),
-            reason=_short_string(
-                record["reason"],
-                operation="find_ambiguities",
-                label="reason",
-                limit=QUALITY_REASON_CHAR_LIMIT,
-            ),
-            question=question,
-        )
-    return AmbiguityReport(
-        memory_count=len(candidates),
-        findings=tuple(
-            findings[candidate.candidate_id]
-            for candidate in candidates
-            if candidate.candidate_id in findings
-        ),
     )
 
 
@@ -788,124 +342,13 @@ def find_conflicts(
     *,
     context_name_by_uid: Mapping[str, str] | None = None,
 ) -> ConflictReport:
-    """Find conflicting unordered Memory pairs in one provider call."""
-    candidates = collect_direct_memories(
+    """Compatibility entry point; semantic ownership lives in relation_analysis."""
+    from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+        analyze_memory_conflicts,
+    )
+
+    return analyze_memory_conflicts(
         ctx,
+        provider_factory,
         context_name_by_uid=context_name_by_uid,
-    )
-    pairs = enumerate_pairs(candidates)
-    if not pairs:
-        return ConflictReport(
-            memory_count=len(candidates),
-            pair_count=0,
-            findings=(),
-        )
-    by_id = {pair.pair_id: pair for pair in pairs}
-    item_schema: dict[str, object] = {
-        "type": "object",
-        "properties": {
-            "pair_id": {
-                "type": "string",
-                "enum": list(by_id),
-            },
-            "conflict": {
-                "type": "string",
-                "enum": sorted(_CONFLICT_LABELS),
-            },
-            "reason": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": QUALITY_REASON_CHAR_LIMIT,
-                "description": "One English sentence, at most 10 whitespace-delimited words.",
-                "pattern": r"^\S+(?:[ \t]+\S+){0,9}$",
-            },
-        },
-        "required": [
-            "pair_id",
-            "conflict",
-            "reason",
-        ],
-        "additionalProperties": False,
-    }
-    prompt_policy, calibration_cases = _prompt_calibration_cases("conflict.json")
-    records = _call_once(
-        provider_factory=provider_factory,
-        operation="find_conflicts",
-        instructions=(
-            "You find semantically conflicting pairs of atomic Memories inside "
-            "one selected Context frame. The frame may combine several readable "
-            "Contexts, and each candidate carries its original context_name. "
-            "Inspect every supplied unordered pair, including cross-Context "
-            "pairs, under ordinary common-sense readings of the complete frame. "
-            "Return YES when the pair conflicts across its ordinary readings. "
-            "Return MAY only when multiple ordinary readings or an unstated "
-            "scope distinction make the pair conflicting under some readings "
-            "and jointly explainable under others. MAY is semantic "
-            "indeterminacy, never low model confidence. Omit NO pairs that are "
-            "jointly explainable. Do not invent exotic assumptions to force "
-            "compatibility. Write reason as one English sentence of at most "
-            "10 whitespace-delimited words. Pinpoint the disagreement for YES "
-            "or the unresolved meaning or scope for MAY. Do not enumerate "
-            "interpretations, repeat the Memories, ask a question, or propose "
-            "a solution. Keep the distinction between definite conflict and "
-            "unresolved meaning explicit."
-        ),
-        payload={
-            "operation": "find_conflicts",
-            **({"prompt_policy": prompt_policy} if prompt_policy is not None else {}),
-            "context": {"name": ctx.name},
-            "memories": _memory_payload(candidates),
-            "pairs": _pair_payload(pairs),
-            "calibration_cases": calibration_cases,
-        },
-        schema=_findings_schema(item_schema, max_items=len(pairs)),
-    )
-    findings: dict[str, ConflictFinding] = {}
-    for value in records:
-        record = _exact_dict(
-            value,
-            {
-                "pair_id",
-                "conflict",
-                "reason",
-            },
-            operation="find_conflicts",
-        )
-        pair_id = record["pair_id"]
-        conflict = record["conflict"]
-        if (
-            not isinstance(pair_id, str)
-            or pair_id not in by_id
-            or pair_id in findings
-            or conflict not in _CONFLICT_LABELS
-        ):
-            raise FindingsError(
-                "Codex find_conflicts returned an unknown, duplicate, or "
-                "invalid finding."
-            )
-        reason = _short_string(
-            record["reason"],
-            operation="find_conflicts",
-            label="reason",
-            limit=QUALITY_REASON_CHAR_LIMIT,
-        )
-        if len(reason.split()) > CONFLICT_REASON_WORD_LIMIT or any(
-            separator in reason for separator in ("\n", "\r")
-        ):
-            raise FindingsError(
-                "Conflict reason must be one line with at most 10 words."
-            )
-        pair = by_id[pair_id]
-        findings[pair_id] = ConflictFinding(
-            left=pair.left.memory,
-            right=pair.right.memory,
-            conflict=conflict,  # type: ignore[arg-type]
-            reason=reason,
-        )
-    return ConflictReport(
-        memory_count=len(candidates),
-        pair_count=len(pairs),
-        findings=tuple(
-            findings[pair.pair_id] for pair in pairs if pair.pair_id in findings
-        ),
     )

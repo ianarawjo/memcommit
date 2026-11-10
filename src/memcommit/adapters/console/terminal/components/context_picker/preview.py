@@ -128,12 +128,6 @@ class ContextMemoryPreviewController:
         if not self.tree.memories_visible_for(self.tree.selected_name):
             self.memory_anchor = None
 
-    def toggle_all_memories(self) -> None:
-        self.tree.toggle_memories()
-        self.load_visible_memories()
-        if not self.tree.memories_visible_for(self.tree.selected_name):
-            self.memory_anchor = None
-
     def expand_selected(self) -> None:
         if self.memory_anchor is not None:
             return

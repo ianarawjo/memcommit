@@ -205,11 +205,6 @@ def _compact(value: str, width: int) -> str:
     return elide_terminal_text(display_escape_text(value), width)
 
 
-def _pad_display(value: str, width: int) -> str:
-    """Pad by terminal cells rather than code points for aligned CJK rows."""
-    return pad_terminal_text(value, width)
-
-
 def _render_entry_line(
     entry: LauncherEntry,
     *,

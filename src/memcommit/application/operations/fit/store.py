@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import uuid
 
+from memcommit.core.json_objects import reject_duplicate_json_keys
 from memcommit.application.operations.fit.ground_report import FitError, FitReport
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.application.operations.ground.workspace_fit import (
@@ -109,7 +110,7 @@ class FitStore:
         try:
             with open(path, encoding="utf-8") as handle:
                 return FitReport.from_dict(
-                    json.load(handle, object_pairs_hook=_strict_json_object)
+                    json.load(handle, object_pairs_hook=reject_duplicate_json_keys)
                 )
         except (OSError, ValueError, json.JSONDecodeError) as error:
             raise FitError("Saved Fit receipt is invalid.") from error
@@ -144,12 +145,3 @@ class FitStore:
             report=report,
             current=workspace_fit_report_is_current(self.store, report),
         )
-
-
-def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
-    result: dict[str, object] = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result

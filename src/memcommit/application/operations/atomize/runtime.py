@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
-import hashlib
-import json
+from dataclasses import dataclass
 from typing import Callable
 
-import memcommit.application.operations.atomize.domain.structural_apply as atomize_structural_apply
+from memcommit.core.json_objects import canonical_json_digest
 from memcommit.application.operations.atomize.domain import (
     AppliedAtomizeItem,
     AtomizeAnalysisSession,
@@ -27,14 +25,8 @@ from memcommit.application.operations.atomize.application import (
     AtomizeMaterialization,
     AtomizeRecordApplyRequest,
     AtomizeRecordApplyResult,
-    AtomizeOutputPlanRequest,
-    AtomizeSaveAsRequest,
-    AtomizeSaveAsResult,
     AtomizeExecutionSnapshot,
-    AtomizeReviewRecordUpdateResult,
-    run_atomize_output_plan_update,
     run_atomize_record_apply,
-    run_atomize_save_as,
 )
 from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisOpenRequest,
@@ -45,7 +37,6 @@ from memcommit.application.operations.atomize.analysis_runtime import (
 )
 from memcommit.application.operations.atomize.records import (
     AtomizeReviewRecord,
-    atomize_review_record_digest,
 )
 from memcommit.persistence.store.checkpoint.requests import AutoCheckpointRequest
 from memcommit.models.context import Context
@@ -67,14 +58,7 @@ def _session_version_token(
         "analysis": analysis.to_dict(),
         "workbench": None if workbench is None else workbench.to_dict(),
     }
-    return hashlib.sha256(
-        json.dumps(
-            payload,
-            ensure_ascii=False,
-            separators=(",", ":"),
-            sort_keys=True,
-        ).encode("utf-8")
-    ).hexdigest()
+    return canonical_json_digest(payload)
 
 
 @dataclass
@@ -147,29 +131,6 @@ class MemoryStoreAtomizeRecordRepository:
             if committed.review_record != workbench:
                 raise AtomizeApplicationError(
                     "Atomize terminal persistence returned a different workbench."
-                )
-            return committed
-
-    def replace_review_record(
-        self,
-        review_record: AtomizeReviewRecord,
-        *,
-        analysis: AtomizeAnalysisSession,
-        expected_version: str,
-    ) -> AtomizeExecutionSnapshot:
-        """Replace one complete review record only under its opaque revision."""
-
-        with self.store._atomize_session_write_lock(analysis.context_uid):  # noqa: SLF001
-            current = self._load_unlocked(analysis)
-            if current.version_token != expected_version:
-                raise AtomizeApplicationError(
-                    "The Atomize session changed before the review update."
-                )
-            self.store._save_atomize_workbench_locked(review_record)  # noqa: SLF001
-            committed = self._load_unlocked(analysis)
-            if committed.review_record != review_record:
-                raise AtomizeApplicationError(
-                    "Atomize review persistence returned a different workbench."
                 )
             return committed
 
@@ -567,398 +528,6 @@ class MemoryStoreAtomizeOutputPort:
                     raise
 
 
-@dataclass
-class MemoryStoreAtomizeSaveAsOutputPort:
-    """Publish a final derived Context once, with no visible baseline copy."""
-
-    store: ProfileStore
-    provider_factory: Callable[[], AtomizeProvider]
-
-    @staticmethod
-    def _source_workbench_record(
-        workbench: AtomizeReviewRecord | None,
-    ) -> dict[str, object] | None:
-        if workbench is None:
-            return None
-        return {
-            "uid": workbench.uid,
-            "output_context_name": workbench.output_context_name,
-            "record_digest": atomize_review_record_digest(workbench),
-        }
-
-    @classmethod
-    def _save_as_record(
-        cls,
-        snapshot: AtomizeExecutionSnapshot,
-        *,
-        source: Context,
-        expected_current: str | None,
-    ) -> dict[str, object]:
-        return {
-            "version": 1,
-            "source_context": {
-                "uid": source.uid,
-                "name": source.name,
-                "digest": context_record_digest(source),
-            },
-            # The unmodified branch is not a checkpoint, but direct-Memory
-            # lineage still needs an exact pre-transform frame for Trace.
-            "source_frame": [
-                {
-                    "uid": item.uid,
-                    "content": item.content,
-                    "position": position,
-                }
-                for position, item in enumerate(
-                    candidate
-                    for candidate in source.iter_memories()
-                    if isinstance(candidate, Memory)
-                )
-            ],
-            "source_frame_digest": direct_context_digest(source),
-            "source_analysis_uid": snapshot.analysis.uid,
-            "source_workbench": cls._source_workbench_record(snapshot.review_record),
-            "current_before": expected_current,
-        }
-
-    @staticmethod
-    def _context_creation_record(output: Context) -> dict[str, object]:
-        return {
-            "version": 1,
-            "context_uid": output.uid,
-            "context_name": output.name,
-        }
-
-    @classmethod
-    def _checkpoint_command_details(
-        cls,
-        snapshot: AtomizeExecutionSnapshot,
-        output_analysis: AtomizeAnalysisSession,
-        output: Context,
-        result: AtomizeApplyResult,
-        audit: AtomizeApplicationAudit,
-        *,
-        source: Context,
-        expected_current: str | None,
-    ) -> dict[str, object]:
-        return {
-            **MemoryStoreAtomizeOutputPort._checkpoint_command_details(
-                output_analysis,
-                result,
-                audit,
-            ),
-            "context_creation": cls._context_creation_record(output),
-            "atomize_save_as": cls._save_as_record(
-                snapshot,
-                source=source,
-                expected_current=expected_current,
-            ),
-        }
-
-
-    @staticmethod
-    def _workbench_matches_record(
-        workbench: AtomizeReviewRecord | None,
-        record: object,
-        *,
-        destination_name: str,
-        checkpoint_uid: str,
-    ) -> bool:
-        if record is None:
-            return workbench is None
-        if not isinstance(record, dict) or set(record) != {
-            "uid",
-            "output_context_name",
-            "record_digest",
-        }:
-            return False
-        if workbench is None or workbench.uid != record.get("uid"):
-            return False
-        reviewing = AtomizeReviewRecord.from_dict(
-            workbench.to_dict(),
-            issues=workbench.issues,
-        )
-        if reviewing.application is not None:
-            try:
-                reviewing.clear_application(
-                    output_context_name=destination_name,
-                    checkpoint_uid=checkpoint_uid,
-                    restore_output_context_name=record.get("output_context_name"),
-                )
-            except (TypeError, ValueError):
-                return False
-        return atomize_review_record_digest(reviewing) == record.get("record_digest")
-
-    def _matching_checkpoint(
-        self,
-        snapshot: AtomizeExecutionSnapshot,
-        audit: AtomizeApplicationAudit,
-        destination_name: str,
-    ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization] | None:
-        if not self.store.context_exists(destination_name):
-            return None
-        output = self.store.load_direct(destination_name)
-        output_analysis = self.store.load_atomize_analysis(output.uid)
-        if (
-            output_analysis is None
-            or output_analysis.uid != snapshot.analysis.uid
-            or output_analysis.context_uid != output.uid
-            or output_analysis.context_name != destination_name
-        ):
-            raise AtomizeApplicationError(
-                f"Planned atomize Output '{destination_name}' already exists "
-                "and is not the exact applied result of this session."
-            )
-        matches = [
-            checkpoint
-            for checkpoint in self.store.list_checkpoints(destination_name)
-            if checkpoint.get("command") == "atomize"
-            and isinstance(checkpoint.get("command_details"), dict)
-            and checkpoint["command_details"].get("analysis_uid") == output_analysis.uid
-        ]
-        if len(matches) != 1:
-            raise AtomizeApplicationError(
-                "The planned Atomize output has incompatible checkpoint history."
-            )
-        checkpoint = matches[0]
-        checkpoint_uid = checkpoint.get("uid")
-        args = checkpoint.get("command_details")
-        snapshot_record = checkpoint.get("snapshot")
-        if (
-            not isinstance(checkpoint_uid, str)
-            or not isinstance(args, dict)
-            or not isinstance(snapshot_record, dict)
-            or context_record_digest(output) != context_record_digest(snapshot_record)
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output changed after publication."
-            )
-        creation = args.get("context_creation")
-        save_as = args.get("atomize_save_as")
-        if (
-            creation != self._context_creation_record(output)
-            or not isinstance(save_as, dict)
-            or set(save_as)
-            != {
-                "version",
-                "source_context",
-                "source_frame",
-                "source_frame_digest",
-                "source_analysis_uid",
-                "source_workbench",
-                "current_before",
-            }
-            or save_as.get("version") != 1
-            or save_as.get("source_analysis_uid") != snapshot.analysis.uid
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output has incompatible creation provenance."
-            )
-        source_record = save_as.get("source_context")
-        if (
-            not isinstance(source_record, dict)
-            or set(source_record) != {"uid", "name", "digest"}
-            or source_record.get("uid") != snapshot.analysis.context_uid
-            or source_record.get("name") != snapshot.analysis.context_name
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output belongs to a different Source."
-            )
-        source_frame = save_as.get("source_frame")
-        expected_selected = [
-            {
-                "uid": item.memory_uid,
-                "content": item.content,
-                "position": item.position,
-            }
-            for item in sorted(snapshot.analysis.items, key=lambda item: item.position)
-        ]
-        if not isinstance(source_frame, list) or any(
-            not isinstance(item, dict)
-            or set(item) != {"uid", "content", "position"}
-            or item.get("position") != position
-            or not isinstance(item.get("uid"), str)
-            or not isinstance(item.get("content"), str)
-            for position, item in enumerate(source_frame)
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output has incompatible Source lineage."
-            )
-        selected_by_position = {item["position"]: item for item in expected_selected}
-        if any(
-            position >= len(source_frame) or source_frame[position] != item
-            for position, item in selected_by_position.items()
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output has incompatible Source lineage."
-            )
-        expected_frame_digest = hashlib.sha256(
-            json.dumps(
-                [
-                    {"uid": item["uid"], "content": item["content"]}
-                    for item in source_frame
-                ],
-                ensure_ascii=False,
-                separators=(",", ":"),
-            ).encode("utf-8")
-        ).hexdigest()
-        analysis_evidence_digest = getattr(
-            snapshot.analysis,
-            "evidence_digest",
-            None,
-        )
-        if save_as.get(
-            "source_frame_digest"
-        ) != expected_frame_digest or expected_frame_digest != (
-            analysis_evidence_digest or snapshot.analysis.context_digest
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output has incompatible Source lineage."
-            )
-        result = MemoryStoreAtomizeOutputPort._result_from_checkpoint(
-            output_analysis,
-            checkpoint,
-        )
-        expected_common = MemoryStoreAtomizeOutputPort._checkpoint_command_details(
-            output_analysis,
-            result,
-            audit,
-        )
-        if any(args.get(key) != value for key, value in expected_common.items()):
-            raise AtomizeApplicationError(
-                "The planned Atomize output belongs to a different review state."
-            )
-        if not self._workbench_matches_record(
-            snapshot.review_record,
-            save_as.get("source_workbench"),
-            destination_name=destination_name,
-            checkpoint_uid=checkpoint_uid,
-        ):
-            raise AtomizeApplicationError(
-                "The planned Atomize output belongs to a different workbench state."
-            )
-        return output_analysis, AtomizeMaterialization(
-            result=result,
-            context_name=destination_name,
-            checkpoint_uid=checkpoint_uid,
-            created=False,
-        )
-
-    def recover_materialization(
-        self,
-        snapshot: AtomizeExecutionSnapshot,
-        audit: AtomizeApplicationAudit,
-        destination_name: str,
-    ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization] | None:
-        return self._matching_checkpoint(snapshot, audit, destination_name)
-
-    def materialize(
-        self,
-        snapshot: AtomizeExecutionSnapshot,
-        audit: AtomizeApplicationAudit,
-        destination_name: str,
-        expected_current: str | None,
-    ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization]:
-        source = self.store.load_for_update(snapshot.analysis.context_name)
-        analysis_evidence_digest = getattr(
-            snapshot.analysis,
-            "evidence_digest",
-            None,
-        )
-        if source.uid != snapshot.analysis.context_uid or direct_context_digest(
-            source
-        ) != (analysis_evidence_digest or snapshot.analysis.context_digest):
-            raise AtomizeApplicationError(
-                "The Atomize Source changed before Save As. Reopen the review."
-            )
-        # Atomize applies a source-UID-keyed reviewed analysis to this
-        # process-local projection before assigning its result identities.
-        # This is not the durable Branch command: its final Save As receipt
-        # owns the independently materialized output and provenance.
-        output = atomize_structural_apply.project_atomize_source(
-            source, destination_name
-        )
-        output_fields: dict[str, object] = {
-            "context_uid": output.uid,
-            "context_name": output.name,
-            "context_digest": (
-                snapshot.analysis.context_digest
-                if analysis_evidence_digest is not None
-                else direct_context_digest(output)
-            ),
-        }
-        if hasattr(snapshot.analysis, "evidence_digest"):
-            output_fields["evidence_digest"] = (
-                direct_context_digest(output)
-                if analysis_evidence_digest is not None
-                else None
-            )
-        output_analysis = replace(snapshot.analysis, **output_fields)
-        # The complete semantic normal form remains unpublished until the one
-        # final Context creation below. The output port requires a provider so
-        # no adapter can publish the legacy structural-only intermediate form.
-        normal_form = project_atomize_normal_form(
-            output,
-            output_analysis,
-            self.provider_factory,
-        )
-        output = normal_form.context
-        result = normal_form.result
-        checkpoint_command_details = self._checkpoint_command_details(
-            snapshot,
-            output_analysis,
-            output,
-            result,
-            audit,
-            source=source,
-            expected_current=expected_current,
-        )
-        self.store.save_atomize_analysis(output_analysis)
-        try:
-            checkpoint = self.store.create_context_with_sources(
-                output,
-                AutoCheckpointRequest(
-                    command="atomize",
-                    command_details=checkpoint_command_details,
-                ),
-                source_bindings=((source.name, source.uid),),
-            )
-        except Exception as error:
-            self.store.delete_atomize_analysis(output.uid)
-            recovered = self._matching_checkpoint(
-                snapshot,
-                audit,
-                destination_name,
-            )
-            if recovered is not None:
-                return recovered
-            raise error
-        if checkpoint is None:
-            self.store.delete_atomize_analysis(output.uid)
-            raise AtomizeApplicationError(
-                "Atomize Save As produced no Context checkpoint."
-            )
-        return output_analysis, AtomizeMaterialization(
-            result=result,
-            context_name=output.name,
-            checkpoint_uid=checkpoint.uid,
-            created=True,
-        )
-
-    def select_output(
-        self,
-        materialization: AtomizeMaterialization,
-        *,
-        expected_current: str | None,
-    ) -> None:
-        output = self.store.load_direct(materialization.context_name)
-        self.store.set_current_context_if(
-            expected_current,
-            output.name,
-            expected_context_uid=output.uid,
-        )
-
-
 def capture_atomize_execution_snapshot(
     *,
     store: ProfileStore,
@@ -1096,71 +665,6 @@ def execute_atomize_in_place(
     )
 
 
-def capture_atomize_execution_snapshot_at_version(
-    *,
-    store: ProfileStore,
-    analysis: AtomizeAnalysisSession,
-    expected_version: str,
-) -> AtomizeExecutionSnapshot:
-    """Recover one exact accepted revision without provider or interface state.
-
-    A transport retry can arrive after Apply committed its terminal receipt.
-    Accept only the current revision or the exact preterminal form of that
-    receipt; every other saved-session change remains a conflict.
-    """
-
-    repository = MemoryStoreAtomizeRecordRepository(store)
-    with store._atomize_session_write_lock(analysis.context_uid):  # noqa: SLF001
-        current = repository._load_unlocked(analysis)  # noqa: SLF001
-        if current.version_token == expected_version:
-            return current
-        workbench = current.review_record
-        if workbench is not None and workbench.application is not None:
-            accepted_workbench = replace(workbench, application=None)
-            accepted_version = _session_version_token(
-                current.analysis,
-                accepted_workbench,
-            )
-            if accepted_version == expected_version:
-                return AtomizeExecutionSnapshot(
-                    analysis=current.analysis,
-                    review_record=accepted_workbench,
-                    version_token=accepted_version,
-                )
-        raise AtomizeApplicationError(
-            "The accepted Atomize version changed before application. Reopen the review."
-        )
-
-
-def capture_current_atomize_execution_snapshot_at_version(
-    *,
-    store: ProfileStore,
-    analysis: AtomizeAnalysisSession,
-    expected_version: str,
-) -> AtomizeExecutionSnapshot:
-    """Capture only the current exact revision, never a terminal retry form."""
-
-    snapshot = MemoryStoreAtomizeRecordRepository(store).load(analysis)
-    if snapshot.version_token != expected_version:
-        raise AtomizeApplicationError(
-            "The accepted Atomize version changed. Reopen the review."
-        )
-    return snapshot
-
-
-def execute_atomize_output_plan_update(
-    request: AtomizeOutputPlanRequest,
-    *,
-    store: ProfileStore,
-) -> AtomizeReviewRecordUpdateResult:
-    """Persist one exact Output-plan update through the production repository."""
-
-    return run_atomize_output_plan_update(
-        request,
-        repository=MemoryStoreAtomizeRecordRepository(store),
-    )
-
-
 def execute_atomize_record_apply(
     request: AtomizeRecordApplyRequest,
     *,
@@ -1173,24 +677,6 @@ def execute_atomize_record_apply(
         request,
         repository=MemoryStoreAtomizeRecordRepository(store),
         output_port=MemoryStoreAtomizeOutputPort(
-            store,
-            provider_factory=provider_factory,
-        ),
-    )
-
-
-def execute_atomize_save_as(
-    request: AtomizeSaveAsRequest,
-    *,
-    store: ProfileStore,
-    provider_factory: Callable[[], AtomizeProvider],
-) -> AtomizeSaveAsResult:
-    """Create or recover one final Save As output through Store adapters."""
-
-    return run_atomize_save_as(
-        request,
-        repository=MemoryStoreAtomizeRecordRepository(store),
-        output_port=MemoryStoreAtomizeSaveAsOutputPort(
             store,
             provider_factory=provider_factory,
         ),

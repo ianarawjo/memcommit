@@ -26,7 +26,7 @@ from memcommit.adapters.console.commands import (
     dev_eval,
     help,
     init_study,
-    provider,
+    llm_provider,
 )
 from memcommit.adapters.console.commands import (
     chunk,
@@ -54,7 +54,7 @@ from memcommit.adapters.console.commands import (
     audit,
     find_ambiguities,
     find_conflicts,
-    resolve,
+    conflict,
 )
 from memcommit.adapters.console.commands.duplicates import (
     find_duplicates,
@@ -154,8 +154,8 @@ app.command(
     ),
 )(show.cmd)
 app.command(
-    "contexts",
-    help=operation_summary("contexts"),
+    "context",
+    help=operation_summary("context"),
 )(contexts.cmd)
 app.command(
     "clear",
@@ -254,9 +254,9 @@ app.command(
     help=operation_summary("fit"),
 )(fit.cmd)
 app.command(
-    "resolve",
-    help=operation_summary("resolve"),
-)(resolve.cmd)
+    "conflict",
+    help=operation_summary("conflict"),
+)(conflict.cmd)
 app.command(
     "dedup",
     help=operation_summary("dedup"),
@@ -376,9 +376,9 @@ app.add_typer(
 app.command("dev-eval", help=operation_summary("dev-eval"))(dev_eval.cmd)
 app.add_typer(config.app, name="config", help=operation_summary("config"))
 app.add_typer(
-    provider.app,
-    name="provider",
-    help=operation_summary("provider"),
+    llm_provider.app,
+    name="llm-provider",
+    help=operation_summary("llm-provider"),
 )
 app.add_typer(
     profile.app,

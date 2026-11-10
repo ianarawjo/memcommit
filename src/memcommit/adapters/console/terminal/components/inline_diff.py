@@ -9,10 +9,6 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.core.theme import (
-    SemanticColorRole,
-    semantic_color_rgb,
-)
 from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     word_diff_spans,
@@ -37,18 +33,6 @@ def inline_diff_parts(before: str, after: str, *, color: bool = True):
             # Adjacent replacement tokens need separation when color replaces brackets.
             yield "equal", " "
         yield span.kind, value
-
-
-def inline_diff_text(before: str, after: str, *, color: bool) -> str:
-    parts = []
-    for kind, text in inline_diff_parts(before, after, color=color):
-        if color and kind != "equal":
-            role = (
-                SemanticColorRole.REMOVE if kind == "remove" else SemanticColorRole.EDIT
-            )
-            text = typer.style(text, fg=semantic_color_rgb(role), underline=True)
-        parts.append(text)
-    return "".join(parts)
 
 
 def render_inline_memory_change(

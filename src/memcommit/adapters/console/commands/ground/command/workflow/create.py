@@ -57,7 +57,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
 )
 from memcommit.core.context_name_validation import validate_context_name
 from memcommit.persistence.store import ProfileStore
-from memcommit.providers.connection import connect_semantic_provider
+from memcommit.llm_providers.connection import connect_semantic_provider
 
 from . import apply as approved_apply
 

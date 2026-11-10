@@ -24,7 +24,6 @@ AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
 AUTHORING_PROFILE_NAME = "authoring"
 STUDY_RUN_PARTICIPANT_SOURCE_KIND = "STUDY_RUN"
 _PROFILE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
-_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class ProfileConfigError(RuntimeError):
@@ -39,8 +38,6 @@ class StudyRunIdentity:
     name: str
     created_at: str
     role: str
-    provider_policy_version: str | None = None
-    provider_policy_digest: str | None = None
     session: str | None = None
     records_root: str | None = None
 
@@ -65,21 +62,20 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
         "study_name",
         "created_at",
     }
-    pinned_fields = identity_fields | {
+    session_fields = identity_fields | {"study_session", "study_records_root"}
+    # Retired baseline and provider pins remain historical metadata. Study
+    # identity and shared user settings must not depend on those old values.
+    source_fields = frozenset(source) - {
+        "baseline_sha256",
+        "baseline_profile_uid",
+        "baseline_profile_name",
         "provider_policy_version",
         "provider_policy_digest",
-    }
-    session_fields = pinned_fields | {"study_session", "study_records_root"}
-    # Retired baseline metadata stays in historical sources without affecting
-    # current Study identity or requiring a registry rewrite.
-    source_fields = frozenset(source) - {
-        "baseline_sha256", "baseline_profile_uid", "baseline_profile_name",
     }
     if (
         source_fields
         not in {
             frozenset(identity_fields),
-            frozenset(pinned_fields),
             frozenset(session_fields),
         }
         or profile.kind != "MANAGED"
@@ -94,23 +90,6 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
         raise ProfileConfigError("Study creation timestamp is invalid.") from error
     if parsed_created_at.tzinfo is None or parsed_created_at.utcoffset() is None:
         raise ProfileConfigError("Study creation timestamp must include a timezone.")
-    provider_policy_version = source.get("provider_policy_version")
-    provider_policy_digest = source.get("provider_policy_digest")
-    if source_fields in (pinned_fields, session_fields):
-        if (
-            not isinstance(provider_policy_version, str)
-            or not provider_policy_version
-            or len(provider_policy_version) > 128
-        ):
-            raise ProfileConfigError("Study provider policy version is invalid.")
-        if (
-            not isinstance(provider_policy_digest, str)
-            or _SHA256.fullmatch(provider_policy_digest) is None
-        ):
-            raise ProfileConfigError("Study provider policy digest is invalid.")
-    else:
-        provider_policy_version = None
-        provider_policy_digest = None
     role = "PARTICIPANT"
     session = source.get("study_session")
     records_root = source.get("study_records_root")
@@ -129,8 +108,6 @@ def study_run_identity(profile: Profile) -> StudyRunIdentity | None:
         name=study_name,
         created_at=created_at,  # type: ignore[arg-type]
         role=role,
-        provider_policy_version=provider_policy_version,
-        provider_policy_digest=provider_policy_digest,
         session=session,
         records_root=records_root,
     )

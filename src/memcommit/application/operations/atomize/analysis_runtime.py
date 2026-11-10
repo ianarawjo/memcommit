@@ -27,7 +27,7 @@ from memcommit.application.operations.atomize.records import (
     create_atomize_review_record,
 )
 from memcommit.models.context import Context
-from memcommit.providers.clients.codex import CodexChatGPTProvider
+from memcommit.llm_providers.clients.codex import CodexChatGPTProvider
 from memcommit.application.capabilities.semantic.prompt_policy import (
     resolve_semantic_prompt_policy,
 )

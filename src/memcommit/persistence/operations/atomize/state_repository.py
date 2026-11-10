@@ -6,10 +6,8 @@ import uuid
 from pathlib import Path
 
 
-from ...store.infrastructure.atomic_io import (
-    _reject_duplicate_json_keys,
-    _write_json_atomic,
-)
+from memcommit.core.json_objects import reject_duplicate_json_keys
+from ...store.infrastructure.atomic_io import _write_json_atomic
 
 
 class _AtomizeStateStoreMixin:
@@ -47,7 +45,7 @@ class _AtomizeStateStoreMixin:
             with open(path, encoding="utf-8") as f:
                 data = json.load(
                     f,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             session = AtomizeAnalysisSession.from_dict(data)
             if session.context_uid != context_uid:
@@ -161,7 +159,7 @@ class _AtomizeStateStoreMixin:
             with open(path, encoding="utf-8") as f:
                 data = json.load(
                     f,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             session = AtomizeReviewRecord.from_dict(
                 data,
@@ -324,7 +322,7 @@ class _AtomizeStateStoreMixin:
             with open(path, encoding="utf-8") as handle:
                 retained = json.load(
                     handle,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             if retained != data:
                 raise ValueError("Atomize session history is immutable.")
@@ -382,7 +380,7 @@ class _AtomizeStateStoreMixin:
             with open(path, encoding="utf-8") as handle:
                 data = json.load(
                     handle,
-                    object_pairs_hook=_reject_duplicate_json_keys,
+                    object_pairs_hook=reject_duplicate_json_keys,
                 )
             if not isinstance(data, dict) or set(data) != {
                 "schema_version",

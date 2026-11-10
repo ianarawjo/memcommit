@@ -8,6 +8,7 @@ from memcommit.persistence.store.context_memory.models import (
     ConcurrentContextUpdateError,
 )
 from memcommit.persistence.store.infrastructure.atomic_io import _write_json_atomic
+from .context_creation import _move_record_and_history
 
 
 def save_sever_undo(
@@ -48,8 +49,11 @@ def save_sever_undo(
     moved = False
     session_saved = False
     try:
-        context_file.rename(archived_context)
-        checkpoints_dir.rename(archived_checkpoints)
+        # A failed second move must put the sole Context record back before
+        # rollback removes the provisional Undo checkpoint from its history.
+        _move_record_and_history(
+            context_file, checkpoints_dir, archived_context, archived_checkpoints
+        )
         moved = True
         _write_json_atomic(
             archive / "manifest.json",
@@ -72,12 +76,13 @@ def save_sever_undo(
                 expected_digest=reviewing_digest,
             )
         if moved:
-            archived_checkpoints.rename(checkpoints_dir)
-            archived_context.rename(context_file)
-            store._remove_checkpoint_uid_locked(
-                change.context_name,
-                checkpoint.uid,
+            _move_record_and_history(
+                archived_context, archived_checkpoints, context_file, checkpoints_dir
             )
+        store._remove_checkpoint_uid_locked(
+            change.context_name,
+            checkpoint.uid,
+        )
         manifest_path = archive / "manifest.json"
         if manifest_path.exists() and not manifest_path.is_symlink():
             manifest_path.unlink()
@@ -112,8 +117,9 @@ def save_sever_redo(
     archived_checkpoints = archive / "checkpoints"
     moved = False
     try:
-        archived_context_file.rename(context_file)
-        archived_checkpoints.rename(checkpoints_dir)
+        _move_record_and_history(
+            archived_context_file, archived_checkpoints, context_file, checkpoints_dir
+        )
         moved = True
         checkpoint = store._save_locked(
             archived_context,
@@ -135,8 +141,9 @@ def save_sever_redo(
                     change.context_name,
                     checkpoint.uid,
                 )
-            checkpoints_dir.rename(archived_checkpoints)
-            context_file.rename(archived_context_file)
+            _move_record_and_history(
+                context_file, checkpoints_dir, archived_context_file, archived_checkpoints
+            )
         raise
     manifest_path = archive / "manifest.json"
     manifest_path.unlink()

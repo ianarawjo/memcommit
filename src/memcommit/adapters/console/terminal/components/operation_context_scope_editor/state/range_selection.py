@@ -18,7 +18,6 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.selection import (
     ContextSelectionState,
-    ContextTargetModeState,
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTree,
@@ -82,7 +81,6 @@ class ContextRangeSelectionState:
     current_name: str
     tree: ContextTreeState
     selection: ContextSelectionState
-    target_mode: ContextTargetModeState
     reach: ContextReachState
     profile_cursor: bool = False
     exclusions: set[str] = field(default_factory=set)
@@ -119,7 +117,6 @@ class ContextRangeSelectionState:
                 selected=(initial_target,),
                 mode=mode,
             ),
-            target_mode=ContextTargetModeState.create(multiple=multiple),
             reach=ContextReachState.create(include_descendants=include_descendants),
         )
 
@@ -167,13 +164,6 @@ class ContextRangeSelectionState:
         before = self.tree.selected_name
         self.tree.move(delta)
         return self.tree.selected_name != before
-
-    def enter_from_boundary(self, delta: int) -> None:
-        if delta > 0:
-            self.profile_cursor = True
-            return
-        self.profile_cursor = False
-        self.tree.selected_name = self.tree.visible_rows()[-1].name
 
     def expand_cursor(self) -> None:
         if not self.profile_cursor:
@@ -238,21 +228,6 @@ class ContextRangeSelectionState:
                 self.selection.replace((*retained, name))
             self._prune_exclusions()
         return self.effective_names != before
-
-    def move_target_mode(self, delta: int) -> tuple[bool, bool]:
-        """Move cardinality; return (control changed, effective set changed)."""
-
-        before = self.effective_names
-        if not self.target_mode.move(delta):
-            return False, False
-        self.selection.set_multiple(
-            self.target_mode.multiple,
-            fallback_name=(
-                _PROFILE_TARGET_UID if self.profile_cursor else self.tree.selected_name
-            ),
-        )
-        self.exclusions.clear()
-        return True, self.effective_names != before
 
     def move_reach(self, delta: int) -> bool:
         if not self.reach.move(delta):

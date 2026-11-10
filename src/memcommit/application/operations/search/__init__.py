@@ -1,1 +1,1 @@
-"""Operation-owned semantic Search and selected-result adaptation."""
+"""Operation-owned semantic Search."""

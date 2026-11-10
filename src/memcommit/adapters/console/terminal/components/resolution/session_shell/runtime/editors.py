@@ -85,8 +85,15 @@ class ResolutionEditors:
             except (TypeError, ValueError) as error:
                 self.controller.set_status(str(error))
                 return False
+        # Collapsing detail clears only the navigation cursor/choice. Browsing
+        # another item must not persist that sentinel over its saved decision.
+        selected_option_uid = (
+            self.controller.navigation.selected_option_uid
+            if self.controller.navigation.expanded_item_uid == item.uid
+            else _item_draft(item, self.controller.local_drafts).selected_choice_uid
+        )
         draft = ResponseDraft(
-            self.controller.navigation.selected_option_uid,
+            selected_option_uid,
             self.controls.input_area.text,
         )
         self.controller.local_drafts[item.uid] = draft

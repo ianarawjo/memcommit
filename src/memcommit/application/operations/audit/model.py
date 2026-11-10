@@ -32,10 +32,11 @@ from memcommit.application.capabilities.reviewing.direct_item_duplicates import 
 from memcommit.application.operations.duplicates.find_duplicates.application import (
     ExactDuplicateReport,
 )
+from memcommit.llm_providers.identity import provider_identity_record
+from memcommit.llm_providers.types import ProviderIdentity
 from memcommit.models.context import Context
 from memcommit.models.memory import Memory
 from memcommit.persistence.store.context_memory.records import context_record_digest
-from memcommit.providers.types import ProviderIdentity
 
 # Audit records retain individual findings; whole-set Fit is a separate operation.
 QUALITY_AUDIT_SCHEMA_VERSION = 11
@@ -267,18 +268,7 @@ class QualityAuditProvenance:
         return {
             "operation": self.operation,
             "provider_called": self.provider_called,
-            "identity": (
-                None
-                if identity is None
-                else {
-                    "provider": identity.provider,
-                    "model": identity.model,
-                    "model_digest": identity.model_digest,
-                    "runtime": identity.runtime,
-                    "endpoint": identity.endpoint,
-                    "reasoning_effort": identity.reasoning_effort,
-                }
-            ),
+            "identity": provider_identity_record(identity),
             "upstream_model": self.upstream_model,
             "upstream_provider": self.upstream_provider,
         }
@@ -764,9 +754,3 @@ class QualityAuditSession:
             checks=checks,
             requested_checks=requested_checks,
         )
-
-
-def quality_audit_record_digest(session: QualityAuditSession) -> str:
-    """Fingerprint the complete immutable Audit record."""
-
-    return _digest(session.to_dict())

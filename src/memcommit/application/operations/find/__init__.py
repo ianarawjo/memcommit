@@ -1,1 +1,1 @@
-"""Operation-owned provider-free Find application and runtime boundaries."""
+"""Exact text matching contract retained for Replace; `mem find` runs Search."""

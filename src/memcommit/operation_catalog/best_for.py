@@ -34,7 +34,7 @@ BEST_FOR_BY_OPERATION = {
         "Inspecting or changing stored global settings through the legacy "
         "low-level interface."
     ),
-    "contexts": "Exploring every Context currently available to the Profile.",
+    "context": "Exploring every Context currently available to the Profile.",
     "delete": "Removing one Memory, or permanently deleting the current Context and its descendants.",
     "dedup": (
         "Removing exact and semantic duplicates while preserving the first "
@@ -79,7 +79,7 @@ BEST_FOR_BY_OPERATION = {
         "Checking whether a defined set of Memories, Rules, Goals, Examples, "
         "or other propositions can jointly hold."
     ),
-    "resolve": (
+    "conflict": (
         "Deciding how to repair semantic conflicts within a bounded Context frame."
     ),
     "forget": (
@@ -95,7 +95,7 @@ BEST_FOR_BY_OPERATION = {
         "Verifying an operation's proposed effects before its separate Apply action."
     ),
     "export": "Write edited memory documents for use outside mem, preserving their current format and attached files.",
-    "sync": "Manually synchronize all supported documents and owned Contexts in the active Profile's project folder, including subfolders. One version choice applies to all conflicts in the Profile.",
+    "sync": "Synchronize supported documents and owned Contexts in the active Profile's project folder, including subfolders. Optional automatic mode watches Markdown edits and mem actions; conflicts require one explicit version choice for the Profile.",
     "import": ("Bringing externally supplied material into a locally managed store."),
     "init": (
         "Starting a separate workspace for a new topic, task, or group of Memories."
@@ -113,8 +113,8 @@ BEST_FOR_BY_OPERATION = {
         "preserving their content and identity."
     ),
     "profile": "Managing separate users, environments, or Memory stores.",
-    "provider": (
-        "Choosing which backend semantic operations should use, or checking "
+    "llm-provider": (
+        "Choosing which LLM backend semantic operations should use, or checking "
         "that it is ready before durable work."
     ),
     "pwd": "Confirming the active Context in a script or terminal.",
